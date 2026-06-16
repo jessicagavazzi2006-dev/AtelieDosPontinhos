@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="AtelieDosPontinhos.API/AtelieDosPontinhos.API.csproj" />
+  <Project Path="AtelieDosPontinhos.Application/AtelieDosPontinhos.Application.csproj" />
+  <Project Path="AtelieDosPontinhos.Domain/AtelieDosPontinhos.Domain.csproj" />
+  <Project Path="AtelieDosPontinhos.Infrastructure/AtelieDosPontinhos.Infrastructure.csproj" />
+  <Project Path="AtelieDosPontinhos.UI/AtelieDosPontinhos.UI.csproj" />
+</Solution>
