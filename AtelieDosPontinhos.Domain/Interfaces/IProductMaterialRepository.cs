@@ -5,25 +5,25 @@ using System.Text;
 
 namespace AtelieDosPontinhos.Domain.Interfaces
 {
-    public interface IMaterialRepository
+    public interface IProductMaterialRepository
     {
         /// <summary>
         /// retorna todos as categorias exitentes no banco de dados
         /// </summary>
         /// <returns></returns>
-        Task<IEnumerable<Material>> GetAllAsync();
+        Task<IEnumerable<Product_Material>> GetAllAsync();
 
 
         /// <summary>
         /// busca uma categoria pelo id
         /// </summary>
-        /// 
+        /// <param name="id"></param>
         /// <returns></returns>
-        Task<Category?> GetByIdAsync(int id);
+        Task<Product_Material?> GetByIdAsync(int id);
 
 
         //atualiza um material
-        Task UpdateAsync(Material material);
+        Task UpdateAsync(Product_Material product_Material);
 
         //Deleta um material
         Task DeleteAsync(int id);
@@ -32,6 +32,6 @@ namespace AtelieDosPontinhos.Domain.Interfaces
         Task<int> CountAsync();
 
         //adiciona uma categoria
-        Task AddAsync(Material material);
+        Task AddAsync(Product_Material product_Material);
     }
 }

@@ -25,6 +25,9 @@ namespace AtelieDosPontinhos.Domain.Interfaces
         //atualiza uma categoria
         Task UpdateAsync(Category category);
 
+        
+        
+
         //Deleta um categoria
         Task DeleteAsync(int id);
 
