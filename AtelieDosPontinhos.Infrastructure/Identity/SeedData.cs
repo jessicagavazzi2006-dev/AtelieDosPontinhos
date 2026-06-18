@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AtelieDosPontinhos.Domain.Interfaces
+namespace AtelieDosPontinhos.Infrastructure.Identity
 {
-    internal class IProductMaterial
+    internal class SeedData
     {
     }
 }

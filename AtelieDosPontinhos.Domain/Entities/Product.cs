@@ -29,7 +29,7 @@ namespace AtelieDosPontinhos.Domain.Entities
         /// <summary>
         /// Preço dos produtos
         /// </summary>
-        public double Price {  get; set; }
+        public decimal Price {  get; set; }
 
         /// <summary>
         /// Estoque dos produtos
@@ -43,7 +43,7 @@ namespace AtelieDosPontinhos.Domain.Entities
 
         public int CategoryId { get; set; }
 
-        public virtual Category? Categories { get; set; }
+        public virtual Category? Category { get; set; }
 
 
 

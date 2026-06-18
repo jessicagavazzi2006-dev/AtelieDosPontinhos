@@ -12,8 +12,8 @@ namespace AtelieDosPontinhos.Domain.Entities
 
         public int UnitUsed { get; set; }
 
-        public virtual Product? Products { get; set; }
+        public virtual Product? Product { get; set; }
 
-        public virtual Material? Materials { get; set; }
+        public virtual Material? Material { get; set; }
     }
 }
