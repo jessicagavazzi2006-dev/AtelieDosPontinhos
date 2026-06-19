@@ -13,4 +13,11 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\images\banner\" />
+    <Folder Include="wwwroot\images\categorias\" />
+    <Folder Include="wwwroot\images\logo\" />
+    <Folder Include="wwwroot\images\produtos\" />
+  </ItemGroup>
+
 </Project>
