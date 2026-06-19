@@ -13,5 +13,7 @@ namespace AtelieDosPontinhos.Domain.Entities
         public int Amount { get; set; }
 
         public string Unit { get; set; } = string.Empty;
+
+        public virtual ICollection<Product_Material> Product_Materials { get; set; } = new List<Product_Material>();
     }
 }
