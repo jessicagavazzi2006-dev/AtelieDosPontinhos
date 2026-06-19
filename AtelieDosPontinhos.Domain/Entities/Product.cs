@@ -45,6 +45,9 @@ namespace AtelieDosPontinhos.Domain.Entities
 
         public virtual Category? Category { get; set; }
 
+        // NAV: coleções de mapeamento many-to-many com payload
+        public virtual ICollection<Product_Material> Product_Materials { get; set; } = new List<Product_Material>();
+
 
 
 
