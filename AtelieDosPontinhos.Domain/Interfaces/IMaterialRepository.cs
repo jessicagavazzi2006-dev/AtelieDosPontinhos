@@ -19,7 +19,7 @@ namespace AtelieDosPontinhos.Domain.Interfaces
         /// </summary>
         /// 
         /// <returns></returns>
-        Task<Category?> GetByIdAsync(int id);
+        Task<Material?> GetByIdAsync(int id);
 
 
         //atualiza um material
@@ -31,7 +31,7 @@ namespace AtelieDosPontinhos.Domain.Interfaces
         //retorna todos os material cadastrados
         Task<int> CountAsync();
 
-        //adiciona uma categoria
+        //adiciona um material
         Task AddAsync(Material material);
     }
 }
