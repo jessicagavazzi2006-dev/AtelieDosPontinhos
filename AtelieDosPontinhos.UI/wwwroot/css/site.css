@@ -1,31 +1,97 @@
-html {
-  font-size: 14px;
-}
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
-}
+/* ============================
+   ESTILO GERAL
+============================= */
 
 body {
-  margin-bottom: 60px;
+    font-family: 'Poppins', sans-serif;
+    background-color: #F7F3ED;
+    color: #4A4A4A;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+/* ============================
+   NAVBAR
+============================= */
+
+.navbar {
+    background-color: #E9D8F4 !important;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+.navbar-brand {
+    color: #7C5E99 !important;
+    font-weight: 700;
 }
+
+.nav-link {
+    color: #555 !important;
+    font-weight: 500;
+    transition: .3s;
+}
+
+    .nav-link:hover {
+        color: #D97FA8 !important;
+    }
+
+/* ============================
+   BOTÕES
+============================= */
+
+.btn-primary {
+    background-color: #D97FA8;
+    border: none;
+}
+
+    .btn-primary:hover {
+        background-color: #C86C96;
+    }
+
+.btn-outline-secondary {
+    border-color: #C8B6E2;
+    color: #7C5E99;
+}
+
+    .btn-outline-secondary:hover {
+        background-color: #C8B6E2;
+        color: white;
+    }
+
+/* ============================
+   CARDS
+============================= */
+
+.card {
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,.08);
+}
+
+/* ============================
+   FOOTER
+============================= */
+
+.footer {
+    background: white;
+    border-top: 1px solid #eee;
+}
+
+/* ============================
+   HERO (Página Inicial)
+============================= */
+
+.hero {
+    padding: 90px 20px;
+    text-align: center;
+}
+
+    .hero h1 {
+        font-size: 3rem;
+        font-weight: 700;
+    }
+
+    .hero p {
+        font-size: 1.2rem;
+        color: #666;
+    }
+
+    .hero .btn {
+        margin-top: 20px;
+    }
