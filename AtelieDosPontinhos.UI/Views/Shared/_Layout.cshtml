@@ -1,95 +1,68 @@
 ﻿<!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Ateliê dos Pontinhos</title>
+    <title>@ViewData["Title"] - Loja</title>
 
-    <script type="importmap"></script>
-
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Bootstrap -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-
-    <!-- CSS -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/AtelieDosPontinhos.UI.styles.css" asp-append-version="true" />
 </head>
 
 <body>
 
-    <!-- NAVBAR -->
     <header>
-        <nav class="navbar navbar-expand-lg shadow-sm py-3">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
             <div class="container">
 
-                <!-- Logo -->
-                <a class="navbar-brand fw-bold fs-4" asp-controller="Home" asp-action="Index">
-                    🧵 Ateliê dos Pontinhos
+                <a class="navbar-brand d-flex align-items-center"
+                       asp-controller="Home"
+                       asp-action="Index">
+
+                    <img src="~/images/logo/logo.jpg"
+                         alt="Logo"
+                         class="logo-navbar rounded-circle me-2" />
+
+                    <strong>Ateliê dos Pontinhos</strong>
+
                 </a>
 
                 <button class="navbar-toggler"
                         type="button"
                         data-bs-toggle="collapse"
-                        data-bs-target="#menu">
+                        data-bs-target="#navbarNav">
 
                     <span class="navbar-toggler-icon"></span>
 
                 </button>
 
-                <div class="collapse navbar-collapse" id="menu">
+                <div class="collapse navbar-collapse" id="navbarNav">
 
-                    <ul class="navbar-nav mx-auto">
+                    <ul class="navbar-nav ms-auto">
 
                         <li class="nav-item">
-                            <a class="nav-link px-3"
-                               asp-controller="Home"
-                               asp-action="Index">
+                            <a class="nav-link"
+                                   asp-controller="Home"
+                                   asp-action="Index">
                                 Início
                             </a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link px-3"
-                               href="#">
+                            <a class="nav-link"
+                                   href="#">
                                 Produtos
                             </a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link px-3"
-                               href="#">
-                                Categorias
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link px-3"
-                               asp-controller="Home"
-                               asp-action="Contato">
+                            <a class="nav-link"
+                                   href="#">
                                 Contato
                             </a>
                         </li>
 
                     </ul>
-
-                    <div class="d-flex">
-
-                        <a href="#"
-                           class="btn btn-outline-secondary rounded-pill me-2 px-4">
-                            Entrar
-                        </a>
-
-                        <a href="#"
-                           class="btn btn-primary rounded-pill px-4">
-                            🛒 Carrinho
-                        </a>
-
-                    </div>
 
                 </div>
 
@@ -97,40 +70,11 @@
         </nav>
     </header>
 
-    <!-- CONTEÚDO -->
     <main>
-        <div class="container py-4">
-            @RenderBody()
-        </div>
+        @RenderBody()
     </main>
 
-    <!-- RODAPÉ -->
-    <footer class="footer mt-5 py-5 text-center">
-
-        <div class="container">
-
-            <h5 class="fw-bold">
-                Ateliê dos Pontinhos
-            </h5>
-
-            <p class="mb-1">
-                Bordados feitos com carinho para deixar sua casa ainda mais especial.
-            </p>
-
-            <small>
-                © 2026 - Todos os direitos reservados.
-            </small>
-
-        </div>
-
-    </footer>
-
-    <!-- Scripts -->
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script src="~/js/site.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 

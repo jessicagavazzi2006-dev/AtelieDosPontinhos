@@ -7,17 +7,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\images\logo\logo\**" />
+    <Compile Remove="wwwroot\images\produtos\**" />
+    <Content Remove="wwwroot\images\logo\logo\**" />
+    <Content Remove="wwwroot\images\produtos\**" />
+    <EmbeddedResource Remove="wwwroot\images\logo\logo\**" />
+    <EmbeddedResource Remove="wwwroot\images\produtos\**" />
+    <None Remove="wwwroot\images\logo\logo\**" />
+    <None Remove="wwwroot\images\produtos\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.11">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\images\banner\" />
-    <Folder Include="wwwroot\images\categorias\" />
-    <Folder Include="wwwroot\images\logo\" />
-    <Folder Include="wwwroot\images\produtos\" />
   </ItemGroup>
 
 </Project>

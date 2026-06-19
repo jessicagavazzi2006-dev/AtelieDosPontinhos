@@ -16,5 +16,10 @@ namespace AtelieDosPontinhos.Domain.Entities
 
 
         public virtual ICollection<Product> Products { get; set; } = new List<Product>();
+
+        /// <summary>
+        /// busca a imagem via local 
+        /// </summary>
+        public string ImageLocal { get; set; } = string.Empty;
     }
 }

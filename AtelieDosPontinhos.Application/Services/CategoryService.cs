@@ -28,7 +28,11 @@ namespace AtelieDosPontinhos.Application.Services
         } 
         public async Task<CategoryDto> CreateAsync(CreateCategoryDto dto)
         {
-            var category = new Category { Name = dto.Name };
+            var category = new Category
+            {
+                Name = dto.Name,
+                ImageLocal = dto.ImageLocal
+            };
             await _categoryRepository.AddAsync(category);
             return MapToDto(category); 
             
@@ -37,8 +41,9 @@ namespace AtelieDosPontinhos.Application.Services
         {
             var category = await _categoryRepository.GetByIdAsync(id);
             if (category == null) return null;
-            
+
             category.Name = dto.Name;
+            category.ImageLocal = dto.ImageLocal;
             await _categoryRepository.UpdateAsync(category);
             return MapToDto(category);
         }
@@ -61,6 +66,7 @@ namespace AtelieDosPontinhos.Application.Services
             {
                 Id = category.Id,
                 Name = category.Name,
+                ImageLocal = category.ImageLocal,
                 ProductCount = category.Products?.Count ?? 0
             };
         }

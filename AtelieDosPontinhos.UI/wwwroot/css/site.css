@@ -95,3 +95,46 @@ body {
     .hero .btn {
         margin-top: 20px;
     }
+
+/* ============================
+   HOME
+============================= */
+
+.banner-home {
+    height: 420px;
+    object-fit: cover;
+}
+
+.categoria-card {
+    overflow: hidden;
+    transition: .3s;
+}
+
+    .categoria-card:hover {
+        transform: translateY(-8px);
+    }
+
+    .categoria-card img {
+        height: 280px;
+        object-fit: cover;
+    }
+
+.produto-card {
+    overflow: hidden;
+    transition: .3s;
+}
+
+    .produto-card:hover {
+        transform: scale(1.04);
+    }
+
+    .produto-card img {
+        height: 220px;
+        object-fit: cover;
+    }
+
+.logo-navbar {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}
