@@ -7,7 +7,7 @@ namespace AtelieDosPontinhos.Application.Interfaces
 {
     public interface IMaterialService
     {
-        Task<IEnumerable<MaterialDto>> GetAllSync();
+        Task<IEnumerable<MaterialDto>> GetAllAsync();
         Task<MaterialDto?> GetByIdAsync(int id);
         Task<MaterialDto> CreateAsync(CreateMaterialDto dto);
         Task<MaterialDto?> UpdateAsync(int id, UpdateMaterialDto dto);
