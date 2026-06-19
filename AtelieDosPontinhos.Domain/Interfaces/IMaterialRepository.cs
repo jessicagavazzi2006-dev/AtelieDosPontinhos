@@ -15,7 +15,7 @@ namespace AtelieDosPontinhos.Domain.Interfaces
 
 
         /// <summary>
-        /// busca uma categoria pelo id
+        /// busca um material pelo id
         /// </summary>
         /// 
         /// <returns></returns>
