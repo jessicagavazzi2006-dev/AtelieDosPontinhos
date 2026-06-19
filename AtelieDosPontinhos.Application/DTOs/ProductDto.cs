@@ -12,7 +12,7 @@ namespace AtelieDosPontinhos.Application.DTOs
         public string CoverImageUrl { get; set; } = string.Empty;
         public int CategoryId { get; set; }
         public string CategoryName { get; set; } = string.Empty;
-        public double Price { get; set; }
+        public decimal Price { get; set; }
         public int Stock { get; set; }
         public string Type_Product { get; set; } = string.Empty;
     }
@@ -23,7 +23,7 @@ namespace AtelieDosPontinhos.Application.DTOs
         public string Description { get; set; } = string.Empty;
         public string CoverImageUrl { get; set; } = string.Empty;
         public int CategoryId { get; set; }
-        public double Price { get; set; }
+        public decimal Price { get; set; }
         public int Stock { get; set; }
     }
     //atulizar produto
@@ -33,7 +33,7 @@ namespace AtelieDosPontinhos.Application.DTOs
         public string Description { get; set; } = string.Empty;
         public string CoverImageUrl { get; set; } = string.Empty;
         public int CategoryId { get; set; }
-        public double Price { get; set; }
+        public decimal Price { get; set; }
         public int Stock { get; set; }
     }
 }
