@@ -1,5 +1,6 @@
 ﻿using AtelieDosPontinhos.Application.Interfaces;
 using AtelieDosPontinhos.Application.DTOs;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AtelieDosPontinhos.API.Controllers
 {
