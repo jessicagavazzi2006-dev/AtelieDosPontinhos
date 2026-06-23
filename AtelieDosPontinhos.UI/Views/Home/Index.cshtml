@@ -2,138 +2,167 @@
     ViewData["Title"] = "Home";
 }
 
-<!-- Banner -->
-<div class="container-fluid p-0">
-    <img src="~/images/banner/banner.png"
-         class="img-fluid w-100 banner-home"
-         alt="Banner">
-    </div>
+<!-- =========================
+     🎠 BANNER CARROSSEL
+========================== -->
 
-    <!-- Categorias -->
-    <section class="container py-5">
+<div id="carouselHome" class="carousel slide" data-bs-ride="carousel">
 
-        <div class="text-center mb-5">
-            <h2>Nossas Categorias</h2>
-            <p class="text-muted">
-                Escolha uma categoria para conhecer nossos produtos.
-            </p>
+    <div class="carousel-inner">
+
+        <div class="carousel-item active">
+            <img src="~/images/banner/banner.png" class="d-block w-100 banner-home" alt="Banner 1">
         </div>
 
-        <div class="row g-4">
+        <div class="carousel-item">
+            <img src="~/images/banner/banner.png" class="d-block w-100 banner-home" alt="Banner 2">
+        </div>
 
-            <div class="col-md-6 col-lg-4">
-                <div class="card categoria-card">
-                    <img src="~/images/categorias/cama/kit lencol/lençol frozen solteiro.jpg"
-                         class="card-img-top"
-                         alt="Cama">
+    </div>
 
-                        <div class="card-body text-center">
-                            <h4>Cama</h4>
-                        </div>
-                    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselHome" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+    </button>
+
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselHome" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+    </button>
+
+</div>
+
+
+<!-- =========================
+     🧺 CATEGORIAS
+========================== -->
+
+<section class="container py-5">
+
+    <div class="text-center mb-5">
+        <h2>Nossas Categorias</h2>
+        <p class="text-muted">Escolha uma categoria e descubra nossos Produtos</p>
+    </div>
+
+    <div class="row g-4">
+
+        <!-- CAMA -->
+        <div class="col-md-4">
+            <div class="card categoria-card">
+                <img src="~/images/categorias/cama/kit lencol/lençol frozen solteiro.jpg">
+                <div class="card-body text-center">
+                    <h4>Cama</h4>
+                    <button class="btn btn-primary btn-sm mt-2">Ver Produtos</button>
                 </div>
+            </div>
+        </div>
 
-                <div class="col-md-6 col-lg-4">
-                    <div class="card categoria-card">
-                        <img src="~/images/categorias/mesa/toalha de mesa/toalha de mesa.jpg"
-                             class="card-img-top"
-                             alt="Mesa">
+        <!-- MESA -->
+        <div class="col-md-4">
+            <div class="card categoria-card">
+                <img src="~/images/categorias/mesa/toalha de mesa/toalha de mesa.jpg">
+                <div class="card-body text-center">
+                    <h4>Mesa</h4>
+                    <button class="btn btn-primary btn-sm mt-2">Ver Produtos</button>
+                </div>
+            </div>
+        </div>
 
-                            <div class="card-body text-center">
-                                <h4>Mesa</h4>
-                            </div>
-                        </div>
-                    </div>
+        <!-- BANHO -->
+        <div class="col-md-4">
+            <div class="card categoria-card">
+                <img src="~/images/categorias/banho/Kit toalhas/kit toalhas beges.jpg">
+                <div class="card-body text-center">
+                    <h4>Banho</h4>
+                    <button class="btn btn-primary btn-sm mt-2">Ver Produtos</button>
+                </div>
+            </div>
+        </div>
 
-                    <div class="col-md-6 col-lg-4">
-                        <div class="card categoria-card">
-                            <img src="~/images/categorias/banho/Kit toalhas/kit toalhas beges.jpg"
-                                 class="card-img-top"
-                                 alt="Banho">
+        <!-- INFANTIL -->
+        <div class="col-md-6">
+            <div class="card categoria-card">
+                <img src="~/images/categorias/infantil/kit infantil/kit fraldas e babador.jpg">
+                <div class="card-body text-center">
+                    <h4>Infantil</h4>
+                    <button class="btn btn-primary btn-sm mt-2">Ver Produtos</button>
+                </div>
+            </div>
+        </div>
 
-                                <div class="card-body text-center">
-                                    <h4>Banho</h4>
-                                </div>
-                            </div>
-                        </div>
+        <!-- MATERIAIS -->
+        <div class="col-md-6">
+            <div class="card categoria-card">
+                <img src="~/images/categorias/materiais/bastidor/bastidores.jpg">
+                <div class="card-body text-center">
+                    <h4>Materiais</h4>
+                    <button class="btn btn-primary btn-sm mt-2">Ver Produtos</button>
+                </div>
+            </div>
+        </div>
 
-                        <div class="col-md-6 col-lg-6">
-                            <div class="card categoria-card">
-                                <img src="~/images/categorias/infantil/kit infantil/kit fraldas e babador.jpg"
-                                     class="card-img-top"
-                                     alt="Infantil">
+    </div>
+</section>
 
-                                    <div class="card-body text-center">
-                                        <h4>Infantil</h4>
-                                    </div>
-                                </div>
-                            </div>
 
-                            <div class="col-md-6 col-lg-6">
-                                <div class="card categoria-card">
-                                    <img src="~/images/categorias/materiais/bastidor/bastidores.jpg"
-                                         class="card-img-top"
-                                         alt="Materiais">
+<!-- =========================
+     🛍️ Produtos EM DESTAQUE
+========================== -->
 
-                                        <div class="card-body text-center">
-                                            <h4>Materiais</h4>
-                                        </div>
-                                    </div>
-                                </div>
+<section class="container pb-5">
 
-                            </div>
+    <div class="text-center mb-4">
+        <h2>Produtos em Destaque</h2>
+        <p class="text-muted">Os queridinhos da nossa loja 💖</p>
+    </div>
 
-                        </section>
+    <div class="row g-4">
 
-                        <!-- Produtos -->
-                        <section class="container pb-5">
+        <!-- Product 1 -->
+        <div class="col-md-3">
+            <div class="card Product-card">
+                <img src="~/images/categorias/cama/fronha/fronha floral rosa.jpg">
+                <div class="card-body text-center">
+                    <h6>Fronha Floral</h6>
+                    <p>R$ 29,90</p>
+                    <button class="btn btn-primary btn-sm">Comprar</button>
+                </div>
+            </div>
+        </div>
 
-                            <div class="text-center mb-4">
-                                <h2>Produtos em Destaque</h2>
-                            </div>
+        <!-- Product 2 -->
+        <div class="col-md-3">
+            <div class="card Product-card">
+                <img src="~/images/categorias/mesa/panos de prato/pano de prato café.jpg">
+                <div class="card-body text-center">
+                    <h6>Pano de Prato</h6>
+                    <p>R$ 19,90</p>
+                    <button class="btn btn-primary btn-sm">Comprar</button>
+                </div>
+            </div>
+        </div>
 
-                            <div class="row g-4">
+        <!-- Product 3 -->
+        <div class="col-md-3">
+            <div class="card Product-card">
+                <img src="~/images/categorias/materiais/agulhas/agulhas.webp">
+                <div class="card-body text-center">
+                    <h6>Agulhas</h6>
+                    <p>R$ 9,90</p>
+                    <button class="btn btn-primary btn-sm">Comprar</button>
+                </div>
+            </div>
+        </div>
 
-                                <div class="col-md-3">
-                                    <div class="card produto-card">
-                                        <img src="~/images/categorias/cama/fronha/fronha floral rosa.jpg" class="card-img-top">
-                                            <div class="card-body text-center">
-                                                <h6>Fronha Floral</h6>
-                                            </div>
-                                        </div>
-                                    </div>
+        <!-- Product 4 -->
+        <div class="col-md-3">
+            <div class="card Product-card">
+                <img src="~/images/categorias/banho/Toalha de banho/toalha azul.jpg">
+                <div class="card-body text-center">
+                    <h6>Toalha Azul</h6>
+                    <p>R$ 39,90</p>
+                    <button class="btn btn-primary btn-sm">Comprar</button>
+                </div>
+            </div>
+        </div>
 
-                                    <div class="col-md-3">
-                                        <div class="card produto-card">
-                                            <img src="~/images/categorias/banho/Toalha de banho/toalha azul.jpg" class="card-img-top">
-                                                <div class="card-body text-center">
-                                                    <h6>Toalha Azul</h6>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-3">
-                                            <div class="card produto-card">
-                                                <img src="~/images/categorias/mesa/panos de prato/pano de prato café.jpg" class="card-img-top">
-                                                    <div class="card-body text-center">
-                                                        <h6>Pano de Prato</h6>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-3">
-                                                <div class="card produto-card">
-                                                    <img src="~/images/categorias/materiais/agulhas/agulhas.webp" class="card-img-top">
-                                                        <div class="card-body text-center">
-                                                            <h6>Agulhas</h6>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-
-                                        </section>
-
-                                        @section Scripts {
-                                            <script src="~/js/home.js"></script>
-                                        }
+    </div>
+</section>

@@ -8,35 +8,38 @@ namespace AtelieDosPontinhos.Infrastructure.Configurations
     {
         public void Configure(EntityTypeBuilder<Product> builder)
         {
-            builder.HasKey(p  => p.Id);
+            // Define a chave primária da tabela Product
+            builder.HasKey(p => p.Id);
 
+            // Nome do produto
             builder.Property(p => p.Name)
-                .IsRequired() // Define que este campo é OBRIGATORIO preencher
-                .HasMaxLength(200); // Define um tamanho máximo para preencher o campo
+                .IsRequired() // campo obrigatório
+                .HasMaxLength(200); // limite de caracteres
 
+            // Descrição do produto
             builder.Property(p => p.Description)
                 .IsRequired()
                 .HasMaxLength(2000);
 
+            // URL da imagem do produto
             builder.Property(p => p.CoverImageUrl)
                 .HasMaxLength(500);
 
+            // Preço do produto
             builder.Property(p => p.Price)
                 .IsRequired()
-                .HasPrecision(10, 2); // Define que este campo todo número será 10 números e 2 casas
+                .HasPrecision(10, 2); // 10 dígitos no total, 2 casas decimais
 
+            // Estoque do produto
             builder.Property(p => p.Stock)
                 .IsRequired();
 
-            builder.Property(p => p.Type_Product)
-                .IsRequired()
-                .HasMaxLength (200);
 
-            builder.HasOne(p => p.Category) // UM produto tem UMA categoria
-                .WithMany(p => p.Products) // UMA categoria tem MUITOS pordutos
-                .HasForeignKey(g => g.CategoryId) // a FK é CategoryId
-                .OnDelete(DeleteBehavior.Restrict); // Esse método vai dar um bloqueio ao tentar excluir a tabela com couteúdo 
-
+            // Relacionamento: um Product pertence a uma Category
+            builder.HasOne(p => p.Category) // UM Product tem UMA Category
+                .WithMany(c => c.Products)  // UMA Category tem MUITOS Products
+                .HasForeignKey(p => p.CategoryId) // chave estrangeira
+                .OnDelete(DeleteBehavior.Restrict); // impede exclusão em cascata
         }
     }
 }

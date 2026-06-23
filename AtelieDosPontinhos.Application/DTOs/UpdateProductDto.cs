@@ -1,6 +1,6 @@
 ﻿namespace AtelieDosPontinhos.Application.DTOs
 {
-    public class ProductDto
+    public class UpdateProductDto
     {
         public string Name { get; set; }
         public string Description { get; set; }

@@ -12,7 +12,7 @@ namespace AtelieDosPontinhos.Infrastructure.Context
         }
 
         /// <summary>
-        /// Dbset representa a tabela produto no banco de dados
+        /// Dbset representa a tabela Product no banco de dados
         /// </summary>
         public DbSet<Product> Products { get; set; }
 
@@ -27,7 +27,7 @@ namespace AtelieDosPontinhos.Infrastructure.Context
         public DbSet<Material> Materials { get; set; }
 
         /// <summary>
-        /// Dbset representa a tabela produto
+        /// Dbset representa a tabela Product
         /// </summary>
         public DbSet<Product_Material> ProductMaterials { get; set; }
 

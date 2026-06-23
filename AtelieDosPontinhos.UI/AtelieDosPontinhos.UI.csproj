@@ -8,20 +8,27 @@
 
   <ItemGroup>
     <Compile Remove="wwwroot\images\logo\logo\**" />
-    <Compile Remove="wwwroot\images\produtos\**" />
+    <Compile Remove="wwwroot\images\Products\**" />
     <Content Remove="wwwroot\images\logo\logo\**" />
-    <Content Remove="wwwroot\images\produtos\**" />
+    <Content Remove="wwwroot\images\Products\**" />
     <EmbeddedResource Remove="wwwroot\images\logo\logo\**" />
-    <EmbeddedResource Remove="wwwroot\images\produtos\**" />
+    <EmbeddedResource Remove="wwwroot\images\Products\**" />
     <None Remove="wwwroot\images\logo\logo\**" />
-    <None Remove="wwwroot\images\produtos\**" />
+    <None Remove="wwwroot\images\Products\**" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.11">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AtelieDosPontinhos.Infrastructure\AtelieDosPontinhos.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

@@ -4,7 +4,7 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    background-color: #F7F3ED;
+    background-color: #F5EEDB;
     color: #4A4A4A;
 }
 
@@ -119,16 +119,16 @@ body {
         object-fit: cover;
     }
 
-.produto-card {
+.Product-card {
     overflow: hidden;
     transition: .3s;
 }
 
-    .produto-card:hover {
+    .Product-card:hover {
         transform: scale(1.04);
     }
 
-    .produto-card img {
+    .Product-card img {
         height: 220px;
         object-fit: cover;
     }
@@ -137,4 +137,78 @@ body {
     width: 100px;
     height: 100px;
     object-fit: cover;
+}
+
+/* ============================
+   NAVBAR UPGRADE
+============================= */
+
+.search-navbar {
+    border-radius: 25px;
+    padding: 10px 18px;
+    border: 1px solid #ddd;
+}
+
+    .search-navbar:focus {
+        box-shadow: 0 0 0 3px rgba(217, 127, 168, 0.25);
+        border-color: #D97FA8;
+    }
+
+.icons-navbar span {
+    cursor: pointer;
+    transition: .2s;
+}
+
+    .icons-navbar span:hover {
+        transform: scale(1.2);
+        color: #D97FA8;
+    }
+
+.cart-badge {
+    position: absolute;
+    top: -6px;
+    right: -10px;
+    background: #D97FA8;
+    color: white;
+    font-size: 10px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.navbar span {
+    cursor: pointer;
+    transition: .2s;
+}
+
+    .navbar span:hover {
+        transform: scale(1.2);
+        color: #D97FA8;
+    }
+
+.Product-detalhe {
+    background: #fff;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 8px 30px rgba(0,0,0,.05);
+}
+
+.Product-imagem {
+    height: 450px;
+    object-fit: cover;
+    width: 100%;
+}
+
+.Product-preco {
+    font-size: 28px;
+    font-weight: bold;
+    color: #D97FA8;
+}
+
+.quantidade-input {
+    width: 60px;
+    text-align: center;
 }

@@ -1,0 +1,65 @@
+﻿@model SeuProjeto.Controllers.ProductViewModel
+
+@{
+    ViewData["Title"] = "Product";
+}
+
+<div class="container py-5 Product-detalhe">
+
+    <div class="row g-5">
+
+        <!-- IMAGEM -->
+        <div class="col-md-6">
+            <div class="Product-imagem-box">
+                <img src="@Url.Content(Model.Imagem)"
+                     class="img-fluid Product-imagem"
+                     alt="@Model.Nome">
+            </div>
+        </div>
+
+        <!-- INFO -->
+        <div class="col-md-6">
+
+            <h2 class="Product-titulo">@Model.Nome</h2>
+
+            <p class="Product-preco">R$ @Model.Preco</p>
+
+            <p class="text-muted">
+                @Model.Descricao
+            </p>
+
+            <div class="d-flex align-items-center gap-3 mb-3">
+
+                <button class="btn btn-outline-secondary">-</button>
+
+                <input type="text" value="1" class="form-control quantidade-input">
+
+                <button class="btn btn-outline-secondary">+</button>
+
+            </div>
+
+            <div class="d-flex gap-2 flex-wrap">
+
+                <button class="btn btn-comprar btn-lg">
+                    🛒 Comprar agora
+                </button>
+
+                <button class="btn btn-outline-secondary btn-lg">
+                    ❤ Favoritar
+                </button>
+
+            </div>
+
+            <hr />
+
+            <ul class="Product-info-extra">
+                <li>✔ Product artesanal</li>
+                <li>✔ Envio rápido</li>
+                <li>✔ Qualidade garantida</li>
+            </ul>
+
+        </div>
+
+    </div>
+
+</div>

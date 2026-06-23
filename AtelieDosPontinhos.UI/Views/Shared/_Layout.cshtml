@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Loja</title>
+    <title>@ViewData["Title"] - Ateliê dos Pontinhos</title>
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -11,72 +11,126 @@
 
 <body>
 
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
-            <div class="container">
+<header>
 
-                <a class="navbar-brand d-flex align-items-center"
-                       asp-controller="Home"
-                       asp-action="Index">
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
+    <div class="container">
 
-                    <img src="~/images/logo/logo.jpg"
-                         alt="Logo"
-                         class="logo-navbar rounded-circle me-2" />
+        <!-- LOGO -->
+        <a class="navbar-brand d-flex align-items-center"
+           asp-controller="Home"
+           asp-action="Index">
 
-                    <strong>Ateliê dos Pontinhos</strong>
+            <img src="~/images/logo/logo.png"
+                 class="logo-navbar rounded-circle me-2"
+                 alt="Logo" />
 
-                </a>
+            <strong>Ateliê dos Pontinhos</strong>
+        </a>
 
-                <button class="navbar-toggler"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#navbarNav">
+        <!-- MENU MOBILE -->
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-                    <span class="navbar-toggler-icon"></span>
+        <div class="collapse navbar-collapse" id="navbarNav">
 
-                </button>
+            <!-- BUSCA + DROPDOWN -->
+            <div class="flex-grow-1 px-3 position-relative">
 
-                <div class="collapse navbar-collapse" id="navbarNav">
+                <!-- INPUT DE BUSCA -->
+                <input type="search"
+                       class="form-control search-navbar"
+                       placeholder="Buscar produtos e categorias...">
 
-                    <ul class="navbar-nav ms-auto">
-
-                        <li class="nav-item">
-                            <a class="nav-link"
-                                   asp-controller="Home"
-                                   asp-action="Index">
-                                Início
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link"
-                                   href="#">
-                                Produtos
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link"
-                                   href="#">
-                                Contato
-                            </a>
-                        </li>
-
-                    </ul>
-
+                <!-- RESULTADOS DA BUSCA -->
+                <div id="searchResults"
+                     class="list-group position-absolute w-100 mt-1"
+                     style="z-index: 9999; display:none;">
                 </div>
 
             </div>
-        </nav>
-    </header>
 
-    <main>
-        @RenderBody()
-    </main>
+            <!-- ÍCONES -->
+            <div class="d-flex align-items-center gap-3 fs-5">
 
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+                <a asp-controller="Account"
+   asp-action="Login"
+   title="Minha conta"
+   class="text-decoration-none text-dark">
+    👤
+</a>
+                <span title="Favoritos">❤</span>
 
-    @await RenderSectionAsync("Scripts", required: false)
+                <!-- CARRINHO -->
+                <div class="position-relative">
+                    <span title="Carrinho">🛒</span>
+                    <span class="cart-badge">2</span>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+</header>
+
+<main class="container mt-4">
+    @RenderBody()
+</main>
+
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- 🔎 BUSCA DINÂMICA -->
+<script>
+const input = document.querySelector(".search-navbar");
+const resultsBox = document.getElementById("searchResults");
+
+let timeout = null;
+
+input.addEventListener("input", function () {
+
+    clearTimeout(timeout);
+
+    const term = this.value;
+
+    if (term.length < 2) {
+        resultsBox.style.display = "none";
+        return;
+    }
+
+    timeout = setTimeout(async () => {
+
+        const response = await fetch(`/api/Product/search?term=${term}`);
+        const data = await response.json();
+
+        resultsBox.innerHTML = "";
+
+        if (!data || data.length === 0) {
+            resultsBox.style.display = "none";
+            return;
+        }
+
+        data.forEach(p => {
+            const item = document.createElement("a");
+            item.classList.add("list-group-item", "list-group-item-action");
+            item.href = "#";
+            item.innerText = p.name;
+
+            resultsBox.appendChild(item);
+        });
+
+        resultsBox.style.display = "block";
+
+    }, 300);
+
+});
+</script>
+
+@await RenderSectionAsync("Scripts", required: false)
 
 </body>
 </html>
