@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 
-namespace AtelieDosPontinhos.Infrastructure.Identity
+namespace AtelieDosPontinhos.Infrastructure.Data
 {
 
 
