@@ -3,72 +3,78 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-public static class SeedData
+
+namespace AtelieDosPontinhos.Infrastructure.Identity
 {
-    public static async Task Initialize(IServiceProvider serviceProvider)
+
+
+    public static class SeedData
     {
-        using var scope = serviceProvider.CreateScope();
-        var context = scope.ServiceProvider.GetRequiredService<AtelieDosPontinhosDbContext>();
-        var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
-
-        // Aplica migrations pendentes automaticamente
-        await context.Database.MigrateAsync();
-
-        // 🔐 CRIAR ROLES
-        string[] roles = { "Admin", "Client" };
-
-        foreach (var role in roles)
+        public static async Task Initialize(IServiceProvider serviceProvider)
         {
-            var roleExists = await roleManager.RoleExistsAsync(role);
+            using var scope = serviceProvider.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<AtelieDosPontinhosDbContext>();
+            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
-            if (!roleExists)
+            // Aplica migrations pendentes automaticamente
+            await context.Database.MigrateAsync();
+
+            // 🔐 CRIAR ROLES
+            string[] roles = { "Admin", "Client" };
+
+            foreach (var role in roles)
             {
-                await roleManager.CreateAsync(new IdentityRole(role));
+                var roleExists = await roleManager.RoleExistsAsync(role);
+
+                if (!roleExists)
+                {
+                    await roleManager.CreateAsync(new IdentityRole(role));
+                }
             }
-        }
 
-        // 👤 CRIAR ADMIN
-        var adminEmail = "admin@site.com";
+            // 👤 CRIAR ADMIN
+            var adminEmail = "admin@site.com";
 
-        var adminUser = await userManager.FindByEmailAsync(adminEmail);
+            var adminUser = await userManager.FindByEmailAsync(adminEmail);
 
-        if (adminUser == null)
-        {
-            var user = new IdentityUser
+            if (adminUser == null)
             {
-                UserName = adminEmail,
-                Email = adminEmail,
-                EmailConfirmed = true
-            };
+                var user = new IdentityUser
+                {
+                    UserName = adminEmail,
+                    Email = adminEmail,
+                    EmailConfirmed = true
+                };
 
-            var result = await userManager.CreateAsync(user, "Admin@123");
+                var result = await userManager.CreateAsync(user, "Admin@123");
 
-            if (result.Succeeded)
-            {
-                await userManager.AddToRoleAsync(user, "Admin");
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(user, "Admin");
+                }
             }
-        }
 
-        // 👤 CRIAR CLIENTE
-        var clientEmail = "cliente@site.com";
+            // 👤 CRIAR CLIENTE
+            var clientEmail = "cliente@site.com";
 
-        var clientUser = await userManager.FindByEmailAsync(clientEmail);
+            var clientUser = await userManager.FindByEmailAsync(clientEmail);
 
-        if (clientUser == null)
-        {
-            var user = new IdentityUser
+            if (clientUser == null)
             {
-                UserName = clientEmail,
-                Email = clientEmail,
-                EmailConfirmed = true
-            };
+                var user = new IdentityUser
+                {
+                    UserName = clientEmail,
+                    Email = clientEmail,
+                    EmailConfirmed = true
+                };
 
-            var result = await userManager.CreateAsync(user, "Cliente@123");
+                var result = await userManager.CreateAsync(user, "Cliente@123");
 
-            if (result.Succeeded)
-            {
-                await userManager.AddToRoleAsync(user, "Client");
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(user, "Client");
+                }
             }
         }
     }
