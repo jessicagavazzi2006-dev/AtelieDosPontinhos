@@ -104,11 +104,11 @@ namespace AtelieDosPontinhos.Application.Services
             };
         }
 
-        public async Task<IEnumerable<ProductDto>> SearchAsync(string term)
-        {
-            var products = await _productRepository.SearchAsync(term);
-            return products.Select(MapToDto);
-        }
+        //public async Task<IEnumerable<ProductDto>> SearchAsync(string term)
+        //{
+        //    var products = await _productRepository.SearchAsync(term);
+        //    return products.Select(MapToDto);
+        //}
 
         public async Task<IEnumerable<ProductDto>> SearchAsync(string term)
         {
