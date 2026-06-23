@@ -8,7 +8,7 @@ namespace AtelieDosPontinhos.Application.ViewModels
     public class HomeViewModel
     {
         public IEnumerable<MaterialDto> Materiais { get; set; } = new List<MaterialDto>();
-        public IEnumerable<ProductDto> ProdutosRecentes { get; set; } = new List<ProductDto>();
+        public IEnumerable<ProductDto> ProductsRecentes { get; set; } = new List<ProductDto>();
     }
     public class ProductDetailViewModel
     {

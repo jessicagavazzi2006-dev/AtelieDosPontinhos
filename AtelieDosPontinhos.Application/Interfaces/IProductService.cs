@@ -1,7 +1,4 @@
 ﻿using AtelieDosPontinhos.Application.DTOs;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace AtelieDosPontinhos.Application.Interfaces
 {
@@ -9,10 +6,14 @@ namespace AtelieDosPontinhos.Application.Interfaces
     {
         Task<IEnumerable<ProductDto>> GetAllAsync();
         Task<ProductDto?> GetByIdAsync(int id);
-        Task<IEnumerable<ProductDto>> GetByCategoryAsync (int categoryId);
-        Task<ProductDto> CreateAsync (CreateProductDto Dto);
-        Task<ProductDto?> UpdateAsync (int id, UpdateProductDto Dto);
-        Task<bool> DeleteAsync (int id);
-        Task<int>CountAsync();
+        Task<IEnumerable<ProductDto>> GetByCategoryAsync(int categoryId);
+
+        Task<ProductDto> CreateAsync(CreateProductDto dto);
+        Task<ProductDto?> UpdateAsync(int id, UpdateProductDto dto);
+
+        Task<bool> DeleteAsync(int id);
+        Task<int> CountAsync();
+
+        Task<IEnumerable<ProductDto>> SearchAsync(string term);
     }
 }

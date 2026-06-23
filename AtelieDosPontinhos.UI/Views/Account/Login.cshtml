@@ -1,0 +1,33 @@
+﻿@model AtelieDosPontinhos.UI.Models.LoginViewModel
+
+<h2>Login</h2>
+
+<form asp-action="Login" method="post">
+
+    <div>
+        <label>Email</label>
+        <input asp-for="Email" class="form-control" />
+    </div>
+
+    <div>
+        <label>Senha</label>
+        <input asp-for="Password" class="form-control" type="password" />
+    </div>
+
+    <div>
+        <label>
+            <input asp-for="RememberMe" />
+            Lembrar-me
+        </label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        Entrar
+    </button>
+
+</form>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <p style="color:red">Login inválido</p>
+}

@@ -46,5 +46,19 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+document.querySelector(".search-navbar").addEventListener("input", async function (e) {
+
+    const term = e.target.value;
+
+    if (term.length < 2) return;
+
+    const response = await fetch(`/api/Product/search?term=${term}`);
+    const data = await response.json();
+
+    console.log("Resultados:", data);
+});
+</script>
 </body>
 </html>

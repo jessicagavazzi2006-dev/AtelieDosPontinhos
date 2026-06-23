@@ -4,7 +4,7 @@
 
 ## Sobre o Projeto
 
-O **AtelieDosPontinhos** é uma loja virtual que vende produtos de artesanato, o site foi desenvolvido de forma de didatico :
+O **AtelieDosPontinhos** é uma loja virtual que vende Products de artesanato, o site foi desenvolvido de forma de didatico :
 
 desenvolvidos pelos alunos:
 Lucar Richard - Domain, Aplication
