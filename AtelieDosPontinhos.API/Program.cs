@@ -1,45 +1,88 @@
 using AtelieDosPontinhos.Infrastructure.Context;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using AtelieDosPontinhos.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+#region SERVICES
+
+// Controllers
 builder.Services.AddControllers();
 
-// Ativa suporte a MVC (Controllers + Views Razor)
+// MVC (Views, se você usa UI junto)
 builder.Services.AddControllersWithViews();
 
 // DbContext
 builder.Services.AddDbContext<AtelieDosPontinhosDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// 🔐 Identity (LOGIN REAL)
+// Identity
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<AtelieDosPontinhosDbContext>()
     .AddDefaultTokenProviders();
 
-// 🔐 Authorization (necessário para Roles funcionar corretamente)
+// Authorization (roles)
 builder.Services.AddAuthorization();
+
+// Swagger
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+#endregion
 
 var app = builder.Build();
 
-// Configure pipeline
+
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+#region PIPELINE
+
+// Swagger (DEVE vir antes do routing)
+app.UseSwagger();
+app.UseSwaggerUI();
+
+// HTTPS
 app.UseHttpsRedirection();
 
-// 🔐 AUTH PIPELINE (ordem obrigatória)
+// Routing
+app.UseRouting();
+
+// Auth (ordem obrigatória)
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Rotas MVC
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-// 🔐 SEED DE ROLES (Admin / Client)
+#endregion
+
+#region SEED DATA
+
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     await SeedData.Initialize(services);
 }
+
+#endregion
+
+#region DEBUG DB CONNECTION (opcional)
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AtelieDosPontinhosDbContext>();
+    Console.WriteLine("DB CONECTADO: " + db.Database.GetConnectionString());
+}
+
+#endregion
 
 app.Run();

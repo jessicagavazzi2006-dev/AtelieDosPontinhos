@@ -4,6 +4,7 @@ using AtelieDosPontinhos.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtelieDosPontinhos.Infrastructure.Migrations
 {
     [DbContext(typeof(AtelieDosPontinhosDbContext))]
-    partial class AtelieDosPontinhosDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260623193827_AddCartItem")]
+    partial class AddCartItem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

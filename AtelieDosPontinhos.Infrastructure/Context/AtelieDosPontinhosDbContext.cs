@@ -11,6 +11,8 @@ namespace AtelieDosPontinhos.Infrastructure.Context
         {
         }
 
+        public DbSet<CartItem> CartItems { get; set; }
+
         /// <summary>
         /// Dbset representa a tabela Product no banco de dados
         /// </summary>

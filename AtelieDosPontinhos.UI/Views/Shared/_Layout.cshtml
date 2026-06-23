@@ -11,126 +11,142 @@
 
 <body>
 
-<header>
+    <header>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
-    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
+            <div class="container">
 
-        <!-- LOGO -->
-        <a class="navbar-brand d-flex align-items-center"
-           asp-controller="Home"
-           asp-action="Index">
+                <!-- LOGO -->
+                <a class="navbar-brand d-flex align-items-center"
+                       asp-controller="Home"
+                       asp-action="Index">
 
-            <img src="~/images/logo/logo.png"
-                 class="logo-navbar rounded-circle me-2"
-                 alt="Logo" />
+                    <img src="~/images/logo/logo.png"
+                         class="logo-navbar rounded-circle me-2"
+                         alt="Logo" />
 
-            <strong>Ateliê dos Pontinhos</strong>
-        </a>
+                    <strong>Ateliê dos Pontinhos</strong>
+                </a>
 
-        <!-- MENU MOBILE -->
-        <button class="navbar-toggler" type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+                <!-- MENU MOBILE -->
+                <button class="navbar-toggler" type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-        <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="collapse navbar-collapse" id="navbarNav">
 
-            <!-- BUSCA + DROPDOWN -->
-            <div class="flex-grow-1 px-3 position-relative">
+                    <!-- BUSCA + DROPDOWN -->
+                    <div class="flex-grow-1 px-3 position-relative">
 
-                <!-- INPUT DE BUSCA -->
-                <input type="search"
-                       class="form-control search-navbar"
-                       placeholder="Buscar produtos e categorias...">
+                        <!-- INPUT DE BUSCA -->
+                        <input type="search"
+                               class="form-control search-navbar"
+                               placeholder="Buscar produtos e categorias...">
 
-                <!-- RESULTADOS DA BUSCA -->
-                <div id="searchResults"
-                     class="list-group position-absolute w-100 mt-1"
-                     style="z-index: 9999; display:none;">
-                </div>
+                        <!-- RESULTADOS DA BUSCA -->
+                        <div id="searchResults"
+                             class="list-group position-absolute w-100 mt-1"
+                             style="z-index: 9999; display:none;">
+                        </div>
 
-            </div>
+                    </div>
 
-            <!-- ÍCONES -->
-            <div class="d-flex align-items-center gap-3 fs-5">
+                   <!-- ÍCONES -->
+<div class="d-flex align-items-center gap-3 fs-5">
 
-                <a asp-controller="Account"
-   asp-action="Login"
-   title="Minha conta"
-   class="text-decoration-none text-dark">
-    👤
-</a>
-                <span title="Favoritos">❤</span>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <span>Olá, @User.Identity.Name</span>
 
-                <!-- CARRINHO -->
-                <div class="position-relative">
-                    <span title="Carrinho">🛒</span>
-                    <span class="cart-badge">2</span>
-                </div>
-
-            </div>
-
-        </div>
-    </div>
-</nav>
-
-</header>
-
-<main class="container mt-4">
-    @RenderBody()
-</main>
-
-<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-
-<!-- 🔎 BUSCA DINÂMICA -->
-<script>
-const input = document.querySelector(".search-navbar");
-const resultsBox = document.getElementById("searchResults");
-
-let timeout = null;
-
-input.addEventListener("input", function () {
-
-    clearTimeout(timeout);
-
-    const term = this.value;
-
-    if (term.length < 2) {
-        resultsBox.style.display = "none";
-        return;
-    }
-
-    timeout = setTimeout(async () => {
-
-        const response = await fetch(`/api/Product/search?term=${term}`);
-        const data = await response.json();
-
-        resultsBox.innerHTML = "";
-
-        if (!data || data.length === 0) {
-            resultsBox.style.display = "none";
-            return;
+        @if (User.IsInRole("Admin"))
+        {
+            <a asp-controller="Dashboard" asp-action="AdminPanel" title="Admin">
+                🔐
+            </a>
         }
 
-        data.forEach(p => {
-            const item = document.createElement("a");
-            item.classList.add("list-group-item", "list-group-item-action");
-            item.href = "#";
-            item.innerText = p.name;
+        <a asp-controller="Account" asp-action="Logout" title="Sair">
+            🚪
+        </a>
+    }
+    else
+    {
+        <a asp-controller="Account" asp-action="Login" title="Minha conta">
+            👤
+        </a>
+    }
 
-            resultsBox.appendChild(item);
-        });
+    <!-- CARRINHO -->
+    <div class="position-relative">
+        <span title="Carrinho">🛒</span>
+        <span class="cart-badge">2</span>
+    </div>
 
-        resultsBox.style.display = "block";
+</div>
 
-    }, 300);
+                    </div>
 
-});
-</script>
+                </div>
+            </div>
+        </nav>
 
-@await RenderSectionAsync("Scripts", required: false)
+    </header>
+
+    <main class="container mt-4">
+        @RenderBody()
+    </main>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- 🔎 BUSCA DINÂMICA -->
+    <script>
+            const input = document.querySelector(".search-navbar");
+            const resultsBox = document.getElementById("searchResults");
+
+            let timeout = null;
+
+            input.addEventListener("input", function () {
+
+                clearTimeout(timeout);
+
+                const term = this.value;
+
+                if (term.length < 2) {
+                    resultsBox.style.display = "none";
+                    return;
+                }
+
+                timeout = setTimeout(async () => {
+
+                    const response = await fetch(`/api/Product/search?term=${term}`);
+                    const data = await response.json();
+
+                    resultsBox.innerHTML = "";
+
+                    if (!data || data.length === 0) {
+                        resultsBox.style.display = "none";
+                        return;
+                    }
+
+                    data.forEach(p => {
+                        const item = document.createElement("a");
+                        item.classList.add("list-group-item", "list-group-item-action");
+                        item.href = "#";
+                        item.innerText = p.name;
+
+                        resultsBox.appendChild(item);
+                    });
+
+                    resultsBox.style.display = "block";
+
+                }, 300);
+
+            });
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
 
 </body>
 </html>
