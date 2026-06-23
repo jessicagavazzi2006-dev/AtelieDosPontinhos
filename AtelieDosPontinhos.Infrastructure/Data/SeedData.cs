@@ -1,12 +1,19 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AtelieDosPontinhos.Infrastructure.Context;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 public static class SeedData
 {
     public static async Task Initialize(IServiceProvider serviceProvider)
     {
-        var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-        var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+        using var scope = serviceProvider.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<AtelieDosPontinhosDbContext>();
+        var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+
+        // Aplica migrations pendentes automaticamente
+        await context.Database.MigrateAsync();
 
         // 🔐 CRIAR ROLES
         string[] roles = { "Admin", "Client" };

@@ -71,7 +71,7 @@ namespace AtelieDosPontinhos.Infrastructure.Identity
             // Seed do Usuário Administrador
             // =================================================================
 
-            var adminEmail = "admin@AtelieDosPontinhos.com";
+            var adminEmail = "admin@site.com";
             var adminUser = await userManeger.FindByEmailAsync(adminEmail);
 
             if (adminUser == null)
