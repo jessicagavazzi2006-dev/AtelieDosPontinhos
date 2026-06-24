@@ -8,8 +8,8 @@ O **AtelieDosPontinhos** é uma loja virtual que vende Products de artesanato, o
 
 desenvolvidos pelos alunos:
 Lucar Richard - Domain, Aplication
-Jessica Alves - Infrastucture
-Elizabeth Dorigon - 
+Jessica Alves - Domain, Infrastucture
+Elizabeth Dorigon - UI, API
 
 - ASP.NET Core MVC
 - Arquitetura em camadas
@@ -105,13 +105,13 @@ O sistema cria automaticamente um usuário admin:
 
 | Campo | Valor |
 |-------|-------|
-| Email | AtelieDosPontinhos..com |
+| Email | admin@site.com |
 | Senha | Admin@123 |
 | Role | Admin |
 
 ## Endpoints da API
 
-### Games
+### Produtos
 | Método | Endpoint | Descrição |
 |--------|----------|-----------|
 | GET | `/api/Products` | Lista todos os games |
@@ -128,7 +128,7 @@ O sistema cria automaticamente um usuário admin:
 | PUT | `/api/categories/{id}` | Atualiza categoria (Admin) |
 | DELETE | `/api/categories/{id}` | Remove categoria (Admin) |
 
-### Categorias
+### Categorias de Materiais
 | Método | Endpoint | Descrição |
 |--------|----------|-----------|
 | GET | `/api/Material` | Lista categorias |
