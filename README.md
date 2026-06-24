@@ -8,8 +8,8 @@ O **AtelieDosPontinhos** é uma loja virtual que vende Products de artesanato, o
 
 desenvolvidos pelos alunos:
 Lucar Richard - Domain, Aplication
-Jessica Alves - Infrastucture
-Elizabeth Dorigon - 
+Jessica Alves - Domain, Infrastucture
+Elizabeth Dorigon - UI, API
 
 - ASP.NET Core MVC
 - Arquitetura em camadas
