@@ -1,5 +1,6 @@
 ﻿using AtelieDosPontinhos.Infrastructure.Context;
 using AtelieDosPontinhos.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -8,6 +9,7 @@ namespace AtelieDosPontinhos.API.Controllers
 {
     [ApiController]
     [Route("api/cart")]
+    [Authorize] // 🔐 tudo exige usuário logado
     public class CartController : ControllerBase
     {
         private readonly AtelieDosPontinhosDbContext _context;
@@ -17,20 +19,41 @@ namespace AtelieDosPontinhos.API.Controllers
             _context = context;
         }
 
+        // 🧠 pega usuário atual de forma segura
+        private string? GetUserId()
+        {
+            return User.FindFirstValue(ClaimTypes.NameIdentifier);
+        }
+
         // 🛒 ADICIONAR AO CARRINHO
         [HttpPost("add")]
-        public async Task<IActionResult> Add(int productId, int quantity = 1)
+        public async Task<IActionResult> Add([FromQuery] int productId, [FromQuery] int quantity = 1)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = GetUserId();
 
-            var item = new CartItem
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized("Usuário não autenticado");
+
+            var item = await _context.CartItems
+                .FirstOrDefaultAsync(x => x.UserId == userId && x.ProductId == productId);
+
+            // 🔥 se já existe, só soma quantidade
+            if (item != null)
             {
-                UserId = userId,
-                ProductId = productId,
-                Quantity = quantity
-            };
+                item.Quantity += quantity;
+            }
+            else
+            {
+                item = new CartItem
+                {
+                    UserId = userId,
+                    ProductId = productId,
+                    Quantity = quantity
+                };
 
-            _context.CartItems.Add(item);
+                _context.CartItems.Add(item);
+            }
+
             await _context.SaveChangesAsync();
 
             return Ok("Produto adicionado ao carrinho");
@@ -40,7 +63,10 @@ namespace AtelieDosPontinhos.API.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = GetUserId();
+
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized("Usuário não autenticado");
 
             var cart = await _context.CartItems
                 .Include(x => x.Product)
@@ -50,11 +76,30 @@ namespace AtelieDosPontinhos.API.Controllers
             return Ok(cart);
         }
 
+        // 🧮 CONTAGEM DO CARRINHO (ícone 🛒)
+        [HttpGet("count")]
+        public async Task<IActionResult> GetCount()
+        {
+            var userId = GetUserId();
+
+            if (string.IsNullOrEmpty(userId))
+                return Ok(0);
+
+            var count = await _context.CartItems
+                .Where(x => x.UserId == userId)
+                .SumAsync(x => x.Quantity);
+
+            return Ok(count);
+        }
+
         // 🗑 REMOVER ITEM
         [HttpDelete("{id}")]
         public async Task<IActionResult> Remove(int id)
         {
-            var item = await _context.CartItems.FindAsync(id);
+            var userId = GetUserId();
+
+            var item = await _context.CartItems
+                .FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId);
 
             if (item == null)
                 return NotFound();

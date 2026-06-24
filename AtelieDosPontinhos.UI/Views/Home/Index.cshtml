@@ -1,9 +1,12 @@
-﻿@{
+﻿List<AtelieDosPontinhos.UI.Models.ProductViewModel>
+@model List<ProductViewModel>
+
+@{
     ViewData["Title"] = "Home";
 }
 
 <!-- =========================
-     🎠 BANNER CARROSSEL
+     🎠 CAROUSEL
 ========================== -->
 
 <div id="carouselHome" class="carousel slide" data-bs-ride="carousel">
@@ -11,27 +14,15 @@
     <div class="carousel-inner">
 
         <div class="carousel-item active">
-            <img src="~/images/banner/banner.png" class="d-block w-100 banner-home" alt="Banner 1">
+            <img src="~/images/banner/banner.png" class="d-block w-100 banner-home" />
         </div>
 
         <div class="carousel-item">
-            <img src="~/images/banner/Banner2.png" class="d-block w-100 banner-home" alt="Banner 2">
+            <img src="~/images/banner/Banner2.png" class="d-block w-100 banner-home" />
         </div>
 
         <div class="carousel-item">
-            <img src="~/images/banner/Banner3.jpg" class="d-block w-100 banner-home" alt="Banner 3">
-        </div>
-
-        <div class="carousel-item">
-            <img src="~/images/banner/Banner4.png" class="d-block w-100 banner-home" alt="Banner 4">
-        </div>
-
-        <div class="carousel-item">
-            <img src="~/images/banner/Banner5.png" class="d-block w-100 banner-home" alt="Banner 5">
-        </div>
-
-        <div class="carousel-item">
-            <img src="~/images/banner/Banner6.png" class="d-block w-100 banner-home" alt="Banner 6">
+            <img src="~/images/banner/Banner3.jpg" class="d-block w-100 banner-home" />
         </div>
 
     </div>
@@ -46,139 +37,58 @@
 
 </div>
 
-
 <!-- =========================
-     🧺 CATEGORIAS
+     🛍️ FEATURED PRODUCTS
 ========================== -->
 
 <section class="container py-5">
 
-    <div class="text-center mb-5">
-        <h2>Nossas Categorias</h2>
-        <p class="text-muted">Escolha uma categoria e descubra nossos Produtos</p>
-    </div>
-
-    <div class="row g-4">
-
-        <!-- CAMA -->
-        <div class="col-md-4">
-            <div class="card categoria-card">
-                <img src="~/images/categorias/cama/kit lencol/lençol frozen solteiro.jpg">
-                <div class="card-body text-center">
-                    <h4>Cama</h4>
-                    <button class="btn btn-primary btn-sm mt-2">Ver Produtos</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- MESA -->
-        <div class="col-md-4">
-            <div class="card categoria-card">
-                <img src="~/images/categorias/mesa/toalha de mesa/toalha de mesa.jpg">
-                <div class="card-body text-center">
-                    <h4>Mesa</h4>
-                    <button class="btn btn-primary btn-sm mt-2">Ver Produtos</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- BANHO -->
-        <div class="col-md-4">
-            <div class="card categoria-card">
-                <img src="~/images/categorias/banho/Kit toalhas/kit toalhas beges.jpg">
-                <div class="card-body text-center">
-                    <h4>Banho</h4>
-                    <button class="btn btn-primary btn-sm mt-2">Ver Produtos</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- INFANTIL -->
-        <div class="col-md-6">
-            <div class="card categoria-card">
-                <img src="~/images/categorias/infantil/kit infantil/kit fraldas e babador.jpg">
-                <div class="card-body text-center">
-                    <h4>Infantil</h4>
-                    <button class="btn btn-primary btn-sm mt-2">Ver Produtos</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- MATERIAIS -->
-        <div class="col-md-6">
-            <div class="card categoria-card">
-                <img src="~/images/categorias/materiais/bastidor/bastidores.jpg">
-                <div class="card-body text-center">
-                    <h4>Materiais</h4>
-                    <button class="btn btn-primary btn-sm mt-2">Ver Produtos</button>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</section>
-
-
-<!-- =========================
-     🛍️ Produtos EM DESTAQUE
-========================== -->
-
-<section class="container pb-5">
-
     <div class="text-center mb-4">
-        <h2>Produtos em Destaque</h2>
-        <p class="text-muted">Os queridinhos da nossa loja 💖</p>
+        <h2>Featured Products</h2>
+        <p class="text-muted">Our customers favorites 💖</p>
     </div>
 
     <div class="row g-4">
 
-        <!-- Product 1 -->
-        <div class="col-md-3">
-            <div class="card Product-card">
-                <img src="~/images/categorias/cama/fronha/fronha floral rosa.jpg">
-                <div class="card-body text-center">
-                    <h6>Fronha Floral</h6>
-                    <p>R$ 29,90</p>
-                    <button class="btn btn-primary btn-sm">Comprar</button>
-                </div>
-            </div>
-        </div>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var product in Model)
+            {
+                <div class="col-md-3">
 
-        <!-- Product 2 -->
-        <div class="col-md-3">
-            <div class="card Product-card">
-                <img src="~/images/categorias/mesa/panos de prato/pano de prato café.jpg">
-                <div class="card-body text-center">
-                    <h6>Pano de Prato</h6>
-                    <p>R$ 19,90</p>
-                    <button class="btn btn-primary btn-sm">Comprar</button>
-                </div>
-            </div>
-        </div>
+                    <div class="card h-100 shadow-sm">
 
-        <!-- Product 3 -->
-        <div class="col-md-3">
-            <div class="card Product-card">
-                <img src="~/images/categorias/materiais/agulhas/agulhas.webp">
-                <div class="card-body text-center">
-                    <h6>Agulhas</h6>
-                    <p>R$ 9,90</p>
-                    <button class="btn btn-primary btn-sm">Comprar</button>
-                </div>
-            </div>
-        </div>
+                        <img src="@(string.IsNullOrEmpty(product.CoverImageUrl) ? "/images/default.png" : product.CoverImageUrl)"
+                             class="card-img-top"
+                             style="height:200px; object-fit:cover;" />
 
-        <!-- Product 4 -->
-        <div class="col-md-3">
-            <div class="card Product-card">
-                <img src="~/images/categorias/banho/Toalha de banho/toalha azul.jpg">
-                <div class="card-body text-center">
-                    <h6>Toalha Azul</h6>
-                    <p>R$ 39,90</p>
-                    <button class="btn btn-primary btn-sm">Comprar</button>
+                        <div class="card-body text-center">
+
+                            <h6 class="fw-bold">@product.Name</h6>
+
+                            <p class="text-success fw-bold">
+                                $ @product.Price
+                            </p>
+
+                            <button class="btn btn-primary btn-sm w-100"
+                                    onclick="addToCart(@product.Id, '@product.Name.Replace("'", "")', @product.Price)">
+                                Buy
+                            </button>
+
+                        </div>
+
+                    </div>
+
                 </div>
+            }
+        }
+        else
+        {
+            <div class="text-center text-muted">
+                No products available 😢
             </div>
-        </div>
+        }
 
     </div>
+
 </section>

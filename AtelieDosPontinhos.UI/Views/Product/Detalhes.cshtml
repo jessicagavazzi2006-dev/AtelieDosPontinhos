@@ -11,21 +11,21 @@
         <!-- IMAGEM -->
         <div class="col-md-6">
             <div class="Product-imagem-box">
-                <img src="@Url.Content(Model.Imagem)"
+                <img src="@Url.Content(Model.Image)"
                      class="img-fluid Product-imagem"
-                     alt="@Model.Nome">
+                     alt="@Model.Name">
             </div>
         </div>
 
         <!-- INFO -->
         <div class="col-md-6">
 
-            <h2 class="Product-titulo">@Model.Nome</h2>
+            <h2 class="Product-titulo">@Model.Name</h2>
 
-            <p class="Product-preco">R$ @Model.Preco</p>
+            <p class="Product-preco">R$ @Model.Price</p>
 
             <p class="text-muted">
-                @Model.Descricao
+                @Model.Description
             </p>
 
             <div class="d-flex align-items-center gap-3 mb-3">
@@ -53,7 +53,7 @@
             <hr />
 
             <ul class="Product-info-extra">
-                <li>✔ Product artesanal</li>
+                <li>✔ Produto artesanal</li>
                 <li>✔ Envio rápido</li>
                 <li>✔ Qualidade garantida</li>
             </ul>

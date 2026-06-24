@@ -37,54 +37,58 @@
 
                 <div class="collapse navbar-collapse" id="navbarNav">
 
-                    <!-- BUSCA + DROPDOWN -->
+                    <!-- BUSCA -->
                     <div class="flex-grow-1 px-3 position-relative">
 
-                        <!-- INPUT DE BUSCA -->
                         <input type="search"
                                class="form-control search-navbar"
-                               placeholder="Buscar produtos e categorias...">
+                               placeholder="Buscar produtos e categorias..." />
 
-                        <!-- RESULTADOS DA BUSCA -->
                         <div id="searchResults"
                              class="list-group position-absolute w-100 mt-1"
-                             style="z-index: 9999; display:none;">
+                             style="z-index:9999; display:none;">
                         </div>
 
                     </div>
 
-                   <!-- ÍCONES -->
-<div class="d-flex align-items-center gap-3 fs-5">
+                    <!-- ÍCONES -->
+                    <div class="d-flex align-items-center gap-3 fs-5">
 
-    @if (User.Identity.IsAuthenticated)
-    {
-        <span>Olá, @User.Identity.Name</span>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <span>
+                                Olá, @(User.Identity.Name ?? "usuário")
+                            </span>
 
-        @if (User.IsInRole("Admin"))
-        {
-            <a asp-controller="Dashboard" asp-action="AdminPanel" title="Admin">
-                🔐
-            </a>
-        }
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <a asp-controller="Dashboard"
+                                       asp-action="AdminPanel"
+                                       title="Admin">
+                                    🔐
+                                </a>
+                            }
 
-        <a asp-controller="Account" asp-action="Logout" title="Sair">
-            🚪
-        </a>
-    }
-    else
-    {
-        <a asp-controller="Account" asp-action="Login" title="Minha conta">
-            👤
-        </a>
-    }
+                            <a asp-controller="Account"
+                                   asp-action="Logout"
+                                   title="Sair">
+                                🚪
+                            </a>
+                        }
+                        else
+                        {
+                            <a asp-controller="Account"
+                                   asp-action="Login"
+                                   title="Minha conta">
+                                👤
+                            </a>
+                        }
 
-    <!-- CARRINHO -->
-    <div class="position-relative">
-        <span title="Carrinho">🛒</span>
-        <span class="cart-badge">2</span>
-    </div>
-
-</div>
+                        <!-- 🛒 CARRINHO LOCAL -->
+                        <div class="position-relative">
+                            <span title="Carrinho">🛒</span>
+                            <span class="cart-badge" id="cartCount">0</span>
+                        </div>
 
                     </div>
 
@@ -100,7 +104,7 @@
 
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- 🔎 BUSCA DINÂMICA -->
+    <!-- 🔎 BUSCA -->
     <script>
             const input = document.querySelector(".search-navbar");
             const resultsBox = document.getElementById("searchResults");
@@ -146,7 +150,26 @@
             });
     </script>
 
+    <!-- 🛒 CARRINHO LOCAL (LOCALSTORAGE) -->
+    <script>
+            function getCart() {
+                return JSON.parse(localStorage.getItem("cart")) || [];
+            }
+
+            function updateCartCount() {
+                let cart = getCart();
+
+                let total = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+                document.getElementById("cartCount").innerText = total;
+            }
+
+            document.addEventListener("DOMContentLoaded", updateCartCount);
+    </script>
+
     @await RenderSectionAsync("Scripts", required: false)
+
+    <script src="~/js/cart.js"></script>
 
 </body>
 </html>

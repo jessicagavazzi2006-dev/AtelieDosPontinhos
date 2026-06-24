@@ -1,16 +1,16 @@
 using AtelieDosPontinhos.Infrastructure.Context;
+using AtelieDosPontinhos.Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using AtelieDosPontinhos.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
 #region SERVICES
 
-// Controllers
+// Controllers (API)
 builder.Services.AddControllers();
 
-// MVC (Views, se você usa UI junto)
+// MVC (Views)
 builder.Services.AddControllersWithViews();
 
 // DbContext
@@ -23,7 +23,36 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<AtelieDosPontinhosDbContext>()
     .AddDefaultTokenProviders();
 
-// Authorization (roles)
+
+// 🔐 CORREÇÃO IMPORTANTE (API não pode redirecionar pra login)
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Events.OnRedirectToLogin = context =>
+    {
+        if (context.Request.Path.StartsWithSegments("/api"))
+        {
+            context.Response.StatusCode = 401;
+            return Task.CompletedTask;
+        }
+
+        context.Response.Redirect(context.RedirectUri);
+        return Task.CompletedTask;
+    };
+
+    options.Events.OnRedirectToAccessDenied = context =>
+    {
+        if (context.Request.Path.StartsWithSegments("/api"))
+        {
+            context.Response.StatusCode = 403;
+            return Task.CompletedTask;
+        }
+
+        context.Response.Redirect(context.RedirectUri);
+        return Task.CompletedTask;
+    };
+});
+
+// Authorization
 builder.Services.AddAuthorization();
 
 // Swagger
@@ -34,7 +63,7 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-
+#region PIPELINE
 
 if (app.Environment.IsDevelopment())
 {
@@ -42,23 +71,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-#region PIPELINE
-
-// Swagger (DEVE vir antes do routing)
-app.UseSwagger();
-app.UseSwaggerUI();
-
-// HTTPS
 app.UseHttpsRedirection();
 
-// Routing
 app.UseRouting();
 
-// Auth (ordem obrigatória)
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Rotas MVC
+// MVC routes
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
@@ -75,7 +95,7 @@ using (var scope = app.Services.CreateScope())
 
 #endregion
 
-#region DEBUG DB CONNECTION (opcional)
+#region DEBUG DB CONNECTION
 
 using (var scope = app.Services.CreateScope())
 {
