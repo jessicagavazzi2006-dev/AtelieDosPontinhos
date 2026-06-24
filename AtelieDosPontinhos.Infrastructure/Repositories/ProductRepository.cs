@@ -74,5 +74,13 @@ namespace AtelieDosPontinhos.Infrastructure.Repositories
                     p.Description.Contains(term))
                 .ToListAsync();
         }
+
+        public async Task<IEnumerable<Product>> GetFeaturedAsync()
+        {
+            return await _context.Products
+                .Include(p => p.Category) // Faz JOIN com a tabela Categories
+                .Where(p => p.IsFeatured) // Filtra apenas os produtos em destaque
+                .ToListAsync();
+        }
     }
 }
