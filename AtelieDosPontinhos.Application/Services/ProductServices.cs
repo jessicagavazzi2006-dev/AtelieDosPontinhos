@@ -48,7 +48,8 @@ namespace AtelieDosPontinhos.Application.Services
                 CoverImageUrl = dto.CoverImageUrl,
                 Price = dto.Price,
                 Stock = dto.Stock,
-                CategoryId = dto.CategoryId
+                CategoryId = dto.CategoryId,
+                IsFeatured = dto.IsFeatured
             };
 
             await _productRepository.AddAsync(product);
@@ -69,6 +70,7 @@ namespace AtelieDosPontinhos.Application.Services
             product.Price = dto.Price;
             product.Stock = dto.Stock;
             product.CategoryId = dto.CategoryId;
+            product.IsFeatured = dto.IsFeatured;
 
             await _productRepository.UpdateAsync(product);
 
@@ -100,7 +102,8 @@ namespace AtelieDosPontinhos.Application.Services
                 CoverImageUrl = product.CoverImageUrl,
                 Price = product.Price,
                 Stock = product.Stock,
-                CategoryId = product.CategoryId
+                CategoryId = product.CategoryId,
+                IsFeatured = product.IsFeatured
             };
         }
 
@@ -120,7 +123,8 @@ namespace AtelieDosPontinhos.Application.Services
                 Name = p.Name,
                 Description = p.Description,
                 Price = p.Price,
-                CoverImageUrl = p.CoverImageUrl
+                CoverImageUrl = p.CoverImageUrl,
+                IsFeatured = p.IsFeatured
             });
         }
     }
