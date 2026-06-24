@@ -164,7 +164,7 @@ Para usar outro servidor SQL Server, altere a connection string nos projetos **A
 
 #### Package Manager Console:
 ```powershell
-Add-Migration NomeDaMigration -Project Material.Infrastructure -StartupProject Material.API
+Add-Migration NomeDaMigration -Project AtelieDosPontinhos.Infrastructure -StartupProject AtelieDosPontinhos.API
 ```
 
 #### PowerShell:
