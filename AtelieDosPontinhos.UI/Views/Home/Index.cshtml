@@ -1,94 +1,30 @@
-﻿List<AtelieDosPontinhos.UI.Models.ProductViewModel>
-@model List<ProductViewModel>
+﻿@model List<AtelieDosPontinhos.UI.Models.ProductViewModel>
 
 @{
-    ViewData["Title"] = "Home";
+    ViewData["Title"] = "Página Inicial";
 }
 
 <!-- =========================
-     🎠 CAROUSEL
+     🎠 CAROUSEL (Banners com Bordas Arredondadas e Sombra)
 ========================== -->
-
-<div id="carouselHome" class="carousel slide" data-bs-ride="carousel">
-
-    <div class="carousel-inner">
-
-        <div class="carousel-item active">
-            <img src="~/images/banner/banner.png" class="d-block w-100 banner-home" />
-        </div>
-
-        <div class="carousel-item">
-            <img src="~/images/banner/Banner2.png" class="d-block w-100 banner-home" />
-        </div>
-
-        <div class="carousel-item">
-            <img src="~/images/banner/Banner3.jpg" class="d-block w-100 banner-home" />
-        </div>
-
-    </div>
-
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselHome" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon"></span>
-    </button>
-
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselHome" data-bs-slide="next">
-        <span class="carousel-control-next-icon"></span>
-    </button>
-
-</div>
-
-<!-- =========================
-     🛍️ FEATURED PRODUCTS
-========================== -->
-
-<section class="container py-5">
-
-    <div class="text-center mb-4">
-        <h2>Featured Products</h2>
-        <p class="text-muted">Our customers favorites 💖</p>
-    </div>
-
-    <div class="row g-4">
-
-        @if (Model != null && Model.Any())
-        {
-            foreach (var product in Model)
-            {
-                <div class="col-md-3">
-
-                    <div class="card h-100 shadow-sm">
-
-                        <img src="@(string.IsNullOrEmpty(product.CoverImageUrl) ? "/images/default.png" : product.CoverImageUrl)"
-                             class="card-img-top"
-                             style="height:200px; object-fit:cover;" />
-
-                        <div class="card-body text-center">
-
-                            <h6 class="fw-bold">@product.Name</h6>
-
-                            <p class="text-success fw-bold">
-                                $ @product.Price
-                            </p>
-
-                            <button class="btn btn-primary btn-sm w-100"
-                                    onclick="addToCart(@product.Id, '@product.Name.Replace("'", "")', @product.Price)">
-                                Buy
-                            </button>
-
-                        </div>
-
-                    </div>
-
-                </div>
-            }
-        }
-        else
-        {
-            <div class="text-center text-muted">
-                No products available 😢
+<div class="container mt-3">
+    <div id="carouselHome" class="carousel slide shadow-sm rounded-4 overflow-hidden" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="~/images/banner/banner.png" class="d-block w-100 banner-home" style="height: 400px; object-fit: cover;" alt="Banner 1" />
             </div>
-        }
-
+            <div class="carousel-item">
+                <img src="~/images/banner/Banner2.png" class="d-block w-100 banner-home" style="height: 400px; object-fit: cover;" alt="Banner 2" />
+            </div>
+            <div class="carousel-item">
+                <img src="~/images/banner/Banner3.jpg" class="d-block w-100 banner-home" style="height: 400px; object-fit: cover;" alt="Banner 3" />
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselHome" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselHome" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        </button>
     </div>
-
-</section>
+</div>

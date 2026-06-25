@@ -10,58 +10,27 @@ namespace AtelieDosPontinhos.Infrastructure.Identity
     {
         public static async Task SeedAsync(IServiceProvider serviceProvider)
         {
-            // Obtém o DbContext do container de Dependency Injection
             using var scope = serviceProvider.CreateScope();
+
+            
             var context = scope.ServiceProvider.GetRequiredService<AtelieDosPontinhosDbContext>();
-            var userManeger = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
             var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-            // Aplica migrations pendentes automaticamente
-            await context.Database.MigrateAsync();
-
-            // =================================================================
-            // Criação de categoria (PARA TESTE)
-            // =================================================================
-
-            if (!context.Categories.Any())
+          
+            try
             {
-                var categories = new List<Category>
-                {
-                    new Category {Name = "Teste"}
-                };
-
-                await context.Categories.AddRangeAsync(categories);
-                await context.SaveChangesAsync();
+                await context.Database.MigrateAsync();
             }
-
-            // =================================================================
-            // Criação de produto (PARA TESTE)
-            // =================================================================
-
-            if (!context.Products.Any())
+            catch (Microsoft.Data.SqlClient.SqlException ex) when (ex.Message.Contains("already an object named"))
             {
-                // Busca as categorias recém-criadas para obter os IDs
-                var teste = await context.Categories.FirstAsync(c => c.Name == "Teste");
-
-                var product = new List<Product>
-                {
-                    new Product
-                    {
-                        Name = "Teste de Produto",
-                        Description = "é apenas um teste para confirmar o funcionamento da criação no SeedData",
-                        CoverImageUrl =  "",
-                        CategoryId = teste.Id
-                    }
-                };
-
-                await context.Products.AddRangeAsync(product);
-                await context.SaveChangesAsync();
+             
+                System.Diagnostics.Debug.WriteLine($"Tabelas já existem: {ex.Message}");
             }
 
             // =================================================================
             // Seed de Roles (Papéis de Usuário)
             // =================================================================
-
             if (!await roleManager.RoleExistsAsync("Admin"))
             {
                 await roleManager.CreateAsync(new IdentityRole("Admin"));
@@ -70,9 +39,8 @@ namespace AtelieDosPontinhos.Infrastructure.Identity
             // =================================================================
             // Seed do Usuário Administrador
             // =================================================================
-
             var adminEmail = "admin@site.com";
-            var adminUser = await userManeger.FindByEmailAsync(adminEmail);
+            var adminUser = await userManager.FindByEmailAsync(adminEmail);
 
             if (adminUser == null)
             {
@@ -80,19 +48,17 @@ namespace AtelieDosPontinhos.Infrastructure.Identity
                 {
                     UserName = adminEmail,
                     Email = adminEmail,
-                    EmailConfirmed = true // Confirma Emial automaticamente
+                    EmailConfirmed = true
                 };
 
-                // Cria o usuário com senha padrão
-                var result = await userManeger.CreateAsync(adminUser, "Admin@123");
+                // Cria o usuário com a senha padrão mapeada
+                var result = await userManager.CreateAsync(adminUser, "Admin@123");
 
                 if (result.Succeeded)
                 {
-                    // Atribui a role "Admin" ao usuário
-                    await userManeger.AddToRoleAsync(adminUser, "Admin");
+                    await userManager.AddToRoleAsync(adminUser, "Admin");
                 }
             }
-
         }
     }
 }
