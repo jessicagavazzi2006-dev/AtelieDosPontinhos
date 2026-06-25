@@ -1,12 +1,9 @@
-﻿@model List<AtelieDosPontinhos.UI.Models.ProductViewModel>
+﻿@model IEnumerable<AtelieDosPontinhos.UI.Models.ProductViewModel>
 
 @{
     ViewData["Title"] = "Página Inicial";
 }
 
-<!-- =========================
-     🎠 CAROUSEL (Banners com Bordas Arredondadas e Sombra)
-========================== -->
 <div class="container mt-3">
     <div id="carouselHome" class="carousel slide shadow-sm rounded-4 overflow-hidden" data-bs-ride="carousel">
         <div class="carousel-inner">
@@ -28,3 +25,42 @@
         </button>
     </div>
 </div>
+
+<div class="container mt-5 mb-5">
+    <h2 class="text-center mb-4 fw-bold text-secondary">Nossos Produtos</h2>
+    
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <div class="col">
+                    <div class="card h-100 shadow-sm border-0 rounded-3 overflow-hidden">
+                        <img src="@item.CoverImageUrl" class="card-img-top" alt="@item.Name" style="height: 250px; object-fit: cover;">
+                        
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title fw-bold text-dark">@item.Name</h5>
+                            <p class="card-text text-muted text-truncate">@item.Description</p>
+                            <p class="card-text fs-5 fw-bold text-success mt-auto">R$ @item.Price</p>
+                            
+                            <button onclick="adicionarAoCarrinho(@item.Id, '@item.Name', @item.Price, '@item.CoverImageUrl')"
+                                    class="btn btn-outline-primary w-100 mt-3 rounded-pill fw-bold">
+                                <i class="bi bi-cart-plus-fill"></i> Adicionar ao Carrinho
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12 text-center py-5">
+                <p class="text-muted fs-5">Nenhum produto encontrado no momento.</p>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/cart.js" asp-append-version="true"></script>
+}

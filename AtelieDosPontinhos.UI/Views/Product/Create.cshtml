@@ -1,0 +1,44 @@
+﻿@model AtelieDosPontinhos.UI.Models.ProductViewModel
+
+@{
+    ViewData["Title"] = "Cadastrar Novo Produto";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow border-0 p-4 rounded-4 bg-white">
+                <h2 class="fw-bold text-dark mb-4 text-center">➕ Cadastrar Novo Produto</h2>
+                
+                <form asp-controller="Product" asp-action="Create" method="post">
+                    
+                    <div class="mb-3">
+                        <label asp-for="Nome" class="form-label fw-semibold">Nome do Produto</label>
+                        <input asp-for="Nome" class="form-control" placeholder="Ex: Pano de Prato Bordado" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Preco" class="form-label fw-semibold">Preço (R$)</label>
+                        <input asp-for="Preco" class="form-control" type="number" step="0.01" placeholder="0.00" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="CoverImageUrl" class="form-label fw-semibold">Caminho da Imagem</label>
+                        <input asp-for="CoverImageUrl" class="form-control" placeholder="Ex: /images/produtos/item.jpg" required />
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Descricao" class="form-label fw-semibold">Descrição</label>
+                        <textarea asp-for="Descricao" class="form-control" rows="4" placeholder="Detalhes sobre o produto..." required></textarea>
+                    </div>
+
+                    <div class="d-flex gap-2 justify-content-end">
+                        <a asp-controller="Dashboard" asp-action="AdminPanel" class="btn btn-outline-secondary px-4 rounded-pill">Voltar</a>
+                        <button type="submit" class="btn btn-primary px-4 rounded-pill">Salvar Produto</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

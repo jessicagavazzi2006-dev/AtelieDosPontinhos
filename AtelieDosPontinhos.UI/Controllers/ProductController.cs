@@ -1,24 +1,44 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
+using AtelieDosPontinhos.UI.Models;
 
-namespace SeuProjeto.Controllers
+namespace AtelieDosPontinhos.UI.Controllers
 {
     public class ProductController : Controller
     {
-        // 🟢 LISTA DE PRODUTOS (vai alimentar o foreach da View)
+        // 🛑 LISTA GLOBAL NA MEMÓRIA: Agora ela mantém os produtos salvos enquanto o app estiver rodando!
+        private static List<ProductViewModel> _products = new List<ProductViewModel>
+        {
+            new ProductViewModel
+            {
+                Id = 1,
+                Nome = "Fronha Floral Rosa",
+                Preco = 29.90M,
+                Descricao = "Fronha artesanal feita com tecido de alta qualidade.",
+                CoverImageUrl = "/images/categorias/cama/fronha/fronha floral rosa.jpg"
+            },
+            new ProductViewModel
+            {
+                Id = 2,
+                Nome = "Pano de Prato Café",
+                Preco = 19.90M,
+                Descricao = "Pano de prato decorado estilo café.",
+                CoverImageUrl = "/images/categorias/mesa/panos de prato/pano de prato café.jpg"
+            }
+        };
+
+        // 🟢 1. LISTA DE PRODUTOS (Para o botão "Ver Todos")
         public IActionResult Index()
         {
-            var products = ObterProducts();
-
-            return View(products);
+            // Retorna a lista que agora aceita novas inserções
+            return View(_products);
         }
 
-        // 🟡 DETALHES DO PRODUTO
+        // 🟡 2. DETALHES DO PRODUTO
         public IActionResult Detalhes(int id)
         {
-            var product = ObterProducts()
-                .FirstOrDefault(p => p.Id == id);
+            var product = _products.FirstOrDefault(p => p.Id == id);
 
             if (product == null)
                 return NotFound();
@@ -26,38 +46,31 @@ namespace SeuProjeto.Controllers
             return View(product);
         }
 
-        // 🔵 SIMULA BANCO (depois vira banco real)
-        private List<ProductViewModel> ObterProducts()
+        // ➕ 3. CARREGA A PÁGINA DE CADASTRO
+        [HttpGet]
+        public IActionResult Create()
         {
-            return new List<ProductViewModel>
-            {
-                new ProductViewModel
-                {
-                    Id = 1,
-                    Name = "Fronha Floral Rosa",
-                    Price = 29.90M,
-                    Description = "Fronha artesanal feita com tecido de alta qualidade.",
-                    Image = "~/images/categorias/cama/fronha/fronha floral rosa.jpg"
-                },
-                new ProductViewModel
-                {
-                    Id = 2,
-                    Name = "Pano de Prato Café",
-                    Price = 19.90M,
-                    Description = "Pano de prato decorado estilo café.",
-                    Image = "~/images/categorias/mesa/panos de prato/pano de prato café.jpg"
-                }
-            };
+            return View();
         }
-    }
 
-    // 🧠 VIEWMODEL (melhor prática: fora do controller na vida real)
-    public class ProductViewModel
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public decimal Price { get; set; }
-        public string Description { get; set; }
-        public string Image { get; set; }
+        // 💾 4. RECEBE OS DADOS E SALVA DE VERDADE NA MEMÓRIA
+        [HttpPost]
+        public IActionResult Create(ProductViewModel novoProduto)
+        {
+            if (ModelState.IsValid)
+            {
+                // Gera um novo ID baseado no último item da lista
+                novoProduto.Id = _products.Any() ? _products.Max(p => p.Id) + 1 : 1;
+
+                // ADICIONA O PRODUTO NA LISTA!
+                _products.Add(novoProduto);
+
+                // Redireciona para a página de listagem para você ver o produto adicionado na tabela
+                return RedirectToAction("Index");
+            }
+
+            // Se faltou preencher algo, recarrega o formulário
+            return View(novoProduto);
+        }
     }
 }

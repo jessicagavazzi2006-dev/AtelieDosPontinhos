@@ -2,17 +2,17 @@
 {
     public class ProductViewModel
     {
+        // Propriedades principais em Português (padrão do seu banco)
         public int Id { get; set; }
-        public string Name { get; set; }
-        public decimal Price { get; set; }
-        public string Description { get; set; }
-        public string CoverImageUrl { get; set; }
-        public bool IsFeatured { get; set; }
+        public string Nome { get; set; } = string.Empty;
+        public decimal Preco { get; set; }
+        public string Descricao { get; set; } = string.Empty;
+        public string CoverImageUrl { get; set; } = string.Empty;
 
-        // Aliases em português usados pelas Views existentes
-        public string Nome { get => Name; set => Name = value; }
-        public decimal Preco { get => Price; set => Price = value; }
-        public string Descricao { get => Description; set => Description = value; }
-        public string Imagem { get => CoverImageUrl; set => CoverImageUrl = value; }
+        // 🔄 ATALHOS EM INGLÊS (Para as Views que usam termos antigos não quebrarem)
+        public string Name { get => Nome; set => Nome = value; }
+        public decimal Price { get => Preco; set => Preco = value; }
+        public string Description { get => Descricao; set => Descricao = value; }
+        public string Image { get => CoverImageUrl; set => CoverImageUrl = value; }
     }
 }

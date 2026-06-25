@@ -4,7 +4,6 @@
 
 <div class="container py-4">
     
-    <!-- Cabeçalho de Boas-Vindas -->
     <div class="d-flex align-items-center justify-content-between mb-4 pb-3 border-bottom border-2 border-white">
         <div>
             <h1 class="fw-bold text-dark mb-1">Painel Administrativo 🔐</h1>
@@ -13,7 +12,6 @@
         <div class="mx-auto bg-danger rounded" style="width: 60px; height: 4px; display: none;"></div>
     </div>
 
-    <!-- 📊 Cards de Métricas e Indicadores Rápidos -->
     <div class="row g-4 mb-5">
         
         <div class="col-md-4">
@@ -21,7 +19,7 @@
                 <div class="fs-1 mb-2">📦</div>
                 <h4 class="fw-bold text-dark">Produtos</h4>
                 <p class="text-muted small">Catálogo ativo integrado</p>
-                <a asp-controller="Products" asp-action="Index" class="btn btn-danger btn-sm rounded-pill px-4 mt-2 fw-semibold">
+                <a asp-controller="Product" asp-action="Index" class="btn btn-danger btn-sm rounded-pill px-4 mt-2 fw-semibold">
                     Ver Todos
                 </a>
             </div>
@@ -32,7 +30,7 @@
                 <div class="fs-1 mb-2">➕</div>
                 <h4 class="fw-bold text-dark">Novo Item</h4>
                 <p class="text-muted small">Adicionar produto ao banco</p>
-                <a asp-controller="Products" asp-action="Create" class="btn btn-outline-secondary btn-sm rounded-pill px-4 mt-2 fw-semibold">
+                <a asp-controller="Product" asp-action="Create" class="btn btn-outline-secondary btn-sm rounded-pill px-4 mt-2 fw-semibold">
                     Cadastrar
                 </a>
             </div>
@@ -44,15 +42,13 @@
                 <h4 class="fw-bold text-dark">Usuários</h4>
                 <p class="text-muted small">Controle de acessos e perfis</p>
                 <a asp-controller="Account" asp-action="Register" class="btn btn-outline-secondary btn-sm rounded-pill px-4 mt-2 fw-semibold">
-    Gerenciar
-</a>
-
+                    Gerenciar
+                </a>
             </div>
         </div>
 
     </div>
 
-    <!-- 🛠️ Bloco de Avisos / Próximas Atividades -->
     <div class="card border-0 shadow-sm p-4 rounded-4 bg-white">
         <h5 class="fw-bold text-dark mb-3 d-flex align-items-center gap-2">
             <span>📢</span> Status do Sistema
@@ -64,5 +60,4 @@
             </div>
         </div>
     </div>
-
 </div>

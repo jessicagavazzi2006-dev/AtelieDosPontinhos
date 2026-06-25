@@ -1,23 +1,20 @@
-﻿@model SeuProjeto.Controllers.ProductViewModel
+﻿@model AtelieDosPontinhos.UI.Models.ProductViewModel
 
 @{
-    ViewData["Title"] = "Product";
+    ViewData["Title"] = Model.Name;
 }
 
 <div class="container py-5 Product-detalhe">
-
     <div class="row g-5">
 
-        <!-- IMAGEM -->
         <div class="col-md-6">
             <div class="Product-imagem-box">
-                <img src="@Url.Content(Model.Image)"
+                <img src="@Model.CoverImageUrl"
                      class="img-fluid Product-imagem"
                      alt="@Model.Name">
             </div>
         </div>
 
-        <!-- INFO -->
         <div class="col-md-6">
 
             <h2 class="Product-titulo">@Model.Name</h2>
@@ -29,25 +26,19 @@
             </p>
 
             <div class="d-flex align-items-center gap-3 mb-3">
-
-                <button class="btn btn-outline-secondary">-</button>
-
-                <input type="text" value="1" class="form-control quantidade-input">
-
-                <button class="btn btn-outline-secondary">+</button>
-
+                <button class="btn btn-outline-secondary" onclick="alterarQuantidade(-1)">-</button>
+                <input type="text" id="qtdInput" value="1" class="form-control quantidade-input text-center" style="width: 60px;" readonly>
+                <button class="btn btn-outline-secondary" onclick="alterarQuantidade(1)">+</button>
             </div>
 
             <div class="d-flex gap-2 flex-wrap">
-
-                <button class="btn btn-comprar btn-lg">
+                <button onclick="adicionarAoCarrinhoComQuantidade(@Model.Id, '@Model.Name', @Model.Price, '@Model.CoverImageUrl')" class="btn btn-comprar btn-lg">
                     🛒 Comprar agora
                 </button>
 
                 <button class="btn btn-outline-secondary btn-lg">
                     ❤ Favoritar
                 </button>
-
             </div>
 
             <hr />
@@ -59,7 +50,29 @@
             </ul>
 
         </div>
-
     </div>
-
 </div>
+
+@section Scripts {
+    <script src="~/js/cart.js" asp-append-version="true"></script>
+    <script>
+        // Função simples para controlar o seletor de quantidade na tela
+        function alterarQuantidade(valor) {
+            const input = document.getElementById('qtdInput');
+            let atual = parseInt(input.value) || 1;
+            atual += valor;
+            if (atual < 1) atual = 1;
+            input.value = atual;
+        }
+
+        // Função que lê a quantidade da tela e joga no carrinho do localStorage
+        function adicionarAoCarrinhoComQuantidade(id, name, price, imageUrl) {
+            const qtd = parseInt(document.getElementById('qtdInput').value) || 1;
+            
+            // Loop para adicionar a quantidade selecionada
+            for (let i = 0; i < qtd; i++) {
+                adicionarAoCarrinho(id, name, price, imageUrl);
+            }
+        }
+    </script>
+}

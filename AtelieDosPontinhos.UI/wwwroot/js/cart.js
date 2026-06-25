@@ -1,41 +1,45 @@
-﻿function getCart() {
-    return JSON.parse(localStorage.getItem("cart")) || [];
+﻿// Chave usada para salvar o carrinho no navegador
+const CART_STORAGE_KEY = 'AtelieDosPontinhos_Cart';
+
+// 1. Obter os itens atuais do carrinho
+function getCart() {
+    const cart = localStorage.getItem(CART_STORAGE_KEY);
+    return cart ? JSON.parse(cart) : [];
 }
 
-function saveCart(cart) {
-    localStorage.setItem("cart", JSON.stringify(cart));
-}
-
-function addToCart(id, name, price) {
-
+// 2. Adicionar um produto ao carrinho (Sem mexer na API por enquanto)
+function adicionarAoCarrinho(productId, name, price, imageUrl) {
     let cart = getCart();
 
-    let item = cart.find(x => x.id === id);
+    // Verifica se o produto já está no carrinho
+    const existingItem = cart.find(item => item.productId === productId);
 
-    if (item) {
-        item.quantity++;
+    if (existingItem) {
+        existingItem.quantity += 1;
     } else {
         cart.push({
-            id: id,
+            productId: productId,
             name: name,
             price: price,
+            imageUrl: imageUrl,
             quantity: 1
         });
     }
 
-    saveCart(cart);
-    updateCartCount();
+    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+    alert(`${name} adicionado ao carrinho!`);
+    atualizarContadorCarrinho();
 }
 
-function updateCartCount() {
-
-    let cart = getCart();
-
-    let total = cart.reduce((sum, item) => sum + item.quantity, 0);
-
-    let el = document.getElementById("cartCount");
-
-    if (el) el.innerText = total;
+// 3. Atualizar o contador visual no menu superior (opcional)
+function atualizarContadorCarrinho() {
+    const cart = getCart();
+    const totalItens = cart.reduce((sum, item) => sum + item.quantity, 0);
+    const badge = document.getElementById('cart-badge');
+    if (badge) {
+        badge.innerText = totalItens;
+    }
 }
 
-document.addEventListener("DOMContentLoaded", updateCartCount);
+// Chame a função ao carregar a página para atualizar o ícone do topo
+document.addEventListener("DOMContentLoaded", atualizarContadorCarrinho);
