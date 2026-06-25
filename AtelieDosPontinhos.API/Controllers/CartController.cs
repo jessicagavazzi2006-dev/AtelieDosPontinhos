@@ -1,4 +1,4 @@
-﻿using AtelieDosPontinhos.Infrastructure.Context;
+﻿/*using AtelieDosPontinhos.Infrastructure.Context;
 using AtelieDosPontinhos.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -110,4 +110,4 @@ namespace AtelieDosPontinhos.API.Controllers
             return Ok("Item removido");
         }
     }
-}
+}*/

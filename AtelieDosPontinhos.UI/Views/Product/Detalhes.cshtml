@@ -1,78 +1,61 @@
 ﻿@model AtelieDosPontinhos.UI.Models.ProductViewModel
 
 @{
-    ViewData["Title"] = Model.Name;
+    var nomeProduto = Model.GetType().GetProperty("Nome")?.GetValue(Model)?.ToString() ?? Model.GetType().GetProperty("Name")?.GetValue(Model)?.ToString();
+    var precoProduto = Convert.ToDecimal(Model.GetType().GetProperty("Preco")?.GetValue(Model) ?? Model.GetType().GetProperty("Price")?.GetValue(Model));
+    ViewData["Title"] = nomeProduto;
 }
 
 <div class="container py-5 Product-detalhe">
     <div class="row g-5">
-
         <div class="col-md-6">
             <div class="Product-imagem-box">
-                <img src="@Model.CoverImageUrl"
-                     class="img-fluid Product-imagem"
-                     alt="@Model.Name">
+                <img src="@Model.CoverImageUrl" class="img-fluid Product-imagem" alt="@nomeProduto">
             </div>
         </div>
 
         <div class="col-md-6">
+            <h2 class="Product-titulo">@nomeProduto</h2>
+            <p class="Product-preco">R$ @precoProduto.ToString("N2")</p>
+            <p class="text-muted">@Model.Descricao</p>
 
-            <h2 class="Product-titulo">@Model.Name</h2>
+            <form asp-controller="Cart" asp-action="AdicionarAoCarrinho" method="post">
+                <input type="hidden" name="id" value="@Model.Id" />
 
-            <p class="Product-preco">R$ @Model.Price</p>
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <button type="button" class="btn btn-outline-secondary" onclick="alterarQuantidade(-1)">-</button>
+                    <input type="text" id="qtdInput" name="quantidade" value="1" class="form-control quantidade-input text-center" style="width: 60px;" readonly>
+                    <button type="button" class="btn btn-outline-secondary" onclick="alterarQuantidade(1)">+</button>
+                </div>
 
-            <p class="text-muted">
-                @Model.Description
-            </p>
-
-            <div class="d-flex align-items-center gap-3 mb-3">
-                <button class="btn btn-outline-secondary" onclick="alterarQuantidade(-1)">-</button>
-                <input type="text" id="qtdInput" value="1" class="form-control quantidade-input text-center" style="width: 60px;" readonly>
-                <button class="btn btn-outline-secondary" onclick="alterarQuantidade(1)">+</button>
-            </div>
-
-            <div class="d-flex gap-2 flex-wrap">
-                <button onclick="adicionarAoCarrinhoComQuantidade(@Model.Id, '@Model.Name', @Model.Price, '@Model.CoverImageUrl')" class="btn btn-comprar btn-lg">
-                    🛒 Comprar agora
-                </button>
-
-                <button class="btn btn-outline-secondary btn-lg">
-                    ❤ Favoritar
-                </button>
-            </div>
+                <div class="d-flex gap-2 flex-wrap">
+                    <button type="submit" class="btn btn-comprar btn-lg">
+                        🛒 Comprar agora
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary btn-lg">
+                        ❤ Favoritar
+                    </button>
+                </div>
+            </form>
 
             <hr />
-
             <ul class="Product-info-extra">
                 <li>✔ Produto artesanal</li>
                 <li>✔ Envio rápido</li>
                 <li>✔ Qualidade garantida</li>
             </ul>
-
         </div>
     </div>
 </div>
 
 @section Scripts {
-    <script src="~/js/cart.js" asp-append-version="true"></script>
     <script>
-        // Função simples para controlar o seletor de quantidade na tela
         function alterarQuantidade(valor) {
             const input = document.getElementById('qtdInput');
             let atual = parseInt(input.value) || 1;
             atual += valor;
             if (atual < 1) atual = 1;
             input.value = atual;
-        }
-
-        // Função que lê a quantidade da tela e joga no carrinho do localStorage
-        function adicionarAoCarrinhoComQuantidade(id, name, price, imageUrl) {
-            const qtd = parseInt(document.getElementById('qtdInput').value) || 1;
-            
-            // Loop para adicionar a quantidade selecionada
-            for (let i = 0; i < qtd; i++) {
-                adicionarAoCarrinho(id, name, price, imageUrl);
-            }
         }
     </script>
 }

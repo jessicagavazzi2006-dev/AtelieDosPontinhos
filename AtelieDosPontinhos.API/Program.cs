@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 #region SERVICES
-
 // Controllers (API)
 builder.Services.AddControllers();
 
@@ -23,10 +22,8 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<AtelieDosPontinhosDbContext>()
     .AddDefaultTokenProviders();
 
-
 // 🔐 CORREÇÃO IMPORTANTE (API não pode redirecionar pra login)
-builder.Services.ConfigureApplicationCookie(options =>
-{
+builder.Services.ConfigureApplicationCookie(options => {
     options.Events.OnRedirectToLogin = context =>
     {
         if (context.Request.Path.StartsWithSegments("/api"))
@@ -58,13 +55,17 @@ builder.Services.AddAuthorization();
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+#endregion
 
+#region DEPENDENCY INJECTION
+// 🌟 CORREÇÃO FEITA: Ajustado para usar o arquivo correto no plural "ProductServices"
+builder.Services.AddScoped<AtelieDosPontinhos.Application.Interfaces.IProductService, AtelieDosPontinhos.Application.Services.ProductServices>();
+builder.Services.AddScoped<AtelieDosPontinhos.Domain.Interfaces.IProductRepository, AtelieDosPontinhos.Infrastructure.Repositories.ProductRepository>();
 #endregion
 
 var app = builder.Build();
 
 #region PIPELINE
-
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -72,7 +73,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseRouting();
 
 app.UseAuthentication();
@@ -83,26 +83,24 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+// 🌟 ADICIONADO: Mapeia os endpoints de API (AccountController) para que o Swagger consiga lê-los!
+app.MapControllers();
 #endregion
 
 #region SEED DATA
-
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     await SeedData.Initialize(services);
 }
-
 #endregion
 
 #region DEBUG DB CONNECTION
-
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AtelieDosPontinhosDbContext>();
     Console.WriteLine("DB CONECTADO: " + db.Database.GetConnectionString());
 }
-
 #endregion
 
 app.Run();
