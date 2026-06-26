@@ -1,25 +1,32 @@
-using AtelieDosPontinhos.UI.Models;
+using AtelieDosPontinhos.Infrastructure.Context;
+using AtelieDosPontinhos.UI.Models; // Garante o acesso ao ProductViewModel
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
+using System.Linq;
 
-namespace AtelieDosPontinhos.UI.Controllers
+public class HomeController : Controller
 {
-    public class HomeController : Controller
+    private readonly AtelieDosPontinhosDbContext _context;
+
+    public HomeController(AtelieDosPontinhosDbContext context)
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
+        _context = context;
+    }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+    public IActionResult Index()
+    {
+        // 1. Busca os produtos originais do banco de dados
+        var productsFromDb = _context.Products.ToList();
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        // 2. Converte a lista de 'Product' para 'ProductViewModel' esperada pela View
+        var productViewModels = productsFromDb.Select(p => new ProductViewModel
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+            Id = p.Id,
+            Name = p.Name,
+            Price = p.Price,
+            CoverImageUrl = p.CoverImageUrl // Use o nome exato da propriedade de imagem do seu modelo
+        }).ToList();
+
+        // 3. Envia a lista convertida e correta para a View
+        return View(productViewModels);
     }
 }

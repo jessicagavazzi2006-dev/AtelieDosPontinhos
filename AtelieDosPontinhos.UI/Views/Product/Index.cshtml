@@ -1,0 +1,49 @@
+﻿@model IEnumerable<AtelieDosPontinhos.UI.Models.ProductViewModel>
+
+@{
+    ViewData["Title"] = "Gerenciar Produtos";
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-dark m-0">📦 Gerenciar Produtos</h2>
+        <a asp-controller="Product" asp-action="Create" class="btn btn-primary rounded-pill">➕ Novo Produto</a>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th style="width: 100px;">Imagem</th>
+                    <th>Nome</th>
+                    <th>Preço</th>
+                    <th>Descrição</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <img src="@item.CoverImageUrl" alt="@item.Nome" class="rounded shadow-sm" style="width: 60px; height: 60px; object-fit: cover;">
+                            </td>
+                            <td class="fw-bold text-dark">@item.Nome</td>
+                            <td class="text-success fw-bold">R$ @item.Preco</td>
+                            <td class="text-muted text-truncate" style="max-width: 300px;">@item.Descricao</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="4" class="text-center py-5 text-muted">
+                            <p class="mb-0 fs-5">Nenhum produto cadastrado no momento.</p>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

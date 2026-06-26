@@ -1,6 +1,7 @@
 /* ============================
    ESTILO GERAL
 ============================= */
+@import url('https://googleapis.com');
 
 body {
     font-family: 'Poppins', sans-serif;
@@ -11,7 +12,6 @@ body {
 /* ============================
    NAVBAR
 ============================= */
-
 .navbar {
     background-color: #E9D8F4 !important;
 }
@@ -24,7 +24,7 @@ body {
 .nav-link {
     color: #555 !important;
     font-weight: 500;
-    transition: .3s;
+    transition: 0.3s;
 }
 
     .nav-link:hover {
@@ -32,174 +32,126 @@ body {
     }
 
 /* ============================
-   BOTÕES
+   BOTÕES E ELEMENTOS EM DESTAQUE
 ============================= */
-
-.btn-primary {
-    background-color: #D97FA8;
-    border: none;
+/* Botão Principal (Rosa/Lilás) */
+.btn-danger, .btn-primary {
+    background-color: #D97FA8 !important;
+    border: none !important;
+    color: white !important;
+    transition: 0.3s ease;
 }
 
-    .btn-primary:hover {
-        background-color: #C86C96;
+    .btn-danger:hover, .btn-primary:hover {
+        background-color: #C86C96 !important;
+        transform: translateY(-2px);
     }
 
+/* Botão Secundário / Detalhes */
 .btn-outline-secondary {
-    border-color: #C8B6E2;
-    color: #7C5E99;
+    border-color: #C8B6E2 !important;
+    color: #7C5E99 !important;
+    transition: 0.3s ease;
 }
 
     .btn-outline-secondary:hover {
-        background-color: #C8B6E2;
-        color: white;
+        background-color: #C8B6E2 !important;
+        color: white !important;
     }
 
-/* ============================
-   CARDS
-============================= */
+/* Badges Dinâmicos */
+.badge.bg-danger {
+    background-color: #D97FA8 !important;
+}
 
-.card {
+/* ============================
+   CARDS DE PRODUTOS (VITRINE)
+============================= */
+.product-card {
     border: none;
     border-radius: 20px;
-    box-shadow: 0 8px 25px rgba(0,0,0,.08);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, .06);
+    background-color: #ffffff;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
 }
 
-/* ============================
-   FOOTER
-============================= */
-
-.footer {
-    background: white;
-    border-top: 1px solid #eee;
-}
-
-/* ============================
-   HERO (Página Inicial)
-============================= */
-
-.hero {
-    padding: 90px 20px;
-    text-align: center;
-}
-
-    .hero h1 {
-        font-size: 3rem;
-        font-weight: 700;
+    .product-card:hover {
+        transform: translateY(-8px) !important;
+        box-shadow: 0 12px 30px rgba(124, 94, 153, 0.15) !important;
     }
 
-    .hero p {
-        font-size: 1.2rem;
-        color: #666;
-    }
-
-    .hero .btn {
-        margin-top: 20px;
-    }
-
-/* ============================
-   HOME
-============================= */
-
-.banner-home {
-    height: 420px;
+/* Efeito de Zoom Suave na Imagem do Card */
+.product-img-zoom {
+    transition: transform 0.5s ease;
+    height: 240px;
     object-fit: cover;
 }
 
-.categoria-card {
-    overflow: hidden;
-    transition: .3s;
-}
-
-    .categoria-card:hover {
-        transform: translateY(-8px);
-    }
-
-    .categoria-card img {
-        height: 280px;
-        object-fit: cover;
-    }
-
-.Product-card {
-    overflow: hidden;
-    transition: .3s;
-}
-
-    .Product-card:hover {
-        transform: scale(1.04);
-    }
-
-    .Product-card img {
-        height: 220px;
-        object-fit: cover;
-    }
-
-.logo-navbar {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
+.product-card:hover .product-img-zoom {
+    transform: scale(1.06);
 }
 
 /* ============================
-   NAVBAR UPGRADE
+   BARRA DE BUSCA E ÍCONES
 ============================= */
-
 .search-navbar {
     border-radius: 25px;
     padding: 10px 18px;
     border: 1px solid #ddd;
+    transition: 0.3s;
 }
 
     .search-navbar:focus {
         box-shadow: 0 0 0 3px rgba(217, 127, 168, 0.25);
         border-color: #D97FA8;
+        outline: none;
     }
 
-.icons-navbar span {
-    cursor: pointer;
-    transition: .2s;
-}
-
-    .icons-navbar span:hover {
-        transform: scale(1.2);
-        color: #D97FA8;
-    }
-
+/* Contador do Carrinho Flutuante */
 .cart-badge {
-    position: absolute;
-    top: -6px;
-    right: -10px;
-    background: #D97FA8;
-    color: white;
-    font-size: 10px;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background: #D97FA8 !important;
+    color: white !important;
+    font-size: 11px !important;
+    font-weight: bold;
+    padding: 4px 8px !important;
+    border: 2px solid #E9D8F4; /* Combina com o fundo da navbar */
 }
 
-.navbar span {
+/* Interações nos Ícones da Navbar */
+.navbar a, .navbar span {
     cursor: pointer;
-    transition: .2s;
+    transition: 0.2s;
+    color: #7C5E99;
 }
 
-    .navbar span:hover {
-        transform: scale(1.2);
-        color: #D97FA8;
+    .navbar a:hover, .navbar span:hover {
+        transform: scale(1.15);
+        color: #D97FA8 !important;
     }
 
+/* Ajuste do tamanho do logo para não quebrar a barra */
+.logo-navbar {
+    width: 45px;
+    height: 45px;
+    object-fit: cover;
+}
+
+/* ============================
+   PÁGINA DE DETALHES DO PRODUTO
+============================= */
 .Product-detalhe {
     background: #fff;
     border-radius: 20px;
     padding: 30px;
-    box-shadow: 0 8px 30px rgba(0,0,0,.05);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, .05);
 }
 
 .Product-imagem {
     height: 450px;
     object-fit: cover;
     width: 100%;
+    border-radius: 15px;
 }
 
 .Product-preco {
@@ -211,4 +163,32 @@ body {
 .quantidade-input {
     width: 60px;
     text-align: center;
+}
+
+/* ============================
+   BANNER E OUTROS
+============================= */
+.banner-home {
+    height: 400px;
+    object-fit: cover;
+}
+
+.categoria-card {
+    overflow: hidden;
+    transition: 0.3s;
+    border-radius: 15px;
+}
+
+    .categoria-card:hover {
+        transform: translateY(-8px);
+    }
+
+    .categoria-card img {
+        height: 280px;
+        object-fit: cover;
+    }
+
+.footer {
+    background: white;
+    border-top: 1px solid #eee;
 }

@@ -1,51 +1,63 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
-public class AccountController : Controller
+namespace AtelieDosPontinhos.API.Controllers
 {
-    private readonly SignInManager<IdentityUser> _signInManager;
-
-    public AccountController(SignInManager<IdentityUser> signInManager)
+    [Route("api/[controller]")]
+    [ApiController]
+    public class AccountController : ControllerBase
     {
-        _signInManager = signInManager;
-    }
+        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<IdentityUser> _userManager;
 
-    // 🔑 LOGIN VIEW
-    [HttpGet]
-    public IActionResult Login()
-    {
-        return View();
-    }
-
-    // 🔐 LOGIN POST REAL
-    [HttpPost]
-    public async Task<IActionResult> Login(string email, string password)
-    {
-        var result = await _signInManager.PasswordSignInAsync(
-            email,
-            password,
-            false,
-            false
-        );
-
-        if (result.Succeeded)
+        public AccountController(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager)
         {
-            var user = User;
-
-            if (User.IsInRole("Admin"))
-                return RedirectToAction("AdminPanel", "Dashboard");
-
-            return RedirectToAction("Index", "Home");
+            _signInManager = signInManager;
+            _userManager = userManager;
         }
 
-        ViewBag.Error = "Login inválido";
-        return View();
+        // 📝 ASSINATURA CORRETA PARA APARECER NO SWAGGER
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] LoginRequest request)
+        {
+            if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Password))
+            {
+                return BadRequest(new { Message = "E-mail e senha são obrigatórios." });
+            }
+
+            var user = new IdentityUser { UserName = request.Email, Email = request.Email };
+            var result = await _userManager.CreateAsync(user, request.Password);
+
+            if (result.Succeeded)
+            {
+                return Ok(new { Succeeded = true, Message = "Usuário cadastrado com sucesso!" });
+            }
+
+            return BadRequest(result.Errors);
+        }
+
+        // 🔑 ROTA DE LOGIN
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        {
+            var result = await _signInManager.PasswordSignInAsync(request.Email, request.Password, false, false);
+
+            if (result.Succeeded)
+            {
+                var user = await _userManager.FindByEmailAsync(request.Email);
+                var roles = await _userManager.GetRolesAsync(user);
+
+                return Ok(new { Succeeded = true, Email = request.Email, Roles = roles });
+            }
+
+            return Unauthorized(new { Succeeded = false, Message = "Usuário ou senha inválidos" });
+        }
     }
 
-    // 🚪 LOGOUT
-    public async Task<IActionResult> Logout()
+    public class LoginRequest
     {
-        await _signInManager.SignOutAsync();
-        return RedirectToAction("Login");
+        public string Email { get; set; }
+        public string Password { get; set; }
     }
 }

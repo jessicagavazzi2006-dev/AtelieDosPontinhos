@@ -4,12 +4,14 @@
 
 ## Sobre o Projeto
 
-O **AtelieDosPontinhos** é uma loja virtual que vende Products de artesanato, o site foi desenvolvido de forma de didatico :
+O **AtelieDosPontinhos** é uma loja virtual que vende produtos e materiais de artesanato focado em ponto cruz, o site foi desenvolvido de forma de didatico :
 
 desenvolvidos pelos alunos:
-Lucar Richard - Domain, Aplication
-Jessica Alves - Domain, Infrastucture
-Elizabeth Dorigon - UI, API
+- Lucar Richard - Domain, Aplication
+- Jessica Alves - Domain, Infrastucture
+- Elizabeth Dorigon - UI, API
+
+## Ferramentas usadas
 
 - ASP.NET Core MVC
 - Arquitetura em camadas
@@ -114,27 +116,27 @@ O sistema cria automaticamente um usuário admin:
 ### Produtos
 | Método | Endpoint | Descrição |
 |--------|----------|-----------|
-| GET | `/api/Products` | Lista todos os games |
-| GET | `/api/Products/{id}` | Busca game por ID |
-| POST | `/api/Products` | Cria novo game (Admin) |
-| PUT | `/api/Products/{id}` | Atualiza game (Admin) |
-| DELETE | `/api/Products/{id}` | Remove game (Admin) |
+| GET | `/api/Products` | Lista todos os produtos |
+| GET | `/api/Products/{id}` | Busca produto por ID |
+| POST | `/api/Products` | Cria novo produto (Admin) |
+| PUT | `/api/Products/{id}` | Atualiza produto (Admin) |
+| DELETE | `/api/Products/{id}` | Remove produto (Admin) |
 
 ### Categorias
 | Método | Endpoint | Descrição |
 |--------|----------|-----------|
-| GET | `/api/categories` | Lista categorias |
+| GET | `/api/categories` | Lista todas as categorias |
 | POST | `/api/categories` | Cria categoria (Admin) |
 | PUT | `/api/categories/{id}` | Atualiza categoria (Admin) |
 | DELETE | `/api/categories/{id}` | Remove categoria (Admin) |
 
-### Categorias de Materiais
+### Materiais
 | Método | Endpoint | Descrição |
 |--------|----------|-----------|
-| GET | `/api/Material` | Lista categorias |
-| POST | `/api/Material` | Cria categoria (Admin) |
-| PUT | `/api/Material/{id}` | Atualiza categoria (Admin) |
-| DELETE | `/api/Material/{id}` | Remove categoria (Admin) |
+| GET | `/api/Material` | Lista todos os materiais |
+| POST | `/api/Material` | Cria material (Admin) |
+| PUT | `/api/Material/{id}` | Atualiza material (Admin) |
+| DELETE | `/api/Material/{id}` | Remove material (Admin) |
 
 ### Autenticação
 | Método | Endpoint | Descrição |
@@ -164,7 +166,7 @@ Para usar outro servidor SQL Server, altere a connection string nos projetos **A
 
 #### Package Manager Console:
 ```powershell
-Add-Migration NomeDaMigration -Project Material.Infrastructure -StartupProject Material.API
+Add-Migration NomeDaMigration -Project AtelieDosPontinhos.Infrastructure -StartupProject AtelieDosPontinhos.API
 ```
 
 #### PowerShell:

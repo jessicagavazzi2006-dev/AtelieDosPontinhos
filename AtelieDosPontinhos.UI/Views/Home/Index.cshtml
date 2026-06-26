@@ -1,184 +1,66 @@
-﻿@{
-    ViewData["Title"] = "Home";
+﻿@model IEnumerable<AtelieDosPontinhos.UI.Models.ProductViewModel>
+
+@{
+    ViewData["Title"] = "Página Inicial";
 }
 
-<!-- =========================
-     🎠 BANNER CARROSSEL
-========================== -->
-
-<div id="carouselHome" class="carousel slide" data-bs-ride="carousel">
-
-    <div class="carousel-inner">
-
-        <div class="carousel-item active">
-            <img src="~/images/banner/banner.png" class="d-block w-100 banner-home" alt="Banner 1">
+<div class="container mt-3">
+    <div id="carouselHome" class="carousel slide shadow-sm rounded-4 overflow-hidden" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="~/images/banner/banner.png" class="d-block w-100 banner-home" style="height: 400px; object-fit: cover;" alt="Banner 1" />
+            </div>
+            <div class="carousel-item">
+                <img src="~/images/banner/Banner2.png" class="d-block w-100 banner-home" style="height: 400px; object-fit: cover;" alt="Banner 2" />
+            </div>
+            <div class="carousel-item">
+                <img src="~/images/banner/Banner3.jpg" class="d-block w-100 banner-home" style="height: 400px; object-fit: cover;" alt="Banner 3" />
+            </div>
         </div>
-
-        <div class="carousel-item">
-            <img src="~/images/banner/Banner2.png" class="d-block w-100 banner-home" alt="Banner 2">
-        </div>
-
-        <div class="carousel-item">
-            <img src="~/images/banner/Banner3.jpg" class="d-block w-100 banner-home" alt="Banner 3">
-        </div>
-
-        <div class="carousel-item">
-            <img src="~/images/banner/Banner4.png" class="d-block w-100 banner-home" alt="Banner 4">
-        </div>
-
-        <div class="carousel-item">
-            <img src="~/images/banner/Banner5.png" class="d-block w-100 banner-home" alt="Banner 5">
-        </div>
-
-        <div class="carousel-item">
-            <img src="~/images/banner/Banner6.png" class="d-block w-100 banner-home" alt="Banner 6">
-        </div>
-
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselHome" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselHome" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        </button>
     </div>
-
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselHome" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon"></span>
-    </button>
-
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselHome" data-bs-slide="next">
-        <span class="carousel-control-next-icon"></span>
-    </button>
-
 </div>
 
-
-<!-- =========================
-     🧺 CATEGORIAS
-========================== -->
-
-<section class="container py-5">
-
-    <div class="text-center mb-5">
-        <h2>Nossas Categorias</h2>
-        <p class="text-muted">Escolha uma categoria e descubra nossos Produtos</p>
+<div class="container mt-5 mb-5">
+    <h2 class="text-center mb-4 fw-bold text-secondary">Nossos Produtos</h2>
+    
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <div class="col">
+                    <div class="card h-100 shadow-sm border-0 rounded-3 overflow-hidden">
+                        <img src="@item.CoverImageUrl" class="card-img-top" alt="@item.Name" style="height: 250px; object-fit: cover;">
+                        
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title fw-bold text-dark">@item.Name</h5>
+                            <p class="card-text text-muted text-truncate">@item.Description</p>
+                            <p class="card-text fs-5 fw-bold text-success mt-auto">R$ @item.Price</p>
+                            
+                            <button onclick="adicionarAoCarrinho(@item.Id, '@item.Name', @item.Price, '@item.CoverImageUrl')"
+                                    class="btn btn-outline-primary w-100 mt-3 rounded-pill fw-bold">
+                                <i class="bi bi-cart-plus-fill"></i> Adicionar ao Carrinho
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12 text-center py-5">
+                <p class="text-muted fs-5">Nenhum produto encontrado no momento.</p>
+            </div>
+        }
     </div>
+</div>
 
-    <div class="row g-4">
-
-        <!-- CAMA -->
-        <div class="col-md-4">
-            <div class="card categoria-card">
-                <img src="~/images/categorias/cama/kit lencol/lençol frozen solteiro.jpg">
-                <div class="card-body text-center">
-                    <h4>Cama</h4>
-                    <button class="btn btn-primary btn-sm mt-2">Ver Produtos</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- MESA -->
-        <div class="col-md-4">
-            <div class="card categoria-card">
-                <img src="~/images/categorias/mesa/toalha de mesa/toalha de mesa.jpg">
-                <div class="card-body text-center">
-                    <h4>Mesa</h4>
-                    <button class="btn btn-primary btn-sm mt-2">Ver Produtos</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- BANHO -->
-        <div class="col-md-4">
-            <div class="card categoria-card">
-                <img src="~/images/categorias/banho/Kit toalhas/kit toalhas beges.jpg">
-                <div class="card-body text-center">
-                    <h4>Banho</h4>
-                    <button class="btn btn-primary btn-sm mt-2">Ver Produtos</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- INFANTIL -->
-        <div class="col-md-6">
-            <div class="card categoria-card">
-                <img src="~/images/categorias/infantil/kit infantil/kit fraldas e babador.jpg">
-                <div class="card-body text-center">
-                    <h4>Infantil</h4>
-                    <button class="btn btn-primary btn-sm mt-2">Ver Produtos</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- MATERIAIS -->
-        <div class="col-md-6">
-            <div class="card categoria-card">
-                <img src="~/images/categorias/materiais/bastidor/bastidores.jpg">
-                <div class="card-body text-center">
-                    <h4>Materiais</h4>
-                    <button class="btn btn-primary btn-sm mt-2">Ver Produtos</button>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</section>
-
-
-<!-- =========================
-     🛍️ Produtos EM DESTAQUE
-========================== -->
-
-<section class="container pb-5">
-
-    <div class="text-center mb-4">
-        <h2>Produtos em Destaque</h2>
-        <p class="text-muted">Os queridinhos da nossa loja 💖</p>
-    </div>
-
-    <div class="row g-4">
-
-        <!-- Product 1 -->
-        <div class="col-md-3">
-            <div class="card Product-card">
-                <img src="~/images/categorias/cama/fronha/fronha floral rosa.jpg">
-                <div class="card-body text-center">
-                    <h6>Fronha Floral</h6>
-                    <p>R$ 29,90</p>
-                    <button class="btn btn-primary btn-sm">Comprar</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Product 2 -->
-        <div class="col-md-3">
-            <div class="card Product-card">
-                <img src="~/images/categorias/mesa/panos de prato/pano de prato café.jpg">
-                <div class="card-body text-center">
-                    <h6>Pano de Prato</h6>
-                    <p>R$ 19,90</p>
-                    <button class="btn btn-primary btn-sm">Comprar</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Product 3 -->
-        <div class="col-md-3">
-            <div class="card Product-card">
-                <img src="~/images/categorias/materiais/agulhas/agulhas.webp">
-                <div class="card-body text-center">
-                    <h6>Agulhas</h6>
-                    <p>R$ 9,90</p>
-                    <button class="btn btn-primary btn-sm">Comprar</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Product 4 -->
-        <div class="col-md-3">
-            <div class="card Product-card">
-                <img src="~/images/categorias/banho/Toalha de banho/toalha azul.jpg">
-                <div class="card-body text-center">
-                    <h6>Toalha Azul</h6>
-                    <p>R$ 39,90</p>
-                    <button class="btn btn-primary btn-sm">Comprar</button>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</section>
+@section Scripts {
+    <script src="~/js/cart.js" asp-append-version="true"></script>
+}

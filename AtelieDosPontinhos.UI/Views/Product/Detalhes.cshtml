@@ -1,0 +1,61 @@
+﻿@model AtelieDosPontinhos.UI.Models.ProductViewModel
+
+@{
+    var nomeProduto = Model.GetType().GetProperty("Nome")?.GetValue(Model)?.ToString() ?? Model.GetType().GetProperty("Name")?.GetValue(Model)?.ToString();
+    var precoProduto = Convert.ToDecimal(Model.GetType().GetProperty("Preco")?.GetValue(Model) ?? Model.GetType().GetProperty("Price")?.GetValue(Model));
+    ViewData["Title"] = nomeProduto;
+}
+
+<div class="container py-5 Product-detalhe">
+    <div class="row g-5">
+        <div class="col-md-6">
+            <div class="Product-imagem-box">
+                <img src="@Model.CoverImageUrl" class="img-fluid Product-imagem" alt="@nomeProduto">
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <h2 class="Product-titulo">@nomeProduto</h2>
+            <p class="Product-preco">R$ @precoProduto.ToString("N2")</p>
+            <p class="text-muted">@Model.Descricao</p>
+
+            <form asp-controller="Cart" asp-action="AdicionarAoCarrinho" method="post">
+                <input type="hidden" name="id" value="@Model.Id" />
+
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <button type="button" class="btn btn-outline-secondary" onclick="alterarQuantidade(-1)">-</button>
+                    <input type="text" id="qtdInput" name="quantidade" value="1" class="form-control quantidade-input text-center" style="width: 60px;" readonly>
+                    <button type="button" class="btn btn-outline-secondary" onclick="alterarQuantidade(1)">+</button>
+                </div>
+
+                <div class="d-flex gap-2 flex-wrap">
+                    <button type="submit" class="btn btn-comprar btn-lg">
+                        🛒 Comprar agora
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary btn-lg">
+                        ❤ Favoritar
+                    </button>
+                </div>
+            </form>
+
+            <hr />
+            <ul class="Product-info-extra">
+                <li>✔ Produto artesanal</li>
+                <li>✔ Envio rápido</li>
+                <li>✔ Qualidade garantida</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function alterarQuantidade(valor) {
+            const input = document.getElementById('qtdInput');
+            let atual = parseInt(input.value) || 1;
+            atual += valor;
+            if (atual < 1) atual = 1;
+            input.value = atual;
+        }
+    </script>
+}
