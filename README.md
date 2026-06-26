@@ -4,14 +4,7 @@
 
 ## Sobre o Projeto
 
-O **AtelieDosPontinhos** é uma loja virtual que vende produtos e materiais de artesanato focado em ponto cruz, o site foi desenvolvido de forma de didatico :
-
-desenvolvidos pelos alunos:
-- Lucar Richard - Domain, Aplication
-- Jessica Alves - Domain, Infrastucture
-- Elizabeth Dorigon - UI, API
-
-## Ferramentas usadas
+O **AtelieDosPontinhos** é uma loja virtual que vende produtos e materiais de artesanato focado em ponto cruz, o site foi desenvolvido de forma didatico para ensino de:
 
 - ASP.NET Core MVC
 - Arquitetura em camadas
@@ -21,6 +14,13 @@ desenvolvidos pelos alunos:
 - CRUD completo
 - Razor Views
 - Bootstrap 5
+
+##Integrantes do grupo
+
+desenvolvidos pelos alunos:
+- Lucar Richard - Domain, Aplication
+- Jessica Alves - Domain, Infrastucture
+- Elizabeth Dorigon - UI, API
 
 ## Tecnologias Utilizadas
 
