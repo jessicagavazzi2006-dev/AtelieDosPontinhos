@@ -1,33 +1,59 @@
 ﻿@model AtelieDosPontinhos.UI.Models.LoginViewModel
 
-<h2>Login</h2>
+@{
+    ViewData["Title"] = "Entrar";
+}
 
-<form asp-action="Login" method="post">
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card shadow border-0 p-4 rounded-4 bg-white">
+                <h2 class="fw-bold mb-3 text-center" style="color: #6f42c1;">🔑 Acessar Minha Conta</h2>
+                <p class="text-muted text-center small mb-4">Insira suas credenciais para acompanhar seus pedidos.</p>
+                
+                <form asp-action="Login" method="post">
+                    
+                    @* Exibição detalhada de erros vindo do Controller *@
+                    <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
 
-    <div>
-        <label>Email</label>
-        <input asp-for="Email" class="form-control" />
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label fw-semibold text-secondary">Endereço de E-mail</label>
+                        <input asp-for="Email" class="form-control form-control-lg bg-light border-0 fs-6" placeholder="nome@exemplo.com" required />
+                        <span asp-validation-for="Email" class="text-danger small"></span>
+                    </div>
+
+                    @* Campo: Senha com Olhinho *@
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label fw-semibold text-secondary">Senha</label>
+                        <div class="input-group">
+                            <input asp-for="Password" id="loginPassword" type="password" class="form-control form-control-lg bg-light border-0 fs-6" placeholder="••••••••" required />
+                            <button class="btn btn-light border-0 bg-light" type="button" onclick="togglePassword('loginPassword', this)" style="z-index: 5;">👁️</button>
+                        </div>
+                        <span asp-validation-for="Password" class="text-danger small"></span>
+                    </div>
+
+                    <div class="form-check mb-4">
+                        <input asp-for="RememberMe" class="form-check-input" style="cursor: pointer;" />
+                        <label asp-for="RememberMe" class="form-check-label small text-muted" style="cursor: pointer;">
+                            Lembrar-me neste dispositivo
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-lg w-100 text-white border-0 fw-bold shadow-sm mb-3" style="background-color: #6f42c1;">
+                        Entrar
+                    </button>
+
+                    <div class="text-center">
+                        <span class="text-muted small">Ainda não tem uma conta?</span>
+                        <a asp-action="Register" class="text-decoration-none small fw-bold" style="color: #6f42c1;">Cadastrar-se</a>
+                    </div>
+
+                </form>
+            </div>
+        </div>
     </div>
+</div>
 
-    <div>
-        <label>Senha</label>
-        <input asp-for="Password" class="form-control" type="password" />
-    </div>
-
-    <div>
-        <label>
-            <input asp-for="RememberMe" />
-            Lembrar-me
-        </label>
-    </div>
-
-    <button type="submit" class="btn btn-primary">
-        Entrar
-    </button>
-
-</form>
-
-@if (!ViewData.ModelState.IsValid)
-{
-    <p style="color:red">Login inválido</p>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }

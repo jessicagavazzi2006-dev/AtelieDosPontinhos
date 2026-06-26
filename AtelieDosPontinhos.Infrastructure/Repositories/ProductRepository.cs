@@ -19,7 +19,6 @@ namespace AtelieDosPontinhos.Infrastructure.Repositories
             return await _context.Products
                 .Include(p => p.Category) // Faz JOIN com a tabela Categoria
                 .OrderBy(p => p.Name) // Ordena a lista de nome em crescente
-                .Include(p => p.Category)
                 .OrderByDescending(p => p.Price)
                 .ToListAsync();
         }

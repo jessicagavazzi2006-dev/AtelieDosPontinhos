@@ -14,34 +14,40 @@
 
     <div class="row g-4 mb-5">
         
+        <!-- CARD: VER TODOS OS PRODUTOS (CRUD principal de listagem/exclusão) -->
         <div class="col-md-4">
             <div class="card h-100 border-0 shadow-sm p-4 text-center bg-white rounded-4 transition-hover">
                 <div class="fs-1 mb-2">📦</div>
                 <h4 class="fw-bold text-dark">Produtos</h4>
                 <p class="text-muted small">Catálogo ativo integrado</p>
-                <a asp-controller="Product" asp-action="Index" class="btn btn-danger btn-sm rounded-pill px-4 mt-2 fw-semibold">
+                <!-- Alterado para apontar para o Dashboard que lista os produtos da API -->
+                <a asp-controller="Dashboard" asp-action="GerenciarProdutos" class="btn btn-danger btn-sm rounded-pill px-4 mt-2 fw-semibold">
                     Ver Todos
                 </a>
             </div>
         </div>
 
+        <!-- CARD: CADASTRO DE NOVO PRODUTO -->
         <div class="col-md-4">
             <div class="card h-100 border-0 shadow-sm p-4 text-center bg-white rounded-4 transition-hover">
                 <div class="fs-1 mb-2">➕</div>
                 <h4 class="fw-bold text-dark">Novo Item</h4>
                 <p class="text-muted small">Adicionar produto ao banco</p>
-                <a asp-controller="Product" asp-action="Create" class="btn btn-outline-secondary btn-sm rounded-pill px-4 mt-2 fw-semibold">
+                <!-- Aponta para a tela de criação dentro do Dashboard ou Products -->
+                <a asp-controller="Dashboard" asp-action="CriarProduto" class="btn btn-outline-secondary btn-sm rounded-pill px-4 mt-2 fw-semibold">
                     Cadastrar
                 </a>
             </div>
         </div>
 
+        <!-- CARD: VER CLIENTES CADASTRADOS -->
         <div class="col-md-4">
             <div class="card h-100 border-0 shadow-sm p-4 text-center bg-white rounded-4 transition-hover">
                 <div class="fs-1 mb-2">👥</div>
                 <h4 class="fw-bold text-dark">Usuários</h4>
                 <p class="text-muted small">Controle de acessos e perfis</p>
-                <a asp-controller="Account" asp-action="Register" class="btn btn-outline-secondary btn-sm rounded-pill px-4 mt-2 fw-semibold">
+                <!-- Alterado para apontar para a nova tela que lista os clientes cadastrados -->
+                <a asp-controller="Dashboard" asp-action="GerenciarUsuarios" class="btn btn-outline-secondary btn-sm rounded-pill px-4 mt-2 fw-semibold">
                     Gerenciar
                 </a>
             </div>

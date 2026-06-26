@@ -24,6 +24,14 @@ builder.Services.Configure<IdentityOptions>(options => {
     options.Password.RequireLowercase = false;
 });
 
+// Configuração de redirecionamento de Cookies para as telas da UI
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Account/Login";
+    options.LogoutPath = "/Account/Logout";
+    options.AccessDeniedPath = "/Account/Login";
+});
+
 // ====================================================================
 // 🛒 CONFIGURAÇÃO DE SESSÃO COMPATÍVEL COM IDENTITY
 // ====================================================================
@@ -36,8 +44,9 @@ builder.Services.AddSession(options =>
     options.Cookie.SameSite = SameSiteMode.Lax;
 });
 
-// 🌟 Corrigido: Separado corretamente do bloco da Session
 builder.Services.AddControllersWithViews();
+
+// 🌟 CONFIGURADO: Registra o HttpClientFactory para o AccountController da UI consumir a API!
 builder.Services.AddHttpClient();
 
 var app = builder.Build();
@@ -105,7 +114,7 @@ using (var scope = app.Services.CreateScope())
         {
             // === CATEGORIA: BANHO ===
             new Product { Name = "Kit Toalhas Beges", Price = 149.90m, CoverImageUrl = "/images/categorias/banho/Kit toalhas/kit toalhas beges.jpg", IsFeatured = true, Description = "Lindo kit de toalhas beges com bordado artesanal refinado.", CategoryId = idBanho },
-            new Product { Name = "Kit Toalhas Brancas com Flores", Price = 159.90m, CoverImageUrl = "/images/categorias/banho/Kit toalhas/kit toalhas brancas com flo.jpg", IsFeatured = true, Description = "Kit de toalhas brancas com delicados motivos florais bordados.", CategoryId = idBanho },
+            new Product { Name = "Kit Toalhas Brancas com Flores", Price = 159.90m, CoverImageUrl = "/images/categorias/banho/Kit toalhas/kit toalhas brancas com flo.jpg", IsFeatured = true, Description = "Kit de toalhas brancas com delicados motifs florais bordados.", CategoryId = idBanho },
             new Product { Name = "Toalha de Banho Azul", Price = 69.90m, CoverImageUrl = "/images/categorias/banho/Toalha de banho/toalha azul.jpg", IsFeatured = true, Description = "Toalha de banho azul macia com detalhes em ponto cruz.", CategoryId = idBanho },
             new Product { Name = "Toalha de Banho Branca", Price = 69.90m, CoverImageUrl = "/images/categorias/banho/Toalha de banho/toalha branca.jpg", IsFeatured = true, Description = "Toalha de banho branca clássica com barrado trabalhado.", CategoryId = idBanho },
             new Product { Name = "Toalha Lavabo Branca", Price = 29.90m, CoverImageUrl = "/images/categorias/banho/Toalha lavabo/toalha lavabo branca.jpg", IsFeatured = true, Description = "Toalha de lavabo branca para decoração de banheiros.", CategoryId = idBanho },
@@ -144,7 +153,7 @@ using (var scope = app.Services.CreateScope())
         context.SaveChanges();
     }
 
-    // 🌟 Corrigido: Execução assíncrona limpa no encerramento do escopo
+    // Execução assíncrona limpa no encerramento do escopo
     await AtelieDosPontinhos.Infrastructure.Identity.SeedData.SeedAsync(scope.ServiceProvider);
 }
 

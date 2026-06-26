@@ -1,0 +1,60 @@
+﻿@model List<AtelieDosPontinhos.UI.Controllers.ProdutoViewModel>
+
+@{
+    ViewData["Title"] = "Gerenciar Produtos";
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold m-0" style="color: #6f42c1;">📦 Gerenciamento de Produtos</h2>
+        <a asp-controller="Dashboard" asp-action="CriarProduto" class="btn text-white fw-bold" style="background-color: #6f42c1;">+ Novo Produto</a>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success border-0 shadow-sm rounded-3">@TempData["Success"]</div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger border-0 shadow-sm rounded-3">@TempData["Error"]</div>
+    }
+
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
+        <table class="table table-hover align-middle m-0">
+            <thead class="table-light">
+                <tr>
+                    <th class="px-4" style="width: 100px;">ID</th>
+                    <th>Nome do Produto</th>
+                    <th class="text-end px-4" style="width: 200px;">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model == null || !Model.Any())
+                {
+                    <tr>
+                        <td colspan="3" class="text-center text-muted py-5">
+                            <span class="fs-4 d-block mb-2">🔍</span>
+                            Nenhum produto integrado encontrado na API.
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="px-4 fw-bold text-muted">#@item.Id</td>
+                            <td class="fw-semibold text-dark">@item.Name</td>
+                            <td class="text-end px-4">
+                                <a asp-controller="Dashboard" asp-action="EditarProduto" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary rounded-pill px-3 me-1">Editar</a>
+                                <form asp-controller="Dashboard" asp-action="DeletarProduto" asp-route-id="@item.Id" method="post" class="d-inline" onsubmit="return confirm('Tem certeza que deseja apagar este produto do Ateliê?');">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3">Excluir</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

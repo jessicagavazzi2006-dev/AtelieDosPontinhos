@@ -1,0 +1,47 @@
+﻿@model AtelieDosPontinhos.UI.Controllers.ProdutoViewModel
+
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <h4>📦 Cadastrar Novo Produto</h4>
+    </div>
+    <div class="card-body">
+
+        <form asp-action="CriarProdutoPost" method="post">
+            
+            <!-- Campo: Nome do Produto -->
+            <div class="form-group mb-3">
+                <label class="form-label">Nome do Produto</label>
+                <input asp-for="Name" class="form-control" required />
+            </div>
+
+            <!-- Campo: Preço -->
+            <div class="form-group mb-3">
+                <label class="form-label">Preço (R$)</label>
+                <input asp-for="Price" type="number" step="0.01" class="form-control" required />
+            </div>
+
+            <!-- ✍️ CAMPO ADICIONADO: Descrição do Produto -->
+            <div class="form-group mb-3">
+                <label class="form-label">Descrição do Produto</label>
+                <textarea asp-for="Description" class="form-control" rows="3" required></textarea>
+            </div>
+
+            <!-- 🖼️ CAMPO CORRIGIDO: Link da Imagem mapeado para CoverImageUrl -->
+            <div class="form-group mb-3">
+                <label class="form-label">Link da Imagem</label>
+                <input asp-for="CoverImageUrl" class="form-control" required />
+                <small class="text-muted">Atenção: Se a API recusar strings Base64 muito longas, utilize uma URL direta da imagem.</small>
+            </div>
+
+            <!-- Campos Ocultos para Valores Padrão (Evita erros de validação caso a API exija) -->
+            <input type="hidden" asp-for="Stock" value="10" />
+            <input type="hidden" asp-for="CategoryId" value="1" />
+
+            <div class="d-flex justify-content-between mt-4">
+                <a asp-action="GerenciarProdutos" class="btn btn-secondary">Voltar</a>
+                <button type="submit" class="btn btn-success">Salvar Produto</button>
+            </div>
+        </form>
+
+    </div>
+</div>
