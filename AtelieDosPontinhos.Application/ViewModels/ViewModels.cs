@@ -33,7 +33,6 @@ namespace AtelieDosPontinhos.Application.ViewModels
         public double Price { get; set; }
         public int CategoryId { get; set; }
         public string Type_Product { get; set; } = string.Empty;
-
         public bool IsFeatured { get; set; }
         public IEnumerable<CategoryDto> categories { get; set; } = new List<CategoryDto>();
     }
