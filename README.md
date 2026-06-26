@@ -15,7 +15,7 @@ O **AtelieDosPontinhos** é uma loja virtual que vende produtos e materiais de a
 - Razor Views
 - Bootstrap 5
 
-##Integrantes do grupo
+## Integrantes do grupo
 
 desenvolvidos pelos alunos:
 - Lucar Richard - Domain, Aplication
