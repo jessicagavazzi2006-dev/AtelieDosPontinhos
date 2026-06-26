@@ -4,7 +4,7 @@
 
 ## Sobre o Projeto
 
-O **AtelieDosPontinhos** é uma loja virtual que vende produtos e materiais de artesanato focado em ponto cruz, o site foi desenvolvido de forma didatico para ensino de:
+O **AtelieDosPontinhos** é uma loja virtual que vende produtos e materiais de artesanato focado apenas em ponto cruz, o site foi desenvolvido de forma didático para ensino de:
 
 - ASP.NET Core MVC
 - Arquitetura em camadas
