@@ -1,0 +1,51 @@
+﻿@model AtelieDosPontinhos.UI.Controllers.ProdutoViewModel
+
+<div class="card">
+    <div class="card-header bg-warning text-dark">
+        <h4>📝 Editar Produto</h4>
+    </div>
+    <div class="card-body">
+
+        <!-- Mapeia para a Action de Edição no seu Controller da UI -->
+        <form asp-action="EditarProdutoPost" method="post">
+            
+            <!-- ⚠️ IMPORTANTE: Campo oculto com o ID do produto para o sistema saber quem atualizar -->
+            <input type="hidden" asp-for="Id" />
+
+            <!-- Campo: Nome do Produto -->
+            <div class="form-group mb-3">
+                <label class="form-label">Nome do Produto</label>
+                <input asp-for="Name" class="form-control" required />
+            </div>
+
+            <!-- Campo: Preço -->
+            <div class="form-group mb-3">
+                <label class="form-label">Preço (R$)</label>
+                <input asp-for="Price" type="number" step="0.01" class="form-control" required />
+            </div>
+
+            <!-- Campo: Descrição do Produto -->
+            <div class="form-group mb-3">
+                <label class="form-label">Descrição do Produto</label>
+                <textarea asp-for="Description" class="form-control" rows="3" required></textarea>
+            </div>
+
+            <!-- Campo: Link da Imagem -->
+            <div class="form-group mb-3">
+                <label class="form-label">Link da Imagem</label>
+                <input asp-for="CoverImageUrl" class="form-control" required />
+                <small class="text-muted">Atenção: Se a API recusar strings Base64 muito longas, utilize uma URL direta da imagem.</small>
+            </div>
+
+            <!-- Campos Ocultos para Valores Padrão (Mantém os dados que já existem) -->
+            <input type="hidden" asp-for="Stock" />
+            <input type="hidden" asp-for="CategoryId" />
+
+            <div class="d-flex justify-content-between mt-4">
+                <a asp-action="GerenciarProdutos" class="btn btn-secondary">Voltar</a>
+                <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+            </div>
+        </form>
+
+    </div>
+</div>
