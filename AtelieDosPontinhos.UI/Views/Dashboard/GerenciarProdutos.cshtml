@@ -24,6 +24,8 @@
             <thead class="table-light">
                 <tr>
                     <th class="px-4" style="width: 100px;">ID</th>
+                    <!-- 🖼️ ADICIONADO: Cabeçalho da coluna de foto -->
+                    <th style="width: 80px;">Foto</th>
                     <th>Nome do Produto</th>
                     <th class="text-end px-4" style="width: 200px;">Ações</th>
                 </tr>
@@ -32,7 +34,8 @@
                 @if (Model == null || !Model.Any())
                 {
                     <tr>
-                        <td colspan="3" class="text-center text-muted py-5">
+                        <!-- Alterado para colspan="4" porque agora temos mais uma coluna -->
+                        <td colspan="4" class="text-center text-muted py-5">
                             <span class="fs-4 d-block mb-2">🔍</span>
                             Nenhum produto integrado encontrado na API.
                         </td>
@@ -44,10 +47,25 @@
                     {
                         <tr>
                             <td class="px-4 fw-bold text-muted">#@item.Id</td>
+                            
+                            <!-- 🖼️ ADICIONADO: Exibição da foto carregada do banco -->
+                            <td>
+                                @if (!string.IsNullOrEmpty(item.CoverImageUrl))
+                                {
+                                    <img src="@item.CoverImageUrl" alt="@item.Name" class="rounded-3 shadow-sm" style="width: 50px; height: 50px; object-fit: cover;" />
+                                }
+                                else
+                                {
+                                    <!-- Caso o produto esteja sem foto, exibe um ícone cinza padrão -->
+                                    <div class="bg-light rounded-3 d-flex align-items-center justify-content-center shadow-sm" style="width: 50px; height: 50px; color: #aaa;">📦</div>
+                                }
+                            </td>
+
                             <td class="fw-semibold text-dark">@item.Name</td>
                             <td class="text-end px-4">
                                 <a asp-controller="Dashboard" asp-action="EditarProduto" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary rounded-pill px-3 me-1">Editar</a>
-                                <form asp-controller="Dashboard" asp-action="DeletarProduto" asp-route-id="@item.Id" method="post" class="d-inline" onsubmit="return confirm('Tem certeza que deseja apagar este produto do Ateliê?');">
+                                
+                                <form asp-controller="Dashboard" asp-action="ExcluirProduto" asp-route-id="@item.Id" method="post" class="d-inline" onsubmit="return confirm('Tem certeza que deseja apagar este produto do Ateliê?');">
                                     <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3">Excluir</button>
                                 </form>
                             </td>

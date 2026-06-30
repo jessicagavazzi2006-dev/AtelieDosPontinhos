@@ -6,7 +6,8 @@
     </div>
     <div class="card-body">
 
-        <form asp-action="CriarProdutoPost" method="post">
+        <!-- ⚠️ IMPORTANTE: Adicionado enctype para permitir upload de arquivos -->
+        <form asp-action="CriarProdutoPost" method="post" enctype="multipart/form-data">
             
             <!-- Campo: Nome do Produto -->
             <div class="form-group mb-3">
@@ -20,20 +21,20 @@
                 <input asp-for="Price" type="number" step="0.01" class="form-control" required />
             </div>
 
-            <!-- ✍️ CAMPO ADICIONADO: Descrição do Produto -->
+            <!-- Campo: Descrição do Produto -->
             <div class="form-group mb-3">
                 <label class="form-label">Descrição do Produto</label>
                 <textarea asp-for="Description" class="form-control" rows="3" required></textarea>
             </div>
 
-            <!-- 🖼️ CAMPO CORRIGIDO: Link da Imagem mapeado para CoverImageUrl -->
+            <!-- 🖼️ MODIFICADO: Agora é um campo de arquivo do computador -->
             <div class="form-group mb-3">
-                <label class="form-label">Link da Imagem</label>
-                <input asp-for="CoverImageUrl" class="form-control" required />
-                <small class="text-muted">Atenção: Se a API recusar strings Base64 muito longas, utilize uma URL direta da imagem.</small>
+                <label class="form-label">Foto do Produto</label>
+                <input type="file" name="FotoArquivo" class="form-control" accept="image/*" required />
+                <small class="text-muted">Selecione uma imagem (.jpg, .png, .jpeg) do seu computador.</small>
             </div>
 
-            <!-- Campos Ocultos para Valores Padrão (Evita erros de validação caso a API exija) -->
+            <!-- Campos Ocultos para Valores Padrão -->
             <input type="hidden" asp-for="Stock" value="10" />
             <input type="hidden" asp-for="CategoryId" value="1" />
 
