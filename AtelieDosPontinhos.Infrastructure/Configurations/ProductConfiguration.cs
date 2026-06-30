@@ -23,7 +23,7 @@ namespace AtelieDosPontinhos.Infrastructure.Configurations
 
             // URL da imagem do produto
             builder.Property(p => p.CoverImageUrl)
-                .HasMaxLength(500);
+                .HasMaxLength(2000);
 
             // Preço do produto
             builder.Property(p => p.Price)
