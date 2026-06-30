@@ -18,5 +18,6 @@
         public int CategoryId { get; set; }
 
         public Category? Category { get; set; }
+        public virtual ICollection<Product_Material> Product_Materials { get; set; } = new List<Product_Material>();
     }
 }

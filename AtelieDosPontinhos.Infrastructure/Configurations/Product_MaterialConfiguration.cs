@@ -11,13 +11,13 @@ public class Product_MaterialConfiguration : IEntityTypeConfiguration<Product_Ma
 
         // Relacionamento: Product_Material -> Product
         builder.HasOne(pm => pm.Product)
-            .WithMany() // sem navegação no Product
+            .WithMany(p => p.Product_Materials) // sem navegação no Product
             .HasForeignKey(pm => pm.ProductId)
             .OnDelete(DeleteBehavior.Restrict);
 
         // Relacionamento: Product_Material -> Material
         builder.HasOne(pm => pm.Material)
-            .WithMany() // sem navegação no Material
+            .WithMany(m => m.Product_Materials) // sem navegação no Material
             .HasForeignKey(pm => pm.MaterialId)
             .OnDelete(DeleteBehavior.Restrict);
 
