@@ -17,9 +17,9 @@ O **AtelieDosPontinhos** é uma loja virtual que vende produtos e materiais de a
 
 ## Integrantes do grupo
 
-desenvolvidos pelos alunos:
+Desenvolvidos pelos alunos:
 - Lucar Richard - Domain, Aplication
-- Jessica Alves - Domain, Infrastucture
+- Jessica Alves - Domain, Infrastructure
 - Elizabeth Dorigon - UI, API
 
 ## Tecnologias Utilizadas
@@ -43,7 +43,7 @@ desenvolvidos pelos alunos:
 SenacGames/
 ├── AtelieDosPontinhos.Domain     → Entidades, Interfaces
 ├── SenacGames.Application   → Services, DTOs, ViewModels
-├── SenacGames.Infrastructure → DbContext, Repositories, Identity, Migrations
+├── SenacGames.Infrastructure → DbContext, Repositories, Identity, Migrations, Configurations
 ├── SenacGames.API       → Controllers REST, Swagger
 └── SenacGames.UI       → Controllers MVC, Views Razor, Bootstrap
 ```
