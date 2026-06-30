@@ -1,7 +1,8 @@
-﻿using AtelieDosPontinhos.Domain.Entities;
-using AtelieDosPontinhos.Infrastructure.Configurations;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
+using AtelieDosPontinhos.Domain;
+using AtelieDosPontinhos.Domain.Entities; // Ajuste se suas entidades usarem outro namespace
+using AtelieDosPontinhos.Infrastructure.Configurations;
 
 namespace AtelieDosPontinhos.Infrastructure.Context
 {
@@ -11,25 +12,12 @@ namespace AtelieDosPontinhos.Infrastructure.Context
         {
         }
 
-        public DbSet<CartItem> CartItems { get; set; }
-
-        /// <summary>
-        /// Dbset representa a tabela Product no banco de dados
-        /// </summary>
+        // 🛠️ TODAS AS SUAS TABELAS DE VOLTA PARA NÃO QUEBRAR OS REPOSITÓRIOS:
         public DbSet<Product> Products { get; set; }
-
-        /// <summary>
-        /// DbSet representa a tabela categoria no banco de dados
-        /// </summary>
         public DbSet<Category> Categories { get; set; }
-
-        /// <summary>
-        /// Dbset representa a tabela material no banco de dados
-        /// </summary>
         public DbSet<Material> Materials { get; set; }
-
         /// <summary>
-        /// Dbset representa a tabela Product
+        /// Tabela de junção entre Product e Material
         /// </summary>
         public DbSet<Product_Material> ProductMaterials { get; set; }
 
@@ -37,10 +25,16 @@ namespace AtelieDosPontinhos.Infrastructure.Context
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.ApplyConfiguration(new ProductConfiguration()); 
-            modelBuilder.ApplyConfiguration(new CategoryConfiguration()); 
-            modelBuilder.ApplyConfiguration(new MaterialConfiguration()); 
-            modelBuilder.ApplyConfiguration(new Product_MaterialConfiguration()); 
+            // 🖼️ CONFIGURAÇÃO DA IMAGEM LONGA EM BASE64:
+            modelBuilder.Entity<Product>()
+                .Property(p => p.CoverImageUrl)
+                .HasColumnType("nvarchar(max)");
+
+            // Aplicar configurações específicas de entidade (inclui chave composta para Product_Material)
+            modelBuilder.ApplyConfiguration(new ProductConfiguration());
+            modelBuilder.ApplyConfiguration(new CategoryConfiguration());
+            modelBuilder.ApplyConfiguration(new MaterialConfiguration());
+            modelBuilder.ApplyConfiguration(new Product_MaterialConfiguration());
         }
     }
 }

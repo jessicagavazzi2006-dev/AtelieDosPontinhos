@@ -14,7 +14,7 @@ namespace AtelieDosPontinhos.UI.Controllers
     public class AccountController : Controller
     {
         private readonly IHttpClientFactory _httpClientFactory;
-        private readonly string _apiUrl = "http://localhost:5004/api/account";
+        private readonly string _apiUrl = "http://localhost:5006/api/account";
 
         public AccountController(IHttpClientFactory httpClientFactory)
         {

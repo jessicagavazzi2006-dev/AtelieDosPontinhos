@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+// Força a URL de escuta para evitar conflito de porta em desenvolvimento
+builder.WebHost.UseUrls("http://localhost:5012");
 
 // 1. Configuração do Banco de Dados SQL Server
 builder.Services.AddDbContext<AtelieDosPontinhosDbContext>(options =>
