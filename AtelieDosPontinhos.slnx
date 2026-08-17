@@ -4,8 +4,8 @@
   </Folder>
   <Project Path="AtelieDosPontinhos.API/AtelieDosPontinhos.API.csproj" />
   <Project Path="AtelieDosPontinhos.Application/AtelieDosPontinhos.Application.csproj" />
+  <Project Path="AtelieDosPontinhos.desk/AtelieDosPontinhos.desk.csproj" Id="a71fa955-b178-4e58-b49c-4272ebc38941" />
   <Project Path="AtelieDosPontinhos.Domain/AtelieDosPontinhos.Domain.csproj" />
   <Project Path="AtelieDosPontinhos.Infrastructure/AtelieDosPontinhos.Infrastructure.csproj" />
   <Project Path="AtelieDosPontinhos.UI/AtelieDosPontinhos.UI.csproj" />
-  <Project Path="Desktop/AtelieDosPontinhos.Desktop.csproj" Id="9d06ef08-728a-4b1f-ab78-8cace2be1c6d" />
 </Solution>
