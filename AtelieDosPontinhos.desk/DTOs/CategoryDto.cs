@@ -11,7 +11,7 @@ namespace AtelieDosPontinhos.Desktop.DTOs
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public int ProductCount { get; set; }
-        public string ImageLocal {  get; set; } = string.Empty
+        public string ImageLocal { get; set; } = string.Empty;
     }
     public class CreateCategoryDto
     {
@@ -20,9 +20,12 @@ namespace AtelieDosPontinhos.Desktop.DTOs
         public string ImageLocal { get; set; } = string.Empty;
     }
 
+
+
     public class UpdateCategoryDto
     {
-
+        public string Name { get; set; } = string.Empty;
+        public string ImageLocal { get; set; } = string.Empty;
     }
     
     
