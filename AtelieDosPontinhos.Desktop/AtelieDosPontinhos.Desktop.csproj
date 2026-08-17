@@ -9,7 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs\NovaPasta\" />
     <Folder Include="Forms\" />
     <Folder Include="Helpers\" />
     <Folder Include="UserControls\" />
