@@ -230,6 +230,7 @@
             btnFechar.Size = new Size(30, 30);
             btnFechar.TabIndex = 5;
             btnFechar.Text = "❌";
+            btnFechar.Click += btnFechar_Click;
             // 
             // LoginForm
             // 
