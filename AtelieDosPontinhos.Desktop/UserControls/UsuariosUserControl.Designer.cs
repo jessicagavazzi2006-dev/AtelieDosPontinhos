@@ -1,0 +1,244 @@
+﻿namespace AtelieDosPontinhos.Desktop.UserControls
+{
+    partial class UsuariosUserControl
+    {
+        /// <summary> 
+        /// Variável de designer necessária.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary> 
+        /// Limpar os recursos que estão sendo usados.
+        /// </summary>
+        /// <param name="disposing">true se for necessário descartar os recursos gerenciados; caso contrário, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Código gerado pelo Designer de Componentes
+
+        /// <summary> 
+        /// Método necessário para suporte ao Designer - não modifique 
+        /// o conteúdo deste método com o editor de código.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges37 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges38 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges39 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges40 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges41 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges42 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges43 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges44 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges45 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges46 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges47 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges48 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            pnlToolbar = new Panel();
+            btnAtualizar = new Guna.UI2.WinForms.Guna2Button();
+            btnExcluir = new Guna.UI2.WinForms.Guna2Button();
+            btnEditar = new Guna.UI2.WinForms.Guna2Button();
+            btnNovo = new Guna.UI2.WinForms.Guna2Button();
+            btnPesquisar = new Guna.UI2.WinForms.Guna2Button();
+            txtPesquisa = new Guna.UI2.WinForms.Guna2TextBox();
+            lblTitulo = new Label();
+            gridUsuarios = new DataGridView();
+            colId = new DataGridViewTextBoxColumn();
+            colName = new DataGridViewTextBoxColumn();
+            colEmail = new DataGridViewTextBoxColumn();
+            colPerfil = new DataGridViewTextBoxColumn();
+            pnlToolbar.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)gridUsuarios).BeginInit();
+            SuspendLayout();
+            // 
+            // pnlToolbar
+            // 
+            pnlToolbar.Controls.Add(btnAtualizar);
+            pnlToolbar.Controls.Add(btnExcluir);
+            pnlToolbar.Controls.Add(btnEditar);
+            pnlToolbar.Controls.Add(btnNovo);
+            pnlToolbar.Controls.Add(btnPesquisar);
+            pnlToolbar.Controls.Add(txtPesquisa);
+            pnlToolbar.Location = new Point(46, 57);
+            pnlToolbar.Name = "pnlToolbar";
+            pnlToolbar.Size = new Size(713, 66);
+            pnlToolbar.TabIndex = 4;
+            // 
+            // btnAtualizar
+            // 
+            btnAtualizar.CustomizableEdges = customizableEdges37;
+            btnAtualizar.DisabledState.BorderColor = Color.DarkGray;
+            btnAtualizar.DisabledState.CustomBorderColor = Color.DarkGray;
+            btnAtualizar.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
+            btnAtualizar.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            btnAtualizar.Font = new Font("Segoe UI", 9F);
+            btnAtualizar.ForeColor = Color.White;
+            btnAtualizar.Location = new Point(604, 13);
+            btnAtualizar.Name = "btnAtualizar";
+            btnAtualizar.ShadowDecoration.CustomizableEdges = customizableEdges38;
+            btnAtualizar.Size = new Size(89, 39);
+            btnAtualizar.TabIndex = 1;
+            btnAtualizar.Text = "🔃 Atualizar";
+            // 
+            // btnExcluir
+            // 
+            btnExcluir.CustomizableEdges = customizableEdges39;
+            btnExcluir.DisabledState.BorderColor = Color.DarkGray;
+            btnExcluir.DisabledState.CustomBorderColor = Color.DarkGray;
+            btnExcluir.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
+            btnExcluir.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            btnExcluir.Font = new Font("Segoe UI", 9F);
+            btnExcluir.ForeColor = Color.White;
+            btnExcluir.Location = new Point(512, 13);
+            btnExcluir.Name = "btnExcluir";
+            btnExcluir.ShadowDecoration.CustomizableEdges = customizableEdges40;
+            btnExcluir.Size = new Size(86, 39);
+            btnExcluir.TabIndex = 1;
+            btnExcluir.Text = "🗑️ Excluir";
+            // 
+            // btnEditar
+            // 
+            btnEditar.CustomizableEdges = customizableEdges41;
+            btnEditar.DisabledState.BorderColor = Color.DarkGray;
+            btnEditar.DisabledState.CustomBorderColor = Color.DarkGray;
+            btnEditar.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
+            btnEditar.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            btnEditar.Font = new Font("Segoe UI", 9F);
+            btnEditar.ForeColor = Color.White;
+            btnEditar.Location = new Point(420, 13);
+            btnEditar.Name = "btnEditar";
+            btnEditar.ShadowDecoration.CustomizableEdges = customizableEdges42;
+            btnEditar.Size = new Size(86, 39);
+            btnEditar.TabIndex = 1;
+            btnEditar.Text = "✏️ Editar";
+            // 
+            // btnNovo
+            // 
+            btnNovo.CustomizableEdges = customizableEdges43;
+            btnNovo.DisabledState.BorderColor = Color.DarkGray;
+            btnNovo.DisabledState.CustomBorderColor = Color.DarkGray;
+            btnNovo.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
+            btnNovo.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            btnNovo.Font = new Font("Segoe UI", 9F);
+            btnNovo.ForeColor = Color.White;
+            btnNovo.Location = new Point(328, 13);
+            btnNovo.Name = "btnNovo";
+            btnNovo.ShadowDecoration.CustomizableEdges = customizableEdges44;
+            btnNovo.Size = new Size(86, 39);
+            btnNovo.TabIndex = 1;
+            btnNovo.Text = "➕ Novo Usuário";
+            // 
+            // btnPesquisar
+            // 
+            btnPesquisar.CustomizableEdges = customizableEdges45;
+            btnPesquisar.DisabledState.BorderColor = Color.DarkGray;
+            btnPesquisar.DisabledState.CustomBorderColor = Color.DarkGray;
+            btnPesquisar.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
+            btnPesquisar.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            btnPesquisar.Font = new Font("Segoe UI", 9F);
+            btnPesquisar.ForeColor = Color.White;
+            btnPesquisar.Location = new Point(223, 13);
+            btnPesquisar.Name = "btnPesquisar";
+            btnPesquisar.ShadowDecoration.CustomizableEdges = customizableEdges46;
+            btnPesquisar.Size = new Size(86, 39);
+            btnPesquisar.TabIndex = 1;
+            btnPesquisar.Text = "Pesquisar";
+            // 
+            // txtPesquisa
+            // 
+            txtPesquisa.CustomizableEdges = customizableEdges47;
+            txtPesquisa.DefaultText = "";
+            txtPesquisa.DisabledState.BorderColor = Color.FromArgb(208, 208, 208);
+            txtPesquisa.DisabledState.FillColor = Color.FromArgb(226, 226, 226);
+            txtPesquisa.DisabledState.ForeColor = Color.FromArgb(138, 138, 138);
+            txtPesquisa.DisabledState.PlaceholderForeColor = Color.FromArgb(138, 138, 138);
+            txtPesquisa.FocusedState.BorderColor = Color.FromArgb(94, 148, 255);
+            txtPesquisa.Font = new Font("Segoe UI", 9F);
+            txtPesquisa.HoverState.BorderColor = Color.FromArgb(94, 148, 255);
+            txtPesquisa.Location = new Point(12, 14);
+            txtPesquisa.Name = "txtPesquisa";
+            txtPesquisa.PlaceholderText = "🔎 Pesquisar por nome ou email...";
+            txtPesquisa.SelectedText = "";
+            txtPesquisa.ShadowDecoration.CustomizableEdges = customizableEdges48;
+            txtPesquisa.Size = new Size(205, 36);
+            txtPesquisa.TabIndex = 0;
+            // 
+            // lblTitulo
+            // 
+            lblTitulo.AutoSize = true;
+            lblTitulo.Location = new Point(46, 24);
+            lblTitulo.Name = "lblTitulo";
+            lblTitulo.Size = new Size(167, 15);
+            lblTitulo.TabIndex = 3;
+            lblTitulo.Text = "👤 Gerenciamento de Usuários";
+            // 
+            // gridUsuarios
+            // 
+            gridUsuarios.AllowUserToDeleteRows = false;
+            gridUsuarios.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            gridUsuarios.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            gridUsuarios.Columns.AddRange(new DataGridViewColumn[] { colId, colName, colEmail, colPerfil });
+            gridUsuarios.Location = new Point(46, 141);
+            gridUsuarios.Name = "gridUsuarios";
+            gridUsuarios.RowHeadersVisible = false;
+            gridUsuarios.Size = new Size(713, 336);
+            gridUsuarios.TabIndex = 5;
+            // 
+            // colId
+            // 
+            colId.HeaderText = "ID";
+            colId.Name = "colId";
+            // 
+            // colName
+            // 
+            colName.HeaderText = "Nome do Usuário";
+            colName.Name = "colName";
+            // 
+            // colEmail
+            // 
+            colEmail.HeaderText = "Email";
+            colEmail.Name = "colEmail";
+            // 
+            // colPerfil
+            // 
+            colPerfil.HeaderText = "Perfil";
+            colPerfil.Name = "colPerfil";
+            // 
+            // UsuariosUserControl
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(pnlToolbar);
+            Controls.Add(lblTitulo);
+            Controls.Add(gridUsuarios);
+            Name = "UsuariosUserControl";
+            Size = new Size(805, 501);
+            pnlToolbar.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)gridUsuarios).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
+        }
+
+        #endregion
+
+        private Panel pnlToolbar;
+        private Guna.UI2.WinForms.Guna2Button btnAtualizar;
+        private Guna.UI2.WinForms.Guna2Button btnExcluir;
+        private Guna.UI2.WinForms.Guna2Button btnEditar;
+        private Guna.UI2.WinForms.Guna2Button btnNovo;
+        private Guna.UI2.WinForms.Guna2Button btnPesquisar;
+        private Guna.UI2.WinForms.Guna2TextBox txtPesquisa;
+        private Label lblTitulo;
+        private DataGridView gridUsuarios;
+        private DataGridViewTextBoxColumn colId;
+        private DataGridViewTextBoxColumn colName;
+        private DataGridViewTextBoxColumn colEmail;
+        private DataGridViewTextBoxColumn colPerfil;
+    }
+}
