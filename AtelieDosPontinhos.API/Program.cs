@@ -22,7 +22,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<AtelieDosPontinhosDbContext>()
     .AddDefaultTokenProviders();
 
-// 🔐 CORREÇÃO IMPORTANTE (API não pode redirecionar pra login)
+
 builder.Services.ConfigureApplicationCookie(options => {
     options.Events.OnRedirectToLogin = context =>
     {
@@ -58,7 +58,7 @@ builder.Services.AddSwaggerGen();
 #endregion
 
 #region DEPENDENCY INJECTION
-// 🌟 CORREÇÃO FEITA: Ajustado para usar o arquivo correto no plural "ProductServices"
+
 builder.Services.AddScoped<AtelieDosPontinhos.Application.Interfaces.IProductService, AtelieDosPontinhos.Application.Services.ProductServices>();
 builder.Services.AddScoped<AtelieDosPontinhos.Domain.Interfaces.IProductRepository, AtelieDosPontinhos.Infrastructure.Repositories.ProductRepository>();
 #endregion
@@ -83,7 +83,7 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-// 🌟 ADICIONADO: Mapeia os endpoints de API (AccountController) para que o Swagger consiga lê-los!
+// Mapeia os endpoints de API (AccountController) para que o Swagger consiga lê-los!
 app.MapControllers();
 #endregion
 

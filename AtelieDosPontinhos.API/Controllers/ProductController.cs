@@ -28,7 +28,7 @@ namespace AtelieDosPontinhos.API.Controllers
             return Ok(products);
         }
 
-        // 2. BUSCAR PRODUTOS POR TEXTO (Corrigido para Name e Description)
+        // 2. BUSCAR PRODUTOS POR TEXTO 
         [HttpGet("search")]
         public async Task<IActionResult> SearchProducts([FromQuery] string? query = null)
         {
@@ -37,7 +37,7 @@ namespace AtelieDosPontinhos.API.Controllers
                 return Ok(await _context.Products.ToListAsync());
             }
 
-            // 🛠️ CORRIGIDO: Alterado de Nome/Descricao para Name/Description
+            
             var filteredProducts = await _context.Products
                 .Where(p => p.Name.Contains(query) || p.Description.Contains(query))
                 .ToListAsync();

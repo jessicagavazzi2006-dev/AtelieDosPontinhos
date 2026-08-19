@@ -15,7 +15,7 @@ namespace AtelieDosPontinhos.UI.Controllers
     {
         private readonly IHttpClientFactory _httpClientFactory;
 
-        // 🌟 Agora usamos HttpClient para falar com a sua API de Produtos
+        //  Agora usamos HttpClient para falar com a  API de Produtos
         public CartController(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
@@ -30,10 +30,10 @@ namespace AtelieDosPontinhos.UI.Controllers
         [HttpPost]
         public async Task<IActionResult> AdicionarAoCarrinho(int id, int quantidade = 1)
         {
-            // 1. Criamos o cliente para chamar a sua API
+            // 1. Criamos o cliente para chamar a API
             var client = _httpClientFactory.CreateClient();
 
-            // ⚠️ ATENÇÃO: Substitua a porta (ex: 5001 ou 7001) pela porta REAL onde a sua API (Swagger) está a rodar!
+          
             var urlApi = $"https://localhost:7193/api/Product/{id}";
 
             ProductViewModel produtoViewModel = null;

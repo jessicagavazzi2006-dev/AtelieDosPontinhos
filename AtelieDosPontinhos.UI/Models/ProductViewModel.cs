@@ -9,7 +9,7 @@
         public string Descricao { get; set; } = string.Empty;
         public string CoverImageUrl { get; set; } = string.Empty;
 
-        // 🔄 ATALHOS EM INGLÊS (Para as Views que usam termos antigos não quebrarem)
+        //  ATALHOS EM INGLÊS (Para as Views que usam termos antigos não quebrarem)
         public string Name { get => Nome; set => Nome = value; }
         public decimal Price { get => Preco; set => Preco = value; }
         public string Description { get => Descricao; set => Descricao = value; }
