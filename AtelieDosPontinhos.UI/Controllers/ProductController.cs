@@ -1,26 +1,30 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Hosting; // 👈 Necessário para descobrir as pastas do sistema
+using Microsoft.AspNetCore.Hosting;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AtelieDosPontinhos.UI.Models;
+using System.Net.Http; // 🌟 NOVO
+using System.Net.Http.Json; // 🌟 NOVO
 
 namespace AtelieDosPontinhos.UI.Controllers
 {
     public class ProductController : Controller
     {
         private readonly IWebHostEnvironment _environment;
+        private readonly IHttpClientFactory _httpClientFactory; // 🌟 NOVO
 
-        // Construtor para o .NET nos dar acesso às pastas físicas do projeto (wwwroot)
-        public ProductController(IWebHostEnvironment environment)
+        // Construtor recebendo o HttpClientFactory para conversar com a API
+        public ProductController(IWebHostEnvironment environment, IHttpClientFactory httpClientFactory)
         {
             _environment = environment;
+            _httpClientFactory = httpClientFactory; // 🌟 NOVO
         }
 
-        // LISTA GLOBAL NA MEMÓRIA
+        // LISTA GLOBAL NA MEMÓRIA (Mantida apenas como segurança/fallback)
         private static List<ProductViewModel> _products = new List<ProductViewModel>
         {
             new ProductViewModel
@@ -41,15 +45,62 @@ namespace AtelieDosPontinhos.UI.Controllers
             }
         };
 
-        public IActionResult Index()
+        // 🌟 MUDANÇA 1: O método Index agora busca TODOS os produtos reais direto da API!
+        public async Task<IActionResult> Index()
         {
-            return View(_products);
+            var client = _httpClientFactory.CreateClient("Api");
+            List<ProductViewModel> produtos = null;
+
+            try
+            {
+                var response = await client.GetAsync("api/Product");
+                if (response.IsSuccessStatusCode)
+                {
+                    produtos = await response.Content.ReadFromJsonAsync<List<ProductViewModel>>();
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Erro ao listar produtos da API: {ex.Message}");
+            }
+
+            if (produtos == null)
+            {
+                produtos = _products;
+            }
+
+            return View(produtos);
         }
 
-        public IActionResult Detalhes(int id)
+        // Método de detalhes buscando da API (que já havíamos arrumado)
+        public async Task<IActionResult> Detalhes(int id)
         {
-            var product = _products.FirstOrDefault(p => p.Id == id);
-            if (product == null) return NotFound();
+            var client = _httpClientFactory.CreateClient("Api");
+            ProductViewModel product = null;
+
+            try
+            {
+                var response = await client.GetAsync($"api/Product/{id}");
+                if (response.IsSuccessStatusCode)
+                {
+                    product = await response.Content.ReadFromJsonAsync<ProductViewModel>();
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Erro ao buscar detalhes na API: {ex.Message}");
+            }
+
+            if (product == null)
+            {
+                product = _products.FirstOrDefault(p => p.Id == id);
+            }
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
             return View(product);
         }
 
@@ -59,46 +110,57 @@ namespace AtelieDosPontinhos.UI.Controllers
             return View();
         }
 
+        // 🌟 MUDANÇA 2: O método Create agora envia o novo produto para salvar no banco real da API!
         [HttpPost]
         public async Task<IActionResult> Create(ProductViewModel novoProduto, IFormFile FotoArquivo)
         {
             if (FotoArquivo != null && FotoArquivo.Length > 0)
             {
-                // 1. Define o caminho da pasta wwwroot/uploads
                 string pastaUploads = Path.Combine(_environment.WebRootPath, "uploads");
 
-                // Se a pasta não existir no seu computador, o código cria ela automaticamente
                 if (!Directory.Exists(pastaUploads))
                 {
                     Directory.CreateDirectory(pastaUploads);
                 }
 
-                // 2. Cria um nome único para o arquivo para não dar conflito (Ex: nome-da-foto-123456.jpg)
                 string nomeUnicoArquivo = Guid.NewGuid().ToString() + "_" + Path.GetFileName(FotoArquivo.FileName);
                 string caminhoCompletoNoPC = Path.Combine(pastaUploads, nomeUnicoArquivo);
 
-                // 3. Salva o arquivo fisicamente na pasta do projeto
                 using (var stream = new FileStream(caminhoCompletoNoPC, FileMode.Create))
                 {
                     await FotoArquivo.CopyToAsync(stream);
                 }
 
-                // 4. Salva o caminho virtual no banco/memória para o HTML conseguir ler depois
                 novoProduto.CoverImageUrl = "/uploads/" + nomeUnicoArquivo;
             }
 
-            // Removemos qualquer erro de validação que o .NET coloque automaticamente no campo da imagem
             ModelState.Remove(nameof(novoProduto.CoverImageUrl));
 
             if (ModelState.IsValid)
             {
-                novoProduto.Id = _products.Any() ? _products.Max(p => p.Id) + 1 : 1;
-                _products.Add(novoProduto);
+                var client = _httpClientFactory.CreateClient("Api");
 
-                return RedirectToAction("Index");
+                try
+                {
+                    // Faz o POST enviando o produto em formato JSON para a API
+                    var response = await client.PostAsJsonAsync("api/Product", novoProduto);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Erro ao salvar o produto na API.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Erro ao enviar produto para a API: {ex.Message}");
+                    ModelState.AddModelError(string.Empty, "Não foi possível conectar à API.");
+                }
             }
 
-            // Se cair aqui, é porque algum outro campo falhou (ex: preço inválido ou nome em branco)
             return View(novoProduto);
         }
     }

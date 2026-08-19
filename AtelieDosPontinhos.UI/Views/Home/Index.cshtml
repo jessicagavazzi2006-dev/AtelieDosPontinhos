@@ -43,10 +43,14 @@
                             <p class="card-text text-muted text-truncate">@item.Description</p>
                             <p class="card-text fs-5 fw-bold text-success mt-auto">R$ @item.Price</p>
                             
-                            <button onclick="adicionarAoCarrinho(@item.Id, '@item.Name', @item.Price, '@item.CoverImageUrl')"
-                                    class="btn btn-outline-primary w-100 mt-3 rounded-pill fw-bold">
-                                <i class="bi bi-cart-plus-fill"></i> Adicionar ao Carrinho
-                            </button>
+                            <form asp-controller="Cart" asp-action="AdicionarAoCarrinho" method="post" class="d-grid mt-3">
+                                <input type="hidden" name="id" value="@item.Id" />
+                                <input type="hidden" name="quantidade" value="1" />
+                                <button type="submit" class="btn btn-outline-primary w-100 rounded-pill fw-bold">
+                                    <i class="bi bi-cart-plus-fill"></i> Adicionar ao Carrinho
+                                </button>
+                            </form>
+
                         </div>
                     </div>
                 </div>
