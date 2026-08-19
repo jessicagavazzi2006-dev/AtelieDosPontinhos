@@ -32,13 +32,13 @@ namespace AtelieDosPontinhos.Desktop.UserControls
             var email = SessionManager.Instance.GetEmail();
             var isAdmin = SessionManager.Instance.IsAdmin;
 
-            btnAvatar.Text = displayName.Length > 0 ? displayName.Substring(0, 1).ToUpper() : "?";
+            btnAvatar.Text = displayName.Length > 0 ? displayName.Substring(0, 1).ToUpper() : "U";
 
             lblNome.Text = displayName;
             lblEmailValor.Text = email;
             lblApiValor.Text = AppConfig.ApiBaseUrl;
 
-            var perfil = isAdmin ? "Administrador" : "Usuário";
+            var perfil = isAdmin ? "🔑 Administrador" : "👀 Usuário";
             //var corBadge = isAdmin ? SenacTheme.LaranjaPrimario : SenacTheme.AzulPrimario;
 
             lblBadge.Text = perfil;
