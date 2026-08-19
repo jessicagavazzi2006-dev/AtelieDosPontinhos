@@ -27,10 +27,16 @@
                     {
                         <tr>
                             <td>
-                                <img src="@item.CoverImageUrl" alt="@item.Nome" class="rounded shadow-sm" style="width: 60px; height: 60px; object-fit: cover;">
+                                <!-- Se a imagem começar com http, /images ou /uploads, ela renderiza.
+                                     Se estiver vazia, colocamos uma imagem padrão do Bootstrap para não quebrar o layout -->
+                                <img src="@(string.IsNullOrEmpty(item.CoverImageUrl) ? "https://placehold.co/60x60?text=Sem+Foto" : item.CoverImageUrl)"
+                                     alt="@item.Nome"
+                                     class="rounded shadow-sm"
+                                     style="width: 60px; height: 60px; object-fit: cover;"
+                                     onerror="this.src='https://placehold.co/60x60?text=Erro+Foto'">
                             </td>
                             <td class="fw-bold text-dark">@item.Nome</td>
-                            <td class="text-success fw-bold">R$ @item.Preco</td>
+                            <td class="text-success fw-bold">R$ @item.Preco.ToString("F2")</td>
                             <td class="text-muted text-truncate" style="max-width: 300px;">@item.Descricao</td>
                         </tr>
                     }

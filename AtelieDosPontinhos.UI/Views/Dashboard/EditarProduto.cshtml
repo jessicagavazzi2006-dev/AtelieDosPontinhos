@@ -6,10 +6,10 @@
     </div>
     <div class="card-body">
 
-        <!-- Mapeia para a Action de Edição no seu Controller da UI -->
-        <form asp-action="EditarProdutoPost" method="post">
+        <!-- 1. ATENÇÃO: Adicionado o enctype="multipart/form-data" para permitir envio de arquivos -->
+        <form asp-action="EditarProdutoPost" method="post" enctype="multipart/form-data">
             
-            <!-- ⚠️ IMPORTANTE: Campo oculto com o ID do produto para o sistema saber quem atualizar -->
+            <!-- Campo oculto com o ID do produto para o sistema saber quem atualizar -->
             <input type="hidden" asp-for="Id" />
 
             <!-- Campo: Nome do Produto -->
@@ -30,14 +30,24 @@
                 <textarea asp-for="Description" class="form-control" rows="3" required></textarea>
             </div>
 
-            <!-- Campo: Link da Imagem -->
+            <!-- 2. NOVO CAMPO: Upload de Imagem do Computador -->
             <div class="form-group mb-3">
-                <label class="form-label">Link da Imagem</label>
-                <input asp-for="CoverImageUrl" class="form-control" required />
-                <small class="text-muted">Atenção: Se a API recusar strings Base64 muito longas, utilize uma URL direta da imagem.</small>
+                <label class="form-label">Imagem do Produto (Do Computador)</label>
+                <!-- O 'name="FotoArquivo"' deve bater com o parâmetro IFormFile no seu Controller -->
+                <input type="file" name="FotoArquivo" id="FotoArquivo" class="form-control" accept="image/*" onchange="previewImage(event)" />
+                <small class="text-muted">Selecione uma imagem JPG, PNG ou WebP.</small>
             </div>
 
-            <!-- Campos Ocultos para Valores Padrão (Mantém os dados que já existem) -->
+            <!-- 3. BÔNUS: Pré-visualização da imagem atual/nova -->
+            <div class="form-group mb-3 text-center">
+                <label class="form-label d-block text-start">Pré-visualização:</label>
+                <img id="imagePreview" src="@Model.CoverImageUrl" alt="Pré-visualização" class="img-thumbnail" style="max-height: 200px; display: @(string.IsNullOrEmpty(Model.CoverImageUrl) ? "none" : "inline-block");" />
+            </div>
+
+            <!-- Mantém a URL antiga guardada caso o usuário NÃO escolha uma nova foto -->
+            <input type="hidden" asp-for="CoverImageUrl" id="CoverImageUrl" />
+
+            <!-- Campos Ocultos para Valores Padrão -->
             <input type="hidden" asp-for="Stock" />
             <input type="hidden" asp-for="CategoryId" />
 
@@ -49,3 +59,18 @@
 
     </div>
 </div>
+
+<!-- Script em JavaScript para atualizar a imagem na tela assim que o usuário seleciona o arquivo -->
+<script>
+    function previewImage(event) {
+        var reader = new FileReader();
+        reader.onload = function() {
+            var output = document.getElementById('imagePreview');
+            output.src = reader.result;
+            output.style.display = 'inline-block';
+        }
+        if(event.target.files[0]) {
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    }
+</script>

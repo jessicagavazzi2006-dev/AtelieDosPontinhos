@@ -10,7 +10,7 @@ namespace AtelieDosPontinhos.API.Controllers
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager; // 🌟 Injetado para gerenciar as permissões (Roles)
+        private readonly RoleManager<IdentityRole> _roleManager; //  Injetado para gerenciar as permissões (Roles)
 
         public AccountController(
             SignInManager<IdentityUser> signInManager,
@@ -22,9 +22,9 @@ namespace AtelieDosPontinhos.API.Controllers
             _roleManager = roleManager;
         }
 
-        // 📝 ASSINATURA CORRETA PARA APARECER NO SWAGGER
+        //  ASSINATURA CORRETA PARA APARECER NO SWAGGER
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterRequest request) // 🌟 Alterado para RegisterRequest para receber a Role da UI
+        public async Task<IActionResult> Register([FromBody] RegisterRequest request) //  Alterado para RegisterRequest para receber a Role da UI
         {
             if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Password))
             {
@@ -54,7 +54,7 @@ namespace AtelieDosPontinhos.API.Controllers
             return BadRequest(result.Errors);
         }
 
-        // 🔑 ROTA DE LOGIN
+        //  ROTA DE LOGIN
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
@@ -83,6 +83,6 @@ namespace AtelieDosPontinhos.API.Controllers
     {
         public string Email { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
-        public string Role { get; set; } = string.Empty; // 🌟 Propriedade adicionada para casar com o envio da UI
+        public string Role { get; set; } = string.Empty; //  Propriedade adicionada para casar com o envio da UI
     }
 }

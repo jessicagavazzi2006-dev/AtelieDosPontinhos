@@ -27,7 +27,7 @@ namespace AtelieDosPontinhos.UI.Controllers
             return View();
         }
 
-        // 🔐 LOGIN (POST) - PROCESSA O LOGON E VALIDA PERMISSÕES DO SISTEMA
+        //  LOGIN (POST) - PROCESSA O LOGON E VALIDA PERMISSÕES DO SISTEMA
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
@@ -63,7 +63,7 @@ namespace AtelieDosPontinhos.UI.Controllers
                         {
                             HttpContext.Session.SetString("UserRoles", string.Join(",", loginResult.Roles));
 
-                            // 👑 Identifica o Administrador de forma segura independente da formatação do banco/API
+                            //  Identifica o Administrador de forma segura independente da formatação do banco/API
                             bool ehAdmin = loginResult.Roles.Any(r => r.Trim().Equals("Admin", System.StringComparison.OrdinalIgnoreCase));
 
                             if (ehAdmin)
@@ -73,7 +73,7 @@ namespace AtelieDosPontinhos.UI.Controllers
                             }
                         }
 
-                        // 🛍️ SE FOR CLIENTE: Vai para a vitrine da loja
+                        //  SE FOR CLIENTE: Vai para a vitrine da loja
                         return RedirectToAction("Index", "Home");
                     }
                 }

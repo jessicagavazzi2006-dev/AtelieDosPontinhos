@@ -10,7 +10,8 @@
             <div class="card shadow border-0 p-4 rounded-4 bg-white">
                 <h2 class="fw-bold text-dark mb-4 text-center">➕ Cadastrar Novo Produto</h2>
                 
-                <form asp-controller="Product" asp-action="Create" method="post">
+                <!-- 1. ALTERADO: Adicionado o enctype="multipart/form-data" para permitir o envio do arquivo -->
+                <form asp-controller="Product" asp-action="Create" method="post" enctype="multipart/form-data">
                     
                     <div class="mb-3">
                         <label asp-for="Nome" class="form-label fw-semibold">Nome do Produto</label>
@@ -22,9 +23,18 @@
                         <input asp-for="Preco" class="form-control" type="number" step="0.01" placeholder="0.00" required />
                     </div>
 
+                    <!-- 2. ALTERADO: Campo modificado de texto para "file" (pegar do computador) -->
                     <div class="mb-3">
-                        <label asp-for="CoverImageUrl" class="form-label fw-semibold">Caminho da Imagem</label>
-                        <input asp-for="CoverImageUrl" class="form-control" placeholder="Ex: /images/produtos/item.jpg" required />
+                        <label class="form-label fw-semibold">Imagem do Produto (Do Computador)</label>
+                        <!-- O 'name="FotoArquivo"' precisa ser exatamente igual ao parâmetro no Controller -->
+                        <input type="file" name="FotoArquivo" id="FotoArquivo" class="form-control" accept="image/*" onchange="previewImage(event)" required />
+                        <small class="text-muted">Selecione uma imagem JPG, PNG ou WebP do seu computador.</small>
+                    </div>
+
+                    <!-- 3. NOVO: Área de pré-visualização para ver a foto na tela antes de salvar -->
+                    <div class="mb-3 text-center">
+                        <label class="form-label d-block text-start fw-semibold">Pré-visualização:</label>
+                        <img id="imagePreview" src="" alt="Pré-visualização da imagem" class="img-thumbnail" style="max-height: 200px; display: none;" />
                     </div>
 
                     <div class="mb-4">
@@ -42,3 +52,20 @@
         </div>
     </div>
 </div>
+
+<!-- 4. NOVO: Script para fazer a foto aparecer na tela assim que o usuário seleciona o arquivo -->
+<script>
+    function previewImage(event) {
+        var reader = new FileReader();
+        reader.onload = function() {
+            var output = document.getElementById('imagePreview');
+            if (output) {
+                output.src = reader.result;
+                output.style.display = 'inline-block';
+            }
+        }
+        if (event.target.files && event.target.files[0]) {
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    }
+</script>
