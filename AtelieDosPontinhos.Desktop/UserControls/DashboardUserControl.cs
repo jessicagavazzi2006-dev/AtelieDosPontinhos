@@ -34,7 +34,7 @@ namespace AtelieDosPontinhos.Desktop.UserControls
             lblSubtitulo.Text = $"Bem-vindo ao SenacGames Desktop - {DateTime.Now:dddd, dd 'de' MMM 'de' yyyy}";
 
             //aplica estilo no DataGridView(tabela)
-            SenacTheme.AplicarEstiloGrid(gridUltimoGames);
+           
 
             await CarregarDadosAsync();
         }
@@ -95,6 +95,13 @@ namespace AtelieDosPontinhos.Desktop.UserControls
             }
         }
 
-        private
+        private void SetCarregando(bool carregando)
+        {
+            lblCarregando.Visible = carregando;
+            cardProdutos.Visible = !carregando;
+            cardCategorias.Visible = !carregando;
+            //reservado
+            gridUltimosProdutos.Visible = !carregando;
+        }
     }
 }
