@@ -13,14 +13,30 @@ namespace AtelieDosPontinhos.Desktop.UserControls
 {
     public partial class CategoriasUserControl : UserControl
     {
-
+        // =====================================================================
+        // SERVIÇOS E DADOS
+        // =====================================================================
         private CategoriasApiService _categoriaService = null;
         private List<CategoriaRsponseDto> _categorias = new();
+
+        // Estado do formulário: null = modo listagem, int = ID sendo editado
         private int? _editandoId = null;
+
+        // =====================================================================
+        // CONSTRUTOR
+        // =====================================================================
+
+        /// <summary>
+        /// Construtor padrão sem parâmetros — compatível com o Designer.
+        /// </summary>
         public CategoriasUserControl()
         {
             InitializeComponent();
         }
+
+        // =====================================================================
+        // DADOS
+        // =====================================================================
         private async Task CarregarDadosAsync()
         {
             gridCategorias.Rows.Clear();
@@ -39,8 +55,9 @@ namespace AtelieDosPontinhos.Desktop.UserControls
             }
         }
 
-
-
+        // =====================================================================
+        // EVENTO LOAD
+        // =====================================================================
         private async void CategoriasUserControl_Load(object sender, EventArgs e)
         {
             if (DesignMode) return;
@@ -49,11 +66,15 @@ namespace AtelieDosPontinhos.Desktop.UserControls
 
             await CarregarDadosAsync();
         }
-        private void MostrarFormulario(CategoriaResponseDto? categoria)
+
+        // =====================================================================
+        // FORMULÁRIO
+        // =====================================================================
+        private void MostrarFormulario(CategoryDto? categoria)
         {
             _editandoId = categoria?.Id;
             txtNome.Text = categoria?.Name ?? string.Empty;
-            lblFormTitulo.Text = categoria == null ? "Nova Categoria" : "Editar Categoria";
+            lblFormTitulo.Text = categoria == null ? "➕ Nova Categoria" : "✏️ Editar Categoria";
             pnlForm.Visible = true;
             txtNome.Focus();
         }
@@ -65,30 +86,41 @@ namespace AtelieDosPontinhos.Desktop.UserControls
             txtNome.Text = string.Empty;
         }
 
-        private CategoriaResponseDto? ObterCategoriaSelecionada()
+        // =====================================================================
+        // AUXILIARES
+        // =====================================================================
+        private CategoryDto? ObterCategoriaSelecionada()
         {
             if (gridCategorias.SelectedRows.Count == 0) return null;
             var id = Convert.ToInt32(gridCategorias.SelectedRows[0].Cells["colId"].Value);
             return _categorias.FirstOrDefault(c => c.Id == id);
         }
 
+        // =====================================================================
+        // EVENTOS DOS BOTÕES
+        // =====================================================================
+        private void btnNova_Click(object sender, EventArgs e) => MostrarFormulario(null);
         private async void btnEditar_Click(object sender, EventArgs e)
         {
             var cat = ObterCategoriaSelecionada();
             if (cat == null)
             {
-                MessageBox.Show("selecione uam categoria para editar", "avisa", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Selecione uma categoria para editar", 
+                    "Aviso", 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Warning);
                 return;
             }
             MostrarFormulario(cat);
         }
 
-        private void btnExcluir_Click(object sender, EventArgs e)
+        private async void btnExcluir_Click(object sender, EventArgs e)
         {
             var cat = ObterCategoriaSelecionada();
             if (cat == null)
             {
-                MessageBox.Show("Selecione uma categoria para excluir.", "Aviso",
+                MessageBox.Show("Selecione uma categoria para excluir.", 
+                    "Aviso",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
                 return;
@@ -113,7 +145,7 @@ namespace AtelieDosPontinhos.Desktop.UserControls
             var (sucess, error) = await _categoriaService.DeleteAsync(cat.Id);
             if (sucess)
             {
-                MessageBox.Show($"Categoria Excluída!",
+                MessageBox.Show($"✅ Categoria Excluída!",
                     "Sucesso",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
@@ -122,7 +154,7 @@ namespace AtelieDosPontinhos.Desktop.UserControls
             }
             else
             {
-                MessageBox.Show($"{error}",
+                MessageBox.Show($"❌ {error}",
                     "Erro",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
@@ -135,7 +167,7 @@ namespace AtelieDosPontinhos.Desktop.UserControls
         {
             if (string.IsNullOrWhiteSpace(txtNome.Text))
             {
-                MessageBox.Show($"Categoria Excluída!",
+                MessageBox.Show($"Informe o nome da categoria.",
                 "validação",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Information);
@@ -161,8 +193,8 @@ namespace AtelieDosPontinhos.Desktop.UserControls
 
             if (sucess)
             {
-                MessageBox.Show($"salvo com sucesso",
-                "validação",
+                MessageBox.Show($"✅ Salvo com sucesso!",
+                "Validação",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Information);
                 OcultarFormulario();

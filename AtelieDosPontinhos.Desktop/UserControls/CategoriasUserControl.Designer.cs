@@ -149,6 +149,7 @@
             btnNova.Size = new Size(126, 45);
             btnNova.TabIndex = 0;
             btnNova.Text = "➕ Nova Categoria";
+            btnNova.Click += btnNova_Click;
             // 
             // pnlForm
             // 

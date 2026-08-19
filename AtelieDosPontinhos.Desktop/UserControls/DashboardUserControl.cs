@@ -31,7 +31,7 @@ namespace AtelieDosPontinhos.Desktop.UserControls
 
             //Preenche dados dinamicos da sessão
             cardCategoriasLblTitulo.Text = $"Olá, {SessionManager.Instance.GetDisplayName()!}";
-            lblSubtitulo.Text = $"Bem-vindo ao SenacGames Desktop - {DateTime.Now:dddd, dd 'de' MMM 'de' yyyy}";
+            lblSubtitulo.Text = $"Bem-vindo ao Ateliê dos Pontinhos Desktop - {DateTime.Now:dddd, dd 'de' MMM 'de' yyyy}";
 
             //aplica estilo no DataGridView(tabela)
            
@@ -54,20 +54,20 @@ namespace AtelieDosPontinhos.Desktop.UserControls
                 cardProdutosLblNumero.Text = produto.Count.ToString();
                 cardCategoriasLblNumero.Text = categorias.Count.ToString();
 
+                //Atualiza os dados do card
                 AtualizarNumeroCard(cardProdutos, produto.Count().ToString());
                 AtualizarNumeroCard(cardCategorias, categorias.Count().ToString());
 
-                //atuliza os dadods do card
+                //Popula o DataGridView(tabela) com os últimos 10 produtos.
                 gridUltimosProdutos.Rows.Clear();
-                foreach (var game in produto.OrderByDescending(x => x.CreatedAt).Take(10))
+                foreach (var p in produto.OrderByDescending(x => x.CreatedAt).Take(10))
                 {
                     gridUltimosProdutos.Rows.Add(
-                        game.Id,
-                        game.Title,
-                        game.CategoryName,
-                        game.ReleaseYear,
-                        game.IsFeatured,
-                        game.CreatedAt.ToString("dd/MM/yyyy HH:mm")
+                        p.Id,
+                        p.Name,
+                        p.CategoryName,
+                        p.Stock,
+                        p.IsFeatured
                     );
                 }
             }
@@ -100,7 +100,7 @@ namespace AtelieDosPontinhos.Desktop.UserControls
             lblCarregando.Visible = carregando;
             cardProdutos.Visible = !carregando;
             cardCategorias.Visible = !carregando;
-            //reservado
+            lblUltimosProdutos.Visible = !carregando;
             gridUltimosProdutos.Visible = !carregando;
         }
     }
