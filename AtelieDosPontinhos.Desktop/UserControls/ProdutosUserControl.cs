@@ -20,7 +20,7 @@ namespace AtelieDosPontinhos.Desktop.UserControls
 
         private List<ProductResponseDto> _todosPrdoutos = new();
 
-        private List<CategoriaResponseDto> _categorias = new();
+        private List<CategoryDto> _categorias = new();
         public ProdutosUserControl()
         {
             InitializeComponent();
@@ -108,13 +108,13 @@ namespace AtelieDosPontinhos.Desktop.UserControls
 
             PopularGrid(filtrados);
         }
-        
-        private void btnNovo_Click(object sender, EventArgs e)
+
+        private async void btnNovo_Click(object sender, EventArgs e)
         {
             using var form = new ProdutoFormDialog(_categorias, null);
-            if (form.ShowDialog() == DialogResult.OK && form.GameDto != null)
+            if (form.ShowDialog() == DialogResult.OK && form.ProdutoDto != null)
             {
-                var (success, _, error) = await _gameService.CreateAsync(form.GameDto);
+                var (success, _, error) = await _produtosService.CreateAsync(form.ProdutoDto);
                 if (success)
                 {
                     MessageBox.Show("game criado com sucesso", "sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -126,5 +126,78 @@ namespace AtelieDosPontinhos.Desktop.UserControls
                 }
             }
         }
+
+        private async void btnEditar_Click(object sender, EventArgs e)
+        {
+            var produto = ObterGameSelecionado();
+            if (produto == null)
+            {
+                MessageBox.Show($"Selecione um game para editar", "Avisar", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            using var form = new ProdutoFormDialog(_categorias, produto);
+            if (form.ShowDialog() == DialogResult.OK && form.UpdateDto != null)
+            {
+                var (success, _, error) = await _produtosService.UpdateAsync(produto.Id, form.UpdateDto);
+                if (success)
+                {
+                    MessageBox.Show("game atualizado", "sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    await CarregarDadosAsync();
+                }
+                else
+                {
+                    MessageBox.Show($"X {error}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+        private ProductResponseDto? ObterGameSelecionado()
+        {
+            if (gridProdutos.SelectedRows.Count == 0) return null;
+            var row = gridProdutos.SelectedRows[0];
+            var id = Convert.ToInt32(row.Cells["colId"].Value);
+            return _todosPrdoutos.FirstOrDefault(g => g.Id == id);
+        }
+
+        private async void btnExcluir_Click(object sender, EventArgs e)
+        {
+            var gam = ObterGameSelecionado();
+            if (gam == null)
+            {
+                MessageBox.Show("Selecione uma categoria para excluir.", "Aviso",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+
+            var conf = MessageBox.Show($"Excluir O GAME \"{gam.Name}\"?",
+                "Confirmar Exclusão",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning);
+
+
+            if (conf != DialogResult.Yes) return;
+
+            var (sucess, error) = await _produtosService.DeleteAsync(gam.Id);
+            if (sucess)
+            {
+                MessageBox.Show($"GAME Excluída!",
+                    "Sucesso",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+
+                await CarregarDadosAsync();
+            }
+            else
+            {
+                MessageBox.Show($"{error}",
+                    "Erro",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+
+        private async void btnAtualizar_Click(object sender, EventArgs e) => await CarregarDadosAsync();
+
     }
 }
