@@ -29,7 +29,7 @@ namespace AtelieDosPontinhos.Desktop.Forms
         // CAMPOS PRIVADOS
         // =====================================================================
         private List<CategoryDto> _categorias = new();
-        private ProductDto? _produtoExistente;
+        private ProductResponseDto? _produtoExistente;
 
         // =====================================================================
         // CONSTRUTORES
@@ -39,7 +39,7 @@ namespace AtelieDosPontinhos.Desktop.Forms
             InitializeComponent();
         }
 
-        public ProdutoFormDialog(List<CategoryDto> categorias, ProductDto? produto)
+        public ProdutoFormDialog(List<CategoryDto> categorias, ProductResponseDto? produto)
         {
             _categorias = categorias;
             _produtoExistente = produto;
