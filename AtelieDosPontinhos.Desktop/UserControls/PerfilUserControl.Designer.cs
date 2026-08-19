@@ -30,17 +30,17 @@
         {
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges1 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             card = new Panel();
+            btnAvatar = new Guna.UI2.WinForms.Guna2CircleButton();
+            lblRolesValor = new Label();
+            lblApiValor = new Label();
+            lblEmailValor = new Label();
+            lblRolesLabel = new Label();
+            lblApiLabel = new Label();
+            lblEmailLabel = new Label();
             lblBadge = new Label();
             sep = new Panel();
             lblNome = new Label();
             lblTitulo = new Label();
-            lblEmailLabel = new Label();
-            lblEmailValor = new Label();
-            lblApiLabel = new Label();
-            lblApiValor = new Label();
-            lblRolesLabel = new Label();
-            lblRolesValor = new Label();
-            btnAvatar = new Guna.UI2.WinForms.Guna2CircleButton();
             card.SuspendLayout();
             SuspendLayout();
             // 
@@ -60,6 +60,76 @@
             card.Name = "card";
             card.Size = new Size(547, 406);
             card.TabIndex = 0;
+            // 
+            // btnAvatar
+            // 
+            btnAvatar.DisabledState.BorderColor = Color.DarkGray;
+            btnAvatar.DisabledState.CustomBorderColor = Color.DarkGray;
+            btnAvatar.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
+            btnAvatar.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            btnAvatar.Font = new Font("Segoe UI", 9F);
+            btnAvatar.ForeColor = Color.White;
+            btnAvatar.Location = new Point(223, 24);
+            btnAvatar.Name = "btnAvatar";
+            btnAvatar.ShadowDecoration.CustomizableEdges = customizableEdges1;
+            btnAvatar.ShadowDecoration.Mode = Guna.UI2.WinForms.Enums.ShadowMode.Circle;
+            btnAvatar.Size = new Size(90, 90);
+            btnAvatar.TabIndex = 2;
+            btnAvatar.Text = "U";
+            // 
+            // lblRolesValor
+            // 
+            lblRolesValor.AutoSize = true;
+            lblRolesValor.Location = new Point(22, 366);
+            lblRolesValor.Name = "lblRolesValor";
+            lblRolesValor.Size = new Size(16, 15);
+            lblRolesValor.TabIndex = 1;
+            lblRolesValor.Text = "...";
+            // 
+            // lblApiValor
+            // 
+            lblApiValor.AutoSize = true;
+            lblApiValor.Location = new Point(22, 308);
+            lblApiValor.Name = "lblApiValor";
+            lblApiValor.Size = new Size(16, 15);
+            lblApiValor.TabIndex = 1;
+            lblApiValor.Text = "...";
+            // 
+            // lblEmailValor
+            // 
+            lblEmailValor.AutoSize = true;
+            lblEmailValor.Location = new Point(22, 246);
+            lblEmailValor.Name = "lblEmailValor";
+            lblEmailValor.Size = new Size(16, 15);
+            lblEmailValor.TabIndex = 1;
+            lblEmailValor.Text = "...";
+            // 
+            // lblRolesLabel
+            // 
+            lblRolesLabel.AutoSize = true;
+            lblRolesLabel.Location = new Point(22, 336);
+            lblRolesLabel.Name = "lblRolesLabel";
+            lblRolesLabel.Size = new Size(74, 15);
+            lblRolesLabel.TabIndex = 1;
+            lblRolesLabel.Text = "PERMISSÕES";
+            // 
+            // lblApiLabel
+            // 
+            lblApiLabel.AutoSize = true;
+            lblApiLabel.Location = new Point(22, 278);
+            lblApiLabel.Name = "lblApiLabel";
+            lblApiLabel.Size = new Size(98, 15);
+            lblApiLabel.TabIndex = 1;
+            lblApiLabel.Text = "API CONECTADA";
+            // 
+            // lblEmailLabel
+            // 
+            lblEmailLabel.AutoSize = true;
+            lblEmailLabel.Location = new Point(22, 216);
+            lblEmailLabel.Name = "lblEmailLabel";
+            lblEmailLabel.Size = new Size(46, 15);
+            lblEmailLabel.TabIndex = 1;
+            lblEmailLabel.Text = "E-MAIL";
             // 
             // lblBadge
             // 
@@ -97,76 +167,6 @@
             lblTitulo.TabIndex = 1;
             lblTitulo.Text = "⚙️ Meu Perfil";
             // 
-            // lblEmailLabel
-            // 
-            lblEmailLabel.AutoSize = true;
-            lblEmailLabel.Location = new Point(22, 216);
-            lblEmailLabel.Name = "lblEmailLabel";
-            lblEmailLabel.Size = new Size(46, 15);
-            lblEmailLabel.TabIndex = 1;
-            lblEmailLabel.Text = "E-MAIL";
-            // 
-            // lblEmailValor
-            // 
-            lblEmailValor.AutoSize = true;
-            lblEmailValor.Location = new Point(22, 246);
-            lblEmailValor.Name = "lblEmailValor";
-            lblEmailValor.Size = new Size(16, 15);
-            lblEmailValor.TabIndex = 1;
-            lblEmailValor.Text = "...";
-            // 
-            // lblApiLabel
-            // 
-            lblApiLabel.AutoSize = true;
-            lblApiLabel.Location = new Point(22, 278);
-            lblApiLabel.Name = "lblApiLabel";
-            lblApiLabel.Size = new Size(98, 15);
-            lblApiLabel.TabIndex = 1;
-            lblApiLabel.Text = "API CONECTADA";
-            // 
-            // lblApiValor
-            // 
-            lblApiValor.AutoSize = true;
-            lblApiValor.Location = new Point(22, 308);
-            lblApiValor.Name = "lblApiValor";
-            lblApiValor.Size = new Size(16, 15);
-            lblApiValor.TabIndex = 1;
-            lblApiValor.Text = "...";
-            // 
-            // lblRolesLabel
-            // 
-            lblRolesLabel.AutoSize = true;
-            lblRolesLabel.Location = new Point(22, 336);
-            lblRolesLabel.Name = "lblRolesLabel";
-            lblRolesLabel.Size = new Size(74, 15);
-            lblRolesLabel.TabIndex = 1;
-            lblRolesLabel.Text = "PERMISSÕES";
-            // 
-            // lblRolesValor
-            // 
-            lblRolesValor.AutoSize = true;
-            lblRolesValor.Location = new Point(22, 366);
-            lblRolesValor.Name = "lblRolesValor";
-            lblRolesValor.Size = new Size(16, 15);
-            lblRolesValor.TabIndex = 1;
-            lblRolesValor.Text = "...";
-            // 
-            // btnAvatar
-            // 
-            btnAvatar.DisabledState.BorderColor = Color.DarkGray;
-            btnAvatar.DisabledState.CustomBorderColor = Color.DarkGray;
-            btnAvatar.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
-            btnAvatar.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
-            btnAvatar.Font = new Font("Segoe UI", 9F);
-            btnAvatar.ForeColor = Color.White;
-            btnAvatar.Location = new Point(223, 24);
-            btnAvatar.Name = "btnAvatar";
-            btnAvatar.ShadowDecoration.CustomizableEdges = customizableEdges1;
-            btnAvatar.ShadowDecoration.Mode = Guna.UI2.WinForms.Enums.ShadowMode.Circle;
-            btnAvatar.Size = new Size(90, 90);
-            btnAvatar.TabIndex = 2;
-            btnAvatar.Text = "U";
-            // 
             // PerfilUserControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -175,6 +175,7 @@
             Controls.Add(card);
             Name = "PerfilUserControl";
             Size = new Size(805, 501);
+            Load += PerfilUserControl_Load;
             card.ResumeLayout(false);
             card.PerformLayout();
             ResumeLayout(false);
