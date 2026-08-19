@@ -65,8 +65,9 @@ namespace AtelieDosPontinhos.Desktop.UserControls
                     gridUltimosProdutos.Rows.Add(
                         p.Id,
                         p.Name,
-                        p.CategoryName,
+                        p.Price,
                         p.Stock,
+                        p.CategoryName,
                         p.IsFeatured
                     );
                 }
