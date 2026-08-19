@@ -4,6 +4,7 @@
   </Folder>
   <Project Path="AtelieDosPontinhos.API/AtelieDosPontinhos.API.csproj" />
   <Project Path="AtelieDosPontinhos.Application/AtelieDosPontinhos.Application.csproj" />
+  <Project Path="AtelieDosPontinhos.Desktop/AtelieDosPontinhos.Desktop.csproj" Id="e4780f1b-be22-4df5-8e69-38021cb3d498" />
   <Project Path="AtelieDosPontinhos.Domain/AtelieDosPontinhos.Domain.csproj" />
   <Project Path="AtelieDosPontinhos.Infrastructure/AtelieDosPontinhos.Infrastructure.csproj" />
   <Project Path="AtelieDosPontinhos.UI/AtelieDosPontinhos.UI.csproj" />
