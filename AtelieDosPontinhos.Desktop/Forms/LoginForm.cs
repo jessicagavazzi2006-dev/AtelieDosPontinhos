@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Net.WebRequestMethods;
 
 namespace AtelieDosPontinhos.Desktop.Forms
 {
@@ -35,14 +36,14 @@ namespace AtelieDosPontinhos.Desktop.Forms
         {
             if (string.IsNullOrWhiteSpace(txtEmail.Text))
             {
-                ExibirErro("informe o email");
+                ExibirErro("⚠️ Informe seu e-mail!");
                 txtEmail.Focus();
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(txtSenha.Text))
             {
-                ExibirErro("informe o email");
+                ExibirErro("⚠️ Informe sua senha!");
                 txtSenha.Focus();
                 return;
             }
@@ -55,7 +56,7 @@ namespace AtelieDosPontinhos.Desktop.Forms
 
                 if (success && user != null)
                 {
-                    sessionManager.Instance.SetUser(user)
+                    sessionManager.Instance.SetUser(user);
 
                     this.Hide();
 
@@ -66,16 +67,19 @@ namespace AtelieDosPontinhos.Desktop.Forms
                 }
                 else
                 {
-                    ExibirErro($"X{errorMessage}");
+                    ExibirErro($"❌{errorMessage}");
+                    MessageBox.Show($"❌ {errorMessage}");
                 }
             }
-            catch (HttpRequestException)
+            catch (HttpRequestException exHttp)
             {
-                ExibirErro("Xnao foi conectatr a API \n verifique se a API esta em execução ")
+                ExibirErro($"❌ Não foi possível conectar à API. \nVerifique se a API está em execução erro do sistema: {exHttp.Message}");
+                MessageBox.Show($"❌ Não foi possível conectar à API. \nVerifique se a API está em execução erro do sistema: {exHttp.Message}");
             }
             catch (Exception ex)
             {
-                ExibirErro($"X erro inesperado{ex.Message}");
+                ExibirErro($"❌ Erro inesperado: {ex.Message}");
+                MessageBox.Show($"❌ Erro inesperado: {ex.Message}");
             }
             finally
             {
@@ -105,12 +109,12 @@ namespace AtelieDosPontinhos.Desktop.Forms
 
             if (carregando)
             {
-                btnEntrar.Text = "aguarde...";
+                btnEntrar.Text = "Aguarde...";
                 lblErro.Visible = false;
             }
             else
             {
-                btnEntrar.Text = "ENTRAR";
+                btnEntrar.Text = "Entrar";
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using Guna.UI2.WinForms;
+﻿using AtelieDosPontinhos.Desktop.UserControls;
+using Guna.UI2.WinForms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -33,10 +34,10 @@ namespace AtelieDosPontinhos.Desktop.Forms
 
             _authService = new AuthApiService();
 
-            this.Text = $"Atelie do pontinhos Desktop - {AppConfig.Version}";
+            this.Text = $"Ateliê dos Pontinhos Desktop - {AppConfig.Version}";
 
             lblUsuario.Text = $"{SessionManager.Intance.GetDisplayName()}";
-            lblPerfil.Text = SessionManager.Instance.IsAdmin ? "Administrador" : "usuario comum";
+            lblPerfil.Text = SessionManager.Instance.IsAdmin ? "🔑 Administrador" : "👀 usuario comum";
             lblSessao.Text = $"🟣 {SessionManager.Instance.GetEmail()}";
 
             ConfigurarPermissoes();
@@ -60,7 +61,7 @@ namespace AtelieDosPontinhos.Desktop.Forms
                 _botaoAtivo.ForeColor = Color.White;
 
                 _botaoAtivo = Botao;
-                if (Botao != null)
+                if (_botaoAtivo != null)
                 {
                     _botaoAtivo.FillColor = Color.FromArgb(0, 50, 110);
                     _botaoAtivo.ForeColor = Color.White;
@@ -73,11 +74,12 @@ namespace AtelieDosPontinhos.Desktop.Forms
 
         private void NavegarParaDashboard()
         {
-            NavegarParaDashboard(new DashBoardUserControl(), btnDashboard);
+            Navegar(new DashboardUserControl(), btnDashboard);
         }
 
         private void Navegar(UserControl Control, Guna2Button? botao = null)
         {
+            //Remove o UserControl anterior
             if (_controleAtual != null)
             {
                 pnlConteudo.Controls.Remove(_controleAtual);
@@ -85,6 +87,7 @@ namespace AtelieDosPontinhos.Desktop.Forms
                 _controleAtual = null;
             }
 
+            //Adiona o novo UserControl(Tela interna)
             Control.Dock = DockStyle.Fill;
             pnlConteudo.Controls.Add(Control);
             _controleAtual = Control;
@@ -95,8 +98,11 @@ namespace AtelieDosPontinhos.Desktop.Forms
 
         private async Task btnLogout_Click(object sender, EventArgs e)
         {
-            var resposta = MessageBox.Show("Deseja do sair do sistema?", "confirmar Logout",
-                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            var resposta = MessageBox.Show("Deseja do sair do sistema?", 
+                "confirmar Logout",
+                MessageBoxButtons.YesNo, 
+                MessageBoxIcon.Question);
+
             if (resposta != DialogResult.Yes) return;
 
             try
@@ -116,13 +122,13 @@ namespace AtelieDosPontinhos.Desktop.Forms
 
 
 
-        private void btnDashboard_Click_1(object sender, EventArgs e) => Navegar(new DashBoardUserControl(), btnDashboard);
+        private void btnDashboard_Click_1(object sender, EventArgs e) => Navegar(new DashboardUserControl(), btnDashboard);
 
         private void btnProdutos_Click(object sender, EventArgs e) => Navegar(new ProdutosUserControl(), btnProdutos);
 
         private void btnCategorias_Click(object sender, EventArgs e) => Navegar(new CategoriasUserControl(), btnCategorias);
 
-        private void btnUsuarios_Click(object sender, EventArgs e) => Navegar(new UsuarioUserControl(), btnUsuarios);
+        private void btnUsuarios_Click(object sender, EventArgs e) => Navegar(new UsuariosUserControl(), btnUsuarios);
 
         private void btnPerfil_Click(object sender, EventArgs e) => Navegar(new PerfilUserControl(), btnPerfil);
 

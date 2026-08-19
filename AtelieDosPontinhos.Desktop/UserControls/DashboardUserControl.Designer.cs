@@ -32,17 +32,17 @@
             lblSubtitulo = new Label();
             lblCarregando = new Label();
             cardProdutos = new Panel();
+            cardProdutosLblDesc = new Label();
+            cardProdutosLblNumero = new Label();
+            cardProdutosLblTitulo = new Label();
             cardCategorias = new Panel();
+            cardCategoriasLblNumero = new Label();
+            cardCategoriasLblDesc = new Label();
+            cardCategoriasLblTitulo = new Label();
             pnlCorProdutos = new Panel();
             pnlCorCategorias = new Panel();
             lblUltimosProdutos = new Label();
             gridUltimosProdutos = new DataGridView();
-            cardProdutosLblTitulo = new Label();
-            cardCategoriasLblTitulo = new Label();
-            cardCategoriasLblNumero = new Label();
-            cardCategoriasLblDesc = new Label();
-            cardProdutosLblNumero = new Label();
-            cardProdutosLblDesc = new Label();
             colId = new DataGridViewTextBoxColumn();
             colName = new DataGridViewTextBoxColumn();
             colPrice = new DataGridViewTextBoxColumn();
@@ -91,6 +91,33 @@
             cardProdutos.Size = new Size(234, 135);
             cardProdutos.TabIndex = 1;
             // 
+            // cardProdutosLblDesc
+            // 
+            cardProdutosLblDesc.AutoSize = true;
+            cardProdutosLblDesc.Location = new Point(16, 105);
+            cardProdutosLblDesc.Name = "cardProdutosLblDesc";
+            cardProdutosLblDesc.Size = new Size(166, 15);
+            cardProdutosLblDesc.TabIndex = 0;
+            cardProdutosLblDesc.Text = "Total de produtos cadastrados";
+            // 
+            // cardProdutosLblNumero
+            // 
+            cardProdutosLblNumero.AutoSize = true;
+            cardProdutosLblNumero.Location = new Point(16, 65);
+            cardProdutosLblNumero.Name = "cardProdutosLblNumero";
+            cardProdutosLblNumero.Size = new Size(13, 15);
+            cardProdutosLblNumero.TabIndex = 0;
+            cardProdutosLblNumero.Text = "0";
+            // 
+            // cardProdutosLblTitulo
+            // 
+            cardProdutosLblTitulo.AutoSize = true;
+            cardProdutosLblTitulo.Location = new Point(16, 30);
+            cardProdutosLblTitulo.Name = "cardProdutosLblTitulo";
+            cardProdutosLblTitulo.Size = new Size(70, 15);
+            cardProdutosLblTitulo.TabIndex = 0;
+            cardProdutosLblTitulo.Text = "🛍️ Produtos";
+            // 
             // cardCategorias
             // 
             cardCategorias.Controls.Add(cardCategoriasLblNumero);
@@ -100,6 +127,33 @@
             cardCategorias.Name = "cardCategorias";
             cardCategorias.Size = new Size(234, 137);
             cardCategorias.TabIndex = 1;
+            // 
+            // cardCategoriasLblNumero
+            // 
+            cardCategoriasLblNumero.AutoSize = true;
+            cardCategoriasLblNumero.Location = new Point(16, 65);
+            cardCategoriasLblNumero.Name = "cardCategoriasLblNumero";
+            cardCategoriasLblNumero.Size = new Size(13, 15);
+            cardCategoriasLblNumero.TabIndex = 0;
+            cardCategoriasLblNumero.Text = "0";
+            // 
+            // cardCategoriasLblDesc
+            // 
+            cardCategoriasLblDesc.AutoSize = true;
+            cardCategoriasLblDesc.Location = new Point(16, 105);
+            cardCategoriasLblDesc.Name = "cardCategoriasLblDesc";
+            cardCategoriasLblDesc.Size = new Size(171, 15);
+            cardCategoriasLblDesc.TabIndex = 0;
+            cardCategoriasLblDesc.Text = "Total de categorias cadastradas";
+            // 
+            // cardCategoriasLblTitulo
+            // 
+            cardCategoriasLblTitulo.AutoSize = true;
+            cardCategoriasLblTitulo.Location = new Point(16, 30);
+            cardCategoriasLblTitulo.Name = "cardCategoriasLblTitulo";
+            cardCategoriasLblTitulo.Size = new Size(78, 15);
+            cardCategoriasLblTitulo.TabIndex = 0;
+            cardCategoriasLblTitulo.Text = "🏷️ Categorias";
             // 
             // pnlCorProdutos
             // 
@@ -134,60 +188,6 @@
             gridUltimosProdutos.RowHeadersVisible = false;
             gridUltimosProdutos.Size = new Size(673, 205);
             gridUltimosProdutos.TabIndex = 2;
-            // 
-            // cardProdutosLblTitulo
-            // 
-            cardProdutosLblTitulo.AutoSize = true;
-            cardProdutosLblTitulo.Location = new Point(16, 30);
-            cardProdutosLblTitulo.Name = "cardProdutosLblTitulo";
-            cardProdutosLblTitulo.Size = new Size(70, 15);
-            cardProdutosLblTitulo.TabIndex = 0;
-            cardProdutosLblTitulo.Text = "🛍️ Produtos";
-            // 
-            // cardCategoriasLblTitulo
-            // 
-            cardCategoriasLblTitulo.AutoSize = true;
-            cardCategoriasLblTitulo.Location = new Point(16, 30);
-            cardCategoriasLblTitulo.Name = "cardCategoriasLblTitulo";
-            cardCategoriasLblTitulo.Size = new Size(78, 15);
-            cardCategoriasLblTitulo.TabIndex = 0;
-            cardCategoriasLblTitulo.Text = "🏷️ Categorias";
-            // 
-            // cardCategoriasLblNumero
-            // 
-            cardCategoriasLblNumero.AutoSize = true;
-            cardCategoriasLblNumero.Location = new Point(16, 65);
-            cardCategoriasLblNumero.Name = "cardCategoriasLblNumero";
-            cardCategoriasLblNumero.Size = new Size(13, 15);
-            cardCategoriasLblNumero.TabIndex = 0;
-            cardCategoriasLblNumero.Text = "0";
-            // 
-            // cardCategoriasLblDesc
-            // 
-            cardCategoriasLblDesc.AutoSize = true;
-            cardCategoriasLblDesc.Location = new Point(16, 105);
-            cardCategoriasLblDesc.Name = "cardCategoriasLblDesc";
-            cardCategoriasLblDesc.Size = new Size(171, 15);
-            cardCategoriasLblDesc.TabIndex = 0;
-            cardCategoriasLblDesc.Text = "Total de categorias cadastradas";
-            // 
-            // cardProdutosLblNumero
-            // 
-            cardProdutosLblNumero.AutoSize = true;
-            cardProdutosLblNumero.Location = new Point(16, 65);
-            cardProdutosLblNumero.Name = "cardProdutosLblNumero";
-            cardProdutosLblNumero.Size = new Size(13, 15);
-            cardProdutosLblNumero.TabIndex = 0;
-            cardProdutosLblNumero.Text = "0";
-            // 
-            // cardProdutosLblDesc
-            // 
-            cardProdutosLblDesc.AutoSize = true;
-            cardProdutosLblDesc.Location = new Point(16, 105);
-            cardProdutosLblDesc.Name = "cardProdutosLblDesc";
-            cardProdutosLblDesc.Size = new Size(166, 15);
-            cardProdutosLblDesc.TabIndex = 0;
-            cardProdutosLblDesc.Text = "Total de produtos cadastrados";
             // 
             // colId
             // 
@@ -234,6 +234,7 @@
             Controls.Add(lblTitulo);
             Name = "DashboardUserControl";
             Size = new Size(805, 501);
+            Load += DashboardUserControl_Load;
             cardProdutos.ResumeLayout(false);
             cardProdutos.PerformLayout();
             cardCategorias.ResumeLayout(false);

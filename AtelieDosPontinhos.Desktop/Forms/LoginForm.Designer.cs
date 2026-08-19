@@ -181,7 +181,7 @@
             // lblProblemas
             // 
             lblProblemas.AutoSize = true;
-            lblProblemas.Location = new Point(30, 418);
+            lblProblemas.Location = new Point(22, 418);
             lblProblemas.Name = "lblProblemas";
             lblProblemas.Size = new Size(330, 15);
             lblProblemas.TabIndex = 1;
@@ -190,7 +190,7 @@
             // lblApi
             // 
             lblApi.AutoSize = true;
-            lblApi.Location = new Point(30, 448);
+            lblApi.Location = new Point(22, 448);
             lblApi.Name = "lblApi";
             lblApi.Size = new Size(34, 15);
             lblApi.TabIndex = 1;
@@ -200,7 +200,7 @@
             // 
             lblErro.AutoSize = true;
             lblErro.ForeColor = Color.Firebrick;
-            lblErro.Location = new Point(30, 475);
+            lblErro.Location = new Point(22, 475);
             lblErro.Name = "lblErro";
             lblErro.Size = new Size(37, 15);
             lblErro.TabIndex = 1;

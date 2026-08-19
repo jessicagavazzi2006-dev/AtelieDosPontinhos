@@ -28,33 +28,33 @@
         /// </summary>
         private void InitializeComponent()
         {
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges61 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges62 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges63 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges64 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges65 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges66 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges67 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges68 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges69 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges70 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges71 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges72 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges1 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges2 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges3 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges4 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges5 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges6 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges7 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges8 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges9 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges10 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges11 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges12 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             lblTitulo = new Label();
             pnlToolbar = new Panel();
+            btnAtualizar = new Guna.UI2.WinForms.Guna2Button();
+            btnExcluir = new Guna.UI2.WinForms.Guna2Button();
+            btnEditar = new Guna.UI2.WinForms.Guna2Button();
+            btnNovo = new Guna.UI2.WinForms.Guna2Button();
+            btnPesquisar = new Guna.UI2.WinForms.Guna2Button();
             txtPesquisa = new Guna.UI2.WinForms.Guna2TextBox();
             gridProdutos = new DataGridView();
-            btnPesquisar = new Guna.UI2.WinForms.Guna2Button();
-            btnNovo = new Guna.UI2.WinForms.Guna2Button();
-            btnEditar = new Guna.UI2.WinForms.Guna2Button();
-            btnExcluir = new Guna.UI2.WinForms.Guna2Button();
-            btnAtualizar = new Guna.UI2.WinForms.Guna2Button();
-            colIsFeatured = new DataGridViewCheckBoxColumn();
-            colCategory = new DataGridViewTextBoxColumn();
-            colStock = new DataGridViewTextBoxColumn();
-            colPrice = new DataGridViewTextBoxColumn();
-            colName = new DataGridViewTextBoxColumn();
             colId = new DataGridViewTextBoxColumn();
+            colName = new DataGridViewTextBoxColumn();
+            colPrice = new DataGridViewTextBoxColumn();
+            colStock = new DataGridViewTextBoxColumn();
+            colCategory = new DataGridViewTextBoxColumn();
+            colIsFeatured = new DataGridViewCheckBoxColumn();
             pnlToolbar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)gridProdutos).BeginInit();
             SuspendLayout();
@@ -81,9 +81,94 @@
             pnlToolbar.Size = new Size(713, 66);
             pnlToolbar.TabIndex = 1;
             // 
+            // btnAtualizar
+            // 
+            btnAtualizar.CustomizableEdges = customizableEdges1;
+            btnAtualizar.DisabledState.BorderColor = Color.DarkGray;
+            btnAtualizar.DisabledState.CustomBorderColor = Color.DarkGray;
+            btnAtualizar.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
+            btnAtualizar.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            btnAtualizar.Font = new Font("Segoe UI", 9F);
+            btnAtualizar.ForeColor = Color.White;
+            btnAtualizar.Location = new Point(604, 13);
+            btnAtualizar.Name = "btnAtualizar";
+            btnAtualizar.ShadowDecoration.CustomizableEdges = customizableEdges2;
+            btnAtualizar.Size = new Size(89, 39);
+            btnAtualizar.TabIndex = 1;
+            btnAtualizar.Text = "🔃 Atualizar";
+            btnAtualizar.Click += btnAtualizar_Click;
+            // 
+            // btnExcluir
+            // 
+            btnExcluir.CustomizableEdges = customizableEdges3;
+            btnExcluir.DisabledState.BorderColor = Color.DarkGray;
+            btnExcluir.DisabledState.CustomBorderColor = Color.DarkGray;
+            btnExcluir.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
+            btnExcluir.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            btnExcluir.Font = new Font("Segoe UI", 9F);
+            btnExcluir.ForeColor = Color.White;
+            btnExcluir.Location = new Point(512, 13);
+            btnExcluir.Name = "btnExcluir";
+            btnExcluir.ShadowDecoration.CustomizableEdges = customizableEdges4;
+            btnExcluir.Size = new Size(86, 39);
+            btnExcluir.TabIndex = 1;
+            btnExcluir.Text = "🗑️ Excluir";
+            btnExcluir.Click += btnExcluir_Click;
+            // 
+            // btnEditar
+            // 
+            btnEditar.CustomizableEdges = customizableEdges5;
+            btnEditar.DisabledState.BorderColor = Color.DarkGray;
+            btnEditar.DisabledState.CustomBorderColor = Color.DarkGray;
+            btnEditar.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
+            btnEditar.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            btnEditar.Font = new Font("Segoe UI", 9F);
+            btnEditar.ForeColor = Color.White;
+            btnEditar.Location = new Point(420, 13);
+            btnEditar.Name = "btnEditar";
+            btnEditar.ShadowDecoration.CustomizableEdges = customizableEdges6;
+            btnEditar.Size = new Size(86, 39);
+            btnEditar.TabIndex = 1;
+            btnEditar.Text = "✏️ Editar";
+            btnEditar.Click += btnEditar_Click;
+            // 
+            // btnNovo
+            // 
+            btnNovo.CustomizableEdges = customizableEdges7;
+            btnNovo.DisabledState.BorderColor = Color.DarkGray;
+            btnNovo.DisabledState.CustomBorderColor = Color.DarkGray;
+            btnNovo.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
+            btnNovo.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            btnNovo.Font = new Font("Segoe UI", 9F);
+            btnNovo.ForeColor = Color.White;
+            btnNovo.Location = new Point(328, 13);
+            btnNovo.Name = "btnNovo";
+            btnNovo.ShadowDecoration.CustomizableEdges = customizableEdges8;
+            btnNovo.Size = new Size(86, 39);
+            btnNovo.TabIndex = 1;
+            btnNovo.Text = "➕ Novo Produto";
+            btnNovo.Click += btnNovo_Click;
+            // 
+            // btnPesquisar
+            // 
+            btnPesquisar.CustomizableEdges = customizableEdges9;
+            btnPesquisar.DisabledState.BorderColor = Color.DarkGray;
+            btnPesquisar.DisabledState.CustomBorderColor = Color.DarkGray;
+            btnPesquisar.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
+            btnPesquisar.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            btnPesquisar.Font = new Font("Segoe UI", 9F);
+            btnPesquisar.ForeColor = Color.White;
+            btnPesquisar.Location = new Point(223, 13);
+            btnPesquisar.Name = "btnPesquisar";
+            btnPesquisar.ShadowDecoration.CustomizableEdges = customizableEdges10;
+            btnPesquisar.Size = new Size(86, 39);
+            btnPesquisar.TabIndex = 1;
+            btnPesquisar.Text = "Pesquisar";
+            btnPesquisar.Click += btnPesquisar_Click;
+            // 
             // txtPesquisa
             // 
-            txtPesquisa.CustomizableEdges = customizableEdges61;
+            txtPesquisa.CustomizableEdges = customizableEdges11;
             txtPesquisa.DefaultText = "";
             txtPesquisa.DisabledState.BorderColor = Color.FromArgb(208, 208, 208);
             txtPesquisa.DisabledState.FillColor = Color.FromArgb(226, 226, 226);
@@ -96,9 +181,10 @@
             txtPesquisa.Name = "txtPesquisa";
             txtPesquisa.PlaceholderText = "🔎 Pesquisar por nome...";
             txtPesquisa.SelectedText = "";
-            txtPesquisa.ShadowDecoration.CustomizableEdges = customizableEdges62;
+            txtPesquisa.ShadowDecoration.CustomizableEdges = customizableEdges12;
             txtPesquisa.Size = new Size(205, 36);
             txtPesquisa.TabIndex = 0;
+            txtPesquisa.TextChanged += txtPesquisa_TextChanged;
             // 
             // gridProdutos
             // 
@@ -110,113 +196,12 @@
             gridProdutos.Size = new Size(713, 336);
             gridProdutos.TabIndex = 2;
             // 
-            // btnPesquisar
+            // colId
             // 
-            btnPesquisar.CustomizableEdges = customizableEdges63;
-            btnPesquisar.DisabledState.BorderColor = Color.DarkGray;
-            btnPesquisar.DisabledState.CustomBorderColor = Color.DarkGray;
-            btnPesquisar.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
-            btnPesquisar.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
-            btnPesquisar.Font = new Font("Segoe UI", 9F);
-            btnPesquisar.ForeColor = Color.White;
-            btnPesquisar.Location = new Point(223, 13);
-            btnPesquisar.Name = "btnPesquisar";
-            btnPesquisar.ShadowDecoration.CustomizableEdges = customizableEdges64;
-            btnPesquisar.Size = new Size(86, 39);
-            btnPesquisar.TabIndex = 1;
-            btnPesquisar.Text = "Pesquisar";
-            // 
-            // btnNovo
-            // 
-            btnNovo.CustomizableEdges = customizableEdges65;
-            btnNovo.DisabledState.BorderColor = Color.DarkGray;
-            btnNovo.DisabledState.CustomBorderColor = Color.DarkGray;
-            btnNovo.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
-            btnNovo.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
-            btnNovo.Font = new Font("Segoe UI", 9F);
-            btnNovo.ForeColor = Color.White;
-            btnNovo.Location = new Point(328, 13);
-            btnNovo.Name = "btnNovo";
-            btnNovo.ShadowDecoration.CustomizableEdges = customizableEdges66;
-            btnNovo.Size = new Size(86, 39);
-            btnNovo.TabIndex = 1;
-            btnNovo.Text = "➕ Novo Produto";
-            // 
-            // btnEditar
-            // 
-            btnEditar.CustomizableEdges = customizableEdges67;
-            btnEditar.DisabledState.BorderColor = Color.DarkGray;
-            btnEditar.DisabledState.CustomBorderColor = Color.DarkGray;
-            btnEditar.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
-            btnEditar.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
-            btnEditar.Font = new Font("Segoe UI", 9F);
-            btnEditar.ForeColor = Color.White;
-            btnEditar.Location = new Point(420, 13);
-            btnEditar.Name = "btnEditar";
-            btnEditar.ShadowDecoration.CustomizableEdges = customizableEdges68;
-            btnEditar.Size = new Size(86, 39);
-            btnEditar.TabIndex = 1;
-            btnEditar.Text = "✏️ Editar";
-            // 
-            // btnExcluir
-            // 
-            btnExcluir.CustomizableEdges = customizableEdges69;
-            btnExcluir.DisabledState.BorderColor = Color.DarkGray;
-            btnExcluir.DisabledState.CustomBorderColor = Color.DarkGray;
-            btnExcluir.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
-            btnExcluir.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
-            btnExcluir.Font = new Font("Segoe UI", 9F);
-            btnExcluir.ForeColor = Color.White;
-            btnExcluir.Location = new Point(512, 13);
-            btnExcluir.Name = "btnExcluir";
-            btnExcluir.ShadowDecoration.CustomizableEdges = customizableEdges70;
-            btnExcluir.Size = new Size(86, 39);
-            btnExcluir.TabIndex = 1;
-            btnExcluir.Text = "🗑️ Excluir";
-            // 
-            // btnAtualizar
-            // 
-            btnAtualizar.CustomizableEdges = customizableEdges71;
-            btnAtualizar.DisabledState.BorderColor = Color.DarkGray;
-            btnAtualizar.DisabledState.CustomBorderColor = Color.DarkGray;
-            btnAtualizar.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
-            btnAtualizar.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
-            btnAtualizar.Font = new Font("Segoe UI", 9F);
-            btnAtualizar.ForeColor = Color.White;
-            btnAtualizar.Location = new Point(604, 13);
-            btnAtualizar.Name = "btnAtualizar";
-            btnAtualizar.ShadowDecoration.CustomizableEdges = customizableEdges72;
-            btnAtualizar.Size = new Size(89, 39);
-            btnAtualizar.TabIndex = 1;
-            btnAtualizar.Text = "🔃 Atualizar";
-            // 
-            // colIsFeatured
-            // 
-            colIsFeatured.FillWeight = 99.667984F;
-            colIsFeatured.HeaderText = "Destaque";
-            colIsFeatured.Name = "colIsFeatured";
-            colIsFeatured.Width = 118;
-            // 
-            // colCategory
-            // 
-            colCategory.FillWeight = 100.614677F;
-            colCategory.HeaderText = "Categoria";
-            colCategory.Name = "colCategory";
-            colCategory.Width = 119;
-            // 
-            // colStock
-            // 
-            colStock.FillWeight = 99.72201F;
-            colStock.HeaderText = "Estoque";
-            colStock.Name = "colStock";
-            colStock.Width = 118;
-            // 
-            // colPrice
-            // 
-            colPrice.FillWeight = 99.6654358F;
-            colPrice.HeaderText = "Preço";
-            colPrice.Name = "colPrice";
-            colPrice.Width = 118;
+            colId.FillWeight = 99.7183F;
+            colId.HeaderText = "ID";
+            colId.Name = "colId";
+            colId.Width = 118;
             // 
             // colName
             // 
@@ -225,12 +210,33 @@
             colName.Name = "colName";
             colName.Width = 119;
             // 
-            // colId
+            // colPrice
             // 
-            colId.FillWeight = 99.7183F;
-            colId.HeaderText = "ID";
-            colId.Name = "colId";
-            colId.Width = 118;
+            colPrice.FillWeight = 99.6654358F;
+            colPrice.HeaderText = "Preço";
+            colPrice.Name = "colPrice";
+            colPrice.Width = 118;
+            // 
+            // colStock
+            // 
+            colStock.FillWeight = 99.72201F;
+            colStock.HeaderText = "Estoque";
+            colStock.Name = "colStock";
+            colStock.Width = 118;
+            // 
+            // colCategory
+            // 
+            colCategory.FillWeight = 100.614677F;
+            colCategory.HeaderText = "Categoria";
+            colCategory.Name = "colCategory";
+            colCategory.Width = 119;
+            // 
+            // colIsFeatured
+            // 
+            colIsFeatured.FillWeight = 99.667984F;
+            colIsFeatured.HeaderText = "Destaque";
+            colIsFeatured.Name = "colIsFeatured";
+            colIsFeatured.Width = 118;
             // 
             // ProdutosUserControl
             // 
@@ -241,6 +247,7 @@
             Controls.Add(lblTitulo);
             Name = "ProdutosUserControl";
             Size = new Size(805, 501);
+            Load += ProdutosUserControl_Load;
             pnlToolbar.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)gridProdutos).EndInit();
             ResumeLayout(false);
