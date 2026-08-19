@@ -148,7 +148,7 @@ namespace AtelieDosPontinhos.Desktop.UserControls
                 return;
             }
 
-            var conf = MessageBox.Show($"Tem certeza que deseja excluir o usuário:\n\"{usuario.Nome}\"?",
+            var conf = MessageBox.Show($"Tem certeza que deseja excluir o usuário:\n\"{usuario.UserName}\"?",
                 "Confirmar Exclusão",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Warning);
