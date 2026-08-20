@@ -63,6 +63,26 @@ namespace AtelieDosPontinhos.Desktop.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Logo_Ateliê_dos_pontinhos_diminuída {
+            get {
+                object obj = ResourceManager.GetObject("Logo Ateliê dos pontinhos diminuída", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Logo_Ateliê_dos_pontinhos_maior {
+            get {
+                object obj = ResourceManager.GetObject("Logo Ateliê dos pontinhos maior", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Mídia__1_ {
             get {
                 object obj = ResourceManager.GetObject("Mídia (1)", resourceCulture);

@@ -38,7 +38,8 @@ namespace AtelieDosPontinhos.Desktop.Forms
 
             lblUsuario.Text = $"{SessionManager.Intance.GetDisplayName()}";
             lblPerfil.Text = SessionManager.Instance.IsAdmin ? "🔑 Administrador" : "👀 usuario comum";
-            lblSessao.Text = $"🟣 {SessionManager.Instance.GetEmail()}";
+            lblPerfil.ForeColor = SessionManager.Instance.IsAdmin ? Color.Orange : Color.Blue;
+            lblSessao.Text = $"🟢 {SessionManager.Instance.GetEmail()}";
 
             ConfigurarPermissoes();
 

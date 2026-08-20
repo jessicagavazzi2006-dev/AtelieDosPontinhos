@@ -62,9 +62,11 @@
             // lblTitulo
             // 
             lblTitulo.AutoSize = true;
+            lblTitulo.Font = new Font("Yu Gothic", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblTitulo.ForeColor = Color.FromArgb(58, 52, 64);
             lblTitulo.Location = new Point(45, 26);
             lblTitulo.Name = "lblTitulo";
-            lblTitulo.Size = new Size(170, 15);
+            lblTitulo.Size = new Size(233, 19);
             lblTitulo.TabIndex = 0;
             lblTitulo.Text = "🛍️ Gerenciamento de Produtos";
             // 
@@ -83,6 +85,7 @@
             // 
             // btnAtualizar
             // 
+            btnAtualizar.BorderRadius = 5;
             btnAtualizar.CustomizableEdges = customizableEdges1;
             btnAtualizar.DisabledState.BorderColor = Color.DarkGray;
             btnAtualizar.DisabledState.CustomBorderColor = Color.DarkGray;
@@ -100,6 +103,7 @@
             // 
             // btnExcluir
             // 
+            btnExcluir.BorderRadius = 5;
             btnExcluir.CustomizableEdges = customizableEdges3;
             btnExcluir.DisabledState.BorderColor = Color.DarkGray;
             btnExcluir.DisabledState.CustomBorderColor = Color.DarkGray;
@@ -117,6 +121,7 @@
             // 
             // btnEditar
             // 
+            btnEditar.BorderRadius = 5;
             btnEditar.CustomizableEdges = customizableEdges5;
             btnEditar.DisabledState.BorderColor = Color.DarkGray;
             btnEditar.DisabledState.CustomBorderColor = Color.DarkGray;
@@ -134,6 +139,7 @@
             // 
             // btnNovo
             // 
+            btnNovo.BorderRadius = 5;
             btnNovo.CustomizableEdges = customizableEdges7;
             btnNovo.DisabledState.BorderColor = Color.DarkGray;
             btnNovo.DisabledState.CustomBorderColor = Color.DarkGray;
@@ -151,6 +157,7 @@
             // 
             // btnPesquisar
             // 
+            btnPesquisar.BorderRadius = 5;
             btnPesquisar.CustomizableEdges = customizableEdges9;
             btnPesquisar.DisabledState.BorderColor = Color.DarkGray;
             btnPesquisar.DisabledState.CustomBorderColor = Color.DarkGray;
@@ -168,6 +175,7 @@
             // 
             // txtPesquisa
             // 
+            txtPesquisa.BorderRadius = 5;
             txtPesquisa.CustomizableEdges = customizableEdges11;
             txtPesquisa.DefaultText = "";
             txtPesquisa.DisabledState.BorderColor = Color.FromArgb(208, 208, 208);
