@@ -7,7 +7,7 @@ namespace AtelieDosPontinhos.Application.Interfaces
 {
     public interface IEnderecoService
     {
-        Task<IEnumerable<EnderecoDto>> GetALlAsync();
+        Task<IEnumerable<EnderecoDto>> GetAllAsync();
         Task<EnderecoDto?> GetByIdAsync(int id);
         Task<EnderecoDto> CreateAsync(CreateEnderecoDto dto);
         Task<EnderecoDto?> UpdateAsync(int id, UpdateEnderecoDto dto);
