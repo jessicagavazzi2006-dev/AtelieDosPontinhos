@@ -56,34 +56,41 @@
             // 
             // pbLogo
             // 
-            pbLogo.Image = Properties.Resources.Mídia__1_;
+            pbLogo.Image = Properties.Resources.Logo_Ateliê_dos_pontinhos_maior;
             pbLogo.Location = new Point(76, 23);
             pbLogo.Name = "pbLogo";
             pbLogo.Size = new Size(261, 80);
+            pbLogo.SizeMode = PictureBoxSizeMode.Zoom;
             pbLogo.TabIndex = 0;
             pbLogo.TabStop = false;
             // 
             // lblBemVindo
             // 
             lblBemVindo.AutoSize = true;
-            lblBemVindo.Location = new Point(169, 119);
+            lblBemVindo.Font = new Font("Yu Gothic", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblBemVindo.ForeColor = Color.FromArgb(58, 52, 64);
+            lblBemVindo.Location = new Point(134, 110);
             lblBemVindo.Name = "lblBemVindo";
-            lblBemVindo.Size = new Size(70, 15);
+            lblBemVindo.Size = new Size(152, 31);
             lblBemVindo.TabIndex = 1;
             lblBemVindo.Text = "Bem-Vindo!";
             // 
             // lblTextoFacaLogin
             // 
             lblTextoFacaLogin.AutoSize = true;
-            lblTextoFacaLogin.Location = new Point(132, 144);
+            lblTextoFacaLogin.Font = new Font("Yu Gothic", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblTextoFacaLogin.ForeColor = SystemColors.ControlDark;
+            lblTextoFacaLogin.Location = new Point(131, 141);
             lblTextoFacaLogin.Name = "lblTextoFacaLogin";
-            lblTextoFacaLogin.Size = new Size(140, 15);
+            lblTextoFacaLogin.Size = new Size(158, 17);
             lblTextoFacaLogin.TabIndex = 1;
             lblTextoFacaLogin.Text = "faça login com sua conta";
             // 
             // lblEmail
             // 
             lblEmail.AutoSize = true;
+            lblEmail.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblEmail.ForeColor = Color.FromArgb(58, 52, 64);
             lblEmail.Location = new Point(22, 189);
             lblEmail.Name = "lblEmail";
             lblEmail.Size = new Size(36, 15);
@@ -92,18 +99,20 @@
             // 
             // txtEmail
             // 
+            txtEmail.BorderRadius = 5;
             txtEmail.CustomizableEdges = customizableEdges1;
             txtEmail.DefaultText = "";
             txtEmail.DisabledState.BorderColor = Color.FromArgb(208, 208, 208);
             txtEmail.DisabledState.FillColor = Color.FromArgb(226, 226, 226);
             txtEmail.DisabledState.ForeColor = Color.FromArgb(138, 138, 138);
             txtEmail.DisabledState.PlaceholderForeColor = Color.FromArgb(138, 138, 138);
+            txtEmail.FillColor = Color.WhiteSmoke;
             txtEmail.FocusedState.BorderColor = Color.FromArgb(94, 148, 255);
             txtEmail.Font = new Font("Segoe UI", 9F);
             txtEmail.HoverState.BorderColor = Color.FromArgb(94, 148, 255);
             txtEmail.Location = new Point(22, 207);
             txtEmail.Name = "txtEmail";
-            txtEmail.PlaceholderText = "";
+            txtEmail.PlaceholderText = "seuemail@hotmail.com.br";
             txtEmail.SelectedText = "";
             txtEmail.ShadowDecoration.CustomizableEdges = customizableEdges2;
             txtEmail.Size = new Size(378, 36);
@@ -112,26 +121,30 @@
             // lblSenha
             // 
             lblSenha.AutoSize = true;
+            lblSenha.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblSenha.ForeColor = Color.FromArgb(58, 52, 64);
             lblSenha.Location = new Point(22, 260);
             lblSenha.Name = "lblSenha";
-            lblSenha.Size = new Size(39, 15);
+            lblSenha.Size = new Size(41, 15);
             lblSenha.TabIndex = 1;
             lblSenha.Text = "Senha";
             // 
             // txtSenha
             // 
+            txtSenha.BorderRadius = 5;
             txtSenha.CustomizableEdges = customizableEdges3;
             txtSenha.DefaultText = "";
             txtSenha.DisabledState.BorderColor = Color.FromArgb(208, 208, 208);
             txtSenha.DisabledState.FillColor = Color.FromArgb(226, 226, 226);
             txtSenha.DisabledState.ForeColor = Color.FromArgb(138, 138, 138);
             txtSenha.DisabledState.PlaceholderForeColor = Color.FromArgb(138, 138, 138);
+            txtSenha.FillColor = Color.WhiteSmoke;
             txtSenha.FocusedState.BorderColor = Color.FromArgb(94, 148, 255);
             txtSenha.Font = new Font("Segoe UI", 9F);
             txtSenha.HoverState.BorderColor = Color.FromArgb(94, 148, 255);
             txtSenha.Location = new Point(22, 278);
             txtSenha.Name = "txtSenha";
-            txtSenha.PlaceholderText = "";
+            txtSenha.PlaceholderText = "•••••••••••";
             txtSenha.SelectedText = "";
             txtSenha.ShadowDecoration.CustomizableEdges = customizableEdges4;
             txtSenha.Size = new Size(378, 36);
@@ -139,12 +152,14 @@
             // 
             // btnEntrar
             // 
+            btnEntrar.BorderRadius = 10;
             btnEntrar.CustomizableEdges = customizableEdges5;
             btnEntrar.DisabledState.BorderColor = Color.DarkGray;
             btnEntrar.DisabledState.CustomBorderColor = Color.DarkGray;
             btnEntrar.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
             btnEntrar.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
-            btnEntrar.Font = new Font("Segoe UI", 9F);
+            btnEntrar.FillColor = Color.FromArgb(177, 145, 217);
+            btnEntrar.Font = new Font("Yu Gothic", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnEntrar.ForeColor = Color.White;
             btnEntrar.Location = new Point(76, 333);
             btnEntrar.Name = "btnEntrar";
@@ -156,9 +171,11 @@
             // lblCarregando
             // 
             lblCarregando.AutoSize = true;
+            lblCarregando.Font = new Font("Yu Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblCarregando.ForeColor = SystemColors.ControlDark;
             lblCarregando.Location = new Point(167, 383);
             lblCarregando.Name = "lblCarregando";
-            lblCarregando.Size = new Size(88, 15);
+            lblCarregando.Size = new Size(90, 16);
             lblCarregando.TabIndex = 1;
             lblCarregando.Text = "Autenticando...";
             // 
@@ -181,37 +198,44 @@
             // lblProblemas
             // 
             lblProblemas.AutoSize = true;
+            lblProblemas.Font = new Font("Yu Gothic", 9F);
+            lblProblemas.ForeColor = SystemColors.ControlDark;
             lblProblemas.Location = new Point(22, 418);
             lblProblemas.Name = "lblProblemas";
-            lblProblemas.Size = new Size(330, 15);
+            lblProblemas.Size = new Size(348, 16);
             lblProblemas.TabIndex = 1;
             lblProblemas.Text = "Problemas para acessar? Contate o administrador do sistema.";
             // 
             // lblApi
             // 
             lblApi.AutoSize = true;
+            lblApi.Font = new Font("Yu Gothic", 9F);
+            lblApi.ForeColor = SystemColors.ControlDark;
             lblApi.Location = new Point(22, 448);
             lblApi.Name = "lblApi";
-            lblApi.Size = new Size(34, 15);
+            lblApi.Size = new Size(36, 16);
             lblApi.TabIndex = 1;
             lblApi.Text = "API...";
             // 
             // lblErro
             // 
             lblErro.AutoSize = true;
+            lblErro.Font = new Font("Yu Gothic", 9F);
             lblErro.ForeColor = Color.Firebrick;
             lblErro.Location = new Point(22, 475);
             lblErro.Name = "lblErro";
-            lblErro.Size = new Size(37, 15);
+            lblErro.Size = new Size(38, 16);
             lblErro.TabIndex = 1;
             lblErro.Text = "Erro...";
             // 
             // lblVersao
             // 
             lblVersao.AutoSize = true;
-            lblVersao.Location = new Point(94, 510);
+            lblVersao.Font = new Font("Yu Gothic", 9F);
+            lblVersao.ForeColor = SystemColors.ControlDark;
+            lblVersao.Location = new Point(87, 510);
             lblVersao.Name = "lblVersao";
-            lblVersao.Size = new Size(231, 15);
+            lblVersao.Size = new Size(252, 16);
             lblVersao.TabIndex = 1;
             lblVersao.Text = "Versão: 1.0.0 | ©️ Senac São Miguel Paulista";
             // 
@@ -221,7 +245,7 @@
             btnFechar.DisabledState.CustomBorderColor = Color.DarkGray;
             btnFechar.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
             btnFechar.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
-            btnFechar.FillColor = Color.Maroon;
+            btnFechar.FillColor = Color.Brown;
             btnFechar.Font = new Font("Segoe UI", 9F);
             btnFechar.ForeColor = Color.White;
             btnFechar.Location = new Point(382, 12);
