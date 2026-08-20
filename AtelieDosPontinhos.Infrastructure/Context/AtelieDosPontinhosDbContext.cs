@@ -15,6 +15,9 @@ namespace AtelieDosPontinhos.Infrastructure.Context
         // 🛠️ TODAS AS SUAS TABELAS DE VOLTA PARA NÃO QUEBRAR OS REPOSITÓRIOS:
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
+
+        public DbSet<AtelieDosPontinhos.Domain.Entities.Endereco> Enderecos { get; set; }
+
         public DbSet<Material> Materials { get; set; }
         /// <summary>
         /// Tabela de junção entre Product e Material
@@ -24,6 +27,9 @@ namespace AtelieDosPontinhos.Infrastructure.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<AtelieDosPontinhos.Domain.Entities.Endereco>();
+
 
             // 🖼️ CONFIGURAÇÃO DA IMAGEM LONGA EM BASE64:
             modelBuilder.Entity<Product>()
