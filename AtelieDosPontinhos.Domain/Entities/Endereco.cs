@@ -7,10 +7,10 @@ namespace AtelieDosPontinhos.Domain.Entities
     public class Endereco
     {
         public int Id { get; set; }
-        public string CEP {  get; set; }
+        public string CEP {  get; set; } = string.Empty;
         public int NUMERO { get; set; }
-        public string Estado { get; set; }
-        public string Referencial { get; set; }
-        public string Cidade { get; set; }
+        public string Estado { get; set; } = string.Empty;
+        public string Referencial { get; set; } = string.Empty;
+        public string Cidade { get; set; } = string.Empty;
     }
 }
