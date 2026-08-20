@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using AtelieDosPontinhos.Desktop.DTOs
+using AtelieDosPontinhos.Desktop.DTOs;
 
 using AtelieDosPontinhos.Desktop.Forms;
 

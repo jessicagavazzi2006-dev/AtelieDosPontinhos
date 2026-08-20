@@ -6,49 +6,103 @@
 
 <div class="container py-5">
     <div class="row justify-content-center">
-        <div class="col-md-5">
+        <div class="col-md-8">
+            @* Aumentamos o tamanho para caber os novos campos confortavelmente *@
             <div class="card shadow border-0 p-4 rounded-4 bg-white">
                 <h2 class="fw-bold mb-3 text-center" style="color: #6f42c1;">🛍️ Criar Minha Conta</h2>
-                <p class="text-muted text-center small mb-4">Cadastre-se rapidamente para realizar suas compras no Ateliê.</p>
-                
+                <p class="text-muted text-center small mb-4">Cadastre-se rapidamente para realizar suas compras express no Ateliê.</p>
+
                 <form asp-controller="Account" asp-action="Register" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
 
-                    <div class="mb-3">
-                        <label asp-for="Email" class="form-label fw-semibold text-secondary">Endereço de E-mail</label>
-                        <input asp-for="Email" class="form-control form-control-lg bg-light border-0 fs-6" placeholder="nome@exemplo.com" />
-                        <span asp-validation-for="Email" class="text-danger small"></span>
+                    <!-- 👤 SEÇÃO 1: DADOS PESSOAIS E ACESSO -->
+                    <h5 class="fw-bold mb-3 pb-2 border-bottom text-secondary">👤 Dados de Acesso</h5>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-12">
+                            <label asp-for="Email" class="form-label fw-semibold text-secondary">Endereço de E-mail</label>
+                            <input asp-for="Email" class="form-control form-control-lg bg-light border-0 fs-6" placeholder="nome@exemplo.com" required />
+                            <span asp-validation-for="Email" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Password" class="form-label fw-semibold text-secondary">Senha de Acesso</label>
+                            <div class="input-group">
+                                <input asp-for="Password" id="password" type="password" class="form-control form-control-lg bg-light border-0 fs-6" placeholder="Crie uma senha segura" required />
+                                <button class="btn btn-light border-0 bg-light" type="button" onclick="togglePassword('password', this)" style="z-index: 5;">👁️</button>
+                            </div>
+                            <span asp-validation-for="Password" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="ConfirmPassword" class="form-label fw-semibold text-secondary">Confirmar Senha</label>
+                            <div class="input-group">
+                                <input asp-for="ConfirmPassword" id="confirmPassword" type="password" class="form-control form-control-lg bg-light border-0 fs-6" placeholder="Repita a senha para confirmar" required />
+                                <button class="btn btn-light border-0 bg-light" type="button" onclick="togglePassword('confirmPassword', this)" style="z-index: 5;">👁️</button>
+                            </div>
+                            <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+                        </div>
                     </div>
 
-                    @* Campo: Senha *@
-                    <div class="mb-3">
-                        <label asp-for="Password" class="form-label fw-semibold text-secondary">Senha de Acesso</label>
-                        <div class="input-group">
-                            <input asp-for="Password" id="password" type="password" class="form-control form-control-lg bg-light border-0 fs-6" placeholder="Crie uma senha segura" />
-                            <button class="btn btn-light border-0 bg-light" type="button" onclick="togglePassword('password', this)" style="z-index: 5;">👁️</button>
+                    <!-- 📍 SEÇÃO 2: ENDEREÇO DE ENTREGA -->
+                    <h5 class="fw-bold mb-3 pb-2 border-bottom text-secondary">📍 Endereço Padrão de Entrega</h5>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold text-secondary">CEP</label>
+                            <input name="CEP" class="form-control form-control-lg bg-light border-0 fs-6" placeholder="00000-000" required />
                         </div>
-                        <span asp-validation-for="Password" class="text-danger small"></span>
+                        <div class="col-md-8">
+                            <label class="form-label fw-semibold text-secondary">Logradouro (Rua/Avenida)</label>
+                            <input name="Logradouro" class="form-control form-control-lg bg-light border-0 fs-6" required />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-semibold text-secondary">Número</label>
+                            <input name="Numero" class="form-control form-control-lg bg-light border-0 fs-6" required />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold text-secondary">Complemento</label>
+                            <input name="Complemento" class="form-control form-control-lg bg-light border-0 fs-6" placeholder="Apto, Bloco..." />
+                        </div>
+                        <div class="col-md-5">
+                            <label class="form-label fw-semibold text-secondary">Bairro</label>
+                            <input name="Bairro" class="form-control form-control-lg bg-light border-0 fs-6" required />
+                        </div>
+                        <div class="col-md-8">
+                            <label class="form-label fw-semibold text-secondary">Cidade</label>
+                            <input name="Cidade" class="form-control form-control-lg bg-light border-0 fs-6" required />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold text-secondary">Estado (UF)</label>
+                            <input name="Estado" class="form-control form-control-lg bg-light border-0 fs-6" placeholder="SP" maxlength="2" required />
+                        </div>
                     </div>
 
-                    @* Campo: Confirmar Senha *@
-                    <div class="mb-4">
-                        <label asp-for="ConfirmPassword" class="form-label fw-semibold text-secondary">Confirmar Senha</label>
-                        <div class="input-group">
-                            <input asp-for="ConfirmPassword" id="confirmPassword" type="password" class="form-control form-control-lg bg-light border-0 fs-6" placeholder="Repita a senha para confirmar" />
-                            <button class="btn btn-light border-0 bg-light" type="button" onclick="togglePassword('confirmPassword', this)" style="z-index: 5;">👁️</button>
+                    <!-- 💳 SEÇÃO 3: DADOS DE PAGAMENTO EXPRESS -->
+                    <h5 class="fw-bold mb-3 pb-2 border-bottom text-secondary">💳 Forma de Pagamento Preferencial</h5>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold text-secondary">Tipo de Pagamento</label>
+                            <select name="TipoPagamento" class="form-select form-select-lg bg-light border-0 fs-6">
+                                <option value="Cartao">💳 Cartão de Crédito</option>
+                                <option value="Pix">📱 PIX</option>
+                                <option value="Boleto">📄 Boleto Bancário</option>
+                            </select>
                         </div>
-                        <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+                        <div class="col-md-8">
+                            <label class="form-label fw-semibold text-secondary">Nome Impresso no Cartão</label>
+                            <input name="NomeNoCartao" class="form-control form-control-lg bg-light border-0 fs-6" placeholder="Ex: MARIA S SILVA" />
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label fw-semibold text-secondary">Número do Cartão (Mascarado)</label>
+                            <input name="NumeroCartaoMascarado" class="form-control form-control-lg bg-light border-0 fs-6" placeholder="**** **** **** 1234" />
+                        </div>
                     </div>
 
                     <button type="submit" class="btn btn-lg w-100 text-white border-0 fw-bold shadow-sm mb-3" style="background-color: #6f42c1;">
-                        Finalizar Cadastro
+                        Finalizar Cadastro Express
                     </button>
 
                     <div class="text-center">
                         <span class="text-muted small">Já tem uma conta?</span>
                         <a asp-action="Login" class="text-decoration-none small fw-bold" style="color: #6f42c1;">Fazer Login</a>
                     </div>
-
                 </form>
             </div>
         </div>

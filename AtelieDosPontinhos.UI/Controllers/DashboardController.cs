@@ -13,7 +13,9 @@ namespace AtelieDosPontinhos.UI.Controllers
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private const string ApiUrl = "http://localhost:5006/api/Product";
-        private const string ApiUsuariosUrl = "http://localhost:5006/api/Account/Users";
+      
+        private const string ApiUsuariosUrl = "http://localhost:5006/api/User";
+
 
         public DashboardController(IHttpClientFactory httpClientFactory)
         {

@@ -1,5 +1,68 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model List<AtelieDosPontinhos.UI.Controllers.UsuarioViewModel>
+
 @{
+    ViewData["Title"] = "Gerenciamento de Usuários";
 }
+
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold" style="color: #8a4f91 !important;">👥 Controle de Usuários</h2>
+        <a asp-controller="Dashboard" asp-action="CriarUsuario" class="btn text-white rounded-pill px-4 shadow-sm" style="background-color: #8a4f91;">
+            ➕ Cadastrar Novo Usuário
+        </a>
+    </div>
+
+    @if (TempData["ErroExcluir"] != null)
+    {
+        <div class="alert alert-danger border-0 rounded-3 shadow-sm mb-4">
+            ⚠️ @TempData["ErroExcluir"]
+        </div>
+    }
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="text-center py-5 shadow-sm rounded bg-light border">
+            <h4 class="text-muted mb-2">Nenhum usuário localizado.</h4>
+            <p class="text-secondary small mb-0">Verifique se a API está conectada e rodando na porta correta.</p>
+        </div>
+    }
+    else
+    {
+        <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="text-white text-center" style="background-color: #8a4f91;">
+                        <tr>
+                            <th scope="col" class="py-3 text-start ps-4">ID do Usuário</th>
+                            <th scope="col" class="py-3 text-start">E-mail / Nome de Usuário</th>
+                            <th scope="col" class="py-3">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model)
+                        {
+                            <tr>
+                                <td class="p-3 text-start ps-4 text-muted small" style="font-family: monospace;">@user.Id</td>
+                                <td class="p-3 text-start fw-semibold text-dark">@user.Email</td>
+                                <td class="text-center">
+                                    <!-- Formulário apontando exatamente para a Action ExcluirUsuario do seu Dashboard -->
+                                    <form asp-controller="Dashboard" asp-action="ExcluirUsuario" asp-route-id="@user.Id" method="post" onsubmit="return confirm('Deseja realmente remover este usuário?');" style="display:inline;">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3">
+                                            ❌ Remover
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+
+    <div class="mt-4">
+        <a asp-controller="Dashboard" asp-action="AdminPanel" class="btn btn-outline-secondary rounded-pill">
+            Voltar ao Painel
+        </a>
+    </div>
+</div>
