@@ -15,18 +15,27 @@ namespace AtelieDosPontinhos.Desktop.UserControls
 {
     public partial class ProdutosUserControl : UserControl
     {
+        //=================================================
+        // SERVIÇOS (Inicilizados no Load)
+        //=================================================
         private ProdutosApiService _produtosService = null;
         private CategoriasApiService _categoriasService = null;
 
+        //=================================================
+        // DADOS
+        //=================================================
         private List<ProductResponseDto> _todosPrdoutos = new();
-
         private List<CategoryDto> _categorias = new();
+
+        //=================================================
+        // CONSTRUTOR
+        //=================================================
         public ProdutosUserControl()
         {
             InitializeComponent();
         }
 
-        private void ProdutosUserControl_Load(object sender, EventArgs e)
+        private async void ProdutosUserControl_Load(object sender, EventArgs e)
         {
             //Guard não executa em tempo de desing
             if (DesignMode) return;
@@ -69,7 +78,7 @@ namespace AtelieDosPontinhos.Desktop.UserControls
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Erro ao carregar games : {ex.Message}", "Erro", MessageBoxButtons.OK,
+                MessageBox.Show($"Erro ao carregar os produtos : {ex.Message}", "Erro", MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
 
             }
@@ -83,10 +92,9 @@ namespace AtelieDosPontinhos.Desktop.UserControls
                 gridProdutos.Rows.Add(
                     p.Id,
                     p.Name,
-                    p.Description,
                     p.Price,
-                    p.CategoryId,
                     p.Stock,
+                    p.CategoryId,
                     p.IsFeatured
 
                 );
@@ -94,6 +102,7 @@ namespace AtelieDosPontinhos.Desktop.UserControls
         }
 
         private void btnPesquisar_Click(object sender, EventArgs e) => FiltrarGames();
+        private void txtPesquisa_TextChanged(object sender, EventArgs e) => FiltrarGames();
 
         private void FiltrarGames()
         {
@@ -117,12 +126,12 @@ namespace AtelieDosPontinhos.Desktop.UserControls
                 var (success, _, error) = await _produtosService.CreateAsync(form.ProdutoDto);
                 if (success)
                 {
-                    MessageBox.Show("game criado com sucesso", "sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("✅ Produto criado com sucesso", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     await CarregarDadosAsync();
                 }
                 else
                 {
-                    MessageBox.Show($"X {error}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"❌ {error}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -132,7 +141,7 @@ namespace AtelieDosPontinhos.Desktop.UserControls
             var produto = ObterGameSelecionado();
             if (produto == null)
             {
-                MessageBox.Show($"Selecione um game para editar", "Avisar", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show($"Selecione um produto para editar", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             using var form = new ProdutoFormDialog(_categorias, produto);
@@ -141,12 +150,12 @@ namespace AtelieDosPontinhos.Desktop.UserControls
                 var (success, _, error) = await _produtosService.UpdateAsync(produto.Id, form.UpdateDto);
                 if (success)
                 {
-                    MessageBox.Show("game atualizado", "sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("✅ Produto atualizado", "sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     await CarregarDadosAsync();
                 }
                 else
                 {
-                    MessageBox.Show($"X {error}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"❌ {error}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -163,14 +172,14 @@ namespace AtelieDosPontinhos.Desktop.UserControls
             var gam = ObterGameSelecionado();
             if (gam == null)
             {
-                MessageBox.Show("Selecione uma categoria para excluir.", "Aviso",
+                MessageBox.Show("Selecione uma produto para excluir.", "Aviso",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
                 return;
             }
 
 
-            var conf = MessageBox.Show($"Excluir O GAME \"{gam.Name}\"?",
+            var conf = MessageBox.Show($"Excluir o produto \"{gam.Name}\"?",
                 "Confirmar Exclusão",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Warning);
@@ -181,7 +190,7 @@ namespace AtelieDosPontinhos.Desktop.UserControls
             var (sucess, error) = await _produtosService.DeleteAsync(gam.Id);
             if (sucess)
             {
-                MessageBox.Show($"GAME Excluída!",
+                MessageBox.Show($"✅ Produto excluído com sucesso!",
                     "Sucesso",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
@@ -190,7 +199,7 @@ namespace AtelieDosPontinhos.Desktop.UserControls
             }
             else
             {
-                MessageBox.Show($"{error}",
+                MessageBox.Show($"❌ {error}",
                     "Erro",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);

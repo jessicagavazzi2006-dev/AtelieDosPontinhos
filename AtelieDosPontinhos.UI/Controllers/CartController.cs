@@ -30,11 +30,13 @@ namespace AtelieDosPontinhos.UI.Controllers
         [HttpPost]
         public async Task<IActionResult> AdicionarAoCarrinho(int id, int quantidade = 1)
         {
-            // 1. Criamos o cliente para chamar a API
-            var client = _httpClientFactory.CreateClient();
+            
+            // 1. Criamos o cliente usando o nome configurado "Api"
+            var client = _httpClientFactory.CreateClient("Api");
 
-          
-            var urlApi = $"https://localhost:7193/api/Product/{id}";
+            // A URL agora é relativa ao endereço configurado lá no appsettings
+            var urlApi = $"api/Product/{id}";
+
 
             ProductViewModel produtoViewModel = null;
 
@@ -104,6 +106,30 @@ namespace AtelieDosPontinhos.UI.Controllers
         {
             var cartJson = JsonSerializer.Serialize(carrinho);
             HttpContext.Session.SetString("Carrinho", cartJson);
+        }
+
+        // ==========================================================
+        // 🔥 ADICIONE ESTE BLOCO ABAIXO PARA EXCLUIR OS PRODUTOS:
+        // ==========================================================
+        [HttpPost]
+        public IActionResult RemoverDoCarrinho(int id)
+        {
+            var carrinho = ObterCarrinhoDaSessao();
+
+            // Procura se o produto realmente está na lista do carrinho
+            var item = carrinho.FirstOrDefault(c => c.Produto.Id == id);
+
+            if (item != null)
+            {
+                // Se o produto foi encontrado, remove ele da lista
+                carrinho.Remove(item);
+            }
+
+            // Atualiza a sessão com a nova lista (sem o produto removido)
+            SalvarCarrinhoNaSessao(carrinho);
+
+            // Recarrega a página atualizada do carrinho
+            return RedirectToAction("Index");
         }
     }
 }

@@ -41,7 +41,8 @@
                         @if (isLogged && isAdmin)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-danger fw-bold" asp-controller="Products" asp-action="Index">📦 Gerenciar Produtos</a>
+                                <a class="nav-link text-danger fw-bold" asp-controller="Product" asp-action="Index">📦 Gerenciar Produtos</a>
+
                             </li>
                         }
                     </ul>
@@ -111,7 +112,8 @@
 
                 timeout = setTimeout(async () => {
                     try {
-                        const response = await fetch(`/api/Product/search?term=${term}`);
+                        const response = await fetch(`http://localhost:5006/api/Product/search?term=${term}`);
+
                         if (!response.ok) return;
 
                         const data = await response.json();
@@ -125,8 +127,13 @@
                         data.forEach(p => {
                             const item = document.createElement("a");
                             item.classList.add("list-group-item", "list-group-item-action");
-                            item.href = `/Products/Details/${p.id}`;
-                            item.innerText = p.name;
+                            // Rota corrigida para bater com o seu ProductController local da UI
+                            item.href = `/Product/Detalhes/${p.id}`;
+
+
+                            // Aceita o nome vindo da API independente se o campo iniciar com letra maiúscula ou minúscula
+                            item.innerText = p.name || p.nome || p.Name || p.Nome;
+
                             resultsBox.appendChild(item);
                         });
 

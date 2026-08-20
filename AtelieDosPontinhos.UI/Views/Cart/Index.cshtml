@@ -30,8 +30,10 @@
                                     <th scope="col" class="py-3">Preço</th>
                                     <th scope="col" class="py-3">Qtd</th>
                                     <th scope="col" class="py-3">Subtotal</th>
+                                    <th scope="col" class="py-3">Ação</th> @* Nova coluna adicionada *@
                                 </tr>
                             </thead>
+
                             <tbody>
                                 @foreach (var item in Model)
                                 {
@@ -57,9 +59,20 @@
                                         <td class="text-center fw-semibold text-secondary">R$ @precoProduto.ToString("N2")</td>
                                         <td class="text-center fw-bold text-dark">@item.Quantidade</td>
                                         <td class="text-center fw-bold text-success">R$ @subtotalItem.ToString("N2")</td>
+                                        <td class="text-center">
+                                            @* Formulário que dispara a exclusão no Servidor *@
+                                            <form asp-controller="Cart" asp-action="RemoverDoCarrinho" method="post" style="display:inline;">
+                                                <input type="hidden" name="id" value="@item.Produto.Id" />
+                                                <button type="submit" class="btn btn-sm btn-danger rounded-pill px-3" title="Remover este produto">
+                                                    ❌ Excluir
+                                                </button>
+
+                                            </form>
+                                        </td>
                                     </tr>
                                 }
                             </tbody>
+
                         </table>
                     </div>
                 </div>
@@ -100,28 +113,4 @@
             </div>
         </div>
     }
-    @foreach (var item in Model)
-    {
-        @if (item?.Produto != null)
-        {
-            var nomeProduto = item.Produto.Nome ?? "Produto Artesanal";
-            var precoProduto = item.Produto.Preco;
-            var subtotalItem = precoProduto * item.Quantidade;
-
-            <tr>
-                <td class="p-3">
-                    <div class="d-flex align-items-center gap-3">
-                        <img src="@item.Produto.CoverImageUrl" alt="@nomeProduto" class="rounded border shadow-sm" style="width: 70px; height: 70px; object-fit: cover;">
-                        <div>
-                            <h6 class="mb-0 fw-bold text-dark">@nomeProduto</h6>
-                            <small class="text-muted d-block text-truncate" style="max-width: 200px;">@item.Produto.Descricao</small>
-                        </div>
-                    </div>
-                </td>
-                <td class="text-center fw-semibold text-secondary">R$ @precoProduto.ToString("N2")</td>
-                <td class="text-center fw-bold text-dark">@item.Quantidade</td>
-                <td class="text-center fw-bold text-success">R$ @subtotalItem.ToString("N2")</td>
-            </tr>
-        }
-    }
-</div>
+   

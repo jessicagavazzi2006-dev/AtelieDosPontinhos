@@ -12,6 +12,18 @@ builder.Services.AddControllers();
 // MVC (Views)
 builder.Services.AddControllersWithViews();
 
+// 🔥 NOVO: Libera o acesso para o JavaScript da UI consultar a API
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("PermitirTudo", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
+
 // DbContext
 builder.Services.AddDbContext<AtelieDosPontinhosDbContext>(options =>
     options.UseSqlServer(
@@ -74,6 +86,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
+// 🔥 NOVO: Ativa a política de liberação de acesso criada acima
+app.UseCors("PermitirTudo");
+
 
 app.UseAuthentication();
 app.UseAuthorization();

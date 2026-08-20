@@ -49,7 +49,10 @@ builder.Services.AddSession(options =>
 builder.Services.AddControllersWithViews();
 
 // 🌟 CONFIGURADO: Registra o HttpClientFactory para o AccountController da UI consumir a API!
-builder.Services.AddHttpClient();
+builder.Services.AddHttpClient("Api", client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["Api:BaseUrl"]);
+});
 
 var app = builder.Build();
 

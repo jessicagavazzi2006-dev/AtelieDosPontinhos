@@ -9,9 +9,9 @@ namespace AtelieDosPontinhos.Desktop.DTOs
     public class ProductResponseDto
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string CoverImageUrl { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public string CoverImageUrl { get; set; } = string.Empty;
         public decimal Price { get; set; }
         public int Stock { get; set; }
         public int CategoryId { get; set; }
@@ -20,9 +20,9 @@ namespace AtelieDosPontinhos.Desktop.DTOs
 
     public class UpdateProductDto
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string CoverImageUrl { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public string CoverImageUrl { get; set; } = string.Empty;
         public decimal Price { get; set; }
         public int Stock { get; set; }
         public int CategoryId { get; set; }
@@ -31,9 +31,9 @@ namespace AtelieDosPontinhos.Desktop.DTOs
 
     public class CreateProductDto
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string CoverImageUrl { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public string CoverImageUrl { get; set; } = string.Empty;
         public decimal Price { get; set; }
         public int Stock { get; set; }
         public int CategoryId { get; set; }

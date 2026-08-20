@@ -30,20 +30,27 @@ namespace AtelieDosPontinhos.API.Controllers
 
         // 2. BUSCAR PRODUTOS POR TEXTO 
         [HttpGet("search")]
-        public async Task<IActionResult> SearchProducts([FromQuery] string? query = null)
+        public async Task<IActionResult> SearchProducts([FromQuery] string? term = null) // 🌟 CORRIGIDO: Mudado de query para term
         {
-            if (string.IsNullOrWhiteSpace(query))
+            if (string.IsNullOrWhiteSpace(term))
             {
-                return Ok(await _context.Products.ToListAsync());
+                // Se não digitar nada, retorna uma lista vazia para não poluir a tela
+                return Ok(new List<object>());
             }
 
-            
+            // Filtra os produtos comparando o termo digitado com o Nome ou Descrição
             var filteredProducts = await _context.Products
-                .Where(p => p.Name.Contains(query) || p.Description.Contains(query))
+                .Where(p => p.Name.Contains(term) || p.Description.Contains(term))
+                .Select(p => new
+                {
+                    id = p.Id,
+                    name = p.Name
+                }) // Retorna apenas o ID e o Nome, deixando a busca ultra rápida
                 .ToListAsync();
 
             return Ok(filteredProducts);
         }
+
 
         // 3. BUSCAR POR ID
         [HttpGet("{id:int}")]
@@ -55,16 +62,48 @@ namespace AtelieDosPontinhos.API.Controllers
         }
 
         // 4. CRIAR NOVO PRODUTO NO BANCO
+        // 4. CRIAR NOVO PRODUTO NO BANCO (COM TRATAMENTO DE CATEGORIA)
         [HttpPost]
         public async Task<IActionResult> CreateProduct([FromBody] Product product)
         {
             if (product == null) return BadRequest(new { message = "Dados inválidos." });
 
-            _context.Products.Add(product);
-            await _context.SaveChangesAsync();
+            try
+            {
+                // Limpa o objeto Category completo se ele vier preenchido para evitar que o Entity Framework tente duplicar a categoria
+                product.Category = null;
 
-            return CreatedAtAction(nameof(GetProductById), new { id = product.Id }, product);
+                // 🌟 CHECAGEM DEFENSIVA: Se a categoria enviada for zero ou não existir no banco, colocamos uma válida automaticamente
+                var categoriaExiste = await _context.Categories.AnyAsync(c => c.Id == product.CategoryId);
+
+                if (product.CategoryId == 0 || !categoriaExiste)
+                {
+                    // Busca a primeira categoria cadastrada no seu banco (ex: "Banho") para usar como padrão
+                    var primeiraCategoria = await _context.Categories.FirstOrDefaultAsync();
+
+                    if (primeiraCategoria != null)
+                    {
+                        product.CategoryId = primeiraCategoria.Id;
+                    }
+                    else
+                    {
+                        return BadRequest(new { message = "Erro: Nenhuma categoria cadastrada no banco de dados para associar ao produto." });
+                    }
+                }
+
+                _context.Products.Add(product);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction(nameof(GetProductById), new { id = product.Id }, product);
+            }
+            catch (DbUpdateException ex)
+            {
+                var innerMessage = ex.InnerException?.Message ?? ex.Message;
+                System.Diagnostics.Debug.WriteLine($"ERRO DE INSERÇÃO NO BANCO: {innerMessage}");
+                return BadRequest(new { message = "Erro nas regras do banco de dados.", detalhes = innerMessage });
+            }
         }
+
 
         // 5. ATUALIZAR PRODUTO NO BANCO
         [HttpPut("{id:int}")]
