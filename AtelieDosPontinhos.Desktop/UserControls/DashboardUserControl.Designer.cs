@@ -57,32 +57,39 @@
             // lblTitulo
             // 
             lblTitulo.AutoSize = true;
+            lblTitulo.Font = new Font("Yu Gothic", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblTitulo.ForeColor = Color.FromArgb(58, 52, 64);
             lblTitulo.Location = new Point(49, 29);
             lblTitulo.Name = "lblTitulo";
-            lblTitulo.Size = new Size(43, 15);
+            lblTitulo.Size = new Size(81, 25);
             lblTitulo.TabIndex = 0;
             lblTitulo.Text = "Olá! 👋";
             // 
             // lblSubtitulo
             // 
             lblSubtitulo.AutoSize = true;
+            lblSubtitulo.Font = new Font("Yu Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblSubtitulo.ForeColor = SystemColors.ControlDark;
             lblSubtitulo.Location = new Point(49, 56);
             lblSubtitulo.Name = "lblSubtitulo";
-            lblSubtitulo.Size = new Size(238, 15);
+            lblSubtitulo.Size = new Size(248, 16);
             lblSubtitulo.TabIndex = 0;
             lblSubtitulo.Text = "Bem vindo ao Ateliê dos Pontinhos Desktop";
             // 
             // lblCarregando
             // 
             lblCarregando.AutoSize = true;
+            lblCarregando.Font = new Font("Yu Gothic", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblCarregando.ForeColor = Color.FromArgb(58, 52, 64);
             lblCarregando.Location = new Point(49, 86);
             lblCarregando.Name = "lblCarregando";
-            lblCarregando.Size = new Size(162, 15);
+            lblCarregando.Size = new Size(203, 17);
             lblCarregando.TabIndex = 0;
             lblCarregando.Text = "⌛Carregando dados da API...";
             // 
             // cardProdutos
             // 
+            cardProdutos.BackColor = Color.White;
             cardProdutos.Controls.Add(cardProdutosLblDesc);
             cardProdutos.Controls.Add(cardProdutosLblNumero);
             cardProdutos.Controls.Add(cardProdutosLblTitulo);
@@ -94,32 +101,36 @@
             // cardProdutosLblDesc
             // 
             cardProdutosLblDesc.AutoSize = true;
+            cardProdutosLblDesc.Font = new Font("Yu Gothic", 9F);
             cardProdutosLblDesc.Location = new Point(16, 105);
             cardProdutosLblDesc.Name = "cardProdutosLblDesc";
-            cardProdutosLblDesc.Size = new Size(166, 15);
+            cardProdutosLblDesc.Size = new Size(175, 16);
             cardProdutosLblDesc.TabIndex = 0;
             cardProdutosLblDesc.Text = "Total de produtos cadastrados";
             // 
             // cardProdutosLblNumero
             // 
             cardProdutosLblNumero.AutoSize = true;
-            cardProdutosLblNumero.Location = new Point(16, 65);
+            cardProdutosLblNumero.Font = new Font("Yu Gothic", 26.25F, FontStyle.Bold);
+            cardProdutosLblNumero.Location = new Point(16, 55);
             cardProdutosLblNumero.Name = "cardProdutosLblNumero";
-            cardProdutosLblNumero.Size = new Size(13, 15);
+            cardProdutosLblNumero.Size = new Size(40, 45);
             cardProdutosLblNumero.TabIndex = 0;
             cardProdutosLblNumero.Text = "0";
             // 
             // cardProdutosLblTitulo
             // 
             cardProdutosLblTitulo.AutoSize = true;
+            cardProdutosLblTitulo.Font = new Font("Yu Gothic", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             cardProdutosLblTitulo.Location = new Point(16, 30);
             cardProdutosLblTitulo.Name = "cardProdutosLblTitulo";
-            cardProdutosLblTitulo.Size = new Size(70, 15);
+            cardProdutosLblTitulo.Size = new Size(89, 17);
             cardProdutosLblTitulo.TabIndex = 0;
             cardProdutosLblTitulo.Text = "🛍️ Produtos";
             // 
             // cardCategorias
             // 
+            cardCategorias.BackColor = Color.White;
             cardCategorias.Controls.Add(cardCategoriasLblNumero);
             cardCategorias.Controls.Add(cardCategoriasLblDesc);
             cardCategorias.Controls.Add(cardCategoriasLblTitulo);
@@ -131,32 +142,37 @@
             // cardCategoriasLblNumero
             // 
             cardCategoriasLblNumero.AutoSize = true;
-            cardCategoriasLblNumero.Location = new Point(16, 65);
+            cardCategoriasLblNumero.Font = new Font("Yu Gothic", 26.25F, FontStyle.Bold);
+            cardCategoriasLblNumero.Location = new Point(16, 55);
             cardCategoriasLblNumero.Name = "cardCategoriasLblNumero";
-            cardCategoriasLblNumero.Size = new Size(13, 15);
+            cardCategoriasLblNumero.Size = new Size(40, 45);
             cardCategoriasLblNumero.TabIndex = 0;
             cardCategoriasLblNumero.Text = "0";
             // 
             // cardCategoriasLblDesc
             // 
             cardCategoriasLblDesc.AutoSize = true;
+            cardCategoriasLblDesc.Font = new Font("Yu Gothic", 9F);
             cardCategoriasLblDesc.Location = new Point(16, 105);
             cardCategoriasLblDesc.Name = "cardCategoriasLblDesc";
-            cardCategoriasLblDesc.Size = new Size(171, 15);
+            cardCategoriasLblDesc.Size = new Size(184, 16);
             cardCategoriasLblDesc.TabIndex = 0;
             cardCategoriasLblDesc.Text = "Total de categorias cadastradas";
             // 
             // cardCategoriasLblTitulo
             // 
             cardCategoriasLblTitulo.AutoSize = true;
+            cardCategoriasLblTitulo.Font = new Font("Yu Gothic", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             cardCategoriasLblTitulo.Location = new Point(16, 30);
             cardCategoriasLblTitulo.Name = "cardCategoriasLblTitulo";
-            cardCategoriasLblTitulo.Size = new Size(78, 15);
+            cardCategoriasLblTitulo.Size = new Size(101, 17);
             cardCategoriasLblTitulo.TabIndex = 0;
             cardCategoriasLblTitulo.Text = "🏷️ Categorias";
             // 
             // pnlCorProdutos
             // 
+            pnlCorProdutos.BackColor = Color.FromArgb(177, 145, 217);
+            pnlCorProdutos.ForeColor = Color.White;
             pnlCorProdutos.Location = new Point(49, 112);
             pnlCorProdutos.Name = "pnlCorProdutos";
             pnlCorProdutos.Size = new Size(234, 20);
@@ -164,6 +180,7 @@
             // 
             // pnlCorCategorias
             // 
+            pnlCorCategorias.BackColor = Color.FromArgb(177, 145, 217);
             pnlCorCategorias.Location = new Point(306, 112);
             pnlCorCategorias.Name = "pnlCorCategorias";
             pnlCorCategorias.Size = new Size(234, 20);
@@ -172,9 +189,11 @@
             // lblUltimosProdutos
             // 
             lblUltimosProdutos.AutoSize = true;
+            lblUltimosProdutos.Font = new Font("Yu Gothic", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblUltimosProdutos.ForeColor = Color.FromArgb(58, 52, 64);
             lblUltimosProdutos.Location = new Point(49, 263);
             lblUltimosProdutos.Name = "lblUltimosProdutos";
-            lblUltimosProdutos.Size = new Size(180, 15);
+            lblUltimosProdutos.Size = new Size(249, 19);
             lblUltimosProdutos.TabIndex = 0;
             lblUltimosProdutos.Text = "💾 Últimos produtos cadastrados";
             // 

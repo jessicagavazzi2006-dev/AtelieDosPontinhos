@@ -75,18 +75,22 @@
             // lblPerfil
             // 
             lblPerfil.AutoSize = true;
+            lblPerfil.Font = new Font("Yu Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblPerfil.ForeColor = Color.FromArgb(58, 52, 64);
             lblPerfil.Location = new Point(22, 54);
             lblPerfil.Name = "lblPerfil";
-            lblPerfil.Size = new Size(34, 15);
+            lblPerfil.Size = new Size(36, 16);
             lblPerfil.TabIndex = 0;
             lblPerfil.Text = "Perfil";
             // 
             // lblUsuario
             // 
             lblUsuario.AutoSize = true;
-            lblUsuario.Location = new Point(22, 23);
+            lblUsuario.Font = new Font("Yu Gothic", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblUsuario.ForeColor = Color.FromArgb(58, 52, 64);
+            lblUsuario.Location = new Point(22, 28);
             lblUsuario.Name = "lblUsuario";
-            lblUsuario.Size = new Size(62, 15);
+            lblUsuario.Size = new Size(98, 21);
             lblUsuario.TabIndex = 0;
             lblUsuario.Text = "👤 Usuário";
             // 
@@ -101,58 +105,69 @@
             // 
             // btnLogout
             // 
+            btnLogout.BorderRadius = 5;
             btnLogout.CustomizableEdges = customizableEdges1;
             btnLogout.DisabledState.BorderColor = Color.DarkGray;
             btnLogout.DisabledState.CustomBorderColor = Color.DarkGray;
             btnLogout.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
             btnLogout.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            btnLogout.FillColor = Color.Brown;
             btnLogout.Font = new Font("Segoe UI", 9F);
             btnLogout.ForeColor = Color.White;
-            btnLogout.Location = new Point(612, 23);
+            btnLogout.Location = new Point(698, 28);
             btnLogout.Name = "btnLogout";
             btnLogout.ShadowDecoration.CustomizableEdges = customizableEdges2;
-            btnLogout.Size = new Size(180, 45);
+            btnLogout.Size = new Size(94, 40);
             btnLogout.TabIndex = 0;
             btnLogout.Text = "Sair";
             // 
             // lblTituloApp
             // 
             lblTituloApp.AutoSize = true;
+            lblTituloApp.Font = new Font("Yu Gothic", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblTituloApp.ForeColor = Color.FromArgb(58, 52, 64);
             lblTituloApp.Location = new Point(37, 39);
             lblTituloApp.Name = "lblTituloApp";
-            lblTituloApp.Size = new Size(116, 15);
+            lblTituloApp.Size = new Size(221, 27);
             lblTituloApp.TabIndex = 0;
             lblTituloApp.Text = "Ateliê dos Pontinhos";
             // 
             // pnlLogo
             // 
+            pnlLogo.BackColor = Color.FromArgb(108, 58, 169);
             pnlLogo.Controls.Add(lblSidebarLogo);
             pnlLogo.Controls.Add(lblSidebarSub);
-            pnlLogo.Location = new Point(0, 101);
+            pnlLogo.ForeColor = Color.Transparent;
+            pnlLogo.Location = new Point(0, 100);
             pnlLogo.Name = "pnlLogo";
-            pnlLogo.Size = new Size(200, 73);
+            pnlLogo.Size = new Size(200, 76);
             pnlLogo.TabIndex = 0;
             // 
             // lblSidebarLogo
             // 
             lblSidebarLogo.AutoSize = true;
-            lblSidebarLogo.Location = new Point(12, 8);
+            lblSidebarLogo.Font = new Font("Yu Gothic", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblSidebarLogo.ForeColor = Color.White;
+            lblSidebarLogo.Location = new Point(12, 18);
             lblSidebarLogo.Name = "lblSidebarLogo";
-            lblSidebarLogo.Size = new Size(116, 15);
+            lblSidebarLogo.Size = new Size(172, 21);
             lblSidebarLogo.TabIndex = 0;
             lblSidebarLogo.Text = "Ateliê dos Pontinhos";
             // 
             // lblSidebarSub
             // 
             lblSidebarSub.AutoSize = true;
+            lblSidebarSub.Font = new Font("Yu Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblSidebarSub.ForeColor = Color.White;
             lblSidebarSub.Location = new Point(12, 40);
             lblSidebarSub.Name = "lblSidebarSub";
-            lblSidebarSub.Size = new Size(111, 15);
+            lblSidebarSub.Size = new Size(117, 16);
             lblSidebarSub.TabIndex = 0;
             lblSidebarSub.Text = "Plataforma Desktop";
             // 
             // pnlSidebar
             // 
+            pnlSidebar.BackColor = Color.FromArgb(155, 113, 206);
             pnlSidebar.Controls.Add(btnPerfil);
             pnlSidebar.Controls.Add(btnUsuarios);
             pnlSidebar.Controls.Add(btnCategorias);
@@ -171,7 +186,8 @@
             btnPerfil.DisabledState.CustomBorderColor = Color.DarkGray;
             btnPerfil.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
             btnPerfil.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
-            btnPerfil.Font = new Font("Segoe UI", 9F);
+            btnPerfil.FillColor = Color.FromArgb(155, 113, 206);
+            btnPerfil.Font = new Font("Yu Gothic", 9F, FontStyle.Bold);
             btnPerfil.ForeColor = Color.White;
             btnPerfil.Location = new Point(0, 180);
             btnPerfil.Name = "btnPerfil";
@@ -188,7 +204,8 @@
             btnUsuarios.DisabledState.CustomBorderColor = Color.DarkGray;
             btnUsuarios.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
             btnUsuarios.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
-            btnUsuarios.Font = new Font("Segoe UI", 9F);
+            btnUsuarios.FillColor = Color.FromArgb(155, 113, 206);
+            btnUsuarios.Font = new Font("Yu Gothic", 9F, FontStyle.Bold);
             btnUsuarios.ForeColor = Color.White;
             btnUsuarios.Location = new Point(0, 135);
             btnUsuarios.Name = "btnUsuarios";
@@ -205,7 +222,8 @@
             btnCategorias.DisabledState.CustomBorderColor = Color.DarkGray;
             btnCategorias.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
             btnCategorias.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
-            btnCategorias.Font = new Font("Segoe UI", 9F);
+            btnCategorias.FillColor = Color.FromArgb(155, 113, 206);
+            btnCategorias.Font = new Font("Yu Gothic", 9F, FontStyle.Bold);
             btnCategorias.ForeColor = Color.White;
             btnCategorias.Location = new Point(0, 90);
             btnCategorias.Name = "btnCategorias";
@@ -222,7 +240,8 @@
             btnProdutos.DisabledState.CustomBorderColor = Color.DarkGray;
             btnProdutos.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
             btnProdutos.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
-            btnProdutos.Font = new Font("Segoe UI", 9F);
+            btnProdutos.FillColor = Color.FromArgb(155, 113, 206);
+            btnProdutos.Font = new Font("Yu Gothic", 9F, FontStyle.Bold);
             btnProdutos.ForeColor = Color.White;
             btnProdutos.Location = new Point(0, 45);
             btnProdutos.Name = "btnProdutos";
@@ -239,7 +258,8 @@
             btnDashboard.DisabledState.CustomBorderColor = Color.DarkGray;
             btnDashboard.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
             btnDashboard.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
-            btnDashboard.Font = new Font("Segoe UI", 9F);
+            btnDashboard.FillColor = Color.FromArgb(155, 113, 206);
+            btnDashboard.Font = new Font("Yu Gothic", 9F, FontStyle.Bold);
             btnDashboard.ForeColor = Color.White;
             btnDashboard.Location = new Point(0, 0);
             btnDashboard.Name = "btnDashboard";
@@ -252,6 +272,7 @@
             // lblSessao
             // 
             lblSessao.AutoSize = true;
+            lblSessao.ForeColor = Color.White;
             lblSessao.Location = new Point(12, 420);
             lblSessao.Name = "lblSessao";
             lblSessao.Size = new Size(16, 15);
