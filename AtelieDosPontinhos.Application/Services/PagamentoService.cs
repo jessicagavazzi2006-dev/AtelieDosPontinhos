@@ -65,10 +65,9 @@ namespace AtelieDosPontinhos.Application.Services
             return new PagamentoDto
             {
                 Id = pagamento.Id,
-                Boleto = pagamento.Boleto,
-                CartaoCredito = pagamento.CartaoCredito,
-                CartaoDebito = pagamento.CartaoDebito,
-                Pix = pagamento.Pix,
+                DataPagamento = pagamento.DataPagamento,
+                ValorPagamento = pagamento.ValorPagamento,
+                FormadePagamento = pagamento.FormadePagamento
             };
         }
     }
