@@ -11,6 +11,18 @@ namespace AtelieDosPontinhos.Infrastructure.Configurations
     {
         public void Configure(EntityTypeBuilder<Pagamento> builder)
         {
+            builder.HasKey(p => p.Id);
+
+            builder.Property(p => p.FormadePagamento)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            builder.Property(p => p.ValorPagamento)
+                .IsRequired()
+                .HasPrecision(18, 2);
+
+            builder.Property(p => p.DataPagamento)
+                .IsRequired();
 
         }
     }

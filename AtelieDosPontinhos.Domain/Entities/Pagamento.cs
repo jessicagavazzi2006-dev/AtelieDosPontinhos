@@ -8,7 +8,7 @@ namespace AtelieDosPontinhos.Domain.Entities
     {
         public int Id { get; set; }
         public int FormadePagamento { get; set; }  
-        public int ValorPagamento { get; set; } 
+        public decimal ValorPagamento { get; set; } 
         public DateTime DataPagamento { get; set; } 
     }
 }
