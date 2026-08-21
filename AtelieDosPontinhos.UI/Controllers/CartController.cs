@@ -131,5 +131,53 @@ namespace AtelieDosPontinhos.UI.Controllers
             // Recarrega a página atualizada do carrinho
             return RedirectToAction("Index");
         }
+
+        // ==========================================================
+        // 🌟 NOVO: ACIONA A TELA DE CHECKOUT EXPRESSO AUTOMÁTICO
+        // ==========================================================
+        [HttpGet]
+        [HttpGet]
+        public async Task<IActionResult> Checkout()
+        {
+            var userEmail = HttpContext.Session.GetString("UserEmail");
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var carrinho = ObterCarrinhoDaSessao();
+            if (carrinho == null || !carrinho.Any())
+            {
+                return RedirectToAction("Index");
+            }
+
+            var client = _httpClientFactory.CreateClient("Api");
+            var dadosUsuario = new Dictionary<string, string>();
+
+            try
+            {
+                // 🌟 ACIONA O ENDPOINT NOVO: Pede para a API buscar o endereço do banco
+                var response = await client.GetAsync($"api/account/user-data?email={userEmail}");
+                if (response.IsSuccessStatusCode)
+                {
+                    dadosUsuario = await response.Content.ReadFromJsonAsync<Dictionary<string, string>>();
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Erro ao carregar dados do usuário: {ex.Message}");
+            }
+
+            // Passa os valores de texto para as caixinhas do arquivo HTML (Checkout.cshtml)
+            ViewBag.UserEmail = userEmail;
+            ViewBag.CEP = dadosUsuario != null && dadosUsuario.ContainsKey("cep") ? dadosUsuario["cep"] : "";
+            ViewBag.Cidade = dadosUsuario != null && dadosUsuario.ContainsKey("cidade") ? dadosUsuario["cidade"] : "";
+            ViewBag.Estado = dadosUsuario != null && dadosUsuario.ContainsKey("estado") ? dadosUsuario["estado"] : "";
+            ViewBag.Numero = dadosUsuario != null && dadosUsuario.ContainsKey("numero") ? dadosUsuario["numero"] : "";
+            ViewBag.Referencial = dadosUsuario != null && dadosUsuario.ContainsKey("referencial") ? dadosUsuario["referencial"] : "";
+
+            return View(carrinho);
+        }
+
     }
 }

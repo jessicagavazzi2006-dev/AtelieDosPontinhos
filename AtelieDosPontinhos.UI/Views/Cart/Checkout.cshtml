@@ -1,0 +1,116 @@
+﻿@model List<AtelieDosPontinhos.UI.Models.CartItemViewModel>
+
+@{
+    ViewData["Title"] = "Confirmar Seu Pedido Express";
+    decimal totalGeral = 0;
+}
+
+<div class="container py-5" style="max-width: 950px;">
+    <h2 class="fw-bold mb-4" style="color: #8a4f91 !important;">🏁 Finalizar Meu Pedido Express</h2>
+
+    <form asp-controller="Cart" asp-action="ConfirmarPedidoPost" method="post">
+        <div class="row g-4">
+
+            <!-- COLUNA DA ESQUERDA: ENTRADAS PREENCHIDAS E EDITÁVEIS -->
+            <div class="col-md-7">
+
+                <!-- Bloco 1: Dados de Entrega -->
+                <div class="card shadow-sm border-0 p-4 rounded-4 bg-white mb-4">
+                    <h5 class="fw-bold mb-3" style="color: #8a4f91;"><i class="bi bi-geo-alt-fill"></i> 📍 Endereço de Entrega</h5>
+                    <p class="text-muted small mb-3">Confirme ou altere os dados para o envio dos seus produtos artesanais:</p>
+
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            <label class="form-label text-secondary small fw-semibold">E-mail do Destinatário</label>
+                            <input type="text" class="form-control bg-light border-0 rounded-pill px-3" value="@ViewBag.UserEmail" readonly />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label text-secondary small fw-semibold">CEP</label>
+                            <input type="text" name="CEP" class="form-control bg-light border-0 rounded-pill px-3" value="@ViewBag.CEP" required />
+                        </div>
+                        <div class="col-md-5">
+                            <label class="form-label text-secondary small fw-semibold">Cidade</label>
+                            <input type="text" name="Cidade" class="form-control bg-light border-0 rounded-pill px-3" value="@ViewBag.Cidade" required />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label text-secondary small fw-semibold">Estado (UF)</label>
+                            <input type="text" name="Estado" class="form-control bg-light border-0 rounded-pill px-3" value="@ViewBag.Estado" maxlength="2" required />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label text-secondary small fw-semibold">Número</label>
+                            <input type="text" name="Numero" class="form-control bg-light border-0 rounded-pill px-3" value="@ViewBag.Numero" required />
+                        </div>
+                        <div class="col-md-8">
+                            <label class="form-label text-secondary small fw-semibold">Complemento / Referência</label>
+                            <input type="text" name="Complemento" class="form-control bg-light border-0 rounded-pill px-3" value="@ViewBag.Referencial" placeholder="Apto, Bloco, Próximo a..." />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bloco 2: Forma de Pagamento -->
+                <div class="card shadow-sm border-0 p-4 rounded-4 bg-white">
+                    <h5 class="fw-bold mb-3" style="color: #8a4f91;"><i class="bi bi-credit-card-2-back-fill"></i> 💳 Forma de Pagamento</h5>
+                    <p class="text-muted small mb-3">Selecione a modalidade de cobrança preferencial para o fechamento:</p>
+
+                    <div class="row g-3">
+                        <div class="col-md-5">
+                            <label class="form-label text-secondary small fw-semibold">Tipo de Pagamento</label>
+                            <select name="TipoPagamento" class="form-select bg-light border-0 rounded-pill px-3">
+                                <option value="Cartao">💳 Cartão de Crédito</option>
+                                <option value="Pix">📱 PIX</option>
+                                <option value="Boleto">📄 Boleto Bancário</option>
+                            </select>
+                        </div>
+                        <div class="col-md-7">
+                            <label class="form-label text-secondary small fw-semibold">Nome Impresso no Cartão</label>
+                            <input type="text" name="NomeNoCartao" class="form-control bg-light border-0 rounded-pill px-3" placeholder="Ex: ANA S SILVA" />
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label text-secondary small fw-semibold">Número do Cartão Mascarado</label>
+                            <input type="text" name="NumeroCartaoMascarado" class="form-control bg-light border-0 rounded-pill px-3" placeholder="**** **** **** 4321" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- COLUNA DA DIREITA: RESUMO FINANCEIRO -->
+            <div class="col-md-5">
+                <div class="card border-0 shadow-sm p-4 rounded-4 bg-light">
+                    <h5 class="fw-bold text-dark mb-4 border-bottom pb-2">Resumo dos Itens</h5>
+
+                    <div class="mb-4" style="max-height: 250px; overflow-y: auto;">
+                        @foreach (var item in Model)
+                        {
+                            var nomeProduto = item.Produto.GetType().GetProperty("Nome")?.GetValue(item.Produto)?.ToString()
+                                              ?? item.Produto.GetType().GetProperty("Name")?.GetValue(item.Produto)?.ToString()
+                                              ?? "Produto Artesanal";
+                            var preco = Convert.ToDecimal(item.Produto.GetType().GetProperty("Preco")?.GetValue(item.Produto) ?? item.Produto.GetType().GetProperty("Price")?.GetValue(item.Produto));
+                            var subtotal = preco * item.Quantidade;
+                            totalGeral += subtotal;
+
+                            <div class="d-flex justify-content-between align-items-center mb-3 text-dark fs-6">
+                                <span class="text-truncate" style="max-width: 180px;">@nomeProduto <small class="text-muted">x@item.Quantidade</small></span>
+                                <span class="fw-semibold text-secondary">R$ @subtotal.ToString("N2")</span>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center pt-3 border-top mb-4">
+                        <h5 class="fw-bold text-dark mb-0">Total do Pedido:</h5>
+                        <h4 class="fw-bold text-success mb-0">R$ @totalGeral.ToString("N2")</h4>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="button" onclick="alert('🎉 Pedido Processado com Sucesso via Checkout Express! O Ateliê dos Pontinhos agradece a sua preferência.'); window.location.href='@Url.Action("Index", "Home")';" class="btn btn-success btn-lg rounded-pill fw-bold py-3 shadow">
+                            🚀 Confirmar Pedido e Pagar
+                        </button>
+                        <a asp-controller="Cart" asp-action="Index" class="btn btn-link text-decoration-none text-muted btn-sm mt-3">
+                            Voltar ao Carrinho
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+</div>

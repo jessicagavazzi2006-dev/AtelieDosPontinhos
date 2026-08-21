@@ -68,8 +68,8 @@ namespace AtelieDosPontinhos.Application.Services
                 CEP = enderecu.CEP,
                 Cidade = enderecu.Cidade,
                 Estado = enderecu.Estado,
-                NUMERO = enderecu.NUMERO,
-                Referencial = enderecu.Referencial
+                NUMERO = enderecu.Numero,
+                Referencial = enderecu.Referencia
             };
         }
 

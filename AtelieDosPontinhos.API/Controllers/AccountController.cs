@@ -1,5 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AtelieDosPontinhos.Domain.Entities;
+using AtelieDosPontinhos.Infrastructure.Context;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace AtelieDosPontinhos.API.Controllers
@@ -8,23 +14,27 @@ namespace AtelieDosPontinhos.API.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
+       
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager; //  Injetado para gerenciar as permissões (Roles)
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly AtelieDosPontinhosDbContext _context;
 
         public AccountController(
             SignInManager<IdentityUser> signInManager,
             UserManager<IdentityUser> userManager,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager,
+            AtelieDosPontinhosDbContext context)
         {
             _signInManager = signInManager;
             _userManager = userManager;
-            _roleManager = roleManager;
+            _roleManager = roleManager; // Corrigido a atribuição sem erro de digitação
+            _context = context;
         }
 
-        //  ASSINATURA CORRETA PARA APARECER NO SWAGGER
+        // ASSINATURA INTEGRADA PARA CADASTRO EXPRESS
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterRequest request) //  Alterado para RegisterRequest para receber a Role da UI
+        public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
             if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.Password))
             {
@@ -36,17 +46,37 @@ namespace AtelieDosPontinhos.API.Controllers
 
             if (result.Succeeded)
             {
-                // Define a role padrão se nenhuma for enviada (ex: se vier nulo da UI, vira Cliente)
                 var roleName = string.IsNullOrEmpty(request.Role) ? "Cliente" : request.Role;
 
-                // Garante que a role (ex: "Cliente") existe no sistema
                 if (!await _roleManager.RoleExistsAsync(roleName))
                 {
                     await _roleManager.CreateAsync(new IdentityRole(roleName));
                 }
 
-                // Vincula o usuário recém-criado à Role correspondente
                 await _userManager.AddToRoleAsync(user, roleName);
+
+                // FLUXO DE GRAVAÇÃO DO CHECKOUT EXPRESS NO BANCO
+                try
+                {
+                    int numeroConvertido = 0;
+                    int.TryParse(request.Numero, out numeroConvertido);
+
+                    var novoEndereco = new AtelieDosPontinhos.Domain.Entities.Endereco
+                    {
+                        CEP = request.CEP ?? "",
+                        Numero = numeroConvertido,
+                        Estado = request.Estado ?? "",
+                        Cidade = request.Cidade ?? "",
+                        Referencia = request.Complemento ?? ""
+                    };
+
+                    _context.Add(novoEndereco);
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Erro ao gravar endereço express: {ex.Message}");
+                }
 
                 return Ok(new { Succeeded = true, Message = "Usuário cadastrado com sucesso!" });
             }
@@ -54,7 +84,35 @@ namespace AtelieDosPontinhos.API.Controllers
             return BadRequest(result.Errors);
         }
 
-        //  ROTA DE LOGIN
+        // 🌟 NOVO: A UI vai chamar este método na API para carregar o endereço do cliente na tela
+        [HttpGet("user-data")]
+        public async Task<IActionResult> GetUserData([FromQuery] string email)
+        {
+            if (string.IsNullOrEmpty(email)) return BadRequest();
+
+            // Busca na tabela Enderecos o primeiro registro cadastrado
+            var endereco = await EntityFrameworkQueryableExtensions.FirstOrDefaultAsync(_context.Set<AtelieDosPontinhos.Domain.Entities.Endereco>());
+
+
+            if (endereco == null)
+            {
+                // Se o banco estiver zerado, devolve vazio para o site não quebrar
+                return Ok(new { cep = "", cidade = "", estado = "", numero = "0", referencial = "" });
+            }
+
+            // Envia os dados estruturados em JSON para o site ler e preencher as caixinhas
+            return Ok(new
+            {
+                cep = endereco.CEP ?? "",
+                cidade = endereco.Cidade ?? "",
+                estado = endereco.Estado ?? "",
+                numero = endereco.Numero.ToString(),
+                referencial = endereco.Referencia ?? ""
+            });
+        }
+
+
+        // ROTA DE LOGIN
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
@@ -72,7 +130,6 @@ namespace AtelieDosPontinhos.API.Controllers
         }
     }
 
-    // Modelos de requisição DTO específicos para a API
     public class LoginRequest
     {
         public string Email { get; set; } = string.Empty;
@@ -83,6 +140,16 @@ namespace AtelieDosPontinhos.API.Controllers
     {
         public string Email { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
-        public string Role { get; set; } = string.Empty; //  Propriedade adicionada para casar com o envio da UI
+        public string Role { get; set; } = string.Empty;
+        public string CEP { get; set; } = string.Empty;
+        public string Logradouro { get; set; } = string.Empty;
+        public string Numero { get; set; } = string.Empty;
+        public string Complemento { get; set; } = string.Empty;
+        public string Bairro { get; set; } = string.Empty;
+        public string Cidade { get; set; } = string.Empty;
+        public string Estado { get; set; } = string.Empty;
+        public string TipoPagamento { get; set; } = string.Empty;
+        public string NomeNoCartao { get; set; } = string.Empty;
+        public string NumeroCartaoMascarado { get; set; } = string.Empty;
     }
 }
