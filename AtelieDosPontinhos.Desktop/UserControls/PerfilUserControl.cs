@@ -39,10 +39,10 @@ namespace AtelieDosPontinhos.Desktop.UserControls
             lblApiValor.Text = AppConfig.ApiBaseUrl;
 
             var perfil = isAdmin ? "🔑 Administrador" : "👀 Usuário";
-            //var corBadge = isAdmin ? SenacTheme.LaranjaPrimario : SenacTheme.AzulPrimario;
+            var corBadge = isAdmin ? Color.Orange : Color.Blue;
 
             lblBadge.Text = perfil;
-            //lblBadge.BackColor = corBadge;
+            lblBadge.BackColor = corBadge;
 
             var roles = SessionManager.Instance.CurrentUser?.Roles ?? new List<string>();
 

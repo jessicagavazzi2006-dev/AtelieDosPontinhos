@@ -91,6 +91,7 @@
             btnAtualizar.DisabledState.CustomBorderColor = Color.DarkGray;
             btnAtualizar.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
             btnAtualizar.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            btnAtualizar.FillColor = Color.Goldenrod;
             btnAtualizar.Font = new Font("Segoe UI", 9F);
             btnAtualizar.ForeColor = Color.White;
             btnAtualizar.Location = new Point(604, 13);
@@ -109,6 +110,7 @@
             btnExcluir.DisabledState.CustomBorderColor = Color.DarkGray;
             btnExcluir.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
             btnExcluir.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            btnExcluir.FillColor = Color.DarkRed;
             btnExcluir.Font = new Font("Segoe UI", 9F);
             btnExcluir.ForeColor = Color.White;
             btnExcluir.Location = new Point(512, 13);
@@ -127,6 +129,7 @@
             btnEditar.DisabledState.CustomBorderColor = Color.DarkGray;
             btnEditar.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
             btnEditar.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            btnEditar.FillColor = Color.RoyalBlue;
             btnEditar.Font = new Font("Segoe UI", 9F);
             btnEditar.ForeColor = Color.White;
             btnEditar.Location = new Point(420, 13);
@@ -145,6 +148,7 @@
             btnNovo.DisabledState.CustomBorderColor = Color.DarkGray;
             btnNovo.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
             btnNovo.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            btnNovo.FillColor = Color.Green;
             btnNovo.Font = new Font("Segoe UI", 9F);
             btnNovo.ForeColor = Color.White;
             btnNovo.Location = new Point(328, 13);
@@ -163,7 +167,8 @@
             btnPesquisar.DisabledState.CustomBorderColor = Color.DarkGray;
             btnPesquisar.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
             btnPesquisar.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
-            btnPesquisar.Font = new Font("Segoe UI", 9F);
+            btnPesquisar.FillColor = Color.FromArgb(177, 145, 217);
+            btnPesquisar.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             btnPesquisar.ForeColor = Color.White;
             btnPesquisar.Location = new Point(223, 13);
             btnPesquisar.Name = "btnPesquisar";

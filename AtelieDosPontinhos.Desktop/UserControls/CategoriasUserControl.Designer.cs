@@ -66,9 +66,11 @@
             // lblTitulo
             // 
             lblTitulo.AutoSize = true;
+            lblTitulo.Font = new Font("Yu Gothic", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblTitulo.ForeColor = Color.FromArgb(58, 52, 64);
             lblTitulo.Location = new Point(40, 30);
             lblTitulo.Name = "lblTitulo";
-            lblTitulo.Size = new Size(178, 15);
+            lblTitulo.Size = new Size(247, 19);
             lblTitulo.TabIndex = 0;
             lblTitulo.Text = "🏷️ Gerenciamento de Categorias";
             // 
@@ -85,11 +87,13 @@
             // 
             // btnAtualizar
             // 
+            btnAtualizar.BorderRadius = 10;
             btnAtualizar.CustomizableEdges = customizableEdges1;
             btnAtualizar.DisabledState.BorderColor = Color.DarkGray;
             btnAtualizar.DisabledState.CustomBorderColor = Color.DarkGray;
             btnAtualizar.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
             btnAtualizar.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            btnAtualizar.FillColor = Color.Goldenrod;
             btnAtualizar.Font = new Font("Segoe UI", 9F);
             btnAtualizar.ForeColor = Color.White;
             btnAtualizar.Location = new Point(405, 21);
@@ -102,11 +106,13 @@
             // 
             // btnExcluir
             // 
+            btnExcluir.BorderRadius = 10;
             btnExcluir.CustomizableEdges = customizableEdges3;
             btnExcluir.DisabledState.BorderColor = Color.DarkGray;
             btnExcluir.DisabledState.CustomBorderColor = Color.DarkGray;
             btnExcluir.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
             btnExcluir.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            btnExcluir.FillColor = Color.DarkRed;
             btnExcluir.Font = new Font("Segoe UI", 9F);
             btnExcluir.ForeColor = Color.White;
             btnExcluir.Location = new Point(277, 21);
@@ -119,11 +125,13 @@
             // 
             // btnEditar
             // 
+            btnEditar.BorderRadius = 10;
             btnEditar.CustomizableEdges = customizableEdges5;
             btnEditar.DisabledState.BorderColor = Color.DarkGray;
             btnEditar.DisabledState.CustomBorderColor = Color.DarkGray;
             btnEditar.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
             btnEditar.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            btnEditar.FillColor = Color.RoyalBlue;
             btnEditar.Font = new Font("Segoe UI", 9F);
             btnEditar.ForeColor = Color.White;
             btnEditar.Location = new Point(146, 21);
@@ -136,11 +144,13 @@
             // 
             // btnNova
             // 
+            btnNova.BorderRadius = 10;
             btnNova.CustomizableEdges = customizableEdges7;
             btnNova.DisabledState.BorderColor = Color.DarkGray;
             btnNova.DisabledState.CustomBorderColor = Color.DarkGray;
             btnNova.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
             btnNova.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            btnNova.FillColor = Color.Green;
             btnNova.Font = new Font("Segoe UI", 9F);
             btnNova.ForeColor = Color.White;
             btnNova.Location = new Point(14, 21);
@@ -153,6 +163,7 @@
             // 
             // pnlForm
             // 
+            pnlForm.BackColor = Color.White;
             pnlForm.Controls.Add(btnCancelar);
             pnlForm.Controls.Add(btnSalvar);
             pnlForm.Controls.Add(txtNome);
@@ -165,11 +176,13 @@
             // 
             // btnCancelar
             // 
+            btnCancelar.BorderRadius = 5;
             btnCancelar.CustomizableEdges = customizableEdges9;
             btnCancelar.DisabledState.BorderColor = Color.DarkGray;
             btnCancelar.DisabledState.CustomBorderColor = Color.DarkGray;
             btnCancelar.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
             btnCancelar.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            btnCancelar.FillColor = Color.Silver;
             btnCancelar.Font = new Font("Segoe UI", 9F);
             btnCancelar.ForeColor = Color.White;
             btnCancelar.Location = new Point(101, 132);
@@ -182,11 +195,13 @@
             // 
             // btnSalvar
             // 
+            btnSalvar.BorderRadius = 5;
             btnSalvar.CustomizableEdges = customizableEdges11;
             btnSalvar.DisabledState.BorderColor = Color.DarkGray;
             btnSalvar.DisabledState.CustomBorderColor = Color.DarkGray;
             btnSalvar.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
             btnSalvar.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            btnSalvar.FillColor = Color.FromArgb(177, 145, 217);
             btnSalvar.Font = new Font("Segoe UI", 9F);
             btnSalvar.ForeColor = Color.White;
             btnSalvar.Location = new Point(13, 132);
@@ -199,6 +214,7 @@
             // 
             // txtNome
             // 
+            txtNome.BorderRadius = 5;
             txtNome.CustomizableEdges = customizableEdges13;
             txtNome.DefaultText = "";
             txtNome.DisabledState.BorderColor = Color.FromArgb(208, 208, 208);
@@ -219,18 +235,22 @@
             // lblNome
             // 
             lblNome.AutoSize = true;
+            lblNome.Font = new Font("Yu Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblNome.ForeColor = Color.FromArgb(58, 52, 64);
             lblNome.Location = new Point(25, 63);
             lblNome.Name = "lblNome";
-            lblNome.Size = new Size(111, 15);
+            lblNome.Size = new Size(115, 16);
             lblNome.TabIndex = 0;
             lblNome.Text = "Nome da categoria:";
             // 
             // lblFormTitulo
             // 
             lblFormTitulo.AutoSize = true;
+            lblFormTitulo.Font = new Font("Yu Gothic", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblFormTitulo.ForeColor = Color.FromArgb(58, 52, 64);
             lblFormTitulo.Location = new Point(25, 27);
             lblFormTitulo.Name = "lblFormTitulo";
-            lblFormTitulo.Size = new Size(89, 15);
+            lblFormTitulo.Size = new Size(108, 17);
             lblFormTitulo.TabIndex = 0;
             lblFormTitulo.Text = "Nova Categoria";
             // 

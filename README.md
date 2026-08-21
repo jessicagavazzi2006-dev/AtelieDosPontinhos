@@ -42,18 +42,20 @@ Desenvolvidos pelos alunos:
 
 SenacGames/
 ├── AtelieDosPontinhos.Domain     → Entidades, Interfaces
-├── SenacGames.Application   → Services, DTOs, ViewModels
-├── SenacGames.Infrastructure → DbContext, Repositories, Identity, Migrations, Configurations
-├── SenacGames.API       → Controllers REST, Swagger
-└── SenacGames.UI       → Controllers MVC, Views Razor, Bootstrap
+├── AtelieDosPontinhos.Application   → Services, DTOs, ViewModels
+├── AtelieDosPontinhos.Infrastructure → DbContext, Repositories, Identity, Migrations, Configurations
+├── AtelieDosPontinhos.API       → Controllers REST, Swagger
+├── AtelieDosPontinhos.Desktop       → DTOs, Forms, Helpers, Resource, Services, Themes, userControls
+└── AtelieDosPontinhos.UI       → Controllers MVC, Views Razor, Bootstrap
 ```
 
 ### Responsabilidade de cada camada:
 
-- **Domain**: Define as entidades (Product, Material e Category ) e as interfaces dos repositórios. Não depende de nenhuma outra camada.
+- **Domain**: Define as entidades (Product, Pagamento, endereco e Category) e as interfaces dos repositórios. Não depende de nenhuma outra camada.
 - **Application**: Contém os serviços que orquestram as operações, DTOs para transferência de dados e ViewModels para as Views.
 - **Infrastructure**: Implementa o acesso a dados com Entity Framework Core, os repositórios, o Identity e o Seed Data.
 - **API**: Expõe os endpoints REST com Swagger para testes.
+- **Desktop**: Exiba via local o próprio gerenciamento do sistema
 - **UI**: Aplicação MVC com Razor Views e Bootstrap para a interface do usuário.
 
 ## Como Executar

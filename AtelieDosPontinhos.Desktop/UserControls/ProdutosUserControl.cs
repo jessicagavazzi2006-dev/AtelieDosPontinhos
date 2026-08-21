@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using AtelieDosPontinhos.Desktop.DTOs;
 
 using AtelieDosPontinhos.Desktop.Forms;
+using AtelieDosPontinhos.Desktop.Themes;
 
 namespace AtelieDosPontinhos.Desktop.UserControls
 {
@@ -25,7 +26,7 @@ namespace AtelieDosPontinhos.Desktop.UserControls
         // DADOS
         //=================================================
         private List<ProductResponseDto> _todosPrdoutos = new();
-        private List<CategoryDto> _categorias = new();
+        private List<CategoriaRsponseDto> _categorias = new();
 
         //=================================================
         // CONSTRUTOR
@@ -43,7 +44,7 @@ namespace AtelieDosPontinhos.Desktop.UserControls
             _produtosService = new ProdutosApiService();
             _categoriasService = new CategoriasApiService();
 
-
+            AtelieDosPontinhosTheme.AplicarEstiloGrid(gridProdutos);
 
             ConfigurarPermissoes();
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AtelieDosPontinhos.Desktop.Themes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -34,7 +35,7 @@ namespace AtelieDosPontinhos.Desktop.UserControls
             lblSubtitulo.Text = $"Bem-vindo ao Ateliê dos Pontinhos Desktop - {DateTime.Now:dddd, dd 'de' MMM 'de' yyyy}";
 
             //aplica estilo no DataGridView(tabela)
-           
+            AtelieDosPontinhosTheme.AplicarEstiloGrid(gridUltimosProdutos);
 
             await CarregarDadosAsync();
         }
