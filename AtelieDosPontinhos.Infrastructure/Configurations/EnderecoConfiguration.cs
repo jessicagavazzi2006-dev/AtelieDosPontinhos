@@ -17,14 +17,14 @@ namespace AtelieDosPontinhos.Infrastructure.Configurations
                 .IsRequired()
                 .HasMaxLength(8);
 
-            builder.Property(e => e.NUMERO)
+            builder.Property(e => e.Numero)
                 .IsRequired();
 
             builder.Property(e => e.Estado)
                 .IsRequired()
                 .HasMaxLength(50);
 
-            builder.Property(e => e.Referencial)
+            builder.Property(e => e.Referencia)
                 .HasMaxLength (200);
 
             builder.Property(e => e.Cidade)

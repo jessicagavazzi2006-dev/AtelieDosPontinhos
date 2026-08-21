@@ -55,11 +55,13 @@
                     <div class="row g-3">
                         <div class="col-md-5">
                             <label class="form-label text-secondary small fw-semibold">Tipo de Pagamento</label>
+                            <label class="form-label text-secondary small fw-semibold">Tipo de Pagamento</label>
                             <select name="TipoPagamento" class="form-select bg-light border-0 rounded-pill px-3">
-                                <option value="Cartao">💳 Cartão de Crédito</option>
-                                <option value="Pix">📱 PIX</option>
-                                <option value="Boleto">📄 Boleto Bancário</option>
+                                <option value="1">💳 Cartão de Crédito</option>
+                                <option value="2">💵 Cartão de Débito</option>
+                                <option value="3">📱 PIX</option>
                             </select>
+
                         </div>
                         <div class="col-md-7">
                             <label class="form-label text-secondary small fw-semibold">Nome Impresso no Cartão</label>
@@ -101,9 +103,10 @@
                     </div>
 
                     <div class="d-grid">
-                        <button type="button" onclick="alert('🎉 Pedido Processado com Sucesso via Checkout Express! O Ateliê dos Pontinhos agradece a sua preferência.'); window.location.href='@Url.Action("Index", "Home")';" class="btn btn-success btn-lg rounded-pill fw-bold py-3 shadow">
+                        <button type="submit" class="btn btn-success btn-lg rounded-pill fw-bold py-3 shadow w-100">
                             🚀 Confirmar Pedido e Pagar
                         </button>
+
                         <a asp-controller="Cart" asp-action="Index" class="btn btn-link text-decoration-none text-muted btn-sm mt-3">
                             Voltar ao Carrinho
                         </a>
