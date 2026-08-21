@@ -64,10 +64,10 @@ namespace AtelieDosPontinhos.API.Controllers
                     var novoEndereco = new AtelieDosPontinhos.Domain.Entities.Endereco
                     {
                         CEP = request.CEP ?? "",
-                        NUMERO = numeroConvertido,
+                        Numero = numeroConvertido,
                         Estado = request.Estado ?? "",
                         Cidade = request.Cidade ?? "",
-                        Referencial = request.Complemento ?? ""
+                        Referencia = request.Complemento ?? ""
                     };
 
                     _context.Add(novoEndereco);
@@ -106,8 +106,8 @@ namespace AtelieDosPontinhos.API.Controllers
                 cep = endereco.CEP ?? "",
                 cidade = endereco.Cidade ?? "",
                 estado = endereco.Estado ?? "",
-                numero = endereco.NUMERO.ToString(),
-                referencial = endereco.Referencial ?? ""
+                numero = endereco.Numero.ToString(),
+                referencial = endereco.Referencia ?? ""
             });
         }
 
