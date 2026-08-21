@@ -18,6 +18,8 @@ namespace AtelieDosPontinhos.Infrastructure.Context
 
         public DbSet<AtelieDosPontinhos.Domain.Entities.Endereco> Enderecos { get; set; }
 
+        public DbSet<Pagamento> Pagamentos { get; set; }
+
         public DbSet<Material> Materials { get; set; }
         /// <summary>
         /// Tabela de junção entre Product e Material
