@@ -15,7 +15,7 @@ namespace AtelieDosPontinhos.Infrastructure.Configurations
 
             builder.Property(p => p.FormadePagamento)
                 .IsRequired()
-                .HasMaxLength(50);
+                .HasMaxLength(200);
 
             builder.Property(p => p.ValorPagamento)
                 .IsRequired()
