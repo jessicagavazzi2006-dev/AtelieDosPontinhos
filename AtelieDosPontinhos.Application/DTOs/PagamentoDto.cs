@@ -8,7 +8,7 @@ namespace AtelieDosPontinhos.Application.DTOs
     {
         public int Id { get; set; }
         public int FormadePagamento { get; set; }
-        public int ValorPagamento { get; set; }
+        public decimal ValorPagamento { get; set; }
         public DateTime DataPagamento { get; set; }
     }
 
@@ -16,7 +16,7 @@ namespace AtelieDosPontinhos.Application.DTOs
     {
         
         public int FormadePagamento { get; set; }
-        public int ValorPagamento { get; set; }
+        public decimal ValorPagamento { get; set; }
         public DateTime DataPagamento { get; set; }
     }
 
@@ -24,7 +24,7 @@ namespace AtelieDosPontinhos.Application.DTOs
     {
 
         public int FormadePagamento { get; set; }
-        public int ValorPagamento { get; set; }
+        public decimal ValorPagamento { get; set; }
         public DateTime DataPagamento { get; set; }
     } 
 }

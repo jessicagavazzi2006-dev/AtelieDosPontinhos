@@ -47,6 +47,7 @@ namespace AtelieDosPontinhos.Infrastructure.Context
             modelBuilder.ApplyConfiguration(new CategoryConfiguration());
             modelBuilder.ApplyConfiguration(new MaterialConfiguration());
             modelBuilder.ApplyConfiguration(new PagamentoConfiguration());
+            modelBuilder.ApplyConfiguration(new EnderecoConfiguration());
             modelBuilder.ApplyConfiguration(new Product_MaterialConfiguration());
         }
     }
