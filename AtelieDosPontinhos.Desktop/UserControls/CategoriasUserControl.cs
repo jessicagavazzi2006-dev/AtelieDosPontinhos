@@ -1,4 +1,5 @@
 ﻿using AtelieDosPontinhos.Desktop.DTOs;
+using AtelieDosPontinhos.Desktop.Themes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -64,13 +65,15 @@ namespace AtelieDosPontinhos.Desktop.UserControls
 
             _categoriaService = new CategoriasApiService();
 
+            AtelieDosPontinhosTheme.AplicarEstiloGrid(gridCategorias);
+
             await CarregarDadosAsync();
         }
 
         // =====================================================================
         // FORMULÁRIO
         // =====================================================================
-        private void MostrarFormulario(CategoryDto? categoria)
+        private void MostrarFormulario(CategoriaRsponseDto? categoria)
         {
             _editandoId = categoria?.Id;
             txtNome.Text = categoria?.Name ?? string.Empty;
@@ -89,7 +92,7 @@ namespace AtelieDosPontinhos.Desktop.UserControls
         // =====================================================================
         // AUXILIARES
         // =====================================================================
-        private CategoryDto? ObterCategoriaSelecionada()
+        private CategoriaRsponseDto? ObterCategoriaSelecionada()
         {
             if (gridCategorias.SelectedRows.Count == 0) return null;
             var id = Convert.ToInt32(gridCategorias.SelectedRows[0].Cells["colId"].Value);

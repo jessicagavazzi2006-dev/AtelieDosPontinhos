@@ -16,7 +16,7 @@ namespace AtelieDosPontinhos.Desktop.Themes
     /// Tema visual moderno focado em tons pastéis e design limpo.
     /// Define todas as cores, fontes e dimensões usadas na interface.
     /// </summary>
-    public static class AppTheme
+    public static class AtelieDosPontinhosTheme
     {
         // =====================================================================
         // PALETA DE CORES PRINCIPAL (Baseada na imagem)

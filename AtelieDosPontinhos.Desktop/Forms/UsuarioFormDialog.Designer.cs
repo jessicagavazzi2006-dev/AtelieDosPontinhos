@@ -58,29 +58,33 @@
             // lblTituloForm
             // 
             lblTituloForm.AutoSize = true;
+            lblTituloForm.Font = new Font("Yu Gothic", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblTituloForm.Location = new Point(23, 25);
             lblTituloForm.Name = "lblTituloForm";
-            lblTituloForm.Size = new Size(47, 15);
+            lblTituloForm.Size = new Size(66, 19);
             lblTituloForm.TabIndex = 0;
             lblTituloForm.Text = "Usuário";
             // 
             // lblCampNome
             // 
             lblCampNome.AutoSize = true;
-            lblCampNome.Location = new Point(23, 63);
+            lblCampNome.Font = new Font("Yu Gothic", 8.25F, FontStyle.Bold);
+            lblCampNome.Location = new Point(23, 65);
             lblCampNome.Name = "lblCampNome";
-            lblCampNome.Size = new Size(50, 15);
+            lblCampNome.Size = new Size(50, 14);
             lblCampNome.TabIndex = 0;
             lblCampNome.Text = "NOME *";
             // 
             // txtNome
             // 
+            txtNome.BorderRadius = 5;
             txtNome.CustomizableEdges = customizableEdges1;
             txtNome.DefaultText = "";
             txtNome.DisabledState.BorderColor = Color.FromArgb(208, 208, 208);
             txtNome.DisabledState.FillColor = Color.FromArgb(226, 226, 226);
             txtNome.DisabledState.ForeColor = Color.FromArgb(138, 138, 138);
             txtNome.DisabledState.PlaceholderForeColor = Color.FromArgb(138, 138, 138);
+            txtNome.FillColor = Color.WhiteSmoke;
             txtNome.FocusedState.BorderColor = Color.FromArgb(94, 148, 255);
             txtNome.Font = new Font("Segoe UI", 9F);
             txtNome.HoverState.BorderColor = Color.FromArgb(94, 148, 255);
@@ -95,20 +99,23 @@
             // lblCampEmail
             // 
             lblCampEmail.AutoSize = true;
-            lblCampEmail.Location = new Point(23, 125);
+            lblCampEmail.Font = new Font("Yu Gothic", 8.25F, FontStyle.Bold);
+            lblCampEmail.Location = new Point(23, 127);
             lblCampEmail.Name = "lblCampEmail";
-            lblCampEmail.Size = new Size(49, 15);
+            lblCampEmail.Size = new Size(52, 14);
             lblCampEmail.TabIndex = 0;
             lblCampEmail.Text = "EMAIL *";
             // 
             // txtEmail
             // 
+            txtEmail.BorderRadius = 5;
             txtEmail.CustomizableEdges = customizableEdges3;
             txtEmail.DefaultText = "";
             txtEmail.DisabledState.BorderColor = Color.FromArgb(208, 208, 208);
             txtEmail.DisabledState.FillColor = Color.FromArgb(226, 226, 226);
             txtEmail.DisabledState.ForeColor = Color.FromArgb(138, 138, 138);
             txtEmail.DisabledState.PlaceholderForeColor = Color.FromArgb(138, 138, 138);
+            txtEmail.FillColor = Color.WhiteSmoke;
             txtEmail.FocusedState.BorderColor = Color.FromArgb(94, 148, 255);
             txtEmail.Font = new Font("Segoe UI", 9F);
             txtEmail.HoverState.BorderColor = Color.FromArgb(94, 148, 255);
@@ -123,20 +130,23 @@
             // lblCampSenha
             // 
             lblCampSenha.AutoSize = true;
-            lblCampSenha.Location = new Point(23, 186);
+            lblCampSenha.Font = new Font("Yu Gothic", 8.25F, FontStyle.Bold);
+            lblCampSenha.Location = new Point(23, 188);
             lblCampSenha.Name = "lblCampSenha";
-            lblCampSenha.Size = new Size(53, 15);
+            lblCampSenha.Size = new Size(56, 14);
             lblCampSenha.TabIndex = 0;
             lblCampSenha.Text = "SENHA *";
             // 
             // txtSenha
             // 
+            txtSenha.BorderRadius = 5;
             txtSenha.CustomizableEdges = customizableEdges5;
             txtSenha.DefaultText = "";
             txtSenha.DisabledState.BorderColor = Color.FromArgb(208, 208, 208);
             txtSenha.DisabledState.FillColor = Color.FromArgb(226, 226, 226);
             txtSenha.DisabledState.ForeColor = Color.FromArgb(138, 138, 138);
             txtSenha.DisabledState.PlaceholderForeColor = Color.FromArgb(138, 138, 138);
+            txtSenha.FillColor = Color.WhiteSmoke;
             txtSenha.FocusedState.BorderColor = Color.FromArgb(94, 148, 255);
             txtSenha.Font = new Font("Segoe UI", 9F);
             txtSenha.HoverState.BorderColor = Color.FromArgb(94, 148, 255);
@@ -150,12 +160,14 @@
             // 
             // txtConfirmarSenha
             // 
+            txtConfirmarSenha.BorderRadius = 5;
             txtConfirmarSenha.CustomizableEdges = customizableEdges7;
             txtConfirmarSenha.DefaultText = "";
             txtConfirmarSenha.DisabledState.BorderColor = Color.FromArgb(208, 208, 208);
             txtConfirmarSenha.DisabledState.FillColor = Color.FromArgb(226, 226, 226);
             txtConfirmarSenha.DisabledState.ForeColor = Color.FromArgb(138, 138, 138);
             txtConfirmarSenha.DisabledState.PlaceholderForeColor = Color.FromArgb(138, 138, 138);
+            txtConfirmarSenha.FillColor = Color.WhiteSmoke;
             txtConfirmarSenha.FocusedState.BorderColor = Color.FromArgb(94, 148, 255);
             txtConfirmarSenha.Font = new Font("Segoe UI", 9F);
             txtConfirmarSenha.HoverState.BorderColor = Color.FromArgb(94, 148, 255);
@@ -170,23 +182,26 @@
             // lblCampConfirmarSenha
             // 
             lblCampConfirmarSenha.AutoSize = true;
-            lblCampConfirmarSenha.Location = new Point(227, 186);
+            lblCampConfirmarSenha.Font = new Font("Yu Gothic", 8.25F, FontStyle.Bold);
+            lblCampConfirmarSenha.Location = new Point(227, 188);
             lblCampConfirmarSenha.Name = "lblCampConfirmarSenha";
-            lblCampConfirmarSenha.Size = new Size(124, 15);
+            lblCampConfirmarSenha.Size = new Size(129, 14);
             lblCampConfirmarSenha.TabIndex = 0;
             lblCampConfirmarSenha.Text = "CONFIRMAR SENHA *";
             // 
             // lblCampPerfil
             // 
             lblCampPerfil.AutoSize = true;
-            lblCampPerfil.Location = new Point(23, 247);
+            lblCampPerfil.Font = new Font("Yu Gothic", 8.25F, FontStyle.Bold);
+            lblCampPerfil.Location = new Point(23, 249);
             lblCampPerfil.Name = "lblCampPerfil";
-            lblCampPerfil.Size = new Size(50, 15);
+            lblCampPerfil.Size = new Size(57, 14);
             lblCampPerfil.TabIndex = 0;
             lblCampPerfil.Text = "PERFIL *";
             // 
             // cmbPerfil
             // 
+            cmbPerfil.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbPerfil.FormattingEnabled = true;
             cmbPerfil.Location = new Point(23, 265);
             cmbPerfil.Name = "cmbPerfil";
@@ -195,42 +210,49 @@
             // 
             // btnSalvar
             // 
+            btnSalvar.BorderRadius = 10;
             btnSalvar.CustomizableEdges = customizableEdges9;
             btnSalvar.DisabledState.BorderColor = Color.DarkGray;
             btnSalvar.DisabledState.CustomBorderColor = Color.DarkGray;
             btnSalvar.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
             btnSalvar.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
-            btnSalvar.Font = new Font("Segoe UI", 9F);
+            btnSalvar.FillColor = Color.FromArgb(177, 145, 217);
+            btnSalvar.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnSalvar.ForeColor = Color.White;
-            btnSalvar.Location = new Point(23, 311);
+            btnSalvar.Location = new Point(227, 311);
             btnSalvar.Name = "btnSalvar";
             btnSalvar.ShadowDecoration.CustomizableEdges = customizableEdges10;
-            btnSalvar.Size = new Size(180, 45);
+            btnSalvar.Size = new Size(96, 45);
             btnSalvar.TabIndex = 3;
             btnSalvar.Text = "🗃️ Salvar";
             btnSalvar.Click += btnSalvar_Click;
             // 
             // btnCancelar
             // 
+            btnCancelar.BorderColor = Color.FromArgb(224, 228, 235);
+            btnCancelar.BorderRadius = 10;
+            btnCancelar.BorderThickness = 1;
             btnCancelar.CustomizableEdges = customizableEdges11;
             btnCancelar.DisabledState.BorderColor = Color.DarkGray;
             btnCancelar.DisabledState.CustomBorderColor = Color.DarkGray;
             btnCancelar.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
             btnCancelar.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            btnCancelar.FillColor = Color.FromArgb(245, 247, 250);
             btnCancelar.Font = new Font("Segoe UI", 9F);
-            btnCancelar.ForeColor = Color.White;
-            btnCancelar.Location = new Point(227, 311);
+            btnCancelar.ForeColor = Color.FromArgb(51, 61, 75);
+            btnCancelar.Location = new Point(329, 311);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.ShadowDecoration.CustomizableEdges = customizableEdges12;
-            btnCancelar.Size = new Size(180, 45);
+            btnCancelar.Size = new Size(88, 45);
             btnCancelar.TabIndex = 3;
-            btnCancelar.Text = "❌ Cancelar";
+            btnCancelar.Text = "Cancelar";
             btnCancelar.Click += btnCancelar_Click;
             // 
             // UsuarioFormDialog
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.White;
             ClientSize = new Size(441, 368);
             Controls.Add(btnCancelar);
             Controls.Add(btnSalvar);

@@ -19,6 +19,7 @@ namespace AtelieDosPontinhos.Infrastructure.Context
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Endereco> Enderecos { get; set; }
+        public DbSet<Pagamento> Pagamentos { get; set; }
         public DbSet<Material> Materials { get; set; }
         public DbSet<Product_Material> ProductMaterials { get; set; }
 
