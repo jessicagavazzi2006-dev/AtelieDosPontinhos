@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AtelieDosPontinhos.Desktop.DTOs
 {
-    public class CategoriaRsponseDto
+    public class CategoriaResponseDto
     {
         public int Id { get; set; }
 
