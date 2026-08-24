@@ -4,6 +4,8 @@ using AtelieDosPontinhos.Infrastructure.Context;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
+
+
 var builder = WebApplication.CreateBuilder(args);
 // Força a URL de escuta para evitar conflito de porta em desenvolvimento
 builder.WebHost.UseUrls("http://localhost:5012");

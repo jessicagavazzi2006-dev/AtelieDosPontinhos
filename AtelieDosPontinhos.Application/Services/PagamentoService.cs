@@ -66,9 +66,12 @@ namespace AtelieDosPontinhos.Application.Services
             {
                 Id = pagamento.Id,
                 DataPagamento = pagamento.DataPagamento,
-                ValorPagamento = pagamento.ValorPagamento,
-                FormadePagamento = pagamento.FormadePagamento
+               
+                ValorPagamento = pagamento.Valor,
+                
+                FormadePagamento = (int)pagamento.Metodo
             };
         }
+
     }
 }

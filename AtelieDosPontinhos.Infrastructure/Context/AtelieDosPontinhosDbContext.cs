@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 namespace AtelieDosPontinhos.Infrastructure.Context
 {
     public class AtelieDosPontinhosDbContext : IdentityDbContext
+
     {
         public AtelieDosPontinhosDbContext(DbContextOptions<AtelieDosPontinhosDbContext> options) : base(options)
         {

@@ -179,5 +179,76 @@ namespace AtelieDosPontinhos.UI.Controllers
             return View(carrinho);
         }
 
+        // 🌟 NOVO: Processa o clique do botão "Confirmar Pedido e Pagar" da tela de Checkout
+        [HttpPost]
+        public async Task<IActionResult> ConfirmarPedidoPost(IFormCollection form)
+        {
+            var userEmail = HttpContext.Session.GetString("UserEmail");
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            // 1. Coleta os dados que o usuário confirmou ou editou na tela de checkout
+            var cep = form["CEP"].ToString();
+            var cidade = form["Cidade"].ToString();
+            var estado = form["Estado"].ToString();
+            var numero = form["Numero"].ToString();
+            var complemento = form["Complemento"].ToString();
+            var tipoPagamento = form["TipoPagamento"].ToString();
+
+            // 2. Coleta os produtos que estavam guardados no carrinho
+            var carrinho = ObterCarrinhoDaSessao();
+            if (carrinho == null || !carrinho.Any())
+            {
+                return RedirectToAction("Index");
+            }
+
+            // 3. Calcula o valor total geral da compra
+            decimal totalPedido = 0;
+            foreach (var item in carrinho)
+            {
+                var precoValue = item.Produto.GetType().GetProperty("Preco")?.GetValue(item.Produto)
+                                 ?? item.Produto.GetType().GetProperty("Price")?.GetValue(item.Produto);
+                var preco = Convert.ToDecimal(precoValue ?? 50.00m);
+                totalPedido += preco * item.Quantidade;
+            }
+
+            // 4. Integração com a API (Envia os dados do pagamento e pedido para salvar no banco)
+            var client = _httpClientFactory.CreateClient("Api");
+            try
+            {
+                var dadosPedido = new
+                {
+                    EmailUsuario = userEmail,
+                    ValorTotal = totalPedido,
+                    MetodoPagamento = tipoPagamento,
+                    CEP = cep,
+                    Cidade = cidade,
+                    Estado = estado,
+                    Numero = numero,
+                    Complemento = complemento
+                };
+
+                // Despacha as informações estruturadas em JSON para o banco da API processar
+                var response = await client.PostAsJsonAsync("api/account/salvar-pedido", dadosPedido);
+                System.Diagnostics.Debug.WriteLine($"Resposta da API ao salvar pedido: {response.StatusCode}");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Erro de comunicação com a API ao salvar o pedido: {ex.Message}");
+            }
+
+            // 5. 🌟 FLUXO ESSENCIAL: Limpa o carrinho da sessão local do cliente após a compra ter sido confirmada
+            HttpContext.Session.Remove("Carrinho");
+
+            // Define uma mensagem de sucesso na tela para avisar o usuário
+            TempData["PedidoSucesso"] = "🎉 Compra Confirmada com Sucesso via Checkout Express! Seu pedido já está sendo preparado pelo Ateliê dos Pontinhos.";
+
+            // Redireciona o cliente de volta para a página inicial da loja
+            return RedirectToAction("Index", "Home");
+        }
+
+
     }
 }
