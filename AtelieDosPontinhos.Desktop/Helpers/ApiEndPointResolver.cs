@@ -66,7 +66,7 @@ namespace AtelieDosPontinhos.Desktop.Helpers
             }
 
             // PROPRIEDADE 2: appsettings.json
-            var fromAppSettings = TryResolveFromLaunchSettings();
+            var fromAppSettings = TryResolveFromAppSettings();
             if (fromAppSettings != null)
             {
                 _resolvedUrl += fromAppSettings;
