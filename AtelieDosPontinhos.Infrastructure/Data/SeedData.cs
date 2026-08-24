@@ -17,8 +17,10 @@ namespace AtelieDosPontinhos.Infrastructure.Data
             var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
             // Aplica migrations pendentes automaticamente
-            //await context.Database.EnsureDeletedAsync(); // Garante a limpeza total de tabelas velhas sem chaves
-            //await context.Database.EnsureCreatedAsync(); // Cria o banco do zero lendo a herança correta do IdentityUser
+            await context.Database.EnsureDeletedAsync(); // Garante a limpeza total de tabelas velhas sem chaves
+            await context.Database.EnsureCreatedAsync(); // Cria o banco do zero lendo a herança correta do IdentityUser
+           
+
 
             // 🔐 CRIAR ROLES
             string[] roles = { "Admin", "Client" };

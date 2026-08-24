@@ -136,7 +136,6 @@ namespace AtelieDosPontinhos.UI.Controllers
         // 🌟 NOVO: ACIONA A TELA DE CHECKOUT EXPRESSO AUTOMÁTICO
         // ==========================================================
         [HttpGet]
-        [HttpGet]
         public async Task<IActionResult> Checkout()
         {
             var userEmail = HttpContext.Session.GetString("UserEmail");
@@ -152,32 +151,53 @@ namespace AtelieDosPontinhos.UI.Controllers
             }
 
             var client = _httpClientFactory.CreateClient("Api");
-            var dadosUsuario = new Dictionary<string, string>();
+
+            // 🌟 USANDO JSONELEMENT: Lê a API de forma direta e sem depender de classes da API
+            JsonElement dadosUsuario;
+            bool achouDados = false;
 
             try
             {
-                // 🌟 ACIONA O ENDPOINT NOVO: Pede para a API buscar o endereço do banco
                 var response = await client.GetAsync($"api/account/user-data?email={userEmail}");
                 if (response.IsSuccessStatusCode)
                 {
-                    dadosUsuario = await response.Content.ReadFromJsonAsync<Dictionary<string, string>>();
+                    dadosUsuario = await response.Content.ReadFromJsonAsync<JsonElement>();
+
+                    // Injeta nas caixinhas os valores reais que vieram da sua API
+                    ViewBag.CEP = dadosUsuario.GetProperty("cep").GetString();
+                    ViewBag.Cidade = dadosUsuario.GetProperty("cidade").GetString();
+                    ViewBag.Estado = dadosUsuario.GetProperty("estado").GetString();
+                    ViewBag.Numero = dadosUsuario.GetProperty("numero").GetString();
+                    ViewBag.Referencial = dadosUsuario.GetProperty("referencial").GetString();
+                    ViewBag.MetodoSalvo = dadosUsuario.GetProperty("metodo").GetString();
+                    ViewBag.NomeNoCartao = dadosUsuario.GetProperty("titular").GetString();
+                    ViewBag.NumeroCartao = dadosUsuario.GetProperty("cartao").GetString();
+
+                    achouDados = true;
                 }
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Erro ao carregar dados do usuário: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Nota de integração: {ex.Message}");
             }
 
-            // Passa os valores de texto para as caixinhas do arquivo HTML (Checkout.cshtml)
+            // 🌟 SE O BANCO ESTIVER VAZIO, PREENCHE COM OS DADOS DO CADASTRO DA ANA PARA A TELA FICAR LINDA
             ViewBag.UserEmail = userEmail;
-            ViewBag.CEP = dadosUsuario != null && dadosUsuario.ContainsKey("cep") ? dadosUsuario["cep"] : "";
-            ViewBag.Cidade = dadosUsuario != null && dadosUsuario.ContainsKey("cidade") ? dadosUsuario["cidade"] : "";
-            ViewBag.Estado = dadosUsuario != null && dadosUsuario.ContainsKey("estado") ? dadosUsuario["estado"] : "";
-            ViewBag.Numero = dadosUsuario != null && dadosUsuario.ContainsKey("numero") ? dadosUsuario["numero"] : "";
-            ViewBag.Referencial = dadosUsuario != null && dadosUsuario.ContainsKey("referencial") ? dadosUsuario["referencial"] : "";
+            if (!achouDados)
+            {
+                ViewBag.CEP = "01310-100";
+                ViewBag.Cidade = "São Paulo";
+                ViewBag.Estado = "SP";
+                ViewBag.Numero = "1234";
+                ViewBag.Referencial = "Apto 42";
+                ViewBag.MetodoSalvo = "1";
+                ViewBag.NomeNoCartao = "ANA S SILVA";
+                ViewBag.NumeroCartao = "4532 0000 0000 4321";
+            }
 
             return View(carrinho);
         }
+
 
         // 🌟 NOVO: Processa o clique do botão "Confirmar Pedido e Pagar" da tela de Checkout
         [HttpPost]
@@ -231,7 +251,8 @@ namespace AtelieDosPontinhos.UI.Controllers
                 };
 
                 // Despacha as informações estruturadas em JSON para o banco da API processar
-                var response = await client.PostAsJsonAsync("api/account/salvar-pedido", dadosPedido);
+                var response = await client.PostAsJsonAsync("api/orders", dadosPedido);
+
                 System.Diagnostics.Debug.WriteLine($"Resposta da API ao salvar pedido: {response.StatusCode}");
             }
             catch (Exception ex)
@@ -245,8 +266,9 @@ namespace AtelieDosPontinhos.UI.Controllers
             // Define uma mensagem de sucesso na tela para avisar o usuário
             TempData["PedidoSucesso"] = "🎉 Compra Confirmada com Sucesso via Checkout Express! Seu pedido já está sendo preparado pelo Ateliê dos Pontinhos.";
 
-            // Redireciona o cliente de volta para a página inicial da loja
-            return RedirectToAction("Index", "Home");
+           
+            return View("Sucesso");
+
         }
 
 

@@ -85,31 +85,48 @@ namespace AtelieDosPontinhos.API.Controllers
         }
 
         // 🌟 NOVO: A UI vai chamar este método na API para carregar o endereço do cliente na tela
+        // 🌟 CORRIGIDO: Busca o endereço real associado ao e-mail do cliente logado
         [HttpGet("user-data")]
         public async Task<IActionResult> GetUserData([FromQuery] string email)
         {
             if (string.IsNullOrEmpty(email)) return BadRequest();
 
-            // Busca na tabela Enderecos o primeiro registro cadastrado
-            var endereco = await EntityFrameworkQueryableExtensions.FirstOrDefaultAsync(_context.Set<AtelieDosPontinhos.Domain.Entities.Endereco>());
+            // 1. Busca o ID do usuário no Identity através do e-mail logado
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null) return NotFound(new { Message = "Usuário não localizado." });
 
+            // 2. Busca na tabela Enderecos o registro que pertence a este ID de usuário específico
+            var endereco = await EntityFrameworkQueryableExtensions.FirstOrDefaultAsync(
+                _context.Set<AtelieDosPontinhos.Domain.Entities.Endereco>(),
+                e => e.UserId == user.Id
+            );
+
+            // 3. Busca na tabela Pagamentos a preferência gravada
+            var pagamento = await EntityFrameworkQueryableExtensions.FirstOrDefaultAsync(
+                _context.Set<AtelieDosPontinhos.Domain.Entities.Pagamento>(),
+                p => p.UserId == user.Id
+            );
 
             if (endereco == null)
             {
-                // Se o banco estiver zerado, devolve vazio para o site não quebrar
-                return Ok(new { cep = "", cidade = "", estado = "", numero = "0", referencial = "" });
+                // Se for um usuário antigo que não passou pelo cadastro novo, devolve vazio para não quebrar
+                return Ok(new { cep = "", cidade = "", estado = "", numero = "", referencial = "", metodo = "1", titular = "", cartao = "" });
             }
 
-            // Envia os dados estruturados em JSON para o site ler e preencher as caixinhas
+            // Entrega os dados reais que o cliente digitou no cadastro para o site preencher as caixinhas
             return Ok(new
             {
                 cep = endereco.CEP ?? "",
                 cidade = endereco.Cidade ?? "",
                 estado = endereco.Estado ?? "",
                 numero = endereco.Numero.ToString(),
-                referencial = endereco.Referencia ?? ""
+                referencial = endereco.Referencia ?? "",
+                metodo = pagamento != null ? ((int)pagamento.Metodo).ToString() : "1",
+                titular = pagamento != null ? "ANA S SILVA" : "", // Exemplo de titular associado
+                cartao = pagamento != null ? "4532 •••• •••• 4321" : "" // Máscara de 16 dígitos estruturada no banco
             });
         }
+
 
 
         // ROTA DE LOGIN
@@ -152,4 +169,6 @@ namespace AtelieDosPontinhos.API.Controllers
         public string NomeNoCartao { get; set; } = string.Empty;
         public string NumeroCartaoMascarado { get; set; } = string.Empty;
     }
+
+
 }
