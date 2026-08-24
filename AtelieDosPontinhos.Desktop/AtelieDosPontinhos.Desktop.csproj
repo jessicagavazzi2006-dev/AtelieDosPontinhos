@@ -10,8 +10,6 @@
 
   <ItemGroup>
     <Folder Include="DTOs\NovaPasta\" />
-    <Folder Include="Helpers\" />
-    <Folder Include="Services\" />
   </ItemGroup>
 
   <ItemGroup>
