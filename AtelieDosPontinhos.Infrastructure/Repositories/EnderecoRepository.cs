@@ -38,7 +38,7 @@ namespace AtelieDosPontinhos.Infrastructure.Repositories
         {
             var featured = await _context.Enderecos
                 .AsNoTracking()
-                .Where(e => !string.IsNullOrEmpty(e.Referencial))
+                .Where(e => !string.IsNullOrEmpty(e.Referencia))
                 .OrderBy(e => e.Id)
                 .Take(20)
                 .ToListAsync();
