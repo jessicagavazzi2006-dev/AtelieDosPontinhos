@@ -1,14 +1,14 @@
 // =============================================================================
-// SenacGames.UI - Services/HttpGameService.cs
+// AtelieDosPontinhos.UI - Services/HttpGameService.cs
 // =============================================================================
 
 using System.Net.Http.Json;
-using SenacGames.Application.DTOs;
-using SenacGames.Application.Interfaces;
+using AtelieDosPontinhos.Application.DTOs;
+using AtelieDosPontinhos.Application.Interfaces;
 
-namespace SenacGames.UI.Services
+namespace AtelieDosPontinhos.UI.Services
 {
-    public class HttpGameService : IGameService
+    public class HttpGameService : ICategoryService
     {
         private readonly HttpClient _httpClient;
 
@@ -23,49 +23,49 @@ namespace SenacGames.UI.Services
             return games.Count();
         }
 
-        public async Task<GameDto> CreateAsync(CreateGameDto dto)
+        public async Task<CategoryDto> CreateAsync(CreateCategoryDto dto)
         {
-            var response = await _httpClient.PostAsJsonAsync("/api/games", dto);
+            var response = await _httpClient.PostAsJsonAsync("/api/categories", dto);
             response.EnsureSuccessStatusCode();
-            return (await response.Content.ReadFromJsonAsync<GameDto>())!;
+            return (await response.Content.ReadFromJsonAsync<CategoryDto>())!;
         }
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var response = await _httpClient.DeleteAsync($"/api/games/{id}");
+            var response = await _httpClient.DeleteAsync($"/api/categories/{id}");
             return response.IsSuccessStatusCode;
         }
 
-        public async Task<IEnumerable<GameDto>> GetAllAsync()
+        public async Task<IEnumerable<CategoryDto>> GetAllAsync()
         {
-            return await _httpClient.GetFromJsonAsync<IEnumerable<GameDto>>("/api/games") ?? new List<GameDto>();
+            return await _httpClient.GetFromJsonAsync<IEnumerable<CategoryDto>>("/api/categories") ?? new List<CategoryDto>();
         }
 
-        public async Task<IEnumerable<GameDto>> GetByCategoryAsync(int categoryId)
+        public async Task<IEnumerable<CategoryDto>> GetByCategoryAsync(int categoryId)
         {
             var all = await GetAllAsync();
-            return all.Where(g => g.CategoryId == categoryId);
+            return all.Where(g => g.Id == categoryId);
         }
 
-        public async Task<GameDto?> GetByIdAsync(int id)
+        public async Task<CategoryDto?> GetByIdAsync(int id)
         {
-            return await _httpClient.GetFromJsonAsync<GameDto>($"/api/games/{id}");
+            return await _httpClient.GetFromJsonAsync<CategoryDto>($"/api/categories/{id}");
         }
 
-        public async Task<IEnumerable<GameDto>> GetFeaturedAsync()
+        public async Task<IEnumerable<CategoryDto>> GetFeaturedAsync()
         {
-            // O endpoint /api/games retorna todos. Poderíamos criar um endpoint específico,
+            // O endpoint /api/categories retorna todos. Poderíamos criar um endpoint específico,
             // mas para manter igual, vamos pegar os 3 primeiros
             var all = await GetAllAsync();
             return all.Take(3);
         }
 
-        public async Task<GameDto?> UpdateAsync(int id, UpdateGameDto dto)
+        public async Task<CategoryDto?> UpdateAsync(int id, UpdateCategoryDto dto)
         {
-            var response = await _httpClient.PutAsJsonAsync($"/api/games/{id}", dto);
+            var response = await _httpClient.PutAsJsonAsync($"/api/categories/{id}", dto);
             if (response.IsSuccessStatusCode)
             {
-                return await response.Content.ReadFromJsonAsync<GameDto>();
+                return await response.Content.ReadFromJsonAsync<CategoryDto>();
             }
             return null;
         }

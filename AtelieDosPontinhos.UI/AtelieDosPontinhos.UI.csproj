@@ -8,13 +8,9 @@
 
   <ItemGroup>
     <Compile Remove="wwwroot\images\logo\logo\**" />
-    <Compile Remove="wwwroot\images\Products\**" />
     <Content Remove="wwwroot\images\logo\logo\**" />
-    <Content Remove="wwwroot\images\Products\**" />
     <EmbeddedResource Remove="wwwroot\images\logo\logo\**" />
-    <EmbeddedResource Remove="wwwroot\images\Products\**" />
     <None Remove="wwwroot\images\logo\logo\**" />
-    <None Remove="wwwroot\images\Products\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,6 +26,19 @@
   <ItemGroup>
     <ProjectReference Include="..\AtelieDosPontinhos.Application\AtelieDosPontinhos.Application.csproj" />
     <ProjectReference Include="..\AtelieDosPontinhos.Infrastructure\AtelieDosPontinhos.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\images\categorias\banho\Kit toalhas\" />
+    <Folder Include="wwwroot\images\categorias\banho\Toalha de banho\" />
+    <Folder Include="wwwroot\images\categorias\banho\Toalha lavabo\" />
+    <Folder Include="wwwroot\images\categorias\cama\fronha\" />
+    <Folder Include="wwwroot\images\categorias\cama\kit lençol\" />
+    <Folder Include="wwwroot\images\categorias\infantil\fraldas\" />
+    <Folder Include="wwwroot\images\categorias\infantil\kit infantil\" />
+    <Folder Include="wwwroot\images\categorias\infantil\tolhas\" />
+    <Folder Include="wwwroot\images\categorias\mesa\toalha de mesa\" />
+    <Folder Include="wwwroot\images\categorias\panos de prato\" />
   </ItemGroup>
 
 </Project>
