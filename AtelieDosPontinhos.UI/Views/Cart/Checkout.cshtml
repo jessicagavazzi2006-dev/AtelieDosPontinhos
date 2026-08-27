@@ -1,20 +1,20 @@
 ﻿@model List<AtelieDosPontinhos.UI.Models.CartItemViewModel>
 
 @{
-    ViewData["Title"] = "Confirmar Seu Pedido Express";
+    ViewData["Title"] = "Finalizar Pedido";
     decimal totalGeral = 0;
 }
 
 <div class="container py-5" style="max-width: 950px;">
-    <h2 class="fw-bold mb-4" style="color: #8a4f91 !important;">🏁 Finalizar Meu Pedido Express</h2>
+    <h2 class="fw-bold mb-4" style="color: #8a4f91 !important;">🏁 Finalizar Meu Pedido</h2>
 
     <form asp-controller="Cart" asp-action="ConfirmarPedidoPost" method="post">
         <div class="row g-4">
 
-            <!-- COLUNA DA ESQUERDA: ENTRADAS PREENCHIDAS E EDITÁVEIS -->
+            <!-- COLUNA DA ESQUERDA: INFORMAÇÕES DO CLIENTE -->
             <div class="col-md-7">
 
-                <!-- Bloco 1: Dados de Entrega -->
+                <!-- Bloco 1: Dados de Entrega (🌟 VINDO DIREITO DO C#) -->
                 <div class="card shadow-sm border-0 p-4 rounded-4 bg-white mb-4">
                     <h5 class="fw-bold mb-3" style="color: #8a4f91;"><i class="bi bi-geo-alt-fill"></i> 📍 Endereço de Entrega</h5>
                     <p class="text-muted small mb-3">Confirme ou altere os dados para o envio dos seus produtos artesanais:</p>
@@ -47,7 +47,7 @@
                     </div>
                 </div>
 
-                <!-- Bloco 2: Forma de Pagamento -->
+                <!-- Bloco 2: Forma de Pagamento com Alternância Garantida -->
                 <div class="card shadow-sm border-0 p-4 rounded-4 bg-white">
                     <h5 class="fw-bold mb-3" style="color: #8a4f91;"><i class="bi bi-credit-card-2-back-fill"></i> 💳 Forma de Pagamento</h5>
                     <p class="text-muted small mb-3">Selecione a modalidade de cobrança preferencial para o fechamento:</p>
@@ -55,22 +55,40 @@
                     <div class="row g-3">
                         <div class="col-md-5">
                             <label class="form-label text-secondary small fw-semibold">Tipo de Pagamento</label>
-                            <label class="form-label text-secondary small fw-semibold">Tipo de Pagamento</label>
-                            <select name="TipoPagamento" class="form-select bg-light border-0 rounded-pill px-3">
+                            <select name="TipoPagamento" id="selectPagamento" class="form-select bg-light border-0 rounded-pill px-3" onchange="alternarMetodoPagamento()">
                                 <option value="1">💳 Cartão de Crédito</option>
                                 <option value="2">💵 Cartão de Débito</option>
                                 <option value="3">📱 PIX</option>
                             </select>
+                        </div>
 
+                        <!-- 💳 ÁREA DO CARTÃO -->
+                        <div id="areaCartao" class="row g-3 col-md-12 m-0 p-0">
+                            <div class="col-md-7">
+                                <label class="form-label text-secondary small fw-semibold">Nome Impresso no Cartão</label>
+                                <input type="text" name="NomeNoCartao" class="form-control bg-light border-0 rounded-pill px-3" value="@ViewBag.NomeNoCartao" placeholder="Ex: ANA S SILVA" />
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label text-secondary small fw-semibold">Número do Cartão </label>
+                                <input type="text" id="inputCartao" name="NumeroCartaoMascarado" class="form-control bg-light border-0 rounded-pill px-3" value="@ViewBag.NumeroCartao" maxlength="19" placeholder="4532 0000 0000 4321" />
+                            </div>
                         </div>
-                        <div class="col-md-7">
-                            <label class="form-label text-secondary small fw-semibold">Nome Impresso no Cartão</label>
-                            <input type="text" name="NomeNoCartao" class="form-control bg-light border-0 rounded-pill px-3" placeholder="Ex: ANA S SILVA" />
+
+                        <!-- 📱 ÁREA DO PIX (INCLUI NOME DO ATELIÊ E CNPJ COMPLETO) -->
+                        <div id="areaPix" class="col-md-12 text-center py-3 d-none">
+                            <div class="p-4 rounded-4 border bg-light d-inline-block shadow-sm" style="max-width: 320px;">
+                                <p class="fw-bold text-dark small mb-3">📱 Escaneie o QR Code abaixo para pagar:</p>
+
+                                <div class="bg-white p-3 rounded-3 shadow-sm d-inline-block mb-3 border">
+                                    <img src="https://qrserver.com" alt="QR Code PIX Ateliê" class="img-fluid" style="width: 160px; height: 160px;" />
+                                </div>
+
+                                <span class="d-block text-dark fw-bold mb-1" style="font-size: 14px;">Ateliê dos Pontinhos Ltda.</span>
+                                <span class="d-block text-muted font-monospace mb-2" style="font-size: 12px;">CNPJ: 99.999.999/0001-99</span>
+                                <small class="text-success fw-semibold bg-success bg-opacity-10 px-3 py-1 rounded-pill" style="font-size: 11px;"><i class="bi bi-shield-check"></i> Ambiente de Pagamento Seguro</small>
+                            </div>
                         </div>
-                        <div class="col-md-12">
-                            <label class="form-label text-secondary small fw-semibold">Número do Cartão Mascarado</label>
-                            <input type="text" name="NumeroCartaoMascarado" class="form-control bg-light border-0 rounded-pill px-3" placeholder="**** **** **** 4321" />
-                        </div>
+
                     </div>
                 </div>
             </div>
@@ -106,7 +124,6 @@
                         <button type="submit" class="btn btn-success btn-lg rounded-pill fw-bold py-3 shadow w-100">
                             🚀 Confirmar Pedido e Pagar
                         </button>
-
                         <a asp-controller="Cart" asp-action="Index" class="btn btn-link text-decoration-none text-muted btn-sm mt-3">
                             Voltar ao Carrinho
                         </a>
@@ -117,3 +134,44 @@
         </div>
     </form>
 </div>
+
+
+<!script type="text/javascript">
+    function alternarMetodoPagamento() {
+        var select = document.getElementById("selectPagamento");
+        var areaCartao = document.getElementById("areaCartao");
+        var areaPix = document.getElementById("areaPix");
+
+        if (select && areaCartao && areaPix) {
+            if (select.value === "3") {
+                areaCartao.style.setProperty("display", "none", "important");
+                areaPix.classList.remove("d-none");
+                areaPix.style.setProperty("display", "block", "important");
+            } else {
+                areaCartao.style.setProperty("display", "flex", "important");
+                areaPix.classList.add("d-none");
+                areaPix.style.setProperty("display", "none", "important");
+            }
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        var selectVal = "@ViewBag.MetodoSalvo";
+        if (selectVal && selectVal !== "") {
+            var selectElem = document.getElementById("selectPagamento");
+            if (selectElem) {
+                selectElem.value = selectVal;
+            }
+        }
+        alternarMetodoPagamento();
+
+        var inputCartao = document.getElementById("inputCartao");
+        if(inputCartao) {
+            inputCartao.addEventListener("input", function(e) {
+                var v = e.target.value.replace(/\D/g, "");
+                var m = v.match(/.{1,4}/g);
+                if (m) { e.target.value = m.join(" "); }
+            });
+        }
+    });
+</!script>

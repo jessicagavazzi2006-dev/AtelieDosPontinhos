@@ -24,6 +24,10 @@ namespace AtelieDosPontinhos.Infrastructure.Context
         public DbSet<Material> Materials { get; set; }
         public DbSet<Product_Material> ProductMaterials { get; set; }
 
+        public DbSet<Pedido> Pedidos { get; set; }
+        public DbSet<PedidoItem> PedidoItens { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -51,6 +55,10 @@ namespace AtelieDosPontinhos.Infrastructure.Context
             modelBuilder.ApplyConfiguration(new PagamentoConfiguration());
             modelBuilder.ApplyConfiguration(new EnderecoConfiguration());
             modelBuilder.ApplyConfiguration(new Product_MaterialConfiguration());
+
+            modelBuilder.Entity<Pedido>().Property(p => p.ValorTotal).HasColumnType("decimal(18,2)");
+            modelBuilder.Entity<PedidoItem>().Property(pi => pi.PrecoUnitario).HasColumnType("decimal(18,2)");
+
         }
     }
 }

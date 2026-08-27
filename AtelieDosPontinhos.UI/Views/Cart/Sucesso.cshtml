@@ -1,0 +1,22 @@
+﻿@{
+    ViewData["Title"] = "Pedido Confirmado!";
+}
+
+<div class="container py-5 text-center" style="max-width: 600px;">
+    <div class="card border-0 shadow p-5 rounded-4 bg-white mt-4">
+        <div class="display-1 text-success mb-3">🎉</div>
+        <h2 class="fw-bold mb-3" style="color: #8a4f91;">Compra Confirmada!</h2>
+        <p class="text-muted fs-5 mb-4">O Ateliê dos Pontinhos agradece a sua preferência. Seu pedido com os produtos artesanais já está sendo preparado com muito carinho!</p>
+
+        <div class="p-3 bg-light rounded-3 border mb-4 text-start">
+            <span class="d-block text-dark small mb-1"><strong>Status:</strong> Pagamento Aprovado</span>
+            <span class="d-block text-dark small"><strong>Acompanhamento:</strong> As atualizações de envio serão encaminhadas para o seu e-mail cadastrado.</span>
+        </div>
+
+        <div class="d-grid">
+            <a asp-controller="Home" asp-action="Index" class="btn btn-lg text-white rounded-pill fw-bold py-3" style="background-color: #8a4f91;">
+                Voltar para a Vitrine
+            </a>
+        </div>
+    </div>
+</div>

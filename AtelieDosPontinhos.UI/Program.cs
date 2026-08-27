@@ -88,7 +88,18 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<AtelieDosPontinhosDbContext>();
 
-    context.Database.EnsureCreated();
+    //context.Database.EnsureCreated();
+    // 🌟 ABORDAGEM RECOMENDADA PELO COPILOT: Captura e ignora o erro 1801
+    try
+    {
+        context.Database.EnsureCreated();
+    }
+    catch (Microsoft.Data.SqlClient.SqlException ex) when (ex.Number == 1801 || ex.Message.Contains("already exists"))
+    {
+        // Se o banco já existir, o C# engole o erro e continua a execução normalmente!
+        System.Diagnostics.Debug.WriteLine("Banco já existente. Continuando inicialização.");
+    }
+
 
     // Carga de Categorias
     if (!context.Categories.Any())
