@@ -10,6 +10,8 @@ using System.Windows.Forms;
 using AtelieDosPontinhos.Desktop.DTOs;
 
 using AtelieDosPontinhos.Desktop.Forms;
+using AtelieDosPontinhos.Desktop.Helpers;
+using AtelieDosPontinhos.Desktop.Services;
 using AtelieDosPontinhos.Desktop.Themes;
 
 namespace AtelieDosPontinhos.Desktop.UserControls
@@ -26,7 +28,7 @@ namespace AtelieDosPontinhos.Desktop.UserControls
         // DADOS
         //=================================================
         private List<ProductResponseDto> _todosPrdoutos = new();
-        private List<CategoriaRsponseDto> _categorias = new();
+        private List<CategoriaResponseDto> _categorias = new();
 
         //=================================================
         // CONSTRUTOR

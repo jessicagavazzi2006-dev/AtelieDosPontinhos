@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AtelieDosPontinhos.Desktop.Helpers;
+using AtelieDosPontinhos.Desktop.Services;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -28,11 +30,11 @@ namespace AtelieDosPontinhos.Desktop.Forms
             lblVersao.Text = $"Versão {AppConfig.Version} | @{DateTime.Now.Year} Senac-sp ";
             lblApi.Text = $" API: {AppConfig.ApiBaseUrl}";
 
-            txtEmail.Text = "admin@SenacGames.com";
+            txtEmail.Text = "admin@site.com";
             txtSenha.Text = "Admin@123";
         }
 
-        private async Task btnEntrar_Click(object sender, EventArgs e)
+        private async void btnEntrar_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtEmail.Text))
             {
@@ -56,7 +58,7 @@ namespace AtelieDosPontinhos.Desktop.Forms
 
                 if (success && user != null)
                 {
-                    sessionManager.Instance.SetUser(user);
+                    SessionManager.Instance.SetUser(user);
 
                     this.Hide();
 
@@ -85,8 +87,8 @@ namespace AtelieDosPontinhos.Desktop.Forms
             {
                 SetCarregando(false);
             }
-
         }
+
         private void ExibirErro(string Mensagem)
         {
             if (string.IsNullOrEmpty(Mensagem))
@@ -122,6 +124,7 @@ namespace AtelieDosPontinhos.Desktop.Forms
         {
             System.Windows.Forms.Application.Exit();
         }
+
     }
 }
 

@@ -173,6 +173,7 @@
             pnlForm.Name = "pnlForm";
             pnlForm.Size = new Size(203, 254);
             pnlForm.TabIndex = 1;
+            pnlForm.Visible = false;
             // 
             // btnCancelar
             // 

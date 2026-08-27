@@ -1,4 +1,6 @@
-﻿using AtelieDosPontinhos.Desktop.Themes;
+﻿using AtelieDosPontinhos.Desktop.Helpers;
+using AtelieDosPontinhos.Desktop.Services;
+using AtelieDosPontinhos.Desktop.Themes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,7 +15,7 @@ namespace AtelieDosPontinhos.Desktop.UserControls
 {
     public partial class DashboardUserControl : UserControl
     {
-        private ProdutoApiService _produtoService = null;
+        private ProdutosApiService _produtoService = null;
         private CategoriasApiService _categoriasService = null;
         public DashboardUserControl()
         {
@@ -26,12 +28,12 @@ namespace AtelieDosPontinhos.Desktop.UserControls
             if (DesignMode) return;
 
             //inicializa serviços 
-            _produtoService = new ProdutoApiService();
+            _produtoService = new ProdutosApiService();
             _categoriasService = new CategoriasApiService();
 
 
             //Preenche dados dinamicos da sessão
-            cardCategoriasLblTitulo.Text = $"Olá, {SessionManager.Instance.GetDisplayName()!}";
+            lblTitulo.Text = $"Olá, {SessionManager.Instance.GetDisplayName()!}";
             lblSubtitulo.Text = $"Bem-vindo ao Ateliê dos Pontinhos Desktop - {DateTime.Now:dddd, dd 'de' MMM 'de' yyyy}";
 
             //aplica estilo no DataGridView(tabela)
@@ -56,19 +58,19 @@ namespace AtelieDosPontinhos.Desktop.UserControls
                 cardCategoriasLblNumero.Text = categorias.Count.ToString();
 
                 //Atualiza os dados do card
-                AtualizarNumeroCard(cardProdutos, produto.Count().ToString());
-                AtualizarNumeroCard(cardCategorias, categorias.Count().ToString());
+                //AtualizarNumeroCard(cardProdutos, produto.Count().ToString());
+                //AtualizarNumeroCard(cardCategorias, categorias.Count().ToString());
 
                 //Popula o DataGridView(tabela) com os últimos 10 produtos.
                 gridUltimosProdutos.Rows.Clear();
-                foreach (var p in produto.OrderByDescending(x => x.CreatedAt).Take(10))
+                foreach (var p in produto.OrderByDescending(x => x.Id).Take(10))
                 {
                     gridUltimosProdutos.Rows.Add(
                         p.Id,
                         p.Name,
                         p.Price,
                         p.Stock,
-                        p.CategoryName,
+                        p.CategoryId,
                         p.IsFeatured
                     );
                 }

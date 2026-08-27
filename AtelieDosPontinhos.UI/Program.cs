@@ -1,64 +1,67 @@
+using AtelieDosPontinhos.Application.Interfaces;
 using AtelieDosPontinhos.Domain.Entities;
 using AtelieDosPontinhos.Infrastructure;
 using AtelieDosPontinhos.Infrastructure.Context;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
+using SenacGames.UI.Helpers;
 
 
 
 var builder = WebApplication.CreateBuilder(args);
-// Força a URL de escuta para evitar conflito de porta em desenvolvimento
-builder.WebHost.UseUrls("http://localhost:5012");
 
-// 1. Configuração do Banco de Dados SQL Server
-builder.Services.AddDbContext<AtelieDosPontinhosDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+// =====================================================================
+// AUTENTICAÇÃO MVC NATIVA
+// =====================================================================
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login";
+        options.LogoutPath = "/Account/Logout";
+        options.AccessDeniedPath = "/Account/AccessDenied";
+    });
 
-// 2. Configuração do Identity
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-    .AddEntityFrameworkStores<AtelieDosPontinhosDbContext>()
-    .AddDefaultTokenProviders();
+// Permite acessar o HttpContext (necessário para o ApiCookieHandler)
+builder.Services.AddHttpContextAccessor();
 
-// Configuração das Opções de Senha/Login
-builder.Services.Configure<IdentityOptions>(options => {
-    options.Password.RequireDigit = false;
-    options.Password.RequiredLength = 4;
-    options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequireUppercase = false;
-    options.Password.RequireLowercase = false;
-});
+// =====================================================================
+// HTTP CLIENTS & SERVIÇOS DA API
+// =====================================================================
+// Registra o Handler que injeta o Cookie
+builder.Services.AddTransient<ApiCookieHandler>();
 
-// Configuração de redirecionamento de Cookies para as telas da UI
-builder.Services.ConfigureApplicationCookie(options =>
+// Resolve a URL dinamicamente via ApiEndpointResolver
+var apiBaseUrl = AppConfig.ApiBaseUrl;
+
+// Cliente para autenticação (sem interceptador)
+builder.Services.AddHttpClient("ApiClientAuth", client =>
 {
-    options.LoginPath = "/Account/Login";
-    options.LogoutPath = "/Account/Logout";
-    options.AccessDeniedPath = "/Account/Login";
+    client.BaseAddress = new Uri(apiBaseUrl);
 });
 
-// ====================================================================
-// 🛒 CONFIGURAÇÃO DE SESSÃO COMPATÍVEL COM IDENTITY
-// ====================================================================
-builder.Services.AddDistributedMemoryCache();
-builder.Services.AddSession(options =>
+// Cliente padrão para serviços (com interceptador de cookie)
+builder.Services.AddHttpClient("ApiClient", client =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
-    options.Cookie.SameSite = SameSiteMode.Lax;
-});
+    client.BaseAddress = new Uri(apiBaseUrl);
+})
+.AddHttpMessageHandler<ApiCookieHandler>();
 
+// Serviços da UI consumindo a API
+//builder.Services.AddScoped<IProductService>(sp =>
+//    new HttpGameService(sp.GetRequiredService<IHttpClientFactory>().CreateClient("ApiClient")));
+
+//builder.Services.AddScoped<ICategoryService>(sp =>
+//    new HttpCategoryService(sp.GetRequiredService<IHttpClientFactory>().CreateClient("ApiClient")));
+
+// =====================================================================
+// MVC
+// =====================================================================
 builder.Services.AddControllersWithViews();
-
-// 🌟 CONFIGURADO: Registra o HttpClientFactory para o AccountController da UI consumir a API!
-builder.Services.AddHttpClient("Api", client =>
-{
-    client.BaseAddress = new Uri(builder.Configuration["Api:BaseUrl"]);
-});
 
 var app = builder.Build();
 
-// Configurações de ambiente pipeline HTTP
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -67,11 +70,6 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
-// ====================================================================
-// 🛒 ATIVAÇÃO DO MIDDLEWARE DE SESSÃO (ANTES DO ROTEAMENTO/AUTH)
-// ====================================================================
-app.UseSession();
 
 app.UseRouting();
 

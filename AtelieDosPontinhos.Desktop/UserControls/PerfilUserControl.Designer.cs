@@ -145,7 +145,7 @@
             lblBadge.BackColor = SystemColors.HotTrack;
             lblBadge.Font = new Font("Yu Gothic UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblBadge.ForeColor = Color.White;
-            lblBadge.Location = new Point(201, 159);
+            lblBadge.Location = new Point(190, 162);
             lblBadge.Name = "lblBadge";
             lblBadge.Padding = new Padding(50, 5, 50, 5);
             lblBadge.Size = new Size(139, 27);

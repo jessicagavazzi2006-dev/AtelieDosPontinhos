@@ -1,5 +1,8 @@
 ﻿using AtelieDosPontinhos.Desktop.DTOs;
 using AtelieDosPontinhos.Desktop.Forms;
+using AtelieDosPontinhos.Desktop.Helpers;
+using AtelieDosPontinhos.Desktop.Services;
+using AtelieDosPontinhos.Desktop.Themes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -28,6 +31,8 @@ namespace AtelieDosPontinhos.Desktop.UserControls
 
             _usuarioService = new UsuariosApiService();
             ConfigurarPermissoes();
+
+            AtelieDosPontinhosTheme.AplicarEstiloGrid(gridUsuarios);
 
             //reservado para CarregarDados
             await CarregarDadosAsync();

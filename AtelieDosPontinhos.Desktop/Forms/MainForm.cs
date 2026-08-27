@@ -1,4 +1,6 @@
-﻿using AtelieDosPontinhos.Desktop.UserControls;
+﻿using AtelieDosPontinhos.Desktop.Helpers;
+using AtelieDosPontinhos.Desktop.Services;
+using AtelieDosPontinhos.Desktop.UserControls;
 using Guna.UI2.WinForms;
 using System;
 using System.Collections.Generic;
@@ -36,7 +38,7 @@ namespace AtelieDosPontinhos.Desktop.Forms
 
             this.Text = $"Ateliê dos Pontinhos Desktop - {AppConfig.Version}";
 
-            lblUsuario.Text = $"{SessionManager.Intance.GetDisplayName()}";
+            lblUsuario.Text = $"{SessionManager.Instance.GetDisplayName()}";
             lblPerfil.Text = SessionManager.Instance.IsAdmin ? "🔑 Administrador" : "👀 usuario comum";
             lblPerfil.ForeColor = SessionManager.Instance.IsAdmin ? Color.Orange : Color.Blue;
             lblSessao.Text = $"🟢 {SessionManager.Instance.GetEmail()}";
@@ -97,11 +99,11 @@ namespace AtelieDosPontinhos.Desktop.Forms
 
         }
 
-        private async Task btnLogout_Click(object sender, EventArgs e)
+        private async void btnLogout_Click(object sender, EventArgs e)
         {
-            var resposta = MessageBox.Show("Deseja do sair do sistema?", 
+            var resposta = MessageBox.Show("Deseja do sair do sistema?",
                 "confirmar Logout",
-                MessageBoxButtons.YesNo, 
+                MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question);
 
             if (resposta != DialogResult.Yes) return;
@@ -120,8 +122,6 @@ namespace AtelieDosPontinhos.Desktop.Forms
                 this.Close();
             }
         }
-
-
 
         private void btnDashboard_Click_1(object sender, EventArgs e) => Navegar(new DashboardUserControl(), btnDashboard);
 

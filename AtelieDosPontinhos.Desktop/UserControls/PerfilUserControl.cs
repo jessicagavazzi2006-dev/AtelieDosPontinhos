@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AtelieDosPontinhos.Desktop.Helpers;
+using AtelieDosPontinhos.Desktop.Services;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -38,7 +40,7 @@ namespace AtelieDosPontinhos.Desktop.UserControls
             lblEmailValor.Text = email;
             lblApiValor.Text = AppConfig.ApiBaseUrl;
 
-            var perfil = isAdmin ? "🔑 Administrador" : "👀 Usuário";
+            var perfil = isAdmin ? "🔑 Administrador" : "👀 Usuário comum";
             var corBadge = isAdmin ? Color.Orange : Color.Blue;
 
             lblBadge.Text = perfil;
@@ -48,5 +50,7 @@ namespace AtelieDosPontinhos.Desktop.UserControls
 
             lblRolesValor.Text = roles.Count > 0 ? string.Join(", ", roles) : "sem perfil atribuido";
         }
+
+      
     }
 }

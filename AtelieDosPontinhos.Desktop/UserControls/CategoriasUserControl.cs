@@ -1,4 +1,5 @@
 ﻿using AtelieDosPontinhos.Desktop.DTOs;
+using AtelieDosPontinhos.Desktop.Services;
 using AtelieDosPontinhos.Desktop.Themes;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace AtelieDosPontinhos.Desktop.UserControls
         // SERVIÇOS E DADOS
         // =====================================================================
         private CategoriasApiService _categoriaService = null;
-        private List<CategoriaRsponseDto> _categorias = new();
+        private List<CategoriaResponseDto> _categorias = new();
 
         // Estado do formulário: null = modo listagem, int = ID sendo editado
         private int? _editandoId = null;
@@ -73,7 +74,7 @@ namespace AtelieDosPontinhos.Desktop.UserControls
         // =====================================================================
         // FORMULÁRIO
         // =====================================================================
-        private void MostrarFormulario(CategoriaRsponseDto? categoria)
+        private void MostrarFormulario(CategoriaResponseDto? categoria)
         {
             _editandoId = categoria?.Id;
             txtNome.Text = categoria?.Name ?? string.Empty;
@@ -92,7 +93,7 @@ namespace AtelieDosPontinhos.Desktop.UserControls
         // =====================================================================
         // AUXILIARES
         // =====================================================================
-        private CategoriaRsponseDto? ObterCategoriaSelecionada()
+        private CategoriaResponseDto? ObterCategoriaSelecionada()
         {
             if (gridCategorias.SelectedRows.Count == 0) return null;
             var id = Convert.ToInt32(gridCategorias.SelectedRows[0].Cells["colId"].Value);

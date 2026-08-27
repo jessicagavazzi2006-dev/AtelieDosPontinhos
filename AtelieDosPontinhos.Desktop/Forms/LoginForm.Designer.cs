@@ -167,6 +167,7 @@
             btnEntrar.Size = new Size(261, 45);
             btnEntrar.TabIndex = 3;
             btnEntrar.Text = "Entrar";
+            btnEntrar.Click += btnEntrar_Click;
             // 
             // lblCarregando
             // 
@@ -227,6 +228,7 @@
             lblErro.Size = new Size(38, 16);
             lblErro.TabIndex = 1;
             lblErro.Text = "Erro...";
+            lblErro.Visible = false;
             // 
             // lblVersao
             // 
