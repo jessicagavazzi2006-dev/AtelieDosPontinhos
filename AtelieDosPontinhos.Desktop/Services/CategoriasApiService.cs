@@ -27,7 +27,7 @@ namespace AtelieDosPontinhos.Desktop.Services
         {
             try
             {
-                var categorias = await _http.GetAsync<List<CategoriaResponseDto>>("/api/categories");
+                var categorias = await _http.GetAsync<List<CategoriaResponseDto>>("/api/Category");
                 return categorias ?? new List<CategoriaResponseDto>();
             }
             catch
@@ -43,7 +43,7 @@ namespace AtelieDosPontinhos.Desktop.Services
         public async Task<(bool Success, CategoriaResponseDto? Categoria, string ErrorMessage)>
             CreateAsync(CreateCategoryDto dto)
         {
-            return await _http.PostAsync<CategoriaResponseDto>("/api/categories", dto);
+            return await _http.PostAsync<CategoriaResponseDto>("/api/Category", dto);
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace AtelieDosPontinhos.Desktop.Services
         public async Task<(bool Success, CategoriaResponseDto? Categoria, string ErrorMessage)>
             UpdateAsync(int id, UpdateCategoryDto dto)
         {
-            return await _http.PutAsync<CategoriaResponseDto>($"/api/categories/{id}", dto);
+            return await _http.PutAsync<CategoriaResponseDto>($"/api/Category/{id}", dto);
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace AtelieDosPontinhos.Desktop.Services
         /// </summary>
         public async Task<(bool Success, string ErrorMessage)> DeleteAsync(int id)
         {
-            return await _http.DeleteAsync($"/api/categories/{id}");
+            return await _http.DeleteAsync($"/api/Category/{id}");
         }
     }
 }

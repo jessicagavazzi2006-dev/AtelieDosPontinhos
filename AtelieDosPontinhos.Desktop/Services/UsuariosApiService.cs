@@ -21,7 +21,7 @@ namespace AtelieDosPontinhos.Desktop.Services
         {
             try
             {
-                var usuarios = await _http.GetAsync<List<UsuarioResponseDto>>("/api/usuarios");
+                var usuarios = await _http.GetAsync<List<UsuarioResponseDto>>("/api/User");
                 return usuarios ?? new List<UsuarioResponseDto>();
             }
             catch
@@ -34,7 +34,7 @@ namespace AtelieDosPontinhos.Desktop.Services
         {
             try
             {
-                var (success, data, errorMessage) = await _http.PostAsync<UsuarioResponseDto>("/api/usuarios", dto);
+                var (success, data, errorMessage) = await _http.PostAsync<UsuarioResponseDto>("/api/User", dto);
                 return (success, data, errorMessage);
             }
             catch (Exception ex)
@@ -47,7 +47,7 @@ namespace AtelieDosPontinhos.Desktop.Services
         {
             try
             {
-                var (success, data, errorMessage) = await _http.PutAsync<UsuarioResponseDto>($"/api/usuarios/{id}", dto);
+                var (success, data, errorMessage) = await _http.PutAsync<UsuarioResponseDto>($"/api/User/{id}", dto);
                 return (success, data, errorMessage);
             }
             catch (Exception ex)
@@ -60,7 +60,7 @@ namespace AtelieDosPontinhos.Desktop.Services
         {
             try
             {
-                await _http.DeleteAsync($"/api/usuarios/{id}");
+                await _http.DeleteAsync($"/api/User/{id}");
                 return (true, string.Empty);
             }
             catch (Exception ex)
@@ -73,7 +73,7 @@ namespace AtelieDosPontinhos.Desktop.Services
         {
             try
             {
-                var perfis = await _http.GetAsync<List<string>>("/api/usuarios/perfis");
+                var perfis = await _http.GetAsync<List<string>>($"/api/User");
                 return perfis ?? new List<string>();
             }
             catch

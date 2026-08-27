@@ -82,6 +82,7 @@ namespace AtelieDosPontinhos.Desktop.Helpers
             // da API ou do appsettings.json do Desktop (fallback).
             // Nunca há porta hardcoded aqui.
             var baseUrl = AppConfig.ApiBaseUrl;
+            System.Diagnostics.Debug.WriteLine($"[HttpClientHelper] ApiBaseUrl = '{baseUrl}'");
 
             if (string.IsNullOrWhiteSpace(baseUrl))
             {
@@ -137,7 +138,7 @@ namespace AtelieDosPontinhos.Desktop.Helpers
                 // Faz uma requisição HEAD simples para verificar conectividade
                 // GET /api/produtos é público e leve o suficiente para um ping
                 using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
-                var response = await _client.GetAsync("/api/produtos", cts.Token);
+                var response = await _client.GetAsync("/api/Product", cts.Token);
 
                 // Qualquer resposta HTTP (mesmo 401/403) indica que a API está rodando
                 return (true, string.Empty);

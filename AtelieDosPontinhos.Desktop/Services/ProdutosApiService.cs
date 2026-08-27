@@ -26,7 +26,7 @@ namespace AtelieDosPontinhos.Desktop.Services
         {
             try
             {
-                var produtos = await _http.GetAsync<List<ProductResponseDto>>("/api/products");
+                var produtos = await _http.GetAsync<List<ProductResponseDto>>("/api/Product");
                 return produtos ?? new List<ProductResponseDto>();
             }
             catch
@@ -40,7 +40,7 @@ namespace AtelieDosPontinhos.Desktop.Services
         /// </summary>
         public async Task<ProductResponseDto?> GetByIdAsync(int id)
         {
-            return await _http.GetAsync<ProductResponseDto>($"/api/products/{id}");
+            return await _http.GetAsync<ProductResponseDto>($"/api/Product/{id}");
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace AtelieDosPontinhos.Desktop.Services
         public async Task<(bool Success, ProductResponseDto? product, string ErrorMessage)>
             CreateAsync(CreateProductDto dto)
         {
-            return await _http.PostAsync<ProductResponseDto>("/api/products", dto);
+            return await _http.PostAsync<ProductResponseDto>("/api/Product", dto);
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace AtelieDosPontinhos.Desktop.Services
         public async Task<(bool Success, ProductResponseDto? product, string ErrorMessage)>
             UpdateAsync(int id, UpdateProductDto dto)
         {
-            return await _http.PutAsync<ProductResponseDto>($"/api/products/{id}", dto);
+            return await _http.PutAsync<ProductResponseDto>($"/api/Product/{id}", dto);
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace AtelieDosPontinhos.Desktop.Services
         /// </summary>
         public async Task<(bool Success, string ErrorMessage)> DeleteAsync(int id)
         {
-            return await _http.DeleteAsync($"/api/products/{id}");
+            return await _http.DeleteAsync($"/api/Product/{id}");
         }
     }
 }
