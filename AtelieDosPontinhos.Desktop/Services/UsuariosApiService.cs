@@ -73,7 +73,7 @@ namespace AtelieDosPontinhos.Desktop.Services
         {
             try
             {
-                var perfis = await _http.GetAsync<List<string>>($"/api/User");
+                var perfis = await _http.GetAsync<List<string>>($"/api/User/perfil");
                 return perfis ?? new List<string>();
             }
             catch

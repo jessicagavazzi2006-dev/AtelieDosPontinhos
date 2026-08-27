@@ -18,7 +18,7 @@ namespace AtelieDosPontinhos.Desktop.UserControls
         // =====================================================================
         // SERVIÇOS E DADOS
         // =====================================================================
-        private CategoriasApiService _categoriaService = null;
+        private CategoriasApiService _categoriaService = null!;
         private List<CategoriaResponseDto> _categorias = new();
 
         // Estado do formulário: null = modo listagem, int = ID sendo editado

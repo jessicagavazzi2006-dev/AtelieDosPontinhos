@@ -155,7 +155,7 @@ namespace AtelieDosPontinhos.Desktop.Helpers
 
         /// <summary>
         /// Realiza uma requisição GET e desserializa o resultado em T.
-        /// Uso: var produtos = await http.GetAsync&lt;List&lt;ProdutoResponseDto&gt;&gt;("/api/games");
+        /// Uso: var produtos = await http.GetAsync&lt;List&lt;ProdutoResponseDto&gt;&gt;("/api/produtos");
         /// </summary>
         /// <typeparam name="T">Tipo de retorno esperado</typeparam>
         /// <param name="endpoint">Caminho do endpoint (ex: "/api/produtos")</param>

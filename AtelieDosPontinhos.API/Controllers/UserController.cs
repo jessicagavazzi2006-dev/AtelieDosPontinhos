@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ namespace AtelieDosPontinhos.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize] // Requer autenticação por padrão
     public class UserController : ControllerBase
     {
         // Adicione o tipo genérico aqui:
@@ -80,6 +82,17 @@ namespace AtelieDosPontinhos.API.Controllers
             }
 
             return NoContent();
+        }
+
+        /// <summary>
+        /// Retorna a lista de perfis disponíveis.
+        /// GET /api/usuarios/perfis
+        /// </summary>
+        [HttpGet("perfis")]
+        public async Task<ActionResult<IEnumerable<string>>> GetPerfis()
+        {
+            var perfis = await _userManager.GetPerfisAsync();
+            return Ok(perfis);
         }
     }
 }

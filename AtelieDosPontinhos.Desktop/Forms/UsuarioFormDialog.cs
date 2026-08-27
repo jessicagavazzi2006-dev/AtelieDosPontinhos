@@ -46,16 +46,16 @@ namespace AtelieDosPontinhos.Desktop.Forms
                 txtNome.Text = _usuarioExistente.UserName;
                 txtEmail.Text = _usuarioExistente.Email;
 
-                if (cmbPerfil.Items.Contains(_usuarioExistente.PerfilPrincipal))
+                if (cmbPerfil.Items.Contains(_usuarioExistente.Roles))
                 {
-                    cmbPerfil.SelectedItem = _usuarioExistente.PerfilPrincipal;
+                    cmbPerfil.SelectedItem = _usuarioExistente.Roles;
                 }
             }
             else
             {
                 lblTituloForm.Text = "➕ Novo Usuário";
                 if (cmbPerfil.Items.Count > 0)
-                    cmbPerfil.SelectedItem = 0;
+                    cmbPerfil.SelectedIndex = 0;
             }
         }
 
@@ -140,6 +140,11 @@ namespace AtelieDosPontinhos.Desktop.Forms
         {
             this.DialogResult = DialogResult.OK;
             this.Close();
+        }
+
+        private void UsuarioFormDialog_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -36,6 +36,27 @@ namespace AtelieDosPontinhos.Desktop.Services
         }
 
         /// <summary>
+        /// Pesquisa produtos via GET /api/Product/search?term={term}.
+        /// Retorna lista vazia em caso de erro.
+        /// </summary>
+        public async Task<List<ProductResponseDto>> SearchAsync(string term)
+        {
+            if (string.IsNullOrWhiteSpace(term))
+                return new List<ProductResponseDto>();
+
+            try
+            {
+                var encoded = Uri.EscapeDataString(term);
+                var produtos = await _http.GetAsync<List<ProductResponseDto>>($"/api/Product/search?term={encoded}");
+                return produtos ?? new List<ProductResponseDto>();
+            }
+            catch
+            {
+                return new List<ProductResponseDto>();
+            }
+        }
+
+        /// <summary>
         /// Busca um produto específico por ID via GET /api/produtos/{id}.
         /// </summary>
         public async Task<ProductResponseDto?> GetByIdAsync(int id)
