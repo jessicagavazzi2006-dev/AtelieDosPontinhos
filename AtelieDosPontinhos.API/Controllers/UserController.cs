@@ -83,9 +83,6 @@ namespace AtelieDosPontinhos.API.Controllers
 
             return NoContent();
         }
-
-        /// <summary>
-        /// Retorna a lista de perfis disponíveis.
         /// GET /api/usuarios/perfis
         /// </summary>
         [HttpGet("perfis")]

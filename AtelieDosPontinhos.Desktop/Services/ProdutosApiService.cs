@@ -47,7 +47,7 @@ namespace AtelieDosPontinhos.Desktop.Services
             try
             {
                 var encoded = Uri.EscapeDataString(term);
-                var produtos = await _http.GetAsync<List<ProductResponseDto>>($"/api/Product/search?term={encoded}");
+                var produtos = await _http.GetAsync<List<ProductResponseDto>>($"/api/Product/search");
                 return produtos ?? new List<ProductResponseDto>();
             }
             catch
