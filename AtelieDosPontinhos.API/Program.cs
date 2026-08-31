@@ -106,7 +106,7 @@ app.MapControllers();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    await SeedData.Initialize(services);
+    await SeedData.SeedAsync(services);
 }
 #endregion
 

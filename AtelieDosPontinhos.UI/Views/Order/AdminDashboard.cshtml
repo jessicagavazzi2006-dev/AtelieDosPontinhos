@@ -1,0 +1,74 @@
+﻿@model List<System.Text.Json.JsonElement>
+
+@{
+    ViewData["Title"] = "Painel Administrativo de Vendas";
+    decimal faturamentoTotal = Model?.Sum(p => p.GetProperty("valorTotal").GetDecimal()) ?? 0;
+}
+
+<div class="container py-5" style="max-width: 1100px;">
+    <div class="row g-4 mb-4">
+        <div class="col-md-8">
+            <h2 class="fw-bold mb-1" style="color: #8a4f91 !important;"><i class="bi bi-shield-lock-fill"></i> Painel de Controle de Vendas</h2>
+            <p class="text-muted mb-0 small">Acompanhamento em tempo real de todas as ordens de serviço do Ateliê dos Pontinhos.</p>
+        </div>
+        <!-- Card de Faturamento Centralizado -->
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm p-3 bg-success bg-opacity-10 rounded-4 text-end">
+                <span class="text-secondary small fw-semibold">💰 FATURAMENTO BRUTO TOTAL</span>
+                <h3 class="fw-bold text-success mb-0">R$ @faturamentoTotal.ToString("N2")</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-4 bg-white overflow-hidden">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0 text-dark">
+                <thead class="table-light text-secondary small fw-semibold">
+                    <tr>
+                        <th class="ps-4 py-3">PEDIDO</th>
+                        <th class="py-3">ID DO COMPRADOR</th>
+                        <th class="py-3">DATA</th>
+                        <th class="py-3">LOCALIDADE</th>
+                        <th class="py-3">PAGAMENTO</th>
+                        <th class="py-3">TOTAL</th>
+                        <th class="py-3 text-center">STATUS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model == null || Model.Count == 0)
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center py-5 text-muted">Nenhuma venda registrada no banco de dados ainda.</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        foreach (var pedido in Model)
+                        {
+                            var id = pedido.GetProperty("id").GetInt32();
+                            var user = pedido.GetProperty("userId").GetString();
+                            var data = pedido.GetProperty("dataPedido").GetDateTime().ToString("dd/MM/yyyy HH:mm");
+                            var total = pedido.GetProperty("valorTotal").GetDecimal();
+                            var status = pedido.GetProperty("status").GetString();
+                            var metodo = pedido.GetProperty("metodoPagamento").GetString() == "3" ? "PIX" : "Cartão";
+                            var cidade = pedido.GetProperty("cidade").GetString();
+                            var estado = pedido.GetProperty("estado").GetString();
+
+                            <tr>
+                                <td class="ps-4 fw-bold">#@id.ToString("D4")</td>
+                                <td class="text-muted small text-truncate" style="max-width: 150px;" title="@user">@user</td>
+                                <td class="text-secondary small">@data</td>
+                                <td class="fw-semibold text-secondary">@cidade - @estado</td>
+                                <td><span class="badge bg-light text-dark border">@metodo</span></td>
+                                <td class="fw-bold text-dark">R$ @total.ToString("N2")</td>
+                                <td class="text-center">
+                                    <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-1 fw-semibold">@status</span>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -13,11 +13,7 @@ namespace AtelieDosPontinhos.Desktop.DTOs
         public string Email { get; set; } = string.Empty;
         public string UserName { get; set; } = string.Empty;
 
-        public List<string> Roles { get; set; } = new();
-
-        public string PerfilPrincipal =>
-            Roles.Contains("Admin") ? "Administrador" :
-            Roles.Count > 0 ? string.Join(",", Roles) : "Usuario Comum";
+        public string Roles { get; set; } = string.Empty;
     }
     /// <summary>
     /// crianção do DTO para o usuário

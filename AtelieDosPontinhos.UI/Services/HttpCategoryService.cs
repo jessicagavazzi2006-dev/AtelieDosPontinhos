@@ -6,7 +6,6 @@ using System.Net.Http.Json;
 using AtelieDosPontinhos.Application.DTOs;
 using AtelieDosPontinhos.Application.Interfaces;
 
-
 namespace AtelieDosPontinhos.UI.Services
 {
     public class HttpCategoryService : ICategoryService

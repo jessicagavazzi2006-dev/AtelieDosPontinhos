@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using AtelieDosPontinhos.Application.DTOs;
+﻿using AtelieDosPontinhos.Application.DTOs;
 using AtelieDosPontinhos.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc; 
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,87 +13,75 @@ namespace AtelieDosPontinhos.API.Controllers
     [Authorize] // Requer autenticação por padrão
     public class UserController : ControllerBase
     {
-        // Adicione o tipo genérico aqui:
+        // Dependências: UserManager para usuários e RoleManager para perfis/roles
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        // Adicione também no construtor do controlador:
+        // Injetar UserManager e RoleManager
         public UserController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
-            _roleManager = roleManager; // novo
+            _roleManager = roleManager;
         }
+
+
 
         // 1. LISTAR TODOS OS USUÁRIOS
         [HttpGet]
-        public async Task<IActionResult> GetUsers()
+        public async Task<ActionResult<IEnumerable<UsuarioDto>>> GetAll()
         {
-            var users = await _userManager.Users.ToListAsync();
-
-            // Retorna apenas os dados necessários em formato simplificado
-            var userList = users.Select(u => new
-            {
-                id = u.Id,
-                email = u.Email,
-                userName = u.UserName
-            }).ToList();
-
-            return Ok(userList);
+            var users = await _usuariosService.GetAllAsync();
+            return Ok(users);
         }
 
         // 2. BUSCAR USUÁRIO POR ID
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetUserById(string id)
+        public async Task<ActionResult<UsuarioDto>> GetById(string id)
         {
-            var user = await _userManager.FindByIdAsync(id);
+            var user = await _usuariosService.GetByIdAsync(id);
             if (user == null) return NotFound(new { message = "Usuário não encontrado." });
 
-            return Ok(new { id = user.Id, email = user.Email, userName = user.UserName });
+            return Ok(user);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<UsuarioDto>> Create([FromBody] CreateUsuarioDto dto)
+        {
+            var (success, usuario, error) = await _usuariosService.CreateAsync(dto);
+            if (!success) return BadRequest(new { message = error });
+
+            return CreatedAtAction(nameof(GetById), new { id = usuario!.Id }, usuario);
         }
 
         // 3. EDITAR USUÁRIO (ATUALIZAR E-MAIL)
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser(string id, [FromBody] IdentityUser updatedUser)
+        public async Task<ActionResult<UsuarioDto>> Update(string id, [FromBody] UpdateUsuarioDto dto)
         {
-            var user = await _userManager.FindByIdAsync(id);
-            if (user == null) return NotFound(new { message = "Usuário não encontrado." });
+            var (success, usuario, error) = await _usuariosService.UpdateAsync(id, dto);
+            if (!success) return BadRequest(new { message = error });
 
-            user.Email = updatedUser.Email;
-            user.UserName = updatedUser.Email; // Mantém o UserName igual ao Email
-
-            var result = await _userManager.UpdateAsync(user);
-            if (!result.Succeeded)
-            {
-                return BadRequest(new { message = "Erro ao atualizar usuário.", errors = result.Errors });
-            }
-
-            return NoContent();
+            return Ok(usuario);
         }
 
         // 4. REMOVER USUÁRIO
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(string id)
+        public async Task<ActionResult> Delete(string id)
         {
-            var user = await _userManager.FindByIdAsync(id);
-            if (user == null) return NotFound(new { message = "Usuário não encontrado." });
-
-            var result = await _userManager.DeleteAsync(user);
-            if (!result.Succeeded)
-            {
-                return BadRequest(new { message = "Erro ao remover usuário." });
-            }
+            var (success, error) = await _usuariosService.DeleteAsync(id);
+            if (!success) return BadRequest(new { message = error });
 
             return NoContent();
         }
 
-        /// <summary>
-        /// Retorna a lista de perfis disponíveis.
-        /// GET /api/usuarios/perfis
-        /// </summary>
         [HttpGet("perfis")]
         public async Task<ActionResult<IEnumerable<string>>> GetPerfis()
         {
-            var perfis = await _userManager.GetPerfisAsync();
+            // Recupera os nomes das roles cadastradas via RoleManager
+            var perfis = await _roleManager.Roles
+                .Where(r => r.Name != null)
+                .Select(r => r.Name!)
+                .ToListAsync();
+
             return Ok(perfis);
         }
     }
