@@ -27,7 +27,10 @@ builder.Services.AddCors(options =>
 // DbContext
 builder.Services.AddDbContext<AtelieDosPontinhosDbContext>(options =>
     options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection")));
+        builder.Configuration.GetConnectionString("DefaultConnection"), sqlOptions =>
+        {
+            sqlOptions.EnableRetryOnFailure();
+        }));
 
 // Identity
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
@@ -85,6 +88,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+// Serve arquivos estáticos (wwwroot) para permitir que imagens/arquivos sejam acessados
+app.UseStaticFiles();
 app.UseRouting();
 // 🔥 NOVO: Ativa a política de liberação de acesso criada acima
 app.UseCors("PermitirTudo");
@@ -106,7 +111,17 @@ app.MapControllers();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    await SeedData.SeedAsync(services);
+    try
+    {
+        // Passa o caminho físico do wwwroot para o SeedData poder carregar imagens
+        await SeedData.SeedAsync(services, app.Environment.WebRootPath);
+    }
+    catch (Exception ex)
+    {
+        // Log e segue em frente para evitar crash na inicialização
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogWarning(ex, "Falha ao executar SeedData na API durante inicialização. Ignorando.");
+    }
 }
 #endregion
 

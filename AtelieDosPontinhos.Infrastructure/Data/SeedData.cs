@@ -29,8 +29,29 @@ namespace AtelieDosPontinhos.Infrastructure.Data
             var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
             var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-            // Aplica migrations pendentes (recomendado para ambientes com Identity)
-            //await context.Database.MigrateAsync();
+            // Garante que o banco exista antes de tentar aplicar migrations ou criar objetos.
+            // Conecta ao catálogo 'master' e verifica se a database já existe; se existir, aplicamos migrations,
+            // caso contrário, criamos com EnsureCreatedAsync.
+            try
+            {
+                var strategy = context.Database.CreateExecutionStrategy();
+                await strategy.ExecuteAsync(async () =>
+                {
+                    try
+                    {
+                        // Use apenas MigrateAsync: EF Core irá criar o banco e a tabela de histórico quando necessário
+                        await context.Database.MigrateAsync();
+                    }
+                    catch (Exception migrateEx)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Falha ao aplicar migrations: {migrateEx.Message}");
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Falha ao executar ExecutionStrategy para migrations: {ex.Message}");
+            }
 
             // 1. Roles
             string[] roles = { "Admin", "Client" };
@@ -99,11 +120,12 @@ namespace AtelieDosPontinhos.Infrastructure.Data
             {
                 var categorias = new List<Category>
                 {
-                    new Category { Name = "Banho", ImageLocal = "/images/products/banho.png" },
-                    new Category { Name = "Cama", ImageLocal = "/images/products/cama.png" },
-                    new Category { Name = "Infantil", ImageLocal = "/images/products/infantil.png" },
-                    new Category { Name = "Materiais", ImageLocal = "/images/products/materiais.png" },
-                    new Category { Name = "Mesa", ImageLocal = "/images/products/mesa.png" }
+                    // Usa imagem padrão disponível em wwwroot/images/products/default.svg para evitar referências a arquivos inexistentes
+                    new Category { Name = "Banho", ImageLocal = "/images/products/default.svg" },
+                    new Category { Name = "Cama", ImageLocal = "/images/products/default.svg" },
+                    new Category { Name = "Infantil", ImageLocal = "/images/products/default.svg" },
+                    new Category { Name = "Materiais", ImageLocal = "/images/products/default.svg" },
+                    new Category { Name = "Mesa", ImageLocal = "/images/products/default.svg" }
                 };
 
                 await context.Categories.AddRangeAsync(categorias);
@@ -111,59 +133,6 @@ namespace AtelieDosPontinhos.Infrastructure.Data
             }
 
             // 4. Produtos iniciais
-            if (!context.Products.Any())
-            {
-                var banho = await context.Categories.FirstOrDefaultAsync(c => c.Name == "Banho");
-                var cama = await context.Categories.FirstOrDefaultAsync(c => c.Name == "Cama");
-                var infantil = await context.Categories.FirstOrDefaultAsync(c => c.Name == "Infantil");
-
-                var produtos = new List<Product>
-                {
-                    new Product
-                    {
-                        Name = "Kit de Toalhas Bordadas",
-                        Description = "Lindo kit contendo duas toalhas de banho e uma de rosto com bordados feitos à mão.",
-                        CoverImageUrl = "https://unsplash.com",
-                        Price = 159.90m,
-                        Stock = 20,
-                        IsFeatured = true,
-                        CategoryId = banho?.Id ?? 1
-                    },
-                    new Product
-                    {
-                        Name = "Toalha de Banho Azul",
-                        Description = "Toalha de banho com acabamento artesanal em crochê azul.",
-                        CoverImageUrl ="https://unsplash.com",
-                        Price = 89.90m,
-                        Stock = 30,
-                        IsFeatured = false,
-                        CategoryId = banho?.Id ?? 1
-                    },
-                    new Product
-                    {
-                        Name = "Jogo de Cama Duplo",
-                        Description = "Jogo de cama casal 200 fios com bordado artesanal.",
-                        CoverImageUrl = "/images/products/lençol vermelho casal.jpg",
-                        Price = 249.90m,
-                        Stock = 10,
-                        IsFeatured = true,
-                        CategoryId = cama?.Id ?? 2
-                    },
-                    new Product
-                    {
-                        Name = "Manta Infantil Bordada",
-                        Description = "Manta leve para berço com bordados decorativos.",
-                        CoverImageUrl = "/images/products/fralda menina.jpg",
-                        Price = 129.90m,
-                        Stock = 15,
-                        IsFeatured = false,
-                        CategoryId = infantil?.Id ?? 3
-                    }
-                };
-
-                await context.Products.AddRangeAsync(produtos);
-                await context.SaveChangesAsync();
-            }
             // 4. Produtos iniciais
             if (!context.Products.Any())
             {
@@ -206,14 +175,48 @@ namespace AtelieDosPontinhos.Infrastructure.Data
                 // Se nenhuma imagem foi encontrada, mantém o seed manual mínimo (fallback)
                 if (!produtos.Any())
                 {
+                    // Lista explícita de produtos com caminhos web relativos corretos (nome de arquivo deve existir em wwwroot/images/products)
                     produtos.Add(new Product
                     {
                         Name = "Kit de Toalhas Bordadas",
                         Description = "Lindo kit contendo duas toalhas de banho e uma de rosto com bordados feitos à mão.",
-                        CoverImageUrl = "/images/products/toalha1.png",
+                        CoverImageUrl = "/images/products/kittoalhas.jpg",
                         Price = 159.90m,
                         Stock = 20,
                         IsFeatured = true,
+                        CategoryId = defaultCategoryId
+                    });
+
+                    produtos.Add(new Product
+                    {
+                        Name = "Toalha de Banho Azul",
+                        Description = "Toalha de banho com acabamento artesanal em crochê azul.",
+                        CoverImageUrl = "/images/products/toalhaazul.jpg",
+                        Price = 89.90m,
+                        Stock = 30,
+                        IsFeatured = false,
+                        CategoryId = defaultCategoryId
+                    });
+
+                    produtos.Add(new Product
+                    {
+                        Name = "Jogo de Cama Duplo",
+                        Description = "Jogo de cama casal 200 fios com bordado artesanal.",
+                        CoverImageUrl = "/images/products/lencolvermelhocasal.jpg",
+                        Price = 249.90m,
+                        Stock = 10,
+                        IsFeatured = true,
+                        CategoryId = defaultCategoryId
+                    });
+
+                    produtos.Add(new Product
+                    {
+                        Name = "Manta Infantil Bordada",
+                        Description = "Manta leve para berço com bordados decorativos.",
+                        CoverImageUrl = "/images/products/default.svg",
+                        Price = 129.90m,
+                        Stock = 15,
+                        IsFeatured = false,
                         CategoryId = defaultCategoryId
                     });
                 }

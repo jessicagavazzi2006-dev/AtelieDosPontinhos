@@ -7,7 +7,8 @@
 <div class="container py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="fw-bold text-dark m-0">📦 Gerenciar Produtos</h2>
-        <a asp-controller="Product" asp-action="Create" class="btn btn-primary rounded-pill">➕ Novo Produto</a>
+        <!-- Redireciona para a Action de CriarProduto na Dashboard -->
+        <a asp-controller="Dashboard" asp-action="CriarProduto" class="btn btn-primary rounded-pill">➕ Novo Produto</a>
     </div>
 
     <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
@@ -18,6 +19,7 @@
                     <th>Nome</th>
                     <th>Preço</th>
                     <th>Descrição</th>
+                    <th class="text-center">Ações</th>
                 </tr>
             </thead>
             <tbody>
@@ -27,24 +29,46 @@
                     {
                         <tr>
                             <td>
-                                <!-- Se a imagem começar com http, /images ou /uploads, ela renderiza.
-                                     Se estiver vazia, colocamos uma imagem padrão do Bootstrap para não quebrar o layout -->
-                                <img src="@(string.IsNullOrEmpty(item.CoverImageUrl) ? "https://placehold.co/60x60?text=Sem+Foto" : item.CoverImageUrl)"
+                                @{
+                                    // Trata a URL para buscar dentro de /uploads/ ou /images/products/
+                                    string imagePath = "/images/products/default.svg";
+
+                                    if (!string.IsNullOrEmpty(item.CoverImageUrl))
+                                    {
+                                        if (item.CoverImageUrl.StartsWith("/") || item.CoverImageUrl.StartsWith("http"))
+                                        {
+                                            imagePath = item.CoverImageUrl;
+                                        }
+                                        else
+                                        {
+                                            imagePath = $"/images/products/{item.CoverImageUrl}";
+                                        }
+                                    }
+                                }
+                                <img src="@imagePath"
                                      alt="@item.Nome"
                                      class="rounded shadow-sm"
                                      style="width: 60px; height: 60px; object-fit: cover;"
-                                     onerror="this.src='https://placehold.co/60x60?text=Erro+Foto'">
+                                     onerror="this.onerror=null;this.src='/images/products/default.svg';">
                             </td>
                             <td class="fw-bold text-dark">@item.Nome</td>
                             <td class="text-success fw-bold">R$ @item.Preco.ToString("F2")</td>
                             <td class="text-muted text-truncate" style="max-width: 300px;">@item.Descricao</td>
+                            <!-- CÓDIGO CORRIGIDO -->
+                            <td class="text-center">
+                                <a asp-controller="Product" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary me-1">Editar</a>
+                                <form asp-controller="Product" asp-action="Delete" asp-route-id="@item.Id" method="post" class="d-inline" onsubmit="return confirm('Deseja realmente excluir este produto?');">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Excluir</button>
+                                </form>
+                            </td>
                         </tr>
                     }
                 }
                 else
                 {
                     <tr>
-                        <td colspan="4" class="text-center py-5 text-muted">
+                        <td colspan="5" class="text-center py-5 text-muted">
                             <p class="mb-0 fs-5">Nenhum produto cadastrado no momento.</p>
                         </td>
                     </tr>

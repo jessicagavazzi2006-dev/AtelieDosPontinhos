@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
+using Microsoft.Data.SqlClient;
 using SenacGames.UI.Helpers;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.FileProviders;
@@ -57,7 +58,11 @@ builder.Services.AddHttpClient("ApiClient", client =>
 // =====================================================================
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AtelieDosPontinhosDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), sqlOptions =>
+    {
+        // Habilita retry em transient failures
+        sqlOptions.EnableRetryOnFailure();
+    }));
 
 // Identity (UI)
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
@@ -115,6 +120,37 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     try
     {
+        // Atenção: rotina de criação do banco (apenas em Development).
+        // Evita erro quando o banco já existe, verificando antes de criar.
+        if (app.Environment.IsDevelopment())
+        {
+            var db = services.GetRequiredService<AtelieDosPontinhosDbContext>();
+            var logger = services.GetRequiredService<ILogger<Program>>();
+
+            try
+            {
+                // Usar a ExecutionStrategy do EF para operações de migração/criação, isso aplica retry automático
+                var strategy = db.Database.CreateExecutionStrategy();
+                await strategy.ExecuteAsync(async () =>
+                {
+                    try
+                    {
+                        // Use MigrateAsync unicamente: EF cria o DB e a tabela __EFMigrationsHistory quando necessário
+                        await db.Database.MigrateAsync();
+                        logger.LogInformation("Migrations aplicadas/criadas com sucesso.");
+                    }
+                    catch (Exception migrateEx)
+                    {
+                        logger.LogWarning(migrateEx, "Falha ao aplicar migrations no banco (ExecutionStrategy).");
+                    }
+                });
+            }
+            catch (Exception dbEx)
+            {
+                logger.LogWarning(dbEx, "Falha ao verificar/criar o banco de dados usando ExecutionStrategy. Ignorando recriação.");
+            }
+        }
+
         // SeedData.SeedAsync espera um IServiceProvider. Opcionalmente passamos WebRootPath para permitir
         // que a camada de infraestrutura carregue imagens estáticas se estiverem presentes.
         await SeedData.SeedAsync(services, app.Environment.WebRootPath);

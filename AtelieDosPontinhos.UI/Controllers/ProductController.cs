@@ -7,24 +7,23 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AtelieDosPontinhos.UI.Models;
-using System.Net.Http; // 🌟 NOVO
-using System.Net.Http.Json; // 🌟 NOVO
+using System.Net.Http;
+using System.Net.Http.Json;
 
 namespace AtelieDosPontinhos.UI.Controllers
 {
     public class ProductController : Controller
     {
         private readonly IWebHostEnvironment _environment;
-        private readonly IHttpClientFactory _httpClientFactory; // 🌟 NOVO
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        // Construtor recebendo o HttpClientFactory para conversar com a API
         public ProductController(IWebHostEnvironment environment, IHttpClientFactory httpClientFactory)
         {
             _environment = environment;
-            _httpClientFactory = httpClientFactory; // 🌟 NOVO
+            _httpClientFactory = httpClientFactory;
         }
 
-        // LISTA GLOBAL NA MEMÓRIA (Mantida apenas como segurança/fallback)
+        // LISTA GLOBAL NA MEMÓRIA (Mantida como fallback)
         private static List<ProductViewModel> _products = new List<ProductViewModel>
         {
             new ProductViewModel
@@ -45,7 +44,8 @@ namespace AtelieDosPontinhos.UI.Controllers
             }
         };
 
-        // 🌟 MUDANÇA 1: O método Index agora busca TODOS os produtos reais direto da API!
+        // 📦 GET: Lista os produtos da API e exibe a tabela
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             var client = _httpClientFactory.CreateClient("Api");
@@ -72,7 +72,8 @@ namespace AtelieDosPontinhos.UI.Controllers
             return View(produtos);
         }
 
-        // Método de detalhes buscando da API (que já havíamos arrumado)
+        // 👁️ GET: Detalhes do produto
+        [HttpGet]
         public async Task<IActionResult> Detalhes(int id)
         {
             var client = _httpClientFactory.CreateClient("Api");
@@ -104,13 +105,14 @@ namespace AtelieDosPontinhos.UI.Controllers
             return View(product);
         }
 
+        // ➕ GET: Redireciona para o formulário na DashboardController
         [HttpGet]
         public IActionResult Create()
         {
-            return View();
+            return RedirectToAction("CriarProduto", "Dashboard");
         }
 
-        // 🌟 MUDANÇA 2: O método Create agora envia o novo produto para salvar no banco real da API!
+        // 💾 POST: Envia o novo produto para salvar na API
         [HttpPost]
         public async Task<IActionResult> Create(ProductViewModel novoProduto, IFormFile FotoArquivo)
         {
@@ -142,7 +144,6 @@ namespace AtelieDosPontinhos.UI.Controllers
 
                 try
                 {
-                    // Faz o POST enviando o produto em formato JSON para a API
                     var response = await client.PostAsJsonAsync("api/Product", novoProduto);
 
                     if (response.IsSuccessStatusCode)
@@ -162,6 +163,75 @@ namespace AtelieDosPontinhos.UI.Controllers
             }
 
             return View(novoProduto);
+        }
+
+        // 🗑️ GET: Confirmação de exclusão
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var client = _httpClientFactory.CreateClient("Api");
+            ProductViewModel product = null;
+
+            try
+            {
+                var response = await client.GetAsync($"api/Product/{id}");
+                if (response.IsSuccessStatusCode)
+                {
+                    product = await response.Content.ReadFromJsonAsync<ProductViewModel>();
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Erro ao buscar produto para deleção: {ex.Message}");
+            }
+
+            if (product == null)
+            {
+                product = _products.FirstOrDefault(p => p.Id == id);
+            }
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            return View(product);
+        }
+
+        // 🗑️ POST: Executa a exclusão na API
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var client = _httpClientFactory.CreateClient("Api");
+
+            try
+            {
+                var response = await client.DeleteAsync($"api/Product/{id}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var localItem = _products.FirstOrDefault(p => p.Id == id);
+                    if (localItem != null)
+                    {
+                        _products.Remove(localItem);
+                    }
+
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Erro ao deletar produto na API: {ex.Message}");
+            }
+
+            var fallbackItem = _products.FirstOrDefault(p => p.Id == id);
+            if (fallbackItem != null)
+            {
+                _products.Remove(fallbackItem);
+            }
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }
