@@ -13,14 +13,18 @@ namespace AtelieDosPontinhos.API.Controllers
     [Authorize] // Requer autenticação por padrão
     public class UserController : ControllerBase
     {
-        // Adicione o tipo genérico aqui:
+        // Dependências: UserManager para usuários e RoleManager para perfis/roles
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        // Adicione também no construtor do controlador:
-        public UserController(UserManager<IdentityUser> userManager)
+        // Injetar UserManager e RoleManager
+        public UserController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
+            _roleManager = roleManager;
         }
+
+
 
         // 1. LISTAR TODOS OS USUÁRIOS
         [HttpGet]
@@ -91,7 +95,12 @@ namespace AtelieDosPontinhos.API.Controllers
         [HttpGet("perfis")]
         public async Task<ActionResult<IEnumerable<string>>> GetPerfis()
         {
-            var perfis = await _userManager.GetPerfisAsync();
+            // Recupera os nomes das roles cadastradas via RoleManager
+            var perfis = await _roleManager.Roles
+                .Where(r => r.Name != null)
+                .Select(r => r.Name!)
+                .ToListAsync();
+
             return Ok(perfis);
         }
     }

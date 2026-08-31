@@ -1,4 +1,9 @@
-﻿using AtelieDosPontinhos.Domain.Entities;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.IO;
+using AtelieDosPontinhos.Domain.Entities;
 using AtelieDosPontinhos.Infrastructure.Context;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +18,11 @@ namespace AtelieDosPontinhos.Infrastructure.Data
         /// Popula o banco de dados com roles, usuários, categorias e produtos iniciais.
         /// Idempotente: pode ser chamado várias vezes sem duplicar dados.
         /// </summary>
-        public static async Task SeedAsync(IServiceProvider serviceProvider)
+        /// <summary>
+        /// Popula o banco. Opcionalmente pode receber o caminho de wwwroot (webRootPath)
+        /// para carregar imagens dinâmicas quando disponível.
+        /// </summary>
+        public static async Task SeedAsync(IServiceProvider serviceProvider, string? webRootPath = null)
         {
             using var scope = serviceProvider.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<AtelieDosPontinhosDbContext>();
@@ -162,24 +171,22 @@ namespace AtelieDosPontinhos.Infrastructure.Data
                 var defaultCategory = await context.Categories.FirstOrDefaultAsync();
                 var defaultCategoryId = defaultCategory?.Id ?? 1;
 
-                // Tenta obter IWebHostEnvironment para localizar wwwroot
-                var env = scope.ServiceProvider.GetService<Microsoft.AspNetCore.Hosting.IWebHostEnvironment>();
+                // Se for fornecido o caminho do wwwroot, tenta carregar imagens de /images/products
                 var produtos = new List<Product>();
-
-                if (env != null)
+                if (!string.IsNullOrWhiteSpace(webRootPath))
                 {
-                    var imagesDir = System.IO.Path.Combine(env.WebRootPath ?? string.Empty, "images", "products");
-                    if (System.IO.Directory.Exists(imagesDir))
+                    var imagesDir = Path.Combine(webRootPath, "images", "products");
+                    if (Directory.Exists(imagesDir))
                     {
                         var allowed = new[] { ".png", ".jpg", ".jpeg", ".webp", ".gif" };
-                        var files = System.IO.Directory.GetFiles(imagesDir)
-                            .Where(f => allowed.Contains(System.IO.Path.GetExtension(f).ToLowerInvariant()))
+                        var files = Directory.GetFiles(imagesDir)
+                            .Where(f => allowed.Contains(Path.GetExtension(f).ToLowerInvariant()))
                             .ToList();
 
                         foreach (var file in files)
                         {
-                            var fileName = System.IO.Path.GetFileName(file);
-                            var name = System.IO.Path.GetFileNameWithoutExtension(fileName).Replace('-', ' ').Replace('_', ' ');
+                            var fileName = Path.GetFileName(file);
+                            var name = Path.GetFileNameWithoutExtension(fileName).Replace('-', ' ').Replace('_', ' ');
                             if (string.IsNullOrWhiteSpace(name)) name = "Produto";
 
                             produtos.Add(new Product

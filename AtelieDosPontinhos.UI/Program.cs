@@ -115,8 +115,9 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     try
     {
-        // SeedData.SeedAsync espera um IServiceProvider
-        await SeedData.SeedAsync(services);
+        // SeedData.SeedAsync espera um IServiceProvider. Opcionalmente passamos WebRootPath para permitir
+        // que a camada de infraestrutura carregue imagens estáticas se estiverem presentes.
+        await SeedData.SeedAsync(services, app.Environment.WebRootPath);
     }
     catch (Exception ex)
     {
