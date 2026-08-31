@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+
 namespace AtelieDosPontinhos.API.Controllers
 {
     [ApiController]
@@ -23,8 +24,6 @@ namespace AtelieDosPontinhos.API.Controllers
             _userManager = userManager;
             _roleManager = roleManager;
         }
-
-
 
         // 1. LISTAR TODOS OS USUÁRIOS
         [HttpGet]

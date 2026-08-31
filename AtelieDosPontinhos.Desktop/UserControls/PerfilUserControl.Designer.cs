@@ -71,7 +71,7 @@
             btnAvatar.FillColor = Color.RoyalBlue;
             btnAvatar.Font = new Font("Yu Gothic UI", 36F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnAvatar.ForeColor = Color.White;
-            btnAvatar.Location = new Point(225, 25);
+            btnAvatar.Location = new Point(228, 26);
             btnAvatar.Name = "btnAvatar";
             btnAvatar.ShadowDecoration.CustomizableEdges = customizableEdges1;
             btnAvatar.ShadowDecoration.Mode = Guna.UI2.WinForms.Enums.ShadowMode.Circle;
@@ -141,16 +141,15 @@
             // 
             // lblBadge
             // 
-            lblBadge.AutoSize = true;
             lblBadge.BackColor = SystemColors.HotTrack;
-            lblBadge.Font = new Font("Yu Gothic UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblBadge.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblBadge.ForeColor = Color.White;
-            lblBadge.Location = new Point(190, 162);
+            lblBadge.Location = new Point(202, 157);
             lblBadge.Name = "lblBadge";
-            lblBadge.Padding = new Padding(50, 5, 50, 5);
             lblBadge.Size = new Size(139, 27);
             lblBadge.TabIndex = 2;
             lblBadge.Text = "Perfil";
+            lblBadge.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // sep
             // 
@@ -165,7 +164,7 @@
             // 
             lblNome.AutoSize = true;
             lblNome.Font = new Font("Yu Gothic UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblNome.Location = new Point(240, 128);
+            lblNome.Location = new Point(242, 128);
             lblNome.Name = "lblNome";
             lblNome.Size = new Size(62, 20);
             lblNome.TabIndex = 1;

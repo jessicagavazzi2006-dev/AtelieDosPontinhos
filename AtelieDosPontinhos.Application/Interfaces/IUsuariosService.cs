@@ -1,7 +1,3 @@
-// =============================================================================
-// SenacGames.Application - Interfaces/IUsuariosService.cs
-// =============================================================================
-
 using AtelieDosPontinhos.Application.DTOs;
 
 namespace AtelieDosPontinhos.Application.Interfaces
