@@ -3,10 +3,11 @@
 // =============================================================================
 
 using System.Net.Http.Json;
-using SenacGames.Application.DTOs;
-using SenacGames.Application.Interfaces;
+using AtelieDosPontinhos.Application.DTOs;
+using AtelieDosPontinhos.Application.Interfaces;
 
-namespace SenacGames.UI.Services
+
+namespace AtelieDosPontinhos.UI.Services
 {
     public class HttpCategoryService : ICategoryService
     {

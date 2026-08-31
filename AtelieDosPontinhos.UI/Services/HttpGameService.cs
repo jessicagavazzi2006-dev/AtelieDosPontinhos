@@ -3,8 +3,7 @@
 // =============================================================================
 
 using System.Net.Http.Json;
-using SenacGames.Application.DTOs;
-using SenacGames.Application.Interfaces;
+
 
 namespace SenacGames.UI.Services
 {

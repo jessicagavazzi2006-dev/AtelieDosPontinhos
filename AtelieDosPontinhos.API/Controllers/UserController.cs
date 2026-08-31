@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using AtelieDosPontinhos.Application.DTOs;
+using AtelieDosPontinhos.Application.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,11 +17,13 @@ namespace AtelieDosPontinhos.API.Controllers
     {
         // Adicione o tipo genérico aqui:
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         // Adicione também no construtor do controlador:
-        public UserController(UserManager<IdentityUser> userManager)
+        public UserController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
+            _roleManager = roleManager; // novo
         }
 
         // 1. LISTAR TODOS OS USUÁRIOS
