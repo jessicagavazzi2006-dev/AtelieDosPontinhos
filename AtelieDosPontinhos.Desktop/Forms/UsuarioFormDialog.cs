@@ -46,9 +46,9 @@ namespace AtelieDosPontinhos.Desktop.Forms
                 txtNome.Text = _usuarioExistente.UserName;
                 txtEmail.Text = _usuarioExistente.Email;
 
-                if (cmbPerfil.Items.Contains(_usuarioExistente.Roles))
+                if (cmbPerfil.Items.Contains(_usuarioExistente.PerfilPrincipal))
                 {
-                    cmbPerfil.SelectedItem = _usuarioExistente.Roles;
+                    cmbPerfil.SelectedItem = _usuarioExistente.PerfilPrincipal;
                 }
             }
             else

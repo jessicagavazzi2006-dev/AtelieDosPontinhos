@@ -1,10 +1,11 @@
-﻿using AtelieDosPontinhos.Application.DTOs;
-using AtelieDosPontinhos.Application.Interfaces;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc; 
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 
 namespace AtelieDosPontinhos.API.Controllers
 {
@@ -24,55 +25,72 @@ namespace AtelieDosPontinhos.API.Controllers
             _roleManager = roleManager;
         }
 
-
-
         // 1. LISTAR TODOS OS USUÁRIOS
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UsuarioDto>>> GetAll()
+        public async Task<IActionResult> GetUsers()
         {
-            var users = await _usuariosService.GetAllAsync();
-            return Ok(users);
+            var users = await _userManager.Users.ToListAsync();
+
+            // Retorna apenas os dados necessários em formato simplificado
+            var userList = users.Select(u => new
+            {
+                id = u.Id,
+                email = u.Email,
+                userName = u.UserName
+            }).ToList();
+
+            return Ok(userList);
         }
 
         // 2. BUSCAR USUÁRIO POR ID
         [HttpGet("{id}")]
-        public async Task<ActionResult<UsuarioDto>> GetById(string id)
+        public async Task<IActionResult> GetUserById(string id)
         {
-            var user = await _usuariosService.GetByIdAsync(id);
+            var user = await _userManager.FindByIdAsync(id);
             if (user == null) return NotFound(new { message = "Usuário não encontrado." });
 
-            return Ok(user);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<UsuarioDto>> Create([FromBody] CreateUsuarioDto dto)
-        {
-            var (success, usuario, error) = await _usuariosService.CreateAsync(dto);
-            if (!success) return BadRequest(new { message = error });
-
-            return CreatedAtAction(nameof(GetById), new { id = usuario!.Id }, usuario);
+            return Ok(new { id = user.Id, email = user.Email, userName = user.UserName });
         }
 
         // 3. EDITAR USUÁRIO (ATUALIZAR E-MAIL)
         [HttpPut("{id}")]
-        public async Task<ActionResult<UsuarioDto>> Update(string id, [FromBody] UpdateUsuarioDto dto)
+        public async Task<IActionResult> UpdateUser(string id, [FromBody] IdentityUser updatedUser)
         {
-            var (success, usuario, error) = await _usuariosService.UpdateAsync(id, dto);
-            if (!success) return BadRequest(new { message = error });
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null) return NotFound(new { message = "Usuário não encontrado." });
 
-            return Ok(usuario);
-        }
+            user.Email = updatedUser.Email;
+            user.UserName = updatedUser.Email; // Mantém o UserName igual ao Email
 
-        // 4. REMOVER USUÁRIO
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(string id)
-        {
-            var (success, error) = await _usuariosService.DeleteAsync(id);
-            if (!success) return BadRequest(new { message = error });
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                return BadRequest(new { message = "Erro ao atualizar usuário.", errors = result.Errors });
+            }
 
             return NoContent();
         }
 
+        // 4. REMOVER USUÁRIO
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null) return NotFound(new { message = "Usuário não encontrado." });
+
+            var result = await _userManager.DeleteAsync(user);
+            if (!result.Succeeded)
+            {
+                return BadRequest(new { message = "Erro ao remover usuário." });
+            }
+
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Retorna a lista de perfis disponíveis.
+        /// GET /api/usuarios/perfis
+        /// </summary>
         [HttpGet("perfis")]
         public async Task<ActionResult<IEnumerable<string>>> GetPerfis()
         {

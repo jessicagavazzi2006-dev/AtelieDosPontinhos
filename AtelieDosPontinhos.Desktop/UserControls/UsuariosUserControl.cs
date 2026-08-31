@@ -76,7 +76,7 @@ namespace AtelieDosPontinhos.Desktop.UserControls
                     u.Id,
                     u.UserName,
                     u.Email,
-                    u.Roles
+                    u.PerfilPrincipal
                 );
             }
 

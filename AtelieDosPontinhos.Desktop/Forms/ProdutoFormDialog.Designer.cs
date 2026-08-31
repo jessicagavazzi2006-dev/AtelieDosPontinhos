@@ -40,6 +40,8 @@
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges10 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges11 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges12 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges13 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges14 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             lblTituloForm = new Label();
             lblCampTitulo = new Label();
             txtNome = new Guna.UI2.WinForms.Guna2TextBox();
@@ -54,6 +56,8 @@
             chkDestaque = new CheckBox();
             btnSalvar = new Guna.UI2.WinForms.Guna2Button();
             btnCancelar = new Guna.UI2.WinForms.Guna2Button();
+            lblCampEstoque = new Label();
+            txtEstoque = new Guna.UI2.WinForms.Guna2TextBox();
             SuspendLayout();
             // 
             // lblTituloForm
@@ -169,7 +173,7 @@
             lblCampCover.AutoSize = true;
             lblCampCover.Font = new Font("Yu Gothic", 9F, FontStyle.Bold);
             lblCampCover.ForeColor = Color.FromArgb(58, 52, 64);
-            lblCampCover.Location = new Point(31, 329);
+            lblCampCover.Location = new Point(31, 391);
             lblCampCover.Name = "lblCampCover";
             lblCampCover.Size = new Size(115, 16);
             lblCampCover.TabIndex = 0;
@@ -188,7 +192,7 @@
             txtCoverUrl.FocusedState.BorderColor = Color.FromArgb(94, 148, 255);
             txtCoverUrl.Font = new Font("Segoe UI", 9F);
             txtCoverUrl.HoverState.BorderColor = Color.FromArgb(94, 148, 255);
-            txtCoverUrl.Location = new Point(31, 347);
+            txtCoverUrl.Location = new Point(31, 409);
             txtCoverUrl.Name = "txtCoverUrl";
             txtCoverUrl.PlaceholderText = "https://...";
             txtCoverUrl.SelectedText = "";
@@ -201,7 +205,7 @@
             cmbCategoria.BackColor = Color.FromArgb(245, 247, 250);
             cmbCategoria.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbCategoria.FlatStyle = FlatStyle.System;
-            cmbCategoria.Location = new Point(31, 411);
+            cmbCategoria.Location = new Point(31, 471);
             cmbCategoria.Name = "cmbCategoria";
             cmbCategoria.Size = new Size(376, 23);
             cmbCategoria.TabIndex = 2;
@@ -211,7 +215,7 @@
             lblCampCategoria.AutoSize = true;
             lblCampCategoria.Font = new Font("Yu Gothic", 9F, FontStyle.Bold);
             lblCampCategoria.ForeColor = Color.FromArgb(58, 52, 64);
-            lblCampCategoria.Location = new Point(31, 393);
+            lblCampCategoria.Location = new Point(31, 453);
             lblCampCategoria.Name = "lblCampCategoria";
             lblCampCategoria.Size = new Size(87, 16);
             lblCampCategoria.TabIndex = 0;
@@ -221,7 +225,7 @@
             // 
             chkDestaque.AutoSize = true;
             chkDestaque.Font = new Font("Yu Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            chkDestaque.Location = new Point(31, 447);
+            chkDestaque.Location = new Point(31, 507);
             chkDestaque.Name = "chkDestaque";
             chkDestaque.Size = new Size(166, 20);
             chkDestaque.TabIndex = 3;
@@ -239,7 +243,7 @@
             btnSalvar.FillColor = Color.FromArgb(177, 145, 217);
             btnSalvar.Font = new Font("Yu Gothic", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             btnSalvar.ForeColor = Color.White;
-            btnSalvar.Location = new Point(31, 487);
+            btnSalvar.Location = new Point(31, 547);
             btnSalvar.Name = "btnSalvar";
             btnSalvar.ShadowDecoration.CustomizableEdges = customizableEdges10;
             btnSalvar.Size = new Size(180, 45);
@@ -260,7 +264,7 @@
             btnCancelar.FillColor = Color.FromArgb(245, 247, 250);
             btnCancelar.Font = new Font("Yu Gothic", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             btnCancelar.ForeColor = Color.FromArgb(51, 61, 75);
-            btnCancelar.Location = new Point(217, 487);
+            btnCancelar.Location = new Point(217, 547);
             btnCancelar.Name = "btnCancelar";
             btnCancelar.ShadowDecoration.CustomizableEdges = customizableEdges12;
             btnCancelar.Size = new Size(114, 45);
@@ -268,17 +272,51 @@
             btnCancelar.Text = "Cancelar";
             btnCancelar.Click += btnCancelar_Click;
             // 
+            // lblCampEstoque
+            // 
+            lblCampEstoque.AutoSize = true;
+            lblCampEstoque.Font = new Font("Yu Gothic", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblCampEstoque.ForeColor = Color.FromArgb(58, 52, 64);
+            lblCampEstoque.Location = new Point(31, 328);
+            lblCampEstoque.Name = "lblCampEstoque";
+            lblCampEstoque.Size = new Size(75, 16);
+            lblCampEstoque.TabIndex = 6;
+            lblCampEstoque.Text = "ESTOQUE *";
+            // 
+            // txtEstoque
+            // 
+            txtEstoque.BorderRadius = 5;
+            txtEstoque.CustomizableEdges = customizableEdges13;
+            txtEstoque.DefaultText = "";
+            txtEstoque.DisabledState.BorderColor = Color.FromArgb(208, 208, 208);
+            txtEstoque.DisabledState.FillColor = Color.FromArgb(226, 226, 226);
+            txtEstoque.DisabledState.ForeColor = Color.FromArgb(138, 138, 138);
+            txtEstoque.DisabledState.PlaceholderForeColor = Color.FromArgb(138, 138, 138);
+            txtEstoque.FillColor = Color.WhiteSmoke;
+            txtEstoque.FocusedState.BorderColor = Color.FromArgb(94, 148, 255);
+            txtEstoque.Font = new Font("Segoe UI", 9F);
+            txtEstoque.HoverState.BorderColor = Color.FromArgb(94, 148, 255);
+            txtEstoque.Location = new Point(31, 348);
+            txtEstoque.Name = "txtEstoque";
+            txtEstoque.PlaceholderText = "Ex: 50";
+            txtEstoque.SelectedText = "";
+            txtEstoque.ShadowDecoration.CustomizableEdges = customizableEdges14;
+            txtEstoque.Size = new Size(376, 36);
+            txtEstoque.TabIndex = 1;
+            // 
             // ProdutoFormDialog
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
-            ClientSize = new Size(436, 568);
+            ClientSize = new Size(436, 628);
+            Controls.Add(lblCampEstoque);
             Controls.Add(btnCancelar);
             Controls.Add(btnSalvar);
             Controls.Add(chkDestaque);
             Controls.Add(cmbCategoria);
             Controls.Add(txtCoverUrl);
+            Controls.Add(txtEstoque);
             Controls.Add(txtPreco);
             Controls.Add(txtDescricao);
             Controls.Add(txtNome);
@@ -313,5 +351,7 @@
         private CheckBox chkDestaque;
         private Guna.UI2.WinForms.Guna2Button btnSalvar;
         private Guna.UI2.WinForms.Guna2Button btnCancelar;
+        private Label lblCampEstoque;
+        private Guna.UI2.WinForms.Guna2TextBox txtEstoque;
     }
 }

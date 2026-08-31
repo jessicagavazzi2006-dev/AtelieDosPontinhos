@@ -79,6 +79,7 @@ namespace AtelieDosPontinhos.Desktop.Forms
             txtNome.Text = _produtoExistente.Name;
             txtDescricao.Text = _produtoExistente.Description;
             txtPreco.Text = _produtoExistente.Price.ToString("F2", CultureInfo.CurrentCulture);
+            txtEstoque.Text = _produtoExistente.Stock.ToString();
             txtCoverUrl.Text = _produtoExistente.CoverImageUrl;
             chkDestaque.Checked = _produtoExistente.IsFeatured;
 
@@ -104,7 +105,27 @@ namespace AtelieDosPontinhos.Desktop.Forms
             if (!decimal.TryParse(txtPreco.Text, out decimal precoValido) || precoValido <= 0)
             {
                 MessageBox.Show(
-                    "Informe um preço válido",
+                    "Informe um preço válido.",
+                    "Validação",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtEstoque.Text))
+            {
+                MessageBox.Show(
+                    "Informe a quantidade em estoque.",
+                    "Validação",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (!int.TryParse(txtEstoque.Text, out int estoqueValido) || estoqueValido < 0)
+            {
+                MessageBox.Show(
+                    "Informe um valor de estoque válido.",
                     "Validação",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
@@ -114,7 +135,7 @@ namespace AtelieDosPontinhos.Desktop.Forms
             if (cmbCategoria.SelectedIndex <= 0)
             {
                 MessageBox.Show(
-                    "Selecione uma categoria",
+                    "Selecione uma categoria.",
                     "Validação",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
@@ -131,6 +152,7 @@ namespace AtelieDosPontinhos.Desktop.Forms
                     Name = txtNome.Text.Trim(),
                     Description = txtDescricao.Text.Trim(),
                     Price = precoValido,
+                    Stock = estoqueValido,
                     CoverImageUrl = txtCoverUrl.Text,
                     CategoryId = categoriaId,
                     IsFeatured = chkDestaque.Checked
@@ -143,6 +165,7 @@ namespace AtelieDosPontinhos.Desktop.Forms
                     Name = txtNome.Text.Trim(),
                     Description = txtDescricao.Text.Trim(),
                     Price = precoValido,
+                    Stock = estoqueValido,
                     CoverImageUrl = txtCoverUrl.Text,
                     CategoryId = categoriaId,
                     IsFeatured = chkDestaque.Checked
