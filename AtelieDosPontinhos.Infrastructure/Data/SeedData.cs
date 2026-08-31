@@ -90,11 +90,11 @@ namespace AtelieDosPontinhos.Infrastructure.Data
             {
                 var categorias = new List<Category>
                 {
-                    new Category { Name = "Banho", ImageLocal = "/images/categorias/banho.png" },
-                    new Category { Name = "Cama", ImageLocal = "/images/categorias/cama.png" },
-                    new Category { Name = "Infantil", ImageLocal = "/images/categorias/infantil.png" },
-                    new Category { Name = "Materiais", ImageLocal = "/images/categorias/materiais.png" },
-                    new Category { Name = "Mesa", ImageLocal = "/images/categorias/mesa.png" }
+                    new Category { Name = "Banho", ImageLocal = "/images/products/banho.png" },
+                    new Category { Name = "Cama", ImageLocal = "/images/products/cama.png" },
+                    new Category { Name = "Infantil", ImageLocal = "/images/products/infantil.png" },
+                    new Category { Name = "Materiais", ImageLocal = "/images/products/materiais.png" },
+                    new Category { Name = "Mesa", ImageLocal = "/images/products/mesa.png" }
                 };
 
                 await context.Categories.AddRangeAsync(categorias);
