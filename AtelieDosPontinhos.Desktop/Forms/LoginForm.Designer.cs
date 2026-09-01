@@ -180,6 +180,7 @@
             lblCarregando.Size = new Size(90, 16);
             lblCarregando.TabIndex = 1;
             lblCarregando.Text = "Autenticando...";
+            lblCarregando.Visible = false;
             // 
             // pnSeparador
             // 

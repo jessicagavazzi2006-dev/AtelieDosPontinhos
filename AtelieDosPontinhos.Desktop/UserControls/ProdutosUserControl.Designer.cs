@@ -221,7 +221,7 @@
             colName.FillWeight = 100.611565F;
             colName.HeaderText = "Nome do Produto";
             colName.Name = "colName";
-            colName.Width = 160;
+            colName.Width = 163;
             // 
             // colPrice
             // 
