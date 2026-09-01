@@ -70,7 +70,7 @@ namespace AtelieDosPontinhos.Desktop.UserControls
                         p.Name,
                         p.Price,
                         p.Stock,
-                        p.CategoryId,
+                        p.CategoryName,
                         p.IsFeatured
                     );
                 }

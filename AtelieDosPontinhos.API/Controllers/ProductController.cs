@@ -20,32 +20,53 @@ namespace AtelieDosPontinhos.API.Controllers
             _context = context;
         }
 
-        // 1. LISTAR TODOS OS PRODUTOS DO BANCO
+        // 1. LISTAR TODOS OS PRODUTOS DO BANCO (projetando CategoryName)
         [HttpGet]
         public async Task<IActionResult> GetProducts()
         {
-            var products = await _context.Products.ToListAsync();
+            var products = await _context.Products
+                .Include(p => p.Category)
+                .Select(p => new
+                {
+                    p.Id,
+                    p.Name,
+                    p.Description,
+                    p.CoverImageUrl,
+                    p.Price,
+                    p.Stock,
+                    p.CategoryId,
+                    CategoryName = p.Category != null ? p.Category.Name : string.Empty,
+                    p.IsFeatured
+                })
+                .ToListAsync();
+
             return Ok(products);
         }
 
         // 2. BUSCAR PRODUTOS POR TEXTO 
         [HttpGet("search")]
-        public async Task<IActionResult> SearchProducts([FromQuery] string? term = null) // 🌟 CORRIGIDO: Mudado de query para term
+        public async Task<IActionResult> SearchProducts([FromQuery] string? term = null)
         {
             if (string.IsNullOrWhiteSpace(term))
             {
-                // Se não digitar nada, retorna uma lista vazia para não poluir a tela
                 return Ok(new List<object>());
             }
 
-            // Filtra os produtos comparando o termo digitado com o Nome ou Descrição
             var filteredProducts = await _context.Products
+                .Include(p => p.Category)
                 .Where(p => p.Name.Contains(term) || p.Description.Contains(term))
                 .Select(p => new
                 {
-                    id = p.Id,
-                    name = p.Name
-                }) // Retorna apenas o ID e o Nome, deixando a busca ultra rápida
+                    p.Id,
+                    p.Name,
+                    p.Description,
+                    p.CoverImageUrl,
+                    p.Price,
+                    p.Stock,
+                    p.CategoryId,
+                    CategoryName = p.Category != null ? p.Category.Name : string.Empty,
+                    p.IsFeatured
+                })
                 .ToListAsync();
 
             return Ok(filteredProducts);
@@ -56,7 +77,23 @@ namespace AtelieDosPontinhos.API.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetProductById(int id)
         {
-            var product = await _context.Products.FindAsync(id);
+            var product = await _context.Products
+                .Include(p => p.Category)
+                .Where(p => p.Id == id)
+                .Select(p => new
+                {
+                    p.Id,
+                    p.Name,
+                    p.Description,
+                    p.CoverImageUrl,
+                    p.Price,
+                    p.Stock,
+                    p.CategoryId,
+                    CategoryName = p.Category != null ? p.Category.Name : string.Empty,
+                    p.IsFeatured
+                })
+                .FirstOrDefaultAsync();
+
             if (product == null) return NotFound(new { message = "Produto não encontrado." });
             return Ok(product);
         }

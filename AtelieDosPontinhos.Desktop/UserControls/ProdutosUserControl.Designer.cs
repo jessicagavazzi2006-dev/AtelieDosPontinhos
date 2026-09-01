@@ -214,42 +214,42 @@
             colId.FillWeight = 99.7183F;
             colId.HeaderText = "ID";
             colId.Name = "colId";
-            colId.Width = 118;
+            colId.Width = 70;
             // 
             // colName
             // 
             colName.FillWeight = 100.611565F;
             colName.HeaderText = "Nome do Produto";
             colName.Name = "colName";
-            colName.Width = 119;
+            colName.Width = 160;
             // 
             // colPrice
             // 
             colPrice.FillWeight = 99.6654358F;
             colPrice.HeaderText = "Preço";
             colPrice.Name = "colPrice";
-            colPrice.Width = 118;
+            colPrice.Width = 120;
             // 
             // colStock
             // 
             colStock.FillWeight = 99.72201F;
             colStock.HeaderText = "Estoque";
             colStock.Name = "colStock";
-            colStock.Width = 118;
+            colStock.Width = 120;
             // 
             // colCategory
             // 
             colCategory.FillWeight = 100.614677F;
             colCategory.HeaderText = "Categoria";
             colCategory.Name = "colCategory";
-            colCategory.Width = 119;
+            colCategory.Width = 120;
             // 
             // colIsFeatured
             // 
             colIsFeatured.FillWeight = 99.667984F;
             colIsFeatured.HeaderText = "Destaque";
             colIsFeatured.Name = "colIsFeatured";
-            colIsFeatured.Width = 118;
+            colIsFeatured.Width = 120;
             // 
             // ProdutosUserControl
             // 

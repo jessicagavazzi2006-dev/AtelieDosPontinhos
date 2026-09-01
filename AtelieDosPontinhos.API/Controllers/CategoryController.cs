@@ -22,7 +22,15 @@ namespace AtelieDosPontinhos.API.Controllers
         public async Task<IActionResult> GetAll()
         {
             var categories = await _context.Categories
+                .Include(c => c.Products)
                 .AsNoTracking()
+                .Select(c => new
+                {
+                    c.Id,
+                    c.Name,
+                    ProductCount = c.Products != null ? c.Products.Count : 0,
+                    c.ImageLocal
+                })
                 .ToListAsync();
 
             return Ok(categories);
@@ -35,7 +43,15 @@ namespace AtelieDosPontinhos.API.Controllers
             var category = await _context.Categories
                 .Include(c => c.Products)
                 .AsNoTracking()
-                .FirstOrDefaultAsync(c => c.Id == id);
+                .Where(c => c.Id == id)
+                .Select(c => new
+                {
+                    c.Id,
+                    c.Name,
+                    ProductCount = c.Products != null ? c.Products.Count : 0,
+                    c.ImageLocal
+                })
+                .FirstOrDefaultAsync();
 
             if (category == null) return NotFound(new { message = "Categoria não encontrada." });
 
@@ -48,10 +64,16 @@ namespace AtelieDosPontinhos.API.Controllers
         {
             if (string.IsNullOrWhiteSpace(term))
                 return Ok(new List<object>());
-
             var results = await _context.Categories
+                .Include(c => c.Products)
                 .Where(c => c.Name.Contains(term))
-                .Select(c => new { id = c.Id, name = c.Name })
+                .Select(c => new
+                {
+                    c.Id,
+                    c.Name,
+                    ProductCount = c.Products != null ? c.Products.Count : 0,
+                    c.ImageLocal
+                })
                 .AsNoTracking()
                 .ToListAsync();
 
