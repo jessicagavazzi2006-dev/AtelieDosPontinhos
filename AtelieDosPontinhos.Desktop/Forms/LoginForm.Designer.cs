@@ -149,6 +149,7 @@
             txtSenha.ShadowDecoration.CustomizableEdges = customizableEdges4;
             txtSenha.Size = new Size(378, 36);
             txtSenha.TabIndex = 2;
+            txtSenha.UseSystemPasswordChar = true;
             // 
             // btnEntrar
             // 
@@ -179,6 +180,7 @@
             lblCarregando.Size = new Size(90, 16);
             lblCarregando.TabIndex = 1;
             lblCarregando.Text = "Autenticando...";
+            lblCarregando.Visible = false;
             // 
             // pnSeparador
             // 

@@ -101,7 +101,7 @@ namespace AtelieDosPontinhos.Desktop.Forms
 
         private async void btnLogout_Click(object sender, EventArgs e)
         {
-            var resposta = MessageBox.Show("Deseja do sair do sistema?",
+            var resposta = MessageBox.Show("Deseja sair do sistema?",
                 "confirmar Logout",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question);

@@ -131,7 +131,7 @@ namespace AtelieDosPontinhos.Desktop.UserControls
             }
             if (cat.ProductCount > 0)
             {
-                MessageBox.Show($"A categoria \"{cat.Name}\" possui {cat.ProductCount} game(s) vinculado(s). \nRemova os games antes de excluir a categoria",
+                MessageBox.Show($"A categoria \"{cat.Name}\" possui {cat.ProductCount} produto(s) vinculado(s). \nRemova os produtos antes de excluir a categoria",
                     "Não é possivel excluir",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
@@ -204,6 +204,8 @@ namespace AtelieDosPontinhos.Desktop.UserControls
                 OcultarFormulario();
                 await CarregarDadosAsync();
             }
+
+
         }
 
         private void btnCancelar_Click(object sender, EventArgs e) => OcultarFormulario();

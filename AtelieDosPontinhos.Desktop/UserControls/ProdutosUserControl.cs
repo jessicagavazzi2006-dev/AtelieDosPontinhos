@@ -97,7 +97,7 @@ namespace AtelieDosPontinhos.Desktop.UserControls
                     p.Name,
                     p.Price,
                     p.Stock,
-                    p.CategoryId,
+                    p.CategoryName,
                     p.IsFeatured
 
                 );
@@ -116,7 +116,7 @@ namespace AtelieDosPontinhos.Desktop.UserControls
                 return;
             }
             var filtrados = _todosPrdoutos.Where(p => p.Name.Contains(termo, StringComparison.OrdinalIgnoreCase)
-                || p.Description.Contains(termo, StringComparison.OrdinalIgnoreCase)).ToList();
+                || p.CategoryName.Contains(termo, StringComparison.OrdinalIgnoreCase)).ToList();
 
             PopularGrid(filtrados);
         }

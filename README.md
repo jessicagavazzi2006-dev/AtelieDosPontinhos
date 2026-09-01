@@ -18,9 +18,9 @@ O **AtelieDosPontinhos** é uma loja virtual que vende produtos e materiais de a
 ## Integrantes do grupo
 
 Desenvolvidos pelos alunos:
-- Lucas Richard - Domain, Application
-- Jessica Alves - Domain, Infrastructure
-- Elizabeth Dorigon - UI, API
+- Lucas Richard - Domain, Application, Desktop
+- Jessica Alves - Domain, Infrastructure, Desktop
+- Elizabeth Dorigon - UI, API, Cart(função de carrinho)
 
 ## Tecnologias Utilizadas
 
