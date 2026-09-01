@@ -37,13 +37,8 @@
                             <tbody>
                                 @foreach (var item in Model)
                                 {
-                                    var nomeProduto = item.Produto.GetType().GetProperty("Nome")?.GetValue(item.Produto)?.ToString()
-                                                      ?? item.Produto.GetType().GetProperty("Name")?.GetValue(item.Produto)?.ToString()
-                                                      ?? "Produto Artesanal";
-                                                      
-                                    var precoProduto = Convert.ToDecimal(item.Produto.GetType().GetProperty("Preco")?.GetValue(item.Produto)
-                                                      ?? item.Produto.GetType().GetProperty("Price")?.GetValue(item.Produto));
-                                                      
+                                    var nomeProduto = item.Produto?.Nome ?? item.Produto?.Name ?? "Produto Artesanal";
+                                    var precoProduto = item.Produto?.Preco ?? item.Produto?.Price ?? 0m;
                                     var subtotalItem = precoProduto * item.Quantidade;
 
                                     <tr>
@@ -82,7 +77,7 @@
                 decimal valorTotalGeral = 0;
                 foreach (var item in Model)
                 {
-                    var preco = Convert.ToDecimal(item.Produto.GetType().GetProperty("Preco")?.GetValue(item.Produto) ?? item.Produto.GetType().GetProperty("Price")?.GetValue(item.Produto));
+                    var preco = item.Produto?.Preco ?? item.Produto?.Price ?? 0m;
                     valorTotalGeral += (preco * item.Quantidade);
                 }
             }

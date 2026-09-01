@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AtelieDosPontinhos.Infrastructure.Context;
 using AtelieDosPontinhos.Domain.Entities;
+using AtelieDosPontinhos.Application.DTOs;
 
 namespace AtelieDosPontinhos.API.Controllers
 {
@@ -26,14 +27,24 @@ namespace AtelieDosPontinhos.API.Controllers
         [Authorize]
         public async Task<IActionResult> CreateOrder([FromBody] CreateOrderDto dto)
         {
+            System.Diagnostics.Debug.WriteLine("📍 CreateOrder: Iniciando criação de pedido...");
+
             var userId = _userManager.GetUserId(User);
-            if (string.IsNullOrEmpty(userId)) return Unauthorized();
+            System.Diagnostics.Debug.WriteLine($"🔐 CreateOrder: UserId extraído = '{userId}'");
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                System.Diagnostics.Debug.WriteLine("❌ CreateOrder: UserId vazio - retornando Unauthorized");
+                return Unauthorized();
+            }
+
+            System.Diagnostics.Debug.WriteLine($"📦 CreateOrder: Recebido DTO com {dto.Items?.Count ?? 0} itens, ValorTotal={dto.ValorTotal}");
 
             var pedido = new Pedido
             {
                 UserId = userId,
                 DataPedido = DateTime.UtcNow,
-                ValorTotal = dto.Itens.Sum(i => i.PrecoUnitario * i.Quantidade),
+                ValorTotal = dto.Items!= null ? dto.Items.Sum(i => i.PrecoUnitario * i.Quantidade) : 0,
                 Status = "Pendente",
                 MetodoPagamento = dto.MetodoPagamento ?? string.Empty,
                 CEP = dto.CEP ?? string.Empty,
@@ -43,11 +54,14 @@ namespace AtelieDosPontinhos.API.Controllers
                 Complemento = dto.Complemento ?? string.Empty
             };
 
-            foreach (var it in dto.Itens)
+            System.Diagnostics.Debug.WriteLine($"✏️ CreateOrder: Entidade Pedido criada - Id={pedido.Id}, ValorTotal={pedido.ValorTotal}");
+
+            foreach (var it in dto.Items!)
             {
+                System.Diagnostics.Debug.WriteLine($"  ➕ Item: ProdutoId={it.ProdutoId}, Quantidade={it.Quantidade}, Preço={it.PrecoUnitario}");
                 var item = new PedidoItem
                 {
-                    ProductId = it.ProductId,
+                    ProductId = it.ProdutoId,
                     Quantidade = it.Quantidade,
                     PrecoUnitario = it.PrecoUnitario
                 };
@@ -55,7 +69,10 @@ namespace AtelieDosPontinhos.API.Controllers
             }
 
             _context.Pedidos.Add(pedido);
+            System.Diagnostics.Debug.WriteLine($"📌 CreateOrder: Pedido adicionado ao DbContext");
+
             await _context.SaveChangesAsync();
+            System.Diagnostics.Debug.WriteLine($"✅ CreateOrder: Pedido gravado no banco com sucesso! ID={pedido.Id}");
 
             return CreatedAtAction(nameof(GetById), new { id = pedido.Id }, pedido);
         }
@@ -66,10 +83,19 @@ namespace AtelieDosPontinhos.API.Controllers
         public async Task<IActionResult> MyOrders()
         {
             var userId = _userManager.GetUserId(User);
+            System.Diagnostics.Debug.WriteLine($"🔍 MyOrders: Buscando pedidos para UserId='{userId}'");
+
             var pedidos = await _context.Pedidos
                 .Where(p => p.UserId == userId)
                 .Include(p => p.Itens)
                 .ToListAsync();
+
+            System.Diagnostics.Debug.WriteLine($"📊 MyOrders: Encontrados {pedidos.Count} pedidos");
+            foreach (var p in pedidos)
+            {
+                System.Diagnostics.Debug.WriteLine($"  - Pedido ID={p.Id}, Status={p.Status}, Total={p.ValorTotal}, Itens={p.Itens.Count}");
+            }
+
             return Ok(pedidos);
         }
 
@@ -115,29 +141,5 @@ namespace AtelieDosPontinhos.API.Controllers
             await _context.SaveChangesAsync();
             return NoContent();
         }
-    }
-
-    // DTOs simples (pode mover para outro arquivo)
-    public class CreateOrderDto
-    {
-        public string MetodoPagamento { get; set; } = string.Empty;
-        public string CEP { get; set; } = string.Empty;
-        public string Cidade { get; set; } = string.Empty;
-        public string Estado { get; set; } = string.Empty;
-        public string Numero { get; set; } = string.Empty;
-        public string Complemento { get; set; } = string.Empty;
-        public List<CreateOrderItemDto> Itens { get; set; } = new();
-    }
-
-    public class CreateOrderItemDto
-    {
-        public int ProductId { get; set; }
-        public int Quantidade { get; set; }
-        public decimal PrecoUnitario { get; set; }
-    }
-
-    public class UpdateStatusDto
-    {
-        public string Status { get; set; } = string.Empty;
     }
 }

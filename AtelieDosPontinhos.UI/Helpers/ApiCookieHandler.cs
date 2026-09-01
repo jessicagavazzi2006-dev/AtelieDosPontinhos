@@ -1,10 +1,10 @@
 // =============================================================================
-// SenacGames.UI - Helpers/ApiCookieHandler.cs
+// AtelieDosPontinhos.UI - Helpers/ApiCookieHandler.cs
 // =============================================================================
 
 using System.Net.Http.Headers;
 
-namespace SenacGames.UI.Helpers
+namespace AtelieDosPontinhos.UI.Helpers
 {
     /// <summary>
     /// Intercepta as requisições HTTP saindo da UI para a API e adiciona o

@@ -43,7 +43,7 @@ Desenvolvidos pelos alunos:
 ```
 ////!!!!!!!!!!!!necessario atulizar quando tiver terminado!!!!!!!!!!!!!!!!!!!
 
-SenacGames/
+AtelieDosPontinhos/
 ├── AtelieDosPontinhos.Domain     → Entidades, Interfaces
 ├── AtelieDosPontinhos.Application   → Services, DTOs, ViewModels
 ├── AtelieDosPontinhos.Infrastructure → DbContext, Repositories, Identity, Migrations, Configurations

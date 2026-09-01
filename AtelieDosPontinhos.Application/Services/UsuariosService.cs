@@ -1,5 +1,5 @@
 // =============================================================================
-// SenacGames.Application - Services/UsuariosService.cs
+// AtelieDosPontinhos.Application - Services/UsuariosService.cs
 // =============================================================================
 
 using Microsoft.AspNetCore.Identity;

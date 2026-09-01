@@ -1,5 +1,5 @@
 // =============================================================================
-// SenacGames.UI - Services/HttpCategoryService.cs
+// AtelieDosPontinhos.UI - Services/HttpCategoryService.cs
 // =============================================================================
 
 using System.Net.Http.Json;

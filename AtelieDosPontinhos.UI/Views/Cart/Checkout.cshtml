@@ -9,12 +9,21 @@
     <h2 class="fw-bold mb-4" style="color: #8a4f91 !important;">🏁 Finalizar Meu Pedido</h2>
 
     <form asp-controller="Cart" asp-action="ConfirmarPedidoPost" method="post">
-        <div class="row g-4">
 
+        <!-- HIDDEN INPUTS PARA GRAVAR OS ITENS DO CARRINHO NO POST -->
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            var pId = Model[i].Produto.GetType().GetProperty("Id")?.GetValue(Model[i].Produto)
+                   ?? Model[i].Produto.GetType().GetProperty("ProdutoId")?.GetValue(Model[i].Produto);
+
+            <input type="hidden" name="[@i].ProdutoId" value="@pId" />
+            <input type="hidden" name="[@i].Quantidade" value="@Model[i].Quantidade" />
+        }
+
+        <div class="row g-4">
             <!-- COLUNA DA ESQUERDA: INFORMAÇÕES DO CLIENTE -->
             <div class="col-md-7">
-
-                <!-- Bloco 1: Dados de Entrega (🌟 VINDO DIREITO DO C#) -->
+                <!-- Bloco 1: Dados de Entrega -->
                 <div class="card shadow-sm border-0 p-4 rounded-4 bg-white mb-4">
                     <h5 class="fw-bold mb-3" style="color: #8a4f91;"><i class="bi bi-geo-alt-fill"></i> 📍 Endereço de Entrega</h5>
                     <p class="text-muted small mb-3">Confirme ou altere os dados para o envio dos seus produtos artesanais:</p>
@@ -22,7 +31,7 @@
                     <div class="row g-3">
                         <div class="col-md-12">
                             <label class="form-label text-secondary small fw-semibold">E-mail do Destinatário</label>
-                            <input type="text" class="form-control bg-light border-0 rounded-pill px-3" value="@ViewBag.UserEmail" readonly />
+                            <input type="text" name="Email" class="form-control bg-light border-0 rounded-pill px-3" value="@ViewBag.UserEmail" readonly />
                         </div>
                         <div class="col-md-4">
                             <label class="form-label text-secondary small fw-semibold">CEP</label>
@@ -47,7 +56,7 @@
                     </div>
                 </div>
 
-                <!-- Bloco 2: Forma de Pagamento com Alternância Garantida -->
+                <!-- Bloco 2: Forma de Pagamento -->
                 <div class="card shadow-sm border-0 p-4 rounded-4 bg-white">
                     <h5 class="fw-bold mb-3" style="color: #8a4f91;"><i class="bi bi-credit-card-2-back-fill"></i> 💳 Forma de Pagamento</h5>
                     <p class="text-muted small mb-3">Selecione a modalidade de cobrança preferencial para o fechamento:</p>
@@ -66,29 +75,26 @@
                         <div id="areaCartao" class="row g-3 col-md-12 m-0 p-0">
                             <div class="col-md-7">
                                 <label class="form-label text-secondary small fw-semibold">Nome Impresso no Cartão</label>
-                                <input type="text" name="NomeNoCartao" class="form-control bg-light border-0 rounded-pill px-3" value="@ViewBag.NomeNoCartao" placeholder="Ex: ANA S SILVA" />
+                                <input type="text" id="inputNomeCartao" name="NomeNoCartao" class="form-control bg-light border-0 rounded-pill px-3" value="@ViewBag.NomeNoCartao" placeholder="Ex: ANA S SILVA" />
                             </div>
                             <div class="col-md-12">
                                 <label class="form-label text-secondary small fw-semibold">Número do Cartão </label>
-                                <input type="text" id="inputCartao" name="NumeroCartaoMascarado" class="form-control bg-light border-0 rounded-pill px-3" value="@ViewBag.NumeroCartao" maxlength="19" placeholder="4532 0000 0000 4321" />
+                                <input type="text" id="inputCartao" name="NumeroCartao" class="form-control bg-light border-0 rounded-pill px-3" value="@ViewBag.NumeroCartao" maxlength="19" placeholder="4532 0000 0000 4321" />
                             </div>
                         </div>
 
-                        <!-- 📱 ÁREA DO PIX (INCLUI NOME DO ATELIÊ E CNPJ COMPLETO) -->
+                        <!-- 📱 ÁREA DO PIX -->
                         <div id="areaPix" class="col-md-12 text-center py-3 d-none">
                             <div class="p-4 rounded-4 border bg-light d-inline-block shadow-sm" style="max-width: 320px;">
                                 <p class="fw-bold text-dark small mb-3">📱 Escaneie o QR Code abaixo para pagar:</p>
-
                                 <div class="bg-white p-3 rounded-3 shadow-sm d-inline-block mb-3 border">
                                     <img src="https://qrserver.com" alt="QR Code PIX Ateliê" class="img-fluid" style="width: 160px; height: 160px;" />
                                 </div>
-
                                 <span class="d-block text-dark fw-bold mb-1" style="font-size: 14px;">Ateliê dos Pontinhos Ltda.</span>
                                 <span class="d-block text-muted font-monospace mb-2" style="font-size: 12px;">CNPJ: 99.999.999/0001-99</span>
                                 <small class="text-success fw-semibold bg-success bg-opacity-10 px-3 py-1 rounded-pill" style="font-size: 11px;"><i class="bi bi-shield-check"></i> Ambiente de Pagamento Seguro</small>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -135,22 +141,27 @@
     </form>
 </div>
 
-
-<!script type="text/javascript">
+<script type="text/javascript">
     function alternarMetodoPagamento() {
         var select = document.getElementById("selectPagamento");
         var areaCartao = document.getElementById("areaCartao");
         var areaPix = document.getElementById("areaPix");
+        var inputCartao = document.getElementById("inputCartao");
+        var inputNomeCartao = document.getElementById("inputNomeCartao");
 
         if (select && areaCartao && areaPix) {
             if (select.value === "3") {
                 areaCartao.style.setProperty("display", "none", "important");
                 areaPix.classList.remove("d-none");
                 areaPix.style.setProperty("display", "block", "important");
+                if (inputCartao) inputCartao.disabled = true;
+                if (inputNomeCartao) inputNomeCartao.disabled = true;
             } else {
                 areaCartao.style.setProperty("display", "flex", "important");
                 areaPix.classList.add("d-none");
                 areaPix.style.setProperty("display", "none", "important");
+                if (inputCartao) inputCartao.disabled = false;
+                if (inputNomeCartao) inputNomeCartao.disabled = false;
             }
         }
     }
@@ -166,7 +177,7 @@
         alternarMetodoPagamento();
 
         var inputCartao = document.getElementById("inputCartao");
-        if(inputCartao) {
+        if (inputCartao) {
             inputCartao.addEventListener("input", function(e) {
                 var v = e.target.value.replace(/\D/g, "");
                 var m = v.match(/.{1,4}/g);
@@ -174,4 +185,4 @@
             });
         }
     });
-</!script>
+</script>

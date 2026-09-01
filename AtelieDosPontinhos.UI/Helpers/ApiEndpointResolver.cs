@@ -1,18 +1,18 @@
 // =============================================================================
-// SenacGames.UI - Helpers/ApiEndpointResolver.cs
+// AtelieDosPontinhos.UI - Helpers/ApiEndpointResolver.cs
 // =============================================================================
 //  CONCEITO: Descoberta Automática da URL da API
 // =============================================================================
 
 using System.Text.Json;
 
-namespace SenacGames.UI.Helpers
+namespace AtelieDosPontinhos.UI.Helpers
 {
     public static class ApiEndpointResolver
     {
         private static string? _resolvedUrl;
         private static bool _resolved = false;
-        private const string ApiProjectName = "SenacGames.API";
+        private const string ApiProjectName = "AtelieDosPontinhos.API";
         private const string LaunchSettingsRelativePath = $"{ApiProjectName}/Properties/launchSettings.json";
         private static readonly string[] PreferredProfiles = ["http", "https", "IIS Express"];
 

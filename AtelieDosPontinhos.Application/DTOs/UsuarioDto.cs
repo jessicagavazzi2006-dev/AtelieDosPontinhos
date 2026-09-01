@@ -1,5 +1,5 @@
 // =============================================================================
-// SenacGames.Application - DTOs de Usuario
+// AtelieDosPontinhos.Application - DTOs de Usuario
 // =============================================================================
 
 namespace AtelieDosPontinhos.Application.DTOs

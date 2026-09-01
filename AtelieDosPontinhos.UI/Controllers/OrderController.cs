@@ -28,16 +28,20 @@ namespace AtelieDosPontinhos.UI.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            var client = _httpClientFactory.CreateClient("Api");
+            var client = _httpClientFactory.CreateClient("ApiClient");
             var listaPedidos = new List<JsonElement>();
 
             try
             {
-                // Faz a chamada para a rota de pedidos do usuário na API que criamos no OrdersController
-                var response = await client.GetAsync($"api/orders/my?email={userEmail}");
+                // Chama o endpoint autenticado /api/orders/my que retorna os pedidos do usuário logado
+                var response = await client.GetAsync("api/orders/my");
                 if (response.IsSuccessStatusCode)
                 {
                     listaPedidos = await response.Content.ReadFromJsonAsync<List<JsonElement>>() ?? new List<JsonElement>();
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine($"Erro ao listar pedidos: {response.StatusCode} - {await response.Content.ReadAsStringAsync()}");
                 }
             }
             catch (Exception ex)
@@ -56,13 +60,14 @@ namespace AtelieDosPontinhos.UI.Controllers
             var userEmail = HttpContext.Session.GetString("UserEmail");
             if (string.IsNullOrEmpty(userEmail)) return RedirectToAction("Login", "Account");
 
-            var client = _httpClientFactory.CreateClient("Api");
+            var client = _httpClientFactory.CreateClient("ApiClient");
             var todosPedidos = new List<JsonElement>();
 
             try
             {
-                // Chama a rota administrativa da API para trazer TODAS as vendas do sistema
-                var response = await client.GetAsync($"api/orders?email={userEmail}");
+                // Chama o endpoint administrativo da API para trazer TODAS as vendas do sistema
+                // O endpoint requer role Admin e está autenticado via ApiClient
+                var response = await client.GetAsync("api/orders");
                 if (response.IsSuccessStatusCode)
                 {
                     todosPedidos = await response.Content.ReadFromJsonAsync<List<JsonElement>>() ?? new List<JsonElement>();
@@ -71,6 +76,10 @@ namespace AtelieDosPontinhos.UI.Controllers
                 {
                     // Se o cliente tentar burlar a URL e não for admin, bloqueia o acesso
                     return Unauthorized("Acesso restrito para administradores.");
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine($"Erro ao listar painel admin: {response.StatusCode}");
                 }
             }
             catch (Exception ex)

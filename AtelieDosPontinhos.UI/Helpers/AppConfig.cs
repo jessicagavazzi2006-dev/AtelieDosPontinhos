@@ -1,8 +1,8 @@
 // =============================================================================
-// SenacGames.UI - Helpers/AppConfig.cs
+// AtelieDosPontinhos.UI - Helpers/AppConfig.cs
 // =============================================================================
 
-namespace SenacGames.UI.Helpers
+namespace AtelieDosPontinhos.UI.Helpers
 {
     public static class AppConfig
     {
