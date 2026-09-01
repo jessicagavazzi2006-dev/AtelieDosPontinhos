@@ -37,12 +37,11 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Home" asp-action="Index">Início</a>
                         </li>
-                        @* 📦 Exibe o gerenciador de produtos se o Admin estiver logado pela sessão *@
+                        @* 📦 Aponta para a tela da tabela no Painel Admin *@
                         @if (isLogged && isAdmin)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-danger fw-bold" asp-controller="Product" asp-action="Index">📦 Gerenciar Produtos</a>
-
+                                <a class="nav-link text-danger fw-bold" asp-controller="Dashboard" asp-action="AdminPanel">📦 Gerenciar Produtos</a>
                             </li>
                         }
                     </ul>
@@ -127,11 +126,8 @@
                         data.forEach(p => {
                             const item = document.createElement("a");
                             item.classList.add("list-group-item", "list-group-item-action");
-                            // Rota corrigida para bater com o seu ProductController local da UI
                             item.href = `/Product/Detalhes/${p.id}`;
 
-
-                            // Aceita o nome vindo da API independente se o campo iniciar com letra maiúscula ou minúscula
                             item.innerText = p.name || p.nome || p.Name || p.Nome;
 
                             resultsBox.appendChild(item);
@@ -154,17 +150,17 @@
     <script>
             function updateCartCount() {
                 @{
-                                    var cartJson = Context.Session.GetString("Carrinho");
-                                    int totalItens = 0;
-                                    if (!string.IsNullOrEmpty(cartJson))
-                                    {
-                                                        try
-                                                        {
-                                                                            var itens = System.Text.Json.JsonSerializer.Deserialize<List<AtelieDosPontinhos.UI.Models.CartItemViewModel>>(cartJson);
-                                                                            totalItens = itens?.Sum(x => x.Quantidade) ?? 0;
-                                                        }
-                                                        catch { }
-                                    }
+                    var cartJson = Context.Session.GetString("Carrinho");
+                    int totalItens = 0;
+                    if (!string.IsNullOrEmpty(cartJson))
+                    {
+                        try
+                        {
+                            var itens = System.Text.Json.JsonSerializer.Deserialize<List<AtelieDosPontinhos.UI.Models.CartItemViewModel>>(cartJson);
+                            totalItens = itens?.Sum(x => x.Quantidade) ?? 0;
+                        }
+                        catch { }
+                    }
                 }
                 document.getElementById("cartCount").innerText = "@totalItens";
             }
@@ -172,7 +168,6 @@
             document.addEventListener("DOMContentLoaded", updateCartCount);
     </script>
 
-    @* 👁️ NOVO: Função para Alternar a Visibilidade da Senha (Olhinho) *@
     <script>
             function togglePassword(inputId, button) {
                 const input = document.getElementById(inputId);
@@ -188,5 +183,6 @@
             }
     </script>
 
-    @await RenderSectionAsync("Scripts", required: false)</body>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
 </html>

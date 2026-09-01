@@ -14,7 +14,10 @@ namespace AtelieDosPontinhos.Infrastructure.Data
             // Se o nome do seu banco for diferente, ajuste no "Database=..."
             string connectionString = "Server=(localdb)\\mssqllocaldb;Database=AtelieDosPontinhosDB;Trusted_Connection=True;MultipleActiveResultSets=true";
 
-            optionsBuilder.UseSqlServer(connectionString);
+            optionsBuilder.UseSqlServer(connectionString, sqlOptions =>
+            {
+                sqlOptions.EnableRetryOnFailure();
+            });
 
             return new AtelieDosPontinhosDbContext(optionsBuilder.Options);
         }

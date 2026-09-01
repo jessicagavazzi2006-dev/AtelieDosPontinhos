@@ -20,12 +20,23 @@ namespace AtelieDosPontinhos.Infrastructure.Identity
           
             try
             {
-                await context.Database.MigrateAsync();
+                var strategy = context.Database.CreateExecutionStrategy();
+                await strategy.ExecuteAsync(async () =>
+                {
+                    try
+                    {
+                        // Use apenas MigrateAsync: EF Core cria o DB e a tabela __EFMigrationsHistory automaticamente
+                        await context.Database.MigrateAsync();
+                    }
+                    catch (Exception migrateEx)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Falha ao aplicar migrations (Identity.Seed): {migrateEx.Message}");
+                    }
+                });
             }
-            catch (Microsoft.Data.SqlClient.SqlException ex) when (ex.Message.Contains("already an object named"))
+            catch (Exception ex)
             {
-             
-                System.Diagnostics.Debug.WriteLine($"Tabelas já existem: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Falha ao executar ExecutionStrategy (Identity.Seed): {ex.Message}");
             }
 
             // =================================================================
