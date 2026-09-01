@@ -144,11 +144,28 @@ namespace AtelieDosPontinhos.API.Controllers
 
         // 5. ATUALIZAR PRODUTO NO BANCO
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> UpdateProduct(int id, [FromBody] Product updatedProduct)
+        public async Task<IActionResult> UpdateProduct(int id, [FromBody] AtelieDosPontinhos.Application.DTOs.UpdateProductDto dto)
         {
-            if (id != updatedProduct.Id) return BadRequest(new { message = "ID incorreto." });
+            if (dto == null) return BadRequest(new { message = "Dados inválidos." });
 
-            _context.Entry(updatedProduct).State = EntityState.Modified;
+            var product = await _context.Products.FindAsync(id);
+            if (product == null) return NotFound(new { message = "Produto não encontrado." });
+
+            // Atualiza campos permitidos
+            product.Name = dto.Name ?? product.Name;
+            product.Description = dto.Description ?? product.Description;
+            product.CoverImageUrl = dto.CoverImageUrl ?? product.CoverImageUrl;
+            product.Price = dto.Price;
+            product.Stock = dto.Stock;
+            product.IsFeatured = dto.IsFeatured;
+
+            // Valida e atualiza categoria
+            if (dto.CategoryId != product.CategoryId)
+            {
+                var existe = await _context.Categories.AnyAsync(c => c.Id == dto.CategoryId);
+                if (!existe) return BadRequest(new { message = "Categoria inválida." });
+                product.CategoryId = dto.CategoryId;
+            }
 
             try
             {
@@ -156,11 +173,29 @@ namespace AtelieDosPontinhos.API.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!_context.Products.Any(p => p.Id == id)) return NotFound();
+                if (!await _context.Products.AnyAsync(p => p.Id == id)) return NotFound();
                 throw;
             }
 
-            return NoContent();
+            // Retorna o produto atualizado na forma esperada pelo cliente
+            var updated = await _context.Products
+                .Include(p => p.Category)
+                .Where(p => p.Id == id)
+                .Select(p => new
+                {
+                    p.Id,
+                    p.Name,
+                    p.Description,
+                    p.CoverImageUrl,
+                    p.Price,
+                    p.Stock,
+                    p.CategoryId,
+                    CategoryName = p.Category != null ? p.Category.Name : string.Empty,
+                    p.IsFeatured
+                })
+                .FirstOrDefaultAsync();
+
+            return Ok(updated);
         }
 
         // 6. EXCLUIR PRODUTO DO BANCO

@@ -83,27 +83,37 @@ namespace AtelieDosPontinhos.API.Controllers
         // Criar categoria (Admin)
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Create([FromBody] Category category)
+        public async Task<IActionResult> Create([FromBody] AtelieDosPontinhos.Application.DTOs.CreateCategoryDto dto)
         {
-            if (category == null || string.IsNullOrWhiteSpace(category.Name))
+            if (dto == null || string.IsNullOrWhiteSpace(dto.Name))
                 return BadRequest(new { message = "Dados inválidos." });
 
-            // Evita duplicidade pelo nome (case-insensitive)
+            var name = dto.Name.Trim();
+
             var exists = await _context.Categories
-                .AnyAsync(c => c.Name.ToLower() == category.Name.Trim().ToLower());
+                .AnyAsync(c => c.Name.ToLower() == name.ToLower());
 
             if (exists)
                 return BadRequest(new { message = "Já existe uma categoria com esse nome." });
 
-            category.Name = category.Name.Trim();
-            category.ImageLocal ??= string.Empty;
+            var category = new Category
+            {
+                Name = name,
+                ImageLocal = dto.ImageLocal ?? string.Empty
+            };
 
             try
             {
                 _context.Categories.Add(category);
                 await _context.SaveChangesAsync();
 
-                return CreatedAtAction(nameof(GetById), new { id = category.Id }, category);
+                return CreatedAtAction(nameof(GetById), new { id = category.Id }, new
+                {
+                    category.Id,
+                    category.Name,
+                    ProductCount = 0,
+                    category.ImageLocal
+                });
             }
             catch (DbUpdateException ex)
             {
@@ -115,25 +125,23 @@ namespace AtelieDosPontinhos.API.Controllers
         // Atualizar categoria (Admin)
         [HttpPut("{id:int}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Update(int id, [FromBody] Category updated)
+        public async Task<IActionResult> Update(int id, [FromBody] AtelieDosPontinhos.Application.DTOs.UpdateCategoryDto dto)
         {
-            if (updated == null || id != updated.Id)
-                return BadRequest(new { message = "Dados inválidos." });
+            if (dto == null) return BadRequest(new { message = "Dados inválidos." });
 
             var category = await _context.Categories.FindAsync(id);
             if (category == null) return NotFound(new { message = "Categoria não encontrada." });
 
-            // Checagem de nome duplicado em outra categoria
+            var newName = dto.Name?.Trim() ?? string.Empty;
+
             var nameConflict = await _context.Categories
-                .AnyAsync(c => c.Id != id && c.Name.ToLower() == updated.Name.Trim().ToLower());
+                .AnyAsync(c => c.Id != id && c.Name.ToLower() == newName.ToLower());
 
             if (nameConflict)
                 return BadRequest(new { message = "Outra categoria já usa esse nome." });
 
-            category.Name = updated.Name?.Trim() ?? category.Name;
-            category.ImageLocal = updated.ImageLocal ?? category.ImageLocal;
-
-            _context.Entry(category).State = EntityState.Modified;
+            category.Name = string.IsNullOrEmpty(newName) ? category.Name : newName;
+            category.ImageLocal = dto.ImageLocal ?? category.ImageLocal;
 
             try
             {
@@ -146,7 +154,21 @@ namespace AtelieDosPontinhos.API.Controllers
                 throw;
             }
 
-            return NoContent();
+            // Retorna a categoria atualizada para o cliente
+            var updated = await _context.Categories
+                .Include(c => c.Products)
+                .Where(c => c.Id == id)
+                .Select(c => new
+                {
+                    c.Id,
+                    c.Name,
+                    ProductCount = c.Products != null ? c.Products.Count : 0,
+                    c.ImageLocal
+                })
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+
+            return Ok(updated);
         }
 
         // Excluir categoria (Admin)

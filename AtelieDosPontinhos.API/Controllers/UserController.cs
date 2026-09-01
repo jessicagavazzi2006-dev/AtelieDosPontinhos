@@ -31,15 +31,20 @@ namespace AtelieDosPontinhos.API.Controllers
         {
             var users = await _userManager.Users.ToListAsync();
 
-            // Retorna apenas os dados necessários em formato simplificado
-            var userList = users.Select(u => new
+            var result = new List<object>();
+            foreach (var u in users)
             {
-                id = u.Id,
-                email = u.Email,
-                userName = u.UserName
-            }).ToList();
+                var roles = await _userManager.GetRolesAsync(u);
+                result.Add(new
+                {
+                    id = u.Id,
+                    email = u.Email,
+                    userName = u.UserName,
+                    roles = roles
+                });
+            }
 
-            return Ok(userList);
+            return Ok(result);
         }
 
         // 2. BUSCAR USUÁRIO POR ID
@@ -48,27 +53,91 @@ namespace AtelieDosPontinhos.API.Controllers
         {
             var user = await _userManager.FindByIdAsync(id);
             if (user == null) return NotFound(new { message = "Usuário não encontrado." });
-
-            return Ok(new { id = user.Id, email = user.Email, userName = user.UserName });
+            var roles = await _userManager.GetRolesAsync(user);
+            return Ok(new { id = user.Id, email = user.Email, userName = user.UserName, roles = roles });
         }
 
-        // 3. EDITAR USUÁRIO (ATUALIZAR E-MAIL)
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser(string id, [FromBody] IdentityUser updatedUser)
+        // 3. CRIAR USUÁRIO (Admin)
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Create([FromBody] AtelieDosPontinhos.Application.DTOs.CreateUsuarioDto dto)
         {
+            if (dto == null) return BadRequest(new { message = "Dados inválidos." });
+
+            if (dto.Password != dto.ConfirmPassword)
+                return BadRequest(new { message = "As senhas não coincidem." });
+
+            var existing = await _userManager.FindByEmailAsync(dto.Email);
+            if (existing != null) return BadRequest(new { message = "E-mail já cadastrado." });
+
+            var user = new IdentityUser { UserName = dto.UserName, Email = dto.Email };
+            var result = await _userManager.CreateAsync(user, dto.Password);
+            if (!result.Succeeded)
+            {
+                var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+                return BadRequest(new { message = $"Erro ao criar usuário: {errors}" });
+            }
+
+            var roleToAdd = string.IsNullOrWhiteSpace(dto.Role) ? "Usuario" : dto.Role;
+            if (await _roleManager.RoleExistsAsync(roleToAdd))
+            {
+                await _userManager.AddToRoleAsync(user, roleToAdd);
+            }
+
+            var roles = await _userManager.GetRolesAsync(user);
+            return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, new { id = user.Id, email = user.Email, userName = user.UserName, roles = roles });
+        }
+
+        // 4. EDITAR USUÁRIO (ATUALIZAR E-MAIL, SENHA, ROLE)
+        [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UpdateUser(string id, [FromBody] AtelieDosPontinhos.Application.DTOs.UpdateUsuarioDto dto)
+        {
+            if (dto == null) return BadRequest(new { message = "Dados inválidos." });
+
+            if (!string.IsNullOrWhiteSpace(dto.Password) && dto.Password != dto.ConfirmPassword)
+                return BadRequest(new { message = "As senhas não coincidem." });
+
             var user = await _userManager.FindByIdAsync(id);
             if (user == null) return NotFound(new { message = "Usuário não encontrado." });
 
-            user.Email = updatedUser.Email;
-            user.UserName = updatedUser.Email; // Mantém o UserName igual ao Email
+            var existing = await _userManager.FindByEmailAsync(dto.Email);
+            if (existing != null && existing.Id != user.Id) return BadRequest(new { message = "E-mail já cadastrado por outro usuário." });
 
-            var result = await _userManager.UpdateAsync(user);
-            if (!result.Succeeded)
+            user.UserName = dto.UserName;
+            user.Email = dto.Email;
+
+            var updateResult = await _userManager.UpdateAsync(user);
+            if (!updateResult.Succeeded)
             {
-                return BadRequest(new { message = "Erro ao atualizar usuário.", errors = result.Errors });
+                var errors = string.Join(", ", updateResult.Errors.Select(e => e.Description));
+                return BadRequest(new { message = $"Erro ao atualizar usuário: {errors}" });
             }
 
-            return NoContent();
+            if (!string.IsNullOrWhiteSpace(dto.Password))
+            {
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var passResult = await _userManager.ResetPasswordAsync(user, token, dto.Password);
+                if (!passResult.Succeeded)
+                {
+                    var errors = string.Join(", ", passResult.Errors.Select(e => e.Description));
+                    return BadRequest(new { message = $"Erro ao atualizar senha: {errors}" });
+                }
+            }
+
+            // Atualiza roles
+            var currentRoles = await _userManager.GetRolesAsync(user);
+            if (!string.IsNullOrWhiteSpace(dto.Role) && !currentRoles.Contains(dto.Role))
+            {
+                if (await _roleManager.RoleExistsAsync(dto.Role))
+                {
+                    await _userManager.RemoveFromRolesAsync(user, currentRoles);
+                    await _userManager.AddToRoleAsync(user, dto.Role);
+                }
+            }
+
+            var roles = await _userManager.GetRolesAsync(user);
+            return Ok(new { id = user.Id, email = user.Email, userName = user.UserName, roles = roles });
         }
 
         // 4. REMOVER USUÁRIO
