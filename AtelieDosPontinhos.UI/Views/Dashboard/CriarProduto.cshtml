@@ -1,48 +1,69 @@
-﻿@model AtelieDosPontinhos.UI.Controllers.ProdutoViewModel
+﻿@using Microsoft.AspNetCore.Mvc.Rendering
+@model AtelieDosPontinhos.UI.Controllers.ProdutoViewModel
 
-<div class="card">
-    <div class="card-header bg-primary text-white">
-        <h4>📦 Cadastrar Novo Produto</h4>
-    </div>
-    <div class="card-body">
+@{
+    ViewData["Title"] = "Cadastrar Novo Produto";
+}
 
-        <!-- ⚠️ IMPORTANTE: Adicionado enctype para permitir upload de arquivos -->
-        <form asp-action="CriarProdutoPost" method="post" enctype="multipart/form-data">
-            
-            <!-- Campo: Nome do Produto -->
-            <div class="form-group mb-3">
-                <label class="form-label">Nome do Produto</label>
-                <input asp-for="Name" class="form-control" required />
-            </div>
+<div class="container py-4">
+    <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+        <div class="card-header text-white fw-bold py-3" style="background-color: #8a4f91;">
+            <h4 class="mb-0 fw-bold">📦 Cadastrar Novo Produto</h4>
+        </div>
+        <div class="card-body p-4">
 
-            <!-- Campo: Preço -->
-            <div class="form-group mb-3">
-                <label class="form-label">Preço (R$)</label>
-                <input asp-for="Price" type="number" step="0.01" class="form-control" required />
-            </div>
+            <form asp-action="CriarProdutoPost" method="post" enctype="multipart/form-data">
 
-            <!-- Campo: Descrição do Produto -->
-            <div class="form-group mb-3">
-                <label class="form-label">Descrição do Produto</label>
-                <textarea asp-for="Description" class="form-control" rows="3" required></textarea>
-            </div>
+                <!-- Campo: Nome do Produto -->
+                <div class="form-group mb-3">
+                    <label class="form-label fw-bold">Nome do Produto</label>
+                    <input asp-for="Name" class="form-control" required />
+                </div>
 
-            <!-- 🖼️ MODIFICADO: Agora é um campo de arquivo do computador -->
-            <div class="form-group mb-3">
-                <label class="form-label">Foto do Produto</label>
-                <input type="file" name="FotoArquivo" class="form-control" accept="image/*" required />
-                <small class="text-muted">Selecione uma imagem (.jpg, .png, .jpeg) do seu computador.</small>
-            </div>
+                <!-- Campo: Preço -->
+                <div class="form-group mb-3">
+                    <label class="form-label fw-bold">Preço (R$)</label>
+                    <input asp-for="Price" type="number" step="0.01" class="form-control" required />
+                </div>
 
-            <!-- Campos Ocultos para Valores Padrão -->
-            <input type="hidden" asp-for="Stock" value="10" />
-            <input type="hidden" asp-for="CategoryId" value="1" />
+                <!-- 🏷️ Categoria (Carregada via API) -->
+                <div class="form-group mb-3">
+                    <label class="form-label fw-bold">Categoria</label>
+                    <select asp-for="CategoryId" asp-items="Model.Categories" class="form-select" required>
+                        <option value="">-- Selecione uma Categoria --</option>
+                    </select>
+                </div>
 
-            <div class="d-flex justify-content-between mt-4">
-                <a asp-action="GerenciarProdutos" class="btn btn-secondary">Voltar</a>
-                <button type="submit" class="btn btn-success">Salvar Produto</button>
-            </div>
-        </form>
+                <!-- Campo: Descrição do Produto -->
+                <div class="form-group mb-3">
+                    <label class="form-label fw-bold">Descrição do Produto</label>
+                    <textarea asp-for="Description" class="form-control" rows="3" required></textarea>
+                </div>
 
+                <!-- Campo: Foto do Produto -->
+                <div class="form-group mb-3">
+                    <label class="form-label fw-bold">Foto do Produto</label>
+                    <input type="file" name="FotoArquivo" class="form-control" accept="image/*" required />
+                    <small class="text-muted">Selecione uma imagem (.jpg, .png, .jpeg) do seu computador.</small>
+                </div>
+
+                <!-- ⭐ Checkbox: Produto em Destaque -->
+                <div class="form-check form-switch mb-4">
+                    <input class="form-check-input" type="checkbox" asp-for="IsFeatured" id="checkDestaque">
+                    <label class="form-check-label fw-bold" for="checkDestaque">
+                        ⭐ Destacar este produto na página inicial
+                    </label>
+                </div>
+
+                <!-- Campo Oculto para Estoque Padrão -->
+                <input type="hidden" asp-for="Stock" value="10" />
+
+                <div class="d-flex justify-content-between mt-4">
+                    <a asp-action="GerenciarProdutos" class="btn btn-secondary px-4 rounded-pill">Voltar</a>
+                    <button type="submit" class="btn btn-success px-4 rounded-pill fw-bold">Salvar Produto</button>
+                </div>
+            </form>
+
+        </div>
     </div>
 </div>

@@ -7,6 +7,8 @@
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <!-- Ícones do Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body>
 
@@ -19,7 +21,8 @@
     }
 
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
+        <!-- Navbar fixa com sobreposição correta -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow fixed-top" style="z-index: 1030;">
             <div class="container">
 
                 <a class="navbar-brand d-flex align-items-center" asp-controller="Home" asp-action="Index">
@@ -38,33 +41,58 @@
 
                     <div class="flex-grow-1 px-3 position-relative" style="max-width: 500px;">
                         <input type="search" class="form-control search-navbar" placeholder="Buscar produtos e categorias..." />
-                        <div id="searchResults" class="list-group position-absolute w-100 mt-1" style="z-index:9999; display:none;"></div>
+                        <div id="searchResults" class="list-group position-absolute w-100 mt-1 shadow" style="z-index:9999; display:none;"></div>
                     </div>
 
                     <div class="d-flex align-items-center gap-3 fs-5 ms-auto">
 
+                        @* ❤️ Link direto para os Favoritos *@
+                        <a asp-controller="Favorites" asp-action="Index" title="Meus Favoritos" class="text-decoration-none d-flex align-items-center fs-6 fw-semibold text-danger">
+                            <i class="bi bi-heart-fill me-1"></i> Favoritos
+                        </a>
+
                         @if (isLogged)
                         {
-                            @* 🏷️ Exibe o e-mail real do usuário logado *@
-                            <span class="fs-6 text-muted">
-                                Olá, <strong style="color: #6f42c1;">@userEmail</strong>
-                            </span>
+                            @* 👤 Menu Dropdown limpo para o usuário logado *@
+                            <div class="dropdown">
+                                <button class="btn btn-light dropdown-toggle border rounded-pill px-3 py-1 fs-6 d-flex align-items-center gap-2 bg-light text-dark fw-semibold shadow-sm" type="button" id="userMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-person-circle text-primary fs-5"></i>
+                                    <span style="max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">@userEmail.Split('@')[0]</span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2 rounded-3 py-2" aria-labelledby="userMenuButton">
+                                    <li>
+                                        <div class="px-3 py-1 text-muted small border-bottom mb-1">
+                                            Logado como:<br><strong>@userEmail</strong>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item py-2 fw-semibold text-secondary" asp-controller="Order" asp-action="Index">
+                                            📦 Meus Pedidos
+                                        </a>
+                                    </li>
 
-                            @* 📦 Link para Meus Pedidos (Visível para qualquer usuário logado) *@
-                            <a asp-controller="Order" asp-action="Index" title="Meus Pedidos" class="text-decoration-none fs-6 fw-semibold text-secondary">
-                                📦 Meus Pedidos
-                            </a>
+                                    @if (isAdmin)
+                                    {
+                                        <li>
+                                            <a class="dropdown-item py-2 fw-semibold" asp-controller="Order" asp-action="AdminDashboard" style="color: #8a4f91;">
+                                                📋 Painel de Vendas
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item py-2 fw-semibold text-purple" asp-controller="Dashboard" asp-action="AdminPanel">
+                                                🔐 Painel Admin
+                                            </a>
+                                        </li>
+                                    }
 
-                            @* 📋 Link para o Painel Geral de Vendas (Visível apenas para Admin) *@
-                            @if (isAdmin)
-                            {
-                                <a asp-controller="Order" asp-action="AdminDashboard" title="Painel de Vendas" class="text-decoration-none fs-6 fw-semibold text-purple" style="color: #8a4f91;">
-                                    📋 Painel de Vendas
-                                </a>
-                                <a asp-controller="Dashboard" asp-action="AdminPanel" title="Painel Admin" class="text-decoration-none">🔐</a>
-                            }
-
-                            <a asp-controller="Account" asp-action="Logout" title="Sair" class="text-decoration-none fs-6 fw-semibold text-danger ms-1">🚪 Sair</a>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <a class="dropdown-item py-2 fw-semibold text-danger" asp-controller="Account" asp-action="Logout">
+                                            🚪 Sair
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
                         }
                         else
                         {
@@ -88,7 +116,8 @@
         </nav>
     </header>
 
-    <main class="container mt-4">
+    <!-- Margem superior ajustada para compensar a barra fixa -->
+    <main class="container mt-4" style="margin-top: 85px !important;">
         @RenderBody()
     </main>
 
@@ -101,7 +130,7 @@
 
             input.addEventListener("input", function() {
                 clearTimeout(timeout);
-                const term = this.value;
+                const term = this.value.trim();
 
                 if (term.length < 2) {
                     resultsBox.style.display = "none";
@@ -110,7 +139,7 @@
 
                 timeout = setTimeout(async () => {
                     try {
-                        const response = await fetch(`http://localhost:5006/api/Product/search?term=${term}`);
+                        const response = await fetch(`http://localhost:5006/api/Product/search?term=${encodeURIComponent(term)}`);
 
                         if (!response.ok) return;
 
@@ -123,13 +152,17 @@
                         }
 
                         data.forEach(p => {
-                            const item = document.createElement("a");
-                            item.classList.add("list-group-item", "list-group-item-action");
-                            item.href = `/Product/Detalhes/${p.id}`;
+                            const productId = p.id || p.Id;
+                            const productName = p.name || p.nome || p.Name || p.Nome;
 
-                            item.innerText = p.name || p.nome || p.Name || p.Nome;
+                            if (productId) {
+                                const item = document.createElement("a");
+                                item.classList.add("list-group-item", "list-group-item-action", "py-2");
+                                item.href = `/Product/Detalhes/${productId}`;
+                                item.innerText = productName;
 
-                            resultsBox.appendChild(item);
+                                resultsBox.appendChild(item);
+                            }
                         });
 
                         resultsBox.style.display = "block";
@@ -140,7 +173,7 @@
             });
 
             document.addEventListener("click", function(e) {
-                if (e.target !== input && e.target !== resultsBox) {
+                if (!input.contains(e.target) && !resultsBox.contains(e.target)) {
                     resultsBox.style.display = "none";
                 }
             });
@@ -156,9 +189,9 @@
                             try
                             {
                                 var itens = System.Text.Json.JsonSerializer.Deserialize<List<AtelieDosPontinhos.UI.Models.CartItemViewModel>>(cartJson);
-                                                        totalItens = itens?.Sum(x => x.Quantidade) ?? 0;
+                                                                                                        totalItens = itens?.Sum(x => x.Quantidade) ?? 0;
                             }
-                                                catch { }
+                                                                                catch { }
                         }
                     }
                     document.getElementById("cartCount").innerText = "@totalItens";
@@ -182,6 +215,5 @@
             }
     </script>
 
-    @await RenderSectionAsync("Scripts", required: false)
-</body>
+    @await RenderSectionAsync("Scripts", required: false)</body>
 </html>

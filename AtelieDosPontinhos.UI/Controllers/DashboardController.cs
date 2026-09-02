@@ -1,11 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 
 namespace AtelieDosPontinhos.UI.Controllers
 {
@@ -14,6 +16,7 @@ namespace AtelieDosPontinhos.UI.Controllers
         private readonly IHttpClientFactory _httpClientFactory;
         private const string ApiUrl = "http://localhost:5006/api/Product";
         private const string ApiUsuariosUrl = "http://localhost:5006/api/User";
+        private const string ApiCategoriasUrl = "http://localhost:5006/api/Category";
 
         public DashboardController(IHttpClientFactory httpClientFactory)
         {
@@ -36,9 +39,14 @@ namespace AtelieDosPontinhos.UI.Controllers
             return View(produtos);
         }
 
-        // CRIAÇÃO
+        // CRIAÇÃO (TELA DO FORMULÁRIO)
         [HttpGet]
-        public IActionResult CriarProduto() => View();
+        public async Task<IActionResult> CriarProduto()
+        {
+            var model = new ProdutoViewModel();
+            model.Categories = await CarregarCategoriasAsync();
+            return View(model);
+        }
 
         [HttpPost]
         public async Task<IActionResult> CriarProdutoPost(ProdutoViewModel model, IFormFile FotoArquivo)
@@ -57,7 +65,11 @@ namespace AtelieDosPontinhos.UI.Controllers
                 ModelState.AddModelError("CoverImageUrl", "A foto do produto é obrigatória.");
             }
 
-            if (!ModelState.IsValid) return View("CriarProduto", model);
+            if (!ModelState.IsValid)
+            {
+                model.Categories = await CarregarCategoriasAsync();
+                return View("CriarProduto", model);
+            }
 
             var httpClient = _httpClientFactory.CreateClient();
             var response = await httpClient.PostAsJsonAsync(ApiUrl, model);
@@ -65,6 +77,7 @@ namespace AtelieDosPontinhos.UI.Controllers
             if (response.IsSuccessStatusCode) return RedirectToAction("GerenciarProdutos");
 
             ModelState.AddModelError(string.Empty, "Erro ao salvar o produto na API.");
+            model.Categories = await CarregarCategoriasAsync();
             return View("CriarProduto", model);
         }
 
@@ -78,13 +91,21 @@ namespace AtelieDosPontinhos.UI.Controllers
             if (!response.IsSuccessStatusCode) return NotFound();
 
             var produtoApi = await response.Content.ReadFromJsonAsync<ProdutoViewModel>();
+            if (produtoApi != null)
+            {
+                produtoApi.Categories = await CarregarCategoriasAsync();
+            }
             return View(produtoApi);
         }
 
         [HttpPost]
         public async Task<IActionResult> EditarProdutoPost(ProdutoViewModel model)
         {
-            if (!ModelState.IsValid) return View("EditarProduto", model);
+            if (!ModelState.IsValid)
+            {
+                model.Categories = await CarregarCategoriasAsync();
+                return View("EditarProduto", model);
+            }
 
             var httpClient = _httpClientFactory.CreateClient();
             var response = await httpClient.PutAsJsonAsync($"{ApiUrl}/{model.Id}", model);
@@ -92,6 +113,7 @@ namespace AtelieDosPontinhos.UI.Controllers
             if (response.IsSuccessStatusCode) return RedirectToAction("GerenciarProdutos");
 
             ModelState.AddModelError(string.Empty, "Erro ao atualizar o produto na API.");
+            model.Categories = await CarregarCategoriasAsync();
             return View("EditarProduto", model);
         }
 
@@ -102,6 +124,31 @@ namespace AtelieDosPontinhos.UI.Controllers
             var httpClient = _httpClientFactory.CreateClient();
             await httpClient.DeleteAsync($"{ApiUrl}/{id}");
             return RedirectToAction("GerenciarProdutos");
+        }
+
+        // MÉTODO AUXILIAR PARA CARREGAR AS CATEGORIAS DA API
+        private async Task<List<SelectListItem>> CarregarCategoriasAsync()
+        {
+            try
+            {
+                var httpClient = _httpClientFactory.CreateClient();
+                var categorias = await httpClient.GetFromJsonAsync<List<CategoriaViewModel>>(ApiCategoriasUrl);
+
+                if (categorias != null && categorias.Any())
+                {
+                    return categorias.Select(c => new SelectListItem
+                    {
+                        Value = c.Id.ToString(),
+                        Text = c.Name
+                    }).ToList();
+                }
+            }
+            catch (Exception)
+            {
+                // Tratamento caso a API de categorias esteja offline
+            }
+
+            return new List<SelectListItem>();
         }
 
         // ==========================================
@@ -139,7 +186,6 @@ namespace AtelieDosPontinhos.UI.Controllers
             {
                 var httpClient = _httpClientFactory.CreateClient();
 
-                // Monta o payload incluindo a Role selecionada no formulário
                 var payload = new
                 {
                     Email = model.Email,
@@ -193,6 +239,15 @@ namespace AtelieDosPontinhos.UI.Controllers
         public string CoverImageUrl { get; set; } = string.Empty;
         public int Stock { get; set; } = 10;
         public int CategoryId { get; set; } = 1;
+
+        public bool IsFeatured { get; set; }
+        public List<SelectListItem>? Categories { get; set; }
+    }
+
+    public class CategoriaViewModel
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
     }
 
     public class UsuarioViewModel

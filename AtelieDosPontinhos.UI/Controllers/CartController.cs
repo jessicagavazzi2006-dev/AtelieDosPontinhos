@@ -68,6 +68,97 @@ namespace AtelieDosPontinhos.UI.Controllers
             return View(carrinho ?? new List<CartItemViewModel>());
         }
 
+        /// <summary>
+        /// Método assíncrono (AJAX) para adicionar produtos mantendo a navegação na vitrine
+        /// </summary>
+        [HttpPost]
+        public async Task<IActionResult> AdicionarAoCarrinhoAjax(int id, int quantidade = 1)
+        {
+            if (id <= 0)
+            {
+                return Json(new { success = false, message = "ID de produto inválido." });
+            }
+
+            try
+            {
+                var client = _httpClientFactory.CreateClient("ApiClient");
+                if (client.BaseAddress == null)
+                {
+                    return Json(new { success = false, message = "Serviço de API não configurado." });
+                }
+
+                string rota = client.BaseAddress.ToString().EndsWith("api/")
+                    ? $"Product/{id}"
+                    : $"api/Product/{id}";
+
+                var response = await client.GetAsync(rota);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    return Json(new { success = false, message = "Produto não encontrado." });
+                }
+
+                var json = await response.Content.ReadFromJsonAsync<JsonElement>();
+
+                int parsedId = id;
+                if (json.TryGetProperty("id", out var idProp) && idProp.ValueKind == JsonValueKind.Number)
+                    parsedId = idProp.GetInt32();
+
+                string name = null;
+                if (json.TryGetProperty("name", out var n1) && n1.ValueKind == JsonValueKind.String)
+                    name = n1.GetString();
+                else if (json.TryGetProperty("nome", out var n2) && n2.ValueKind == JsonValueKind.String)
+                    name = n2.GetString();
+
+                string description = null;
+                if (json.TryGetProperty("description", out var d1) && d1.ValueKind == JsonValueKind.String)
+                    description = d1.GetString();
+
+                string imagem = null;
+                if (json.TryGetProperty("coverImageUrl", out var i1) && i1.ValueKind == JsonValueKind.String)
+                    imagem = i1.GetString();
+                else if (json.TryGetProperty("imageUrl", out var i2) && i2.ValueKind == JsonValueKind.String)
+                    imagem = i2.GetString();
+
+                decimal preco = 0m;
+                if (json.TryGetProperty("price", out var p1) && p1.ValueKind == JsonValueKind.Number)
+                    preco = p1.GetDecimal();
+                else if (json.TryGetProperty("preco", out var p2) && p2.ValueKind == JsonValueKind.Number)
+                    preco = p2.GetDecimal();
+
+                var produtoViewModel = new ProductViewModel
+                {
+                    Id = parsedId,
+                    Name = !string.IsNullOrEmpty(name) ? name : $"Produto {id}",
+                    Price = preco,
+                    CoverImageUrl = !string.IsNullOrEmpty(imagem) ? imagem : "/images/logo/logo.png",
+                    Description = description ?? string.Empty
+                };
+
+                var carrinho = ObterCarrinhoDaSessao();
+                var itemExistente = carrinho.FirstOrDefault(c => c.Produto != null && c.Produto.Id == produtoViewModel.Id);
+
+                if (itemExistente == null)
+                {
+                    carrinho.Add(new CartItemViewModel { Produto = produtoViewModel, Quantidade = quantidade });
+                }
+                else
+                {
+                    itemExistente.Quantidade += quantidade;
+                }
+
+                SalvarCarrinhoNaSessao(carrinho);
+
+                int totalCount = carrinho.Sum(x => x.Quantidade);
+                return Json(new { success = true, totalCount });
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"ERRO AJAX CARRINHO: {ex.Message}");
+                return Json(new { success = false, message = "Erro ao adicionar item ao carrinho." });
+            }
+        }
+
         [HttpPost]
         [HttpGet]
         public async Task<IActionResult> AdicionarAoCarrinho(int id, int produtoId = 0, int quantidade = 1)
@@ -188,7 +279,7 @@ namespace AtelieDosPontinhos.UI.Controllers
         public IActionResult RemoverDoCarrinho(int id)
         {
             var carrinho = ObterCarrinhoDaSessao();
-            var item = carrinho.FirstOrDefault(c => c.Produto.Id == id);
+            var item = carrinho.FirstOrDefault(c => c.Produto?.Id == id);
 
             if (item != null)
             {
@@ -225,7 +316,6 @@ namespace AtelieDosPontinhos.UI.Controllers
 
                 var response = await client.GetAsync(rotaUsuario);
 
-                // O CÓDIGO FOI COLOCADO AQUI:
                 if (response.IsSuccessStatusCode)
                 {
                     var jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
@@ -271,7 +361,6 @@ namespace AtelieDosPontinhos.UI.Controllers
             var client = _httpClientFactory.CreateClient("ApiClient");
             InjetarCookieAutenticacao(client);
 
-            // Mapeia os itens garantindo que nenhum venha com ID zero ou nulo
             var itemsDto = new List<CreateOrderItemDto>();
             foreach (var item in carrinho)
             {
@@ -316,7 +405,6 @@ namespace AtelieDosPontinhos.UI.Controllers
                     ? "orders"
                     : "api/orders";
 
-                // Envia requisição para a API
                 var response = await client.PostAsJsonAsync(rotaPedido, dadosPedido);
 
                 var conteudoResposta = await response.Content.ReadAsStringAsync();
@@ -335,13 +423,11 @@ namespace AtelieDosPontinhos.UI.Controllers
                 return RedirectToAction("Checkout");
             }
 
-            // Limpa o carrinho após gravação com sucesso
             HttpContext.Session.Remove("Carrinho");
             TempData["PedidoSucesso"] = "🎉 Compra Confirmada com Sucesso!";
             return RedirectToAction("Index", "Order");
         }
 
-        // Método auxiliar para evitar que exceções sejam lançadas caso alguma propriedade não exista
         private string ObterPropriedadeString(JsonElement json, params string[] nomesPropriedade)
         {
             foreach (var nome in nomesPropriedade)

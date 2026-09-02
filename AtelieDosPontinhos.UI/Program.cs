@@ -28,7 +28,6 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 // Permite acessar o HttpContext (necessário para o ApiCookieHandler)
 builder.Services.AddHttpContextAccessor();
-
 builder.Services.AddSession(); // 🌟 ATIVA O SERVIÇO DE SESSÃO NA MEMÓRIA
 
 // =====================================================================
@@ -65,6 +64,13 @@ builder.Services.AddHttpClient("ApiClientAuth", client =>
     client.BaseAddress = new Uri(apiBaseUrl);
 });
 
+// 🌟 CORREÇÃO: Adicionado o cliente "Api" utilizado pelo ProductController
+builder.Services.AddHttpClient("Api", client =>
+{
+    client.BaseAddress = new Uri(apiBaseUrl);
+})
+.AddHttpMessageHandler<ApiCookieHandler>();
+
 // Cliente padrão para serviços (com interceptador de cookie)
 builder.Services.AddHttpClient("ApiClient", client =>
 {
@@ -76,6 +82,7 @@ builder.Services.AddHttpClient("ApiClient", client =>
 // MVC
 // =====================================================================
 builder.Services.AddControllersWithViews();
+
 builder.Services.AddDbContext<AtelieDosPontinhosDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), sqlOptions =>
     {
@@ -105,25 +112,8 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-// Serve arquivos estáticos adicionais (ex.: mapeamento para /images em uma pasta customizada)
-// Exemplo: se as imagens estiverem em uma pasta "StaticFiles/Images" no ContentRoot,
-// descomente o bloco abaixo e ajuste o caminho conforme necessário.
-/*
-var imagesPath = Path.Combine(app.Environment.ContentRootPath, "StaticFiles", "Images");
-if (Directory.Exists(imagesPath))
-{
-    app.UseStaticFiles(new StaticFileOptions
-    {
-        FileProvider = new PhysicalFileProvider(imagesPath),
-        RequestPath = "/images"
-    });
-}
-*/
-
 app.UseRouting();
-
 app.UseSession(); // 🌟 ATIVA O MIDDLEWARE QUE PERMITE O HTML LER A SESSÃO
-
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -139,8 +129,6 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     try
     {
-        // Atenção: rotina de criação do banco (apenas em Development).
-        // Evita erro quando o banco já existe, verificando antes de criar.
         if (app.Environment.IsDevelopment())
         {
             var db = services.GetRequiredService<AtelieDosPontinhosDbContext>();
@@ -148,13 +136,11 @@ using (var scope = app.Services.CreateScope())
 
             try
             {
-                // Usar a ExecutionStrategy do EF para operações de migração/criação, isso aplica retry automático
                 var strategy = db.Database.CreateExecutionStrategy();
                 await strategy.ExecuteAsync(async () =>
                 {
                     try
                     {
-                        // Use MigrateAsync unicamente: EF cria o DB e a tabela __EFMigrationsHistory quando necessário
                         await db.Database.MigrateAsync();
                         logger.LogInformation("Migrations aplicadas/criadas com sucesso.");
                     }
@@ -170,8 +156,6 @@ using (var scope = app.Services.CreateScope())
             }
         }
 
-        // SeedData.SeedAsync espera um IServiceProvider. Opcionalmente passamos WebRootPath para permitir
-        // que a camada de infraestrutura carregue imagens estáticas se estiverem presentes.
         await SeedData.SeedAsync(services, app.Environment.WebRootPath);
     }
     catch (Exception ex)

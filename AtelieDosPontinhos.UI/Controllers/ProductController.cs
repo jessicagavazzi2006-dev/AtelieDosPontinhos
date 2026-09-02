@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using AtelieDosPontinhos.UI.Models;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text.Json;
 
 namespace AtelieDosPontinhos.UI.Controllers
 {
@@ -16,6 +17,12 @@ namespace AtelieDosPontinhos.UI.Controllers
     {
         private readonly IWebHostEnvironment _environment;
         private readonly IHttpClientFactory _httpClientFactory;
+
+        // Configuração para aceitar propriedades minúsculas/maiúsculas do JSON da API
+        private readonly JsonSerializerOptions _jsonOptions = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
 
         public ProductController(IWebHostEnvironment environment, IHttpClientFactory httpClientFactory)
         {
@@ -56,7 +63,7 @@ namespace AtelieDosPontinhos.UI.Controllers
                 var response = await client.GetAsync("api/Product");
                 if (response.IsSuccessStatusCode)
                 {
-                    produtos = await response.Content.ReadFromJsonAsync<List<ProductViewModel>>();
+                    produtos = await response.Content.ReadFromJsonAsync<List<ProductViewModel>>(_jsonOptions);
                 }
             }
             catch (Exception ex)
@@ -81,25 +88,38 @@ namespace AtelieDosPontinhos.UI.Controllers
 
             try
             {
+                // Tenta buscar no endpoint padrão de produto
                 var response = await client.GetAsync($"api/Product/{id}");
+
                 if (response.IsSuccessStatusCode)
                 {
-                    product = await response.Content.ReadFromJsonAsync<ProductViewModel>();
+                    product = await response.Content.ReadFromJsonAsync<ProductViewModel>(_jsonOptions);
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine($"API retornou HTTP Status: {response.StatusCode} para o ID {id}");
                 }
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Erro ao buscar detalhes na API: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Erro ao conectar na API para detalhes do produto {id}: {ex.Message}");
             }
 
+            // Fallback para lista em memória caso não encontre na API
             if (product == null)
             {
                 product = _products.FirstOrDefault(p => p.Id == id);
             }
 
+            // Garante o mapeamento do nome caso a propriedade venha vazia do JSON
+            if (product != null && string.IsNullOrEmpty(product.Nome) && !string.IsNullOrEmpty(product.Name))
+            {
+                product.Nome = product.Name;
+            }
+
             if (product == null)
             {
-                return NotFound();
+                return NotFound($"O produto de código #{id} não foi localizado nem na API e nem na lista de fallback.");
             }
 
             return View(product);
@@ -177,7 +197,7 @@ namespace AtelieDosPontinhos.UI.Controllers
                 var response = await client.GetAsync($"api/Product/{id}");
                 if (response.IsSuccessStatusCode)
                 {
-                    product = await response.Content.ReadFromJsonAsync<ProductViewModel>();
+                    product = await response.Content.ReadFromJsonAsync<ProductViewModel>(_jsonOptions);
                 }
             }
             catch (Exception ex)

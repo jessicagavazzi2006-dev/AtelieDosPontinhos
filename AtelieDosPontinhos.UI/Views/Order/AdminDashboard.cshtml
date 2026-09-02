@@ -82,7 +82,9 @@
                                 <td>
                                     <form asp-controller="Order" asp-action="AtualizarStatus" method="post" class="d-inline-block">
                                         <input type="hidden" name="id" value="@id" />
-                                        <select name="status" onchange="this.form.submit()" class="form-select form-select-sm rounded-pill border-0 px-3 fw-bold @(status == "Concluído" ? "bg-success bg-opacity-10 text-success" : "bg-warning bg-opacity-10 text-warning")">
+                                        <select name="status" onchange="this.form.submit()"
+                                                class="form-select form-select-sm rounded-pill border-0 ps-3 pe-4 fw-bold @(status == "Concluído" ? "bg-success bg-opacity-10 text-success" : status == "Cancelado" ? "bg-danger bg-opacity-10 text-danger" : "bg-warning bg-opacity-10 text-warning")"
+                                                style="min-width: 140px;">
                                             <option value="Pendente" selected="@(status == "Pendente")">🟡 Pendente</option>
                                             <option value="Concluído" selected="@(status == "Concluído")">🟢 Concluído</option>
                                             <option value="Cancelado" selected="@(status == "Cancelado")">🔴 Cancelado</option>
