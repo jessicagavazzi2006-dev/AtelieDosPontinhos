@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Finalizar Pedido";
     decimal totalGeral = 0;
+    string metodoSalvo = ViewBag.MetodoSalvo?.ToString() ?? "1";
 }
 
 <div class="container py-5" style="max-width: 950px;">
@@ -16,8 +17,9 @@
             var pId = Model[i].Produto.GetType().GetProperty("Id")?.GetValue(Model[i].Produto)
                    ?? Model[i].Produto.GetType().GetProperty("ProdutoId")?.GetValue(Model[i].Produto);
 
-            <input type="hidden" name="[@i].ProdutoId" value="@pId" />
-            <input type="hidden" name="[@i].Quantidade" value="@Model[i].Quantidade" />
+            <input type="hidden" name="Items[@i].ProdutoId" value="@pId" />
+            <input type="hidden" name="Items[@i].Quantidade" value="@Model[i].Quantidade" />
+            <input type="hidden" name="Items[@i].PrecoUnitario" value="@(Model[i].Produto.GetType().GetProperty("Price")?.GetValue(Model[i].Produto) ?? Model[i].Produto.GetType().GetProperty("Preco")?.GetValue(Model[i].Produto))" />
         }
 
         <div class="row g-4">
@@ -31,7 +33,7 @@
                     <div class="row g-3">
                         <div class="col-md-12">
                             <label class="form-label text-secondary small fw-semibold">E-mail do Destinatário</label>
-                            <input type="text" name="Email" class="form-control bg-light border-0 rounded-pill px-3" value="@ViewBag.UserEmail" readonly />
+                            <input type="text" name="EmailUsuario" class="form-control bg-light border-0 rounded-pill px-3" value="@ViewBag.UserEmail" readonly />
                         </div>
                         <div class="col-md-4">
                             <label class="form-label text-secondary small fw-semibold">CEP</label>
@@ -65,9 +67,9 @@
                         <div class="col-md-5">
                             <label class="form-label text-secondary small fw-semibold">Tipo de Pagamento</label>
                             <select name="TipoPagamento" id="selectPagamento" class="form-select bg-light border-0 rounded-pill px-3" onchange="alternarMetodoPagamento()">
-                                <option value="1">💳 Cartão de Crédito</option>
-                                <option value="2">💵 Cartão de Débito</option>
-                                <option value="3">📱 PIX</option>
+                                <option value="1" selected="@(metodoSalvo == "1" || metodoSalvo.ToLower().Contains("crédito") || metodoSalvo.ToLower().Contains("credito"))">💳 Cartão de Crédito</option>
+                                <option value="2" selected="@(metodoSalvo == "2" || metodoSalvo.ToLower().Contains("débito") || metodoSalvo.ToLower().Contains("debito"))">💵 Cartão de Débito</option>
+                                <option value="3" selected="@(metodoSalvo == "3" || metodoSalvo.ToLower().Contains("pix"))">📱 PIX</option>
                             </select>
                         </div>
 
@@ -88,7 +90,7 @@
                             <div class="p-4 rounded-4 border bg-light d-inline-block shadow-sm" style="max-width: 320px;">
                                 <p class="fw-bold text-dark small mb-3">📱 Escaneie o QR Code abaixo para pagar:</p>
                                 <div class="bg-white p-3 rounded-3 shadow-sm d-inline-block mb-3 border">
-                                    <img src="https://qrserver.com" alt="QR Code PIX Ateliê" class="img-fluid" style="width: 160px; height: 160px;" />
+                                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=AtelieDosPontinhosPagamentoPix" alt="QR Code PIX Ateliê" class="img-fluid" style="width: 160px; height: 160px;" />
                                 </div>
                                 <span class="d-block text-dark fw-bold mb-1" style="font-size: 14px;">Ateliê dos Pontinhos Ltda.</span>
                                 <span class="d-block text-muted font-monospace mb-2" style="font-size: 12px;">CNPJ: 99.999.999/0001-99</span>
@@ -167,13 +169,6 @@
     }
 
     document.addEventListener("DOMContentLoaded", function() {
-        var selectVal = "@ViewBag.MetodoSalvo";
-        if (selectVal && selectVal !== "") {
-            var selectElem = document.getElementById("selectPagamento");
-            if (selectElem) {
-                selectElem.value = selectVal;
-            }
-        }
         alternarMetodoPagamento();
 
         var inputCartao = document.getElementById("inputCartao");

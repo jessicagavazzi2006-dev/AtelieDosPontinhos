@@ -224,17 +224,21 @@ namespace AtelieDosPontinhos.UI.Controllers
                     : $"api/account/user-data?email={userEmail}";
 
                 var response = await client.GetAsync(rotaUsuario);
+
+                // O CÓDIGO FOI COLOCADO AQUI:
                 if (response.IsSuccessStatusCode)
                 {
-                    var dadosUsuario = await response.Content.ReadFromJsonAsync<JsonElement>();
-                    ViewBag.CEP = dadosUsuario.GetProperty("cep").GetString();
-                    ViewBag.Cidade = dadosUsuario.GetProperty("cidade").GetString();
-                    ViewBag.Estado = dadosUsuario.GetProperty("estado").GetString();
-                    ViewBag.Numero = dadosUsuario.GetProperty("numero").GetString();
-                    ViewBag.Referencial = dadosUsuario.GetProperty("referencial").GetString();
-                    ViewBag.MetodoSalvo = dadosUsuario.GetProperty("metodo").GetString();
-                    ViewBag.NomeNoCartao = dadosUsuario.GetProperty("titular").GetString();
-                    ViewBag.NumeroCartao = dadosUsuario.GetProperty("cartao").GetString();
+                    var jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                    var dadosUsuario = await response.Content.ReadFromJsonAsync<JsonElement>(jsonOptions);
+
+                    ViewBag.CEP = ObterPropriedadeString(dadosUsuario, "cep", "CEP");
+                    ViewBag.Cidade = ObterPropriedadeString(dadosUsuario, "cidade", "Cidade");
+                    ViewBag.Estado = ObterPropriedadeString(dadosUsuario, "estado", "Estado");
+                    ViewBag.Numero = ObterPropriedadeString(dadosUsuario, "numero", "Numero");
+                    ViewBag.Referencial = ObterPropriedadeString(dadosUsuario, "referencia", "Referencia", "referencial");
+                    ViewBag.MetodoSalvo = ObterPropriedadeString(dadosUsuario, "metodo", "Metodo");
+                    ViewBag.NomeNoCartao = ObterPropriedadeString(dadosUsuario, "titular", "NomeNoCartao");
+                    ViewBag.NumeroCartao = ObterPropriedadeString(dadosUsuario, "cartao", "NumeroCartao");
                 }
             }
             catch (Exception ex)
@@ -260,19 +264,36 @@ namespace AtelieDosPontinhos.UI.Controllers
             var carrinho = ObterCarrinhoDaSessao();
             if (carrinho == null || !carrinho.Any())
             {
+                TempData["Erro"] = "Seu carrinho está vazio.";
                 return RedirectToAction("Index");
             }
 
             var client = _httpClientFactory.CreateClient("ApiClient");
             InjetarCookieAutenticacao(client);
 
-            // Montagem da lista DTO fortemente tipada
-            var itemsDto = carrinho.Select(item => new CreateOrderItemDto
+            // Mapeia os itens garantindo que nenhum venha com ID zero ou nulo
+            var itemsDto = new List<CreateOrderItemDto>();
+            foreach (var item in carrinho)
             {
-                ProdutoId = item.Produto.Id,
-                Quantidade = item.Quantidade,
-                PrecoUnitario = item.Produto?.Price ?? 0m
-            }).ToList();
+                var pId = item.Produto?.Id ?? 0;
+                var pPreco = item.Produto?.Price ?? 0m;
+
+                if (pId > 0)
+                {
+                    itemsDto.Add(new CreateOrderItemDto
+                    {
+                        ProdutoId = pId,
+                        Quantidade = item.Quantidade,
+                        PrecoUnitario = pPreco
+                    });
+                }
+            }
+
+            if (!itemsDto.Any())
+            {
+                TempData["Erro"] = "Nenhum produto válido encontrado no carrinho.";
+                return RedirectToAction("Index");
+            }
 
             decimal totalPedido = itemsDto.Sum(i => i.PrecoUnitario * i.Quantidade);
 
@@ -280,7 +301,7 @@ namespace AtelieDosPontinhos.UI.Controllers
             {
                 EmailUsuario = userEmail,
                 ValorTotal = totalPedido,
-                MetodoPagamento = form["TipoPagamento"].ToString(),
+                MetodoPagamento = !string.IsNullOrEmpty(form["TipoPagamento"]) ? form["TipoPagamento"].ToString() : "1",
                 CEP = form["CEP"].ToString(),
                 Cidade = form["Cidade"].ToString(),
                 Estado = form["Estado"].ToString(),
@@ -295,13 +316,15 @@ namespace AtelieDosPontinhos.UI.Controllers
                     ? "orders"
                     : "api/orders";
 
+                // Envia requisição para a API
                 var response = await client.PostAsJsonAsync(rotaPedido, dadosPedido);
+
+                var conteudoResposta = await response.Content.ReadAsStringAsync();
+                System.Diagnostics.Debug.WriteLine($"🔍 RESPOSTA DA API POST ORDERS [{response.StatusCode}]: {conteudoResposta}");
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    var erroDetalhado = await response.Content.ReadAsStringAsync();
-                    System.Diagnostics.Debug.WriteLine($"❌ ERRO API ORDERS ({response.StatusCode}): {erroDetalhado}");
-                    TempData["Erro"] = $"Erro ao salvar na API ({response.StatusCode}): {erroDetalhado}";
+                    TempData["Erro"] = $"Erro ao salvar o pedido na API ({response.StatusCode}): {conteudoResposta}";
                     return RedirectToAction("Checkout");
                 }
             }
@@ -312,9 +335,23 @@ namespace AtelieDosPontinhos.UI.Controllers
                 return RedirectToAction("Checkout");
             }
 
+            // Limpa o carrinho após gravação com sucesso
             HttpContext.Session.Remove("Carrinho");
             TempData["PedidoSucesso"] = "🎉 Compra Confirmada com Sucesso!";
             return RedirectToAction("Index", "Order");
+        }
+
+        // Método auxiliar para evitar que exceções sejam lançadas caso alguma propriedade não exista
+        private string ObterPropriedadeString(JsonElement json, params string[] nomesPropriedade)
+        {
+            foreach (var nome in nomesPropriedade)
+            {
+                if (json.TryGetProperty(nome, out var prop) && prop.ValueKind == JsonValueKind.String)
+                {
+                    return prop.GetString() ?? string.Empty;
+                }
+            }
+            return string.Empty;
         }
     }
 }
