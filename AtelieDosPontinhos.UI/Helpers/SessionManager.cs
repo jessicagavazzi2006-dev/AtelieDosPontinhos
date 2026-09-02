@@ -1,4 +1,4 @@
-﻿namespace SenacGames.UI.Helpers
+﻿namespace AtelieDosPontinhos.UI.Helpers
 {
     public class SessionManager
     {

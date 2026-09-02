@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using AtelieDosPontinhos.Infrastructure.Context;
 using AtelieDosPontinhos.Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
@@ -6,13 +7,16 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 #region SERVICES
-// Controllers (API)
-builder.Services.AddControllers();
 
-// MVC (Views)
-builder.Services.AddControllersWithViews();
+// Controllers (API) + Configuração para ignorar ciclos de serialização JSON
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+    });
 
-// 🔥 NOVO: Libera o acesso para o JavaScript da UI consultar a API
+// 🔥 Libera o acesso CORS para chamadas externas/UI
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("PermitirTudo", policy =>
@@ -22,7 +26,6 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader();
     });
 });
-
 
 // DbContext
 builder.Services.AddDbContext<AtelieDosPontinhosDbContext>(options =>
@@ -37,8 +40,8 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<AtelieDosPontinhosDbContext>()
     .AddDefaultTokenProviders();
 
-
-builder.Services.ConfigureApplicationCookie(options => {
+builder.Services.ConfigureApplicationCookie(options =>
+{
     options.Events.OnRedirectToLogin = context =>
     {
         if (context.Request.Path.StartsWithSegments("/api"))
@@ -70,17 +73,20 @@ builder.Services.AddAuthorization();
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 #endregion
 
 #region DEPENDENCY INJECTION
 
 builder.Services.AddScoped<AtelieDosPontinhos.Application.Interfaces.IProductService, AtelieDosPontinhos.Application.Services.ProductServices>();
 builder.Services.AddScoped<AtelieDosPontinhos.Domain.Interfaces.IProductRepository, AtelieDosPontinhos.Infrastructure.Repositories.ProductRepository>();
+
 #endregion
 
 var app = builder.Build();
 
 #region PIPELINE
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -88,49 +94,49 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
 // Serve arquivos estáticos (wwwroot) para permitir que imagens/arquivos sejam acessados
 app.UseStaticFiles();
-app.UseRouting();
-// 🔥 NOVO: Ativa a política de liberação de acesso criada acima
-app.UseCors("PermitirTudo");
 
+app.UseRouting();
+
+// Ativa a política de CORS
+app.UseCors("PermitirTudo");
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-// MVC routes
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
-
-// Mapeia os endpoints de API (AccountController) para que o Swagger consiga lê-los!
+// Mapeia os endpoints de API para controllers
 app.MapControllers();
+
 #endregion
 
 #region SEED DATA
+
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     try
     {
-        // Passa o caminho físico do wwwroot para o SeedData poder carregar imagens
         await SeedData.SeedAsync(services, app.Environment.WebRootPath);
     }
     catch (Exception ex)
     {
-        // Log e segue em frente para evitar crash na inicialização
         var logger = services.GetRequiredService<ILogger<Program>>();
         logger.LogWarning(ex, "Falha ao executar SeedData na API durante inicialização. Ignorando.");
     }
 }
+
 #endregion
 
 #region DEBUG DB CONNECTION
+
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AtelieDosPontinhosDbContext>();
     Console.WriteLine("DB CONECTADO: " + db.Database.GetConnectionString());
 }
+
 #endregion
 
 app.Run();

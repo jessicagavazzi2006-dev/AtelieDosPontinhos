@@ -1,7 +1,109 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-<h1>Criar Usuário</h1>
-<p>Tela de teste</p>
+﻿@model AtelieDosPontinhos.UI.Controllers.CriarUsuarioViewModel
+
+<!-- Importação de ícones do Bootstrap para o olhinho -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-body p-4">
+                    <h3 class="mb-3 text-purple font-weight-bold">👤 Cadastrar Novo Usuário</h3>
+                    <p class="text-muted small mb-4">Preencha os dados abaixo para cadastrar um novo usuário ou administrador.</p>
+
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div class="alert alert-danger rounded-3" role="alert">
+                            <div asp-validation-summary="All" class="text-danger m-0"></div>
+                        </div>
+                    }
+
+                    <form asp-controller="Dashboard" asp-action="CriarUsuario" method="post" id="formCriarUsuario">
+                        <!-- E-MAIL -->
+                        <div class="mb-3">
+                            <label class="form-label font-weight-bold">E-mail</label>
+                            <input asp-for="Email" class="form-control rounded-3" placeholder="exemplo@site.com" required type="email" />
+                            <span asp-validation-for="Email" class="text-danger small"></span>
+                        </div>
+
+                        <!-- SENHA -->
+                        <div class="mb-3">
+                            <label class="form-label font-weight-bold">Senha</label>
+                            <div class="input-group">
+                                <input asp-for="Password" id="txtSenha" class="form-control rounded-start-3" placeholder="Digite a senha" required type="password" />
+                                <button class="btn btn-outline-secondary rounded-end-3" type="button" onclick="togglePassword('txtSenha', 'iconSenha')">
+                                    <i id="iconSenha" class="bi bi-eye"></i>
+                                </button>
+                            </div>
+                            <span asp-validation-for="Password" class="text-danger small"></span>
+                        </div>
+
+                        <!-- CONFIRMAÇÃO DE SENHA -->
+                        <div class="mb-3">
+                            <label class="form-label font-weight-bold">Confirmar Senha</label>
+                            <div class="input-group">
+                                <input asp-for="ConfirmPassword" id="txtConfirmarSenha" class="form-control rounded-start-3" placeholder="Confirme a senha" required type="password" />
+                                <button class="btn btn-outline-secondary rounded-end-3" type="button" onclick="togglePassword('txtConfirmarSenha', 'iconConfirmarSenha')">
+                                    <i id="iconConfirmarSenha" class="bi bi-eye"></i>
+                                </button>
+                            </div>
+                            <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+                            <div id="msgErroSenha" class="text-danger small d-none mt-1">As senhas não coincidem.</div>
+                        </div>
+
+                        <!-- ROLE -->
+                        <div class="mb-3">
+                            <label class="form-label font-weight-bold">Perfil do Usuário (Role)</label>
+                            <select name="Role" class="form-select rounded-3" required>
+                                <option value="Cliente">Cliente</option>
+                                <option value="Admin">Administrador</option>
+                            </select>
+                        </div>
+
+                        <!-- BOTÕES -->
+                        <div class="d-flex justify-content-between align-items-center mt-4 pt-2">
+                            <a asp-controller="Dashboard" asp-action="GerenciarUsuarios" class="btn btn-outline-secondary rounded-pill px-4">
+                                Voltar
+                            </a>
+                            <button type="submit" class="btn btn-purple rounded-pill px-4" style="background-color: #6f42c1; color: white;">
+                                Salvar Usuário
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Função para mostrar/ocultar a senha
+    function togglePassword(inputId, iconId) {
+        const input = document.getElementById(inputId);
+        const icon = document.getElementById(iconId);
+
+        if (input.type === "password") {
+            input.type = "text";
+            icon.classList.remove("bi-eye");
+            icon.classList.add("bi-eye-slash");
+        } else {
+            input.type = "password";
+            icon.classList.remove("bi-eye-slash");
+            icon.classList.add("bi-eye");
+        }
+    }
+
+    // Validação no lado do cliente para checar se as senhas batem antes do envio
+    document.getElementById("formCriarUsuario").addEventListener("submit", function (e) {
+        const senha = document.getElementById("txtSenha").value;
+        const confirmarSenha = document.getElementById("txtConfirmarSenha").value;
+        const msgErro = document.getElementById("msgErroSenha");
+
+        if (senha !== confirmarSenha) {
+            e.preventDefault();
+            msgErro.classList.remove("d-none");
+        } else {
+            msgErro.classList.add("d-none");
+        }
+    });
+</script>

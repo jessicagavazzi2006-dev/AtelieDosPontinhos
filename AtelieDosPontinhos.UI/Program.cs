@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using Microsoft.Data.SqlClient;
-using SenacGames.UI.Helpers;
+using AtelieDosPontinhos.UI.Helpers;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.FileProviders;
 using System.IO;
@@ -39,6 +39,25 @@ builder.Services.AddTransient<ApiCookieHandler>();
 
 // Resolve a URL dinamicamente via ApiEndpointResolver
 var apiBaseUrl = AppConfig.ApiBaseUrl;
+
+// Fallback para appsettings.json ou URL padrão se resolver falhar
+if (string.IsNullOrEmpty(apiBaseUrl))
+{
+    apiBaseUrl = builder.Configuration["Api:BaseUrl"] ?? "http://localhost:5006/";
+    System.Diagnostics.Debug.WriteLine($"DEBUG: API URL resolvida via appsettings.json: {apiBaseUrl}");
+}
+else
+{
+    System.Diagnostics.Debug.WriteLine($"DEBUG: API URL resolvida via ApiEndpointResolver: {apiBaseUrl}");
+}
+
+// Validação crítica
+if (string.IsNullOrEmpty(apiBaseUrl) || !Uri.IsWellFormedUriString(apiBaseUrl, UriKind.Absolute))
+{
+    throw new InvalidOperationException($"API Base URL inválida ou não configurada: '{apiBaseUrl}'. Configure 'Api:BaseUrl' em appsettings.json ou libere o acesso ao launchSettings.json do projeto AtelieDosPontinhos.API");
+}
+
+System.Diagnostics.Debug.WriteLine($"✅ API URL Configurada: {apiBaseUrl}");
 
 // Cliente para autenticação (sem interceptador)
 builder.Services.AddHttpClient("ApiClientAuth", client =>

@@ -1,92 +1,164 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AtelieDosPontinhos.UI.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Threading.Tasks;
-using AtelieDosPontinhos.UI.Models;
-using Microsoft.AspNetCore.Http;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace AtelieDosPontinhos.UI.Controllers
 {
+    // DTOs locais fortemente tipados para garantir contrato perfeito com a API
+    public class CreateOrderDto
+    {
+        public string EmailUsuario { get; set; } = string.Empty;
+        public decimal ValorTotal { get; set; }
+        public string MetodoPagamento { get; set; } = string.Empty;
+        public string? CEP { get; set; }
+        public string? Cidade { get; set; }
+        public string? Estado { get; set; }
+        public string? Numero { get; set; }
+        public string? Complemento { get; set; }
+        public List<CreateOrderItemDto> Items { get; set; } = new();
+    }
+
+    public class CreateOrderItemDto
+    {
+        public int ProdutoId { get; set; }
+        public int Quantidade { get; set; }
+        public decimal PrecoUnitario { get; set; }
+    }
+
     public class CartController : Controller
     {
         private readonly IHttpClientFactory _httpClientFactory;
 
-        //  Agora usamos HttpClient para falar com a  API de Produtos
         public CartController(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
         }
 
+        private void InjetarCookieAutenticacao(HttpClient client)
+        {
+            var apiCookie = HttpContext.Session.GetString("ApiCookie");
+
+            if (string.IsNullOrEmpty(apiCookie))
+            {
+                apiCookie = User.FindFirst("ApiCookie")?.Value;
+            }
+
+            System.Diagnostics.Debug.WriteLine($"🔍 DEBUG COOKIE NA SESSÃO: '{(string.IsNullOrEmpty(apiCookie) ? "VAZIO / NULO" : apiCookie)}'");
+
+            if (!string.IsNullOrEmpty(apiCookie))
+            {
+                client.DefaultRequestHeaders.Remove("Cookie");
+                client.DefaultRequestHeaders.Add("Cookie", apiCookie);
+            }
+        }
+
         public IActionResult Index()
         {
             var carrinho = ObterCarrinhoDaSessao();
-            return View(carrinho);
+            decimal total = carrinho?.Sum(i => (i.Produto?.Price ?? 0m) * i.Quantidade) ?? 0m;
+
+            ViewBag.ValorTotal = total;
+            return View(carrinho ?? new List<CartItemViewModel>());
         }
 
         [HttpPost]
-        public async Task<IActionResult> AdicionarAoCarrinho(int id, int quantidade = 1)
+        [HttpGet]
+        public async Task<IActionResult> AdicionarAoCarrinho(int id, int produtoId = 0, int quantidade = 1)
         {
-            
-            // 1. Criamos o cliente usando o nome configurado "Api"
-            var client = _httpClientFactory.CreateClient("Api");
+            int idFinal = id > 0 ? id : produtoId;
 
-            // A URL agora é relativa ao endereço configurado lá no appsettings
-            var urlApi = $"api/Product/{id}";
-
-
-            ProductViewModel produtoViewModel = null;
+            if (idFinal <= 0)
+            {
+                TempData["Erro"] = "ID do produto inválido.";
+                return RedirectToAction("Index");
+            }
 
             try
             {
-                // Busca o produto diretamente da API
-                var response = await client.GetAsync(urlApi);
-                if (response.IsSuccessStatusCode)
+                var client = _httpClientFactory.CreateClient("ApiClient");
+                if (client.BaseAddress == null)
                 {
-                    produtoViewModel = await response.Content.ReadFromJsonAsync<ProductViewModel>();
+                    TempData["Erro"] = "Serviço de API não configurado.";
+                    return RedirectToAction("Index");
                 }
+
+                string rota = client.BaseAddress.ToString().EndsWith("api/")
+                    ? $"Product/{idFinal}"
+                    : $"api/Product/{idFinal}";
+
+                var response = await client.GetAsync(rota);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    TempData["Erro"] = "Produto não encontrado na API.";
+                    return RedirectToAction("Index");
+                }
+
+                var json = await response.Content.ReadFromJsonAsync<JsonElement>();
+
+                int parsedId = idFinal;
+                if (json.TryGetProperty("id", out var idProp) && idProp.ValueKind == JsonValueKind.Number)
+                    parsedId = idProp.GetInt32();
+
+                string name = null;
+                if (json.TryGetProperty("name", out var n1) && n1.ValueKind == JsonValueKind.String)
+                    name = n1.GetString();
+                else if (json.TryGetProperty("nome", out var n2) && n2.ValueKind == JsonValueKind.String)
+                    name = n2.GetString();
+
+                string description = null;
+                if (json.TryGetProperty("description", out var d1) && d1.ValueKind == JsonValueKind.String)
+                    description = d1.GetString();
+
+                string imagem = null;
+                if (json.TryGetProperty("coverImageUrl", out var i1) && i1.ValueKind == JsonValueKind.String)
+                    imagem = i1.GetString();
+                else if (json.TryGetProperty("imageUrl", out var i2) && i2.ValueKind == JsonValueKind.String)
+                    imagem = i2.GetString();
+
+                decimal preco = 0m;
+                if (json.TryGetProperty("price", out var p1) && p1.ValueKind == JsonValueKind.Number)
+                    preco = p1.GetDecimal();
+                else if (json.TryGetProperty("preco", out var p2) && p2.ValueKind == JsonValueKind.Number)
+                    preco = p2.GetDecimal();
+
+                var produtoViewModel = new ProductViewModel
+                {
+                    Id = parsedId,
+                    Name = !string.IsNullOrEmpty(name) ? name : $"Produto {idFinal}",
+                    Price = preco,
+                    CoverImageUrl = !string.IsNullOrEmpty(imagem) ? imagem : "/images/logo/logo.png",
+                    Description = description ?? string.Empty
+                };
+
+                var carrinho = ObterCarrinhoDaSessao();
+                var itemExistente = carrinho.FirstOrDefault(c => c.Produto != null && c.Produto.Id == produtoViewModel.Id);
+
+                if (itemExistente == null)
+                {
+                    carrinho.Add(new CartItemViewModel { Produto = produtoViewModel, Quantidade = quantidade });
+                }
+                else
+                {
+                    itemExistente.Quantidade += quantidade;
+                }
+
+                SalvarCarrinhoNaSessao(carrinho);
+                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
-                // Se a API estiver desligada ou der erro, criamos um fallback de teste para não crashar o front
-                System.Diagnostics.Debug.WriteLine($"Erro ao chamar API: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"ERRO GERAL: {ex.Message}");
+                TempData["Erro"] = "Erro ao processar pedido. Tente novamente.";
+                return RedirectToAction("Index");
             }
-
-            // Se não encontrou na API, cria um objeto temporário para o teste do Front não falhar
-            if (produtoViewModel == null)
-            {
-                produtoViewModel = new ProductViewModel
-                {
-                    Id = id,
-                    CoverImageUrl = "/images/logo/logo.png",
-                    Descricao = "Produto carregado via Fallback (API indisponível)"
-                };
-
-                // Define propriedades dinâmicas caso o idioma mude
-                typeof(ProductViewModel).GetProperty("Preco")?.SetValue(produtoViewModel, 50.00m);
-                typeof(ProductViewModel).GetProperty("Price")?.SetValue(produtoViewModel, 50.00m);
-                typeof(ProductViewModel).GetProperty("Nome")?.SetValue(produtoViewModel, $"Produto Teste ID {id}");
-                typeof(ProductViewModel).GetProperty("Name")?.SetValue(produtoViewModel, $"Produto Teste ID {id}");
-            }
-
-            // 2. Fluxo da Sessão Local (Apenas Front)
-            var carrinho = ObterCarrinhoDaSessao();
-            var item = carrinho.FirstOrDefault(c => c.Produto.Id == produtoViewModel.Id);
-
-            if (item == null)
-            {
-                carrinho.Add(new CartItemViewModel { Produto = produtoViewModel, Quantidade = quantidade });
-            }
-            else
-            {
-                item.Quantidade += quantidade;
-            }
-
-            SalvarCarrinhoNaSessao(carrinho);
-            return RedirectToAction("Index");
         }
 
         private List<CartItemViewModel> ObterCarrinhoDaSessao()
@@ -94,7 +166,10 @@ namespace AtelieDosPontinhos.UI.Controllers
             try
             {
                 var cartJson = HttpContext.Session.GetString("Carrinho");
-                return cartJson == null ? new List<CartItemViewModel>() : JsonSerializer.Deserialize<List<CartItemViewModel>>(cartJson);
+                if (string.IsNullOrEmpty(cartJson)) return new List<CartItemViewModel>();
+
+                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                return JsonSerializer.Deserialize<List<CartItemViewModel>>(cartJson, options) ?? new List<CartItemViewModel>();
             }
             catch
             {
@@ -104,37 +179,26 @@ namespace AtelieDosPontinhos.UI.Controllers
 
         private void SalvarCarrinhoNaSessao(List<CartItemViewModel> carrinho)
         {
-            var cartJson = JsonSerializer.Serialize(carrinho);
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true, WriteIndented = false };
+            var cartJson = JsonSerializer.Serialize(carrinho, options);
             HttpContext.Session.SetString("Carrinho", cartJson);
         }
 
-        // ==========================================================
-        // 🔥 ADICIONE ESTE BLOCO ABAIXO PARA EXCLUIR OS PRODUTOS:
-        // ==========================================================
         [HttpPost]
         public IActionResult RemoverDoCarrinho(int id)
         {
             var carrinho = ObterCarrinhoDaSessao();
-
-            // Procura se o produto realmente está na lista do carrinho
             var item = carrinho.FirstOrDefault(c => c.Produto.Id == id);
 
             if (item != null)
             {
-                // Se o produto foi encontrado, remove ele da lista
                 carrinho.Remove(item);
+                SalvarCarrinhoNaSessao(carrinho);
             }
 
-            // Atualiza a sessão com a nova lista (sem o produto removido)
-            SalvarCarrinhoNaSessao(carrinho);
-
-            // Recarrega a página atualizada do carrinho
             return RedirectToAction("Index");
         }
 
-        // ==========================================================
-        // 🌟 NOVO: ACIONA A TELA DE CHECKOUT EXPRESSO AUTOMÁTICO
-        // ==========================================================
         [HttpGet]
         public async Task<IActionResult> Checkout()
         {
@@ -150,30 +214,31 @@ namespace AtelieDosPontinhos.UI.Controllers
                 return RedirectToAction("Index");
             }
 
-            var client = _httpClientFactory.CreateClient("Api");
-
-            // 🌟 USANDO JSONELEMENT: Lê a API de forma direta e sem depender de classes da API
-            JsonElement dadosUsuario;
-            bool achouDados = false;
+            var client = _httpClientFactory.CreateClient("ApiClient");
+            InjetarCookieAutenticacao(client);
 
             try
             {
-                var response = await client.GetAsync($"api/account/user-data?email={userEmail}");
+                string rotaUsuario = client.BaseAddress != null && client.BaseAddress.ToString().EndsWith("api/")
+                    ? $"account/user-data?email={userEmail}"
+                    : $"api/account/user-data?email={userEmail}";
+
+                var response = await client.GetAsync(rotaUsuario);
+
+                // O CÓDIGO FOI COLOCADO AQUI:
                 if (response.IsSuccessStatusCode)
                 {
-                    dadosUsuario = await response.Content.ReadFromJsonAsync<JsonElement>();
+                    var jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                    var dadosUsuario = await response.Content.ReadFromJsonAsync<JsonElement>(jsonOptions);
 
-                    // Injeta nas caixinhas os valores reais que vieram da sua API
-                    ViewBag.CEP = dadosUsuario.GetProperty("cep").GetString();
-                    ViewBag.Cidade = dadosUsuario.GetProperty("cidade").GetString();
-                    ViewBag.Estado = dadosUsuario.GetProperty("estado").GetString();
-                    ViewBag.Numero = dadosUsuario.GetProperty("numero").GetString();
-                    ViewBag.Referencial = dadosUsuario.GetProperty("referencial").GetString();
-                    ViewBag.MetodoSalvo = dadosUsuario.GetProperty("metodo").GetString();
-                    ViewBag.NomeNoCartao = dadosUsuario.GetProperty("titular").GetString();
-                    ViewBag.NumeroCartao = dadosUsuario.GetProperty("cartao").GetString();
-
-                    achouDados = true;
+                    ViewBag.CEP = ObterPropriedadeString(dadosUsuario, "cep", "CEP");
+                    ViewBag.Cidade = ObterPropriedadeString(dadosUsuario, "cidade", "Cidade");
+                    ViewBag.Estado = ObterPropriedadeString(dadosUsuario, "estado", "Estado");
+                    ViewBag.Numero = ObterPropriedadeString(dadosUsuario, "numero", "Numero");
+                    ViewBag.Referencial = ObterPropriedadeString(dadosUsuario, "referencia", "Referencia", "referencial");
+                    ViewBag.MetodoSalvo = ObterPropriedadeString(dadosUsuario, "metodo", "Metodo");
+                    ViewBag.NomeNoCartao = ObterPropriedadeString(dadosUsuario, "titular", "NomeNoCartao");
+                    ViewBag.NumeroCartao = ObterPropriedadeString(dadosUsuario, "cartao", "NumeroCartao");
                 }
             }
             catch (Exception ex)
@@ -181,25 +246,12 @@ namespace AtelieDosPontinhos.UI.Controllers
                 System.Diagnostics.Debug.WriteLine($"Nota de integração: {ex.Message}");
             }
 
-            // 🌟 SE O BANCO ESTIVER VAZIO, PREENCHE COM OS DADOS DO CADASTRO DA ANA PARA A TELA FICAR LINDA
             ViewBag.UserEmail = userEmail;
-            if (!achouDados)
-            {
-                ViewBag.CEP = "01310-100";
-                ViewBag.Cidade = "São Paulo";
-                ViewBag.Estado = "SP";
-                ViewBag.Numero = "1234";
-                ViewBag.Referencial = "Apto 42";
-                ViewBag.MetodoSalvo = "1";
-                ViewBag.NomeNoCartao = "ANA S SILVA";
-                ViewBag.NumeroCartao = "4532 0000 0000 4321";
-            }
+            ViewBag.ValorTotal = carrinho.Sum(i => (i.Produto?.Price ?? 0m) * i.Quantidade);
 
             return View(carrinho);
         }
 
-
-        // 🌟 NOVO: Processa o clique do botão "Confirmar Pedido e Pagar" da tela de Checkout
         [HttpPost]
         public async Task<IActionResult> ConfirmarPedidoPost(IFormCollection form)
         {
@@ -209,68 +261,97 @@ namespace AtelieDosPontinhos.UI.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            // 1. Coleta os dados que o usuário confirmou ou editou na tela de checkout
-            var cep = form["CEP"].ToString();
-            var cidade = form["Cidade"].ToString();
-            var estado = form["Estado"].ToString();
-            var numero = form["Numero"].ToString();
-            var complemento = form["Complemento"].ToString();
-            var tipoPagamento = form["TipoPagamento"].ToString();
-
-            // 2. Coleta os produtos que estavam guardados no carrinho
             var carrinho = ObterCarrinhoDaSessao();
             if (carrinho == null || !carrinho.Any())
             {
+                TempData["Erro"] = "Seu carrinho está vazio.";
                 return RedirectToAction("Index");
             }
 
-            // 3. Calcula o valor total geral da compra
-            decimal totalPedido = 0;
+            var client = _httpClientFactory.CreateClient("ApiClient");
+            InjetarCookieAutenticacao(client);
+
+            // Mapeia os itens garantindo que nenhum venha com ID zero ou nulo
+            var itemsDto = new List<CreateOrderItemDto>();
             foreach (var item in carrinho)
             {
-                var precoValue = item.Produto.GetType().GetProperty("Preco")?.GetValue(item.Produto)
-                                 ?? item.Produto.GetType().GetProperty("Price")?.GetValue(item.Produto);
-                var preco = Convert.ToDecimal(precoValue ?? 50.00m);
-                totalPedido += preco * item.Quantidade;
+                var pId = item.Produto?.Id ?? 0;
+                var pPreco = item.Produto?.Price ?? 0m;
+
+                if (pId > 0)
+                {
+                    itemsDto.Add(new CreateOrderItemDto
+                    {
+                        ProdutoId = pId,
+                        Quantidade = item.Quantidade,
+                        PrecoUnitario = pPreco
+                    });
+                }
             }
 
-            // 4. Integração com a API (Envia os dados do pagamento e pedido para salvar no banco)
-            var client = _httpClientFactory.CreateClient("Api");
+            if (!itemsDto.Any())
+            {
+                TempData["Erro"] = "Nenhum produto válido encontrado no carrinho.";
+                return RedirectToAction("Index");
+            }
+
+            decimal totalPedido = itemsDto.Sum(i => i.PrecoUnitario * i.Quantidade);
+
+            var dadosPedido = new CreateOrderDto
+            {
+                EmailUsuario = userEmail,
+                ValorTotal = totalPedido,
+                MetodoPagamento = !string.IsNullOrEmpty(form["TipoPagamento"]) ? form["TipoPagamento"].ToString() : "1",
+                CEP = form["CEP"].ToString(),
+                Cidade = form["Cidade"].ToString(),
+                Estado = form["Estado"].ToString(),
+                Numero = form["Numero"].ToString(),
+                Complemento = form["Complemento"].ToString(),
+                Items = itemsDto
+            };
+
             try
             {
-                var dadosPedido = new
+                string rotaPedido = client.BaseAddress != null && client.BaseAddress.ToString().EndsWith("api/")
+                    ? "orders"
+                    : "api/orders";
+
+                // Envia requisição para a API
+                var response = await client.PostAsJsonAsync(rotaPedido, dadosPedido);
+
+                var conteudoResposta = await response.Content.ReadAsStringAsync();
+                System.Diagnostics.Debug.WriteLine($"🔍 RESPOSTA DA API POST ORDERS [{response.StatusCode}]: {conteudoResposta}");
+
+                if (!response.IsSuccessStatusCode)
                 {
-                    EmailUsuario = userEmail,
-                    ValorTotal = totalPedido,
-                    MetodoPagamento = tipoPagamento,
-                    CEP = cep,
-                    Cidade = cidade,
-                    Estado = estado,
-                    Numero = numero,
-                    Complemento = complemento
-                };
-
-                // Despacha as informações estruturadas em JSON para o banco da API processar
-                var response = await client.PostAsJsonAsync("api/orders", dadosPedido);
-
-                System.Diagnostics.Debug.WriteLine($"Resposta da API ao salvar pedido: {response.StatusCode}");
+                    TempData["Erro"] = $"Erro ao salvar o pedido na API ({response.StatusCode}): {conteudoResposta}";
+                    return RedirectToAction("Checkout");
+                }
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Erro de comunicação com a API ao salvar o pedido: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"💥 EXCEÇÃO AO SALVAR PEDIDO: {ex.Message}");
+                TempData["Erro"] = $"Exceção ao processar pedido: {ex.Message}";
+                return RedirectToAction("Checkout");
             }
 
-            // 5. 🌟 FLUXO ESSENCIAL: Limpa o carrinho da sessão local do cliente após a compra ter sido confirmada
+            // Limpa o carrinho após gravação com sucesso
             HttpContext.Session.Remove("Carrinho");
-
-            // Define uma mensagem de sucesso na tela para avisar o usuário
-            TempData["PedidoSucesso"] = "🎉 Compra Confirmada com Sucesso via Checkout Express! Seu pedido já está sendo preparado pelo Ateliê dos Pontinhos.";
-
-           
-            return View("Sucesso");
-
+            TempData["PedidoSucesso"] = "🎉 Compra Confirmada com Sucesso!";
+            return RedirectToAction("Index", "Order");
         }
 
-
+        // Método auxiliar para evitar que exceções sejam lançadas caso alguma propriedade não exista
+        private string ObterPropriedadeString(JsonElement json, params string[] nomesPropriedade)
+        {
+            foreach (var nome in nomesPropriedade)
+            {
+                if (json.TryGetProperty(nome, out var prop) && prop.ValueKind == JsonValueKind.String)
+                {
+                    return prop.GetString() ?? string.Empty;
+                }
+            }
+            return string.Empty;
+        }
     }
 }

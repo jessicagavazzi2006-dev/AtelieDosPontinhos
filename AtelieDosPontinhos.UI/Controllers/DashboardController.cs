@@ -13,9 +13,7 @@ namespace AtelieDosPontinhos.UI.Controllers
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private const string ApiUrl = "http://localhost:5006/api/Product";
-      
         private const string ApiUsuariosUrl = "http://localhost:5006/api/User";
-
 
         public DashboardController(IHttpClientFactory httpClientFactory)
         {
@@ -45,14 +43,12 @@ namespace AtelieDosPontinhos.UI.Controllers
         [HttpPost]
         public async Task<IActionResult> CriarProdutoPost(ProdutoViewModel model, IFormFile FotoArquivo)
         {
-            // Processa o arquivo carregado do computador
             if (FotoArquivo != null && FotoArquivo.Length > 0)
             {
                 using (var ms = new MemoryStream())
                 {
                     await FotoArquivo.CopyToAsync(ms);
                     var fileBytes = ms.ToArray();
-                    // Transforma em Base64 com o prefixo correto para tags <img> do HTML reconhecerem
                     model.CoverImageUrl = $"data:{FotoArquivo.ContentType};base64,{System.Convert.ToBase64String(fileBytes)}";
                 }
             }
@@ -124,7 +120,6 @@ namespace AtelieDosPontinhos.UI.Controllers
             }
             catch (Exception)
             {
-                // Evita crash caso o endpoint da API ainda esteja fora do ar
                 ModelState.AddModelError(string.Empty, "Não foi possível carregar os usuários da API.");
                 return View(new List<UsuarioViewModel>());
             }
@@ -134,29 +129,37 @@ namespace AtelieDosPontinhos.UI.Controllers
         [HttpGet]
         public IActionResult CriarUsuario() => View();
 
-        // CRIAÇÃO (SUBMISSÃO DO FORMULÁRIO)
+        // 🌟 CRIAÇÃO (SUBMISSÃO DO FORMULÁRIO)
         [HttpPost]
-        public async Task<IActionResult> CriarUsuarioPost(CriarUsuarioViewModel model)
+        public async Task<IActionResult> CriarUsuario(CriarUsuarioViewModel model, string Role)
         {
-            if (!ModelState.IsValid) return View("CriarUsuario", model);
+            if (!ModelState.IsValid) return View(model);
 
             try
             {
                 var httpClient = _httpClientFactory.CreateClient();
-                // Observação: Ajuste a rota se a sua API usar '/api/Account/Register' para novos cadastros
-                var response = await httpClient.PostAsJsonAsync("http://localhost:5006/api/Account/Register", model);
+
+                // Monta o payload incluindo a Role selecionada no formulário
+                var payload = new
+                {
+                    Email = model.Email,
+                    Password = model.Password,
+                    Role = string.IsNullOrEmpty(Role) ? "Cliente" : Role
+                };
+
+                var response = await httpClient.PostAsJsonAsync("http://localhost:5006/api/account/register", payload);
 
                 if (response.IsSuccessStatusCode)
                     return RedirectToAction("GerenciarUsuarios");
 
-                ModelState.AddModelError(string.Empty, "Erro ao salvar o usuário na API. Verifique as credenciais ou se o e-mail já existe.");
+                ModelState.AddModelError(string.Empty, "Erro ao salvar o usuário na API. Verifique a senha ou se o e-mail já existe.");
             }
             catch (Exception)
             {
                 ModelState.AddModelError(string.Empty, "Não foi possível se comunicar com o servidor de autenticação.");
             }
 
-            return View("CriarUsuario", model);
+            return View(model);
         }
 
         // EXCLUSÃO DE USUÁRIO

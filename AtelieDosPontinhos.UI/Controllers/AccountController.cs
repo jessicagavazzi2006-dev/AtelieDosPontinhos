@@ -1,14 +1,17 @@
 ﻿using AtelieDosPontinhos.UI.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.AspNetCore.Http;
-using System;
 
 namespace AtelieDosPontinhos.UI.Controllers
 {
@@ -56,20 +59,60 @@ namespace AtelieDosPontinhos.UI.Controllers
 
                     if (loginResult != null && loginResult.Succeeded)
                     {
+                        // 🔐 Extrai o cookie da resposta Set-Cookie
+                        var apiCookie = response.Headers.FirstOrDefault(h => h.Key == "Set-Cookie").Value?.FirstOrDefault() ?? string.Empty;
+
+                        // Se não houver Set-Cookie no header padrão, tenta extrair via TryGetValues
+                        if (string.IsNullOrEmpty(apiCookie) && response.Headers.TryGetValues("set-cookie", out var cookieValues))
+                        {
+                            apiCookie = string.Join("; ", cookieValues);
+                        }
+
+                        // Cria as claims do usuário autenticado
+                        var claims = new List<Claim>
+                        {
+                            new Claim(ClaimTypes.Email, loginResult.Email),
+                            new Claim(ClaimTypes.Name, loginResult.Email),
+                            new Claim("ApiCookie", apiCookie)  // Armazena o cookie na Claim
+                        };
+
+                        // Adiciona as roles às claims
+                        if (loginResult.Roles != null && loginResult.Roles.Any())
+                        {
+                            foreach (var role in loginResult.Roles)
+                            {
+                                claims.Add(new Claim(ClaimTypes.Role, role));
+                            }
+                        }
+
+                        // Cria a identidade autenticada da UI
+                        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                        var authProperties = new AuthenticationProperties
+                        {
+                            IsPersistent = true,
+                            ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(60)
+                        };
+
+                        // Realiza login no contexto MVC da UI
+                        await HttpContext.SignInAsync(
+                            CookieAuthenticationDefaults.AuthenticationScheme,
+                            new ClaimsPrincipal(claimsIdentity),
+                            authProperties);
+
+                        // 💾 Grava dados na sessão (incluindo o Cookie da API)
                         HttpContext.Session.SetString("UserEmail", loginResult.Email);
+
+                        if (!string.IsNullOrEmpty(apiCookie))
+                        {
+                            HttpContext.Session.SetString("ApiCookie", apiCookie);
+                        }
 
                         if (loginResult.Roles != null && loginResult.Roles.Any())
                         {
                             HttpContext.Session.SetString("UserRoles", string.Join(",", loginResult.Roles));
-
-                            bool ehAdmin = loginResult.Roles.Any(r => r.Trim().Equals("Admin", System.StringComparison.OrdinalIgnoreCase));
-
-                            if (ehAdmin)
-                            {
-                                return RedirectToAction("AdminPanel", "Dashboard");
-                            }
                         }
 
+                        // 🎉 Redireciona para a Tela Inicial
                         return RedirectToAction("Index", "Home");
                     }
                 }
@@ -99,14 +142,13 @@ namespace AtelieDosPontinhos.UI.Controllers
             return View();
         }
 
-        // 🌟 ATUALIZADO: Agora captura todos os campos dinâmicos do formulário e envia para a API!
+        // POST: Register
         [HttpPost]
         public async Task<IActionResult> Register(RegisterClienteViewModel model)
         {
             if (!ModelState.IsValid)
                 return View(model);
 
-            // Coleta os novos campos digitados no HTML que não faziam parte do modelo original
             var cep = Request.Form["CEP"].ToString();
             var logradouro = Request.Form["Logradouro"].ToString();
             var numero = Request.Form["Numero"].ToString();
@@ -118,13 +160,11 @@ namespace AtelieDosPontinhos.UI.Controllers
             var nomeNoCartao = Request.Form["NomeNoCartao"].ToString();
             var numeroCartaoMascarado = Request.Form["NumeroCartaoMascarado"].ToString();
 
-            // Monta o objeto completo de cadastro expandido
             var apiModel = new
             {
                 Email = model.Email,
                 Password = model.Password,
                 Role = "Cliente",
-                // Endereço integrado
                 CEP = cep,
                 Logradouro = logradouro,
                 Numero = numero,
@@ -132,7 +172,6 @@ namespace AtelieDosPontinhos.UI.Controllers
                 Bairro = bairro,
                 Cidade = cidade,
                 Estado = estado,
-                // Pagamento integrado
                 TipoPagamento = tipoPagamento,
                 NomeNoCartao = nomeNoCartao,
                 NumeroCartaoMascarado = numeroCartaoMascarado
@@ -160,9 +199,11 @@ namespace AtelieDosPontinhos.UI.Controllers
             return View(model);
         }
 
+        // LOGOUT: Limpa a sessão e desautentica os cookies
         public async Task<IActionResult> Logout()
         {
             HttpContext.Session?.Clear();
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login");
         }
     }

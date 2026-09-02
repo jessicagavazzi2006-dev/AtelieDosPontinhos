@@ -26,12 +26,30 @@
         <div class="row g-3">
             @foreach (var pedido in Model)
             {
-                var id = pedido.GetProperty("id").GetInt32();
-                var data = pedido.GetProperty("dataPedido").GetDateTime().ToString("dd/MM/yyyy HH:mm");
-                var total = pedido.GetProperty("valorTotal").GetDecimal();
-                var status = pedido.GetProperty("status").GetString();
-                var metodo = pedido.GetProperty("metodoPagamento").GetString() == "3" ? "PIX" : "Cartão";
-                var cidade = pedido.GetProperty("cidade").GetString();
+                // Mapeamento seguro de propriedades (suporta Português e Inglês)
+                int id = pedido.TryGetProperty("id", out var idP) ? idP.GetInt32() : (pedido.TryGetProperty("Id", out var idP2) ? idP2.GetInt32() : 0);
+
+                string data = "-";
+                if (pedido.TryGetProperty("dataPedido", out var dP) && dP.ValueKind != System.Text.Json.JsonValueKind.Null)
+                    data = dP.GetDateTime().ToString("dd/MM/yyyy HH:mm");
+                else if (pedido.TryGetProperty("createdDate", out var dP2) && dP2.ValueKind != System.Text.Json.JsonValueKind.Null)
+                    data = dP2.GetDateTime().ToString("dd/MM/yyyy HH:mm");
+                else if (pedido.TryGetProperty("dataCriacao", out var dP3) && dP3.ValueKind != System.Text.Json.JsonValueKind.Null)
+                    data = dP3.GetDateTime().ToString("dd/MM/yyyy HH:mm");
+
+                decimal total = 0m;
+                if (pedido.TryGetProperty("valorTotal", out var tP)) total = tP.GetDecimal();
+                else if (pedido.TryGetProperty("totalAmount", out var tP2)) total = tP2.GetDecimal();
+                else if (pedido.TryGetProperty("total", out var tP3)) total = tP3.GetDecimal();
+
+                string status = "Confirmado";
+                if (pedido.TryGetProperty("status", out var stP) && stP.ValueKind != System.Text.Json.JsonValueKind.Null)
+                    status = stP.GetString() ?? "Confirmado";
+
+                string rawMetodo = "";
+                if (pedido.TryGetProperty("metodoPagamento", out var mP)) rawMetodo = mP.GetString() ?? "";
+                else if (pedido.TryGetProperty("paymentMethod", out var mP2)) rawMetodo = mP2.GetString() ?? "";
+                string metodo = (rawMetodo == "3" || rawMetodo.ToUpper() == "PIX") ? "PIX" : "Cartão";
 
                 <div class="card border-0 shadow-sm p-4 rounded-4 bg-white mb-3 border-start border-4 border-success">
                     <div class="row align-items-center">
@@ -53,7 +71,7 @@
                         </div>
                         <div class="col-md-2 text-md-end">
                             <span class="text-muted small d-block text-md-end mb-1">STATUS</span>
-                            <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-1fw-bold">@status</span>
+                            <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-1 fw-bold">@status</span>
                         </div>
                     </div>
                 </div>

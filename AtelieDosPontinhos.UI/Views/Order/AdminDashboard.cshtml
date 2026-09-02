@@ -2,7 +2,18 @@
 
 @{
     ViewData["Title"] = "Painel Administrativo de Vendas";
-    decimal faturamentoTotal = Model?.Sum(p => p.GetProperty("valorTotal").GetDecimal()) ?? 0;
+
+    // Cálculo seguro do faturamento total (trata 'valorTotal', 'totalAmount' ou 'total')
+    decimal faturamentoTotal = 0m;
+    if (Model != null)
+    {
+        foreach (var p in Model)
+        {
+            if (p.TryGetProperty("valorTotal", out var v1)) faturamentoTotal += v1.GetDecimal();
+            else if (p.TryGetProperty("totalAmount", out var v2)) faturamentoTotal += v2.GetDecimal();
+            else if (p.TryGetProperty("total", out var v3)) faturamentoTotal += v3.GetDecimal();
+        }
+    }
 }
 
 <div class="container py-5" style="max-width: 1100px;">
@@ -26,7 +37,7 @@
                 <thead class="table-light text-secondary small fw-semibold">
                     <tr>
                         <th class="ps-4 py-3">PEDIDO</th>
-                        <th class="py-3">ID DO COMPRADOR</th>
+                        <th class="py-3">COMPRADOR</th>
                         <th class="py-3">DATA</th>
                         <th class="py-3">LOCALIDADE</th>
                         <th class="py-3">PAGAMENTO</th>
@@ -45,20 +56,47 @@
                     {
                         foreach (var pedido in Model)
                         {
-                            var id = pedido.GetProperty("id").GetInt32();
-                            var user = pedido.GetProperty("userId").GetString();
-                            var data = pedido.GetProperty("dataPedido").GetDateTime().ToString("dd/MM/yyyy HH:mm");
-                            var total = pedido.GetProperty("valorTotal").GetDecimal();
-                            var status = pedido.GetProperty("status").GetString();
-                            var metodo = pedido.GetProperty("metodoPagamento").GetString() == "3" ? "PIX" : "Cartão";
-                            var cidade = pedido.GetProperty("cidade").GetString();
-                            var estado = pedido.GetProperty("estado").GetString();
+                            // Parse seguro de ID
+                            int id = pedido.TryGetProperty("id", out var idP) ? idP.GetInt32() : (pedido.TryGetProperty("Id", out var idP2) ? idP2.GetInt32() : 0);
+
+                            // Parse seguro de Usuário/Email
+                            string user = "-";
+                            if (pedido.TryGetProperty("userEmail", out var u1)) user = u1.GetString() ?? "-";
+                            else if (pedido.TryGetProperty("emailUsuario", out var u2)) user = u2.GetString() ?? "-";
+                            else if (pedido.TryGetProperty("userId", out var u3)) user = u3.GetString() ?? "-";
+
+                            // Parse seguro de Data
+                            string data = "-";
+                            if (pedido.TryGetProperty("dataPedido", out var d1) && d1.ValueKind != System.Text.Json.JsonValueKind.Null) data = d1.GetDateTime().ToString("dd/MM/yyyy HH:mm");
+                            else if (pedido.TryGetProperty("createdDate", out var d2) && d2.ValueKind != System.Text.Json.JsonValueKind.Null) data = d2.GetDateTime().ToString("dd/MM/yyyy HH:mm");
+                            else if (pedido.TryGetProperty("dataCriacao", out var d3) && d3.ValueKind != System.Text.Json.JsonValueKind.Null) data = d3.GetDateTime().ToString("dd/MM/yyyy HH:mm");
+
+                            // Parse seguro de Cidade e Estado
+                            string cidade = pedido.TryGetProperty("cidade", out var cP) ? (cP.GetString() ?? "") : "";
+                            string estado = pedido.TryGetProperty("estado", out var eP) ? (eP.GetString() ?? "") : "";
+                            string localidade = string.IsNullOrEmpty(cidade) ? "Não informada" : $"{cidade} - {estado}";
+
+                            // Parse seguro do Pagamento
+                            string rawMetodo = "";
+                            if (pedido.TryGetProperty("metodoPagamento", out var m1)) rawMetodo = m1.GetString() ?? "";
+                            else if (pedido.TryGetProperty("paymentMethod", out var m2)) rawMetodo = m2.GetString() ?? "";
+                            string metodo = (rawMetodo == "3" || rawMetodo.ToUpper() == "PIX") ? "PIX" : "Cartão";
+
+                            // Parse seguro do Valor Total
+                            decimal total = 0m;
+                            if (pedido.TryGetProperty("valorTotal", out var t1)) total = t1.GetDecimal();
+                            else if (pedido.TryGetProperty("totalAmount", out var t2)) total = t2.GetDecimal();
+                            else if (pedido.TryGetProperty("total", out var t3)) total = t3.GetDecimal();
+
+                            // Parse seguro do Status
+                            string status = "Confirmado";
+                            if (pedido.TryGetProperty("status", out var stP) && stP.ValueKind != System.Text.Json.JsonValueKind.Null) status = stP.GetString() ?? "Confirmado";
 
                             <tr>
                                 <td class="ps-4 fw-bold">#@id.ToString("D4")</td>
-                                <td class="text-muted small text-truncate" style="max-width: 150px;" title="@user">@user</td>
+                                <td class="text-muted small text-truncate" style="max-width: 180px;" title="@user">@user</td>
                                 <td class="text-secondary small">@data</td>
-                                <td class="fw-semibold text-secondary">@cidade - @estado</td>
+                                <td class="fw-semibold text-secondary">@localidade</td>
                                 <td><span class="badge bg-light text-dark border">@metodo</span></td>
                                 <td class="fw-bold text-dark">R$ @total.ToString("N2")</td>
                                 <td class="text-center">

@@ -34,16 +34,6 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
 
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Home" asp-action="Index">Início</a>
-                        </li>
-                        @* 📦 Aponta para a tela da tabela no Painel Admin *@
-                        @if (isLogged && isAdmin)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-danger fw-bold" asp-controller="Dashboard" asp-action="AdminPanel">📦 Gerenciar Produtos</a>
-                            </li>
-                        }
                     </ul>
 
                     <div class="flex-grow-1 px-3 position-relative" style="max-width: 500px;">
@@ -55,13 +45,22 @@
 
                         @if (isLogged)
                         {
-                            @* 🏷️ Exibe o e-mail real do usuário logado vindo da API *@
-                            <span class="fs-6 border-end pe-2 text-muted">
+                            @* 🏷️ Exibe o e-mail real do usuário logado *@
+                            <span class="fs-6 text-muted">
                                 Olá, <strong style="color: #6f42c1;">@userEmail</strong>
                             </span>
 
+                            @* 📦 Link para Meus Pedidos (Visível para qualquer usuário logado) *@
+                            <a asp-controller="Order" asp-action="Index" title="Meus Pedidos" class="text-decoration-none fs-6 fw-semibold text-secondary">
+                                📦 Meus Pedidos
+                            </a>
+
+                            @* 📋 Link para o Painel Geral de Vendas (Visível apenas para Admin) *@
                             @if (isAdmin)
                             {
+                                <a asp-controller="Order" asp-action="AdminDashboard" title="Painel de Vendas" class="text-decoration-none fs-6 fw-semibold text-purple" style="color: #8a4f91;">
+                                    📋 Painel de Vendas
+                                </a>
                                 <a asp-controller="Dashboard" asp-action="AdminPanel" title="Painel Admin" class="text-decoration-none">🔐</a>
                             }
 
@@ -100,7 +99,7 @@
             const resultsBox = document.getElementById("searchResults");
             let timeout = null;
 
-            input.addEventListener("input", function () {
+            input.addEventListener("input", function() {
                 clearTimeout(timeout);
                 const term = this.value;
 
@@ -150,19 +149,19 @@
     <script>
             function updateCartCount() {
                 @{
-                    var cartJson = Context.Session.GetString("Carrinho");
-                    int totalItens = 0;
-                    if (!string.IsNullOrEmpty(cartJson))
-                    {
-                        try
+                        var cartJson = Context.Session.GetString("Carrinho");
+                        int totalItens = 0;
+                        if (!string.IsNullOrEmpty(cartJson))
                         {
-                            var itens = System.Text.Json.JsonSerializer.Deserialize<List<AtelieDosPontinhos.UI.Models.CartItemViewModel>>(cartJson);
-                            totalItens = itens?.Sum(x => x.Quantidade) ?? 0;
+                            try
+                            {
+                                var itens = System.Text.Json.JsonSerializer.Deserialize<List<AtelieDosPontinhos.UI.Models.CartItemViewModel>>(cartJson);
+                                                        totalItens = itens?.Sum(x => x.Quantidade) ?? 0;
+                            }
+                                                catch { }
                         }
-                        catch { }
                     }
-                }
-                document.getElementById("cartCount").innerText = "@totalItens";
+                    document.getElementById("cartCount").innerText = "@totalItens";
             }
 
             document.addEventListener("DOMContentLoaded", updateCartCount);
