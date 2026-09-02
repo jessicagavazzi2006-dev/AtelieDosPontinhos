@@ -46,7 +46,7 @@ namespace AtelieDosPontinhos.UI.Controllers
             }
 
             var client = _httpClientFactory.CreateClient("ApiClient");
-            InjetarCookieAutenticacao(client); // INJETADO AQUI
+            InjetarCookieAutenticacao(client);
 
             var listaPedidos = new List<JsonElement>();
 
@@ -83,7 +83,7 @@ namespace AtelieDosPontinhos.UI.Controllers
             if (string.IsNullOrEmpty(userEmail)) return RedirectToAction("Login", "Account");
 
             var client = _httpClientFactory.CreateClient("ApiClient");
-            InjetarCookieAutenticacao(client); // INJETADO AQUI
+            InjetarCookieAutenticacao(client);
 
             var todosPedidos = new List<JsonElement>();
 
@@ -113,6 +113,39 @@ namespace AtelieDosPontinhos.UI.Controllers
             }
 
             return View(todosPedidos);
+        }
+
+        // 🔄 ROTA: /Order/AtualizarStatus -> Altera o status do pedido via API
+        [HttpPost]
+        public async Task<IActionResult> AtualizarStatus(int id, string status)
+        {
+            var client = _httpClientFactory.CreateClient("ApiClient");
+            InjetarCookieAutenticacao(client);
+
+            string rota = client.BaseAddress != null && client.BaseAddress.ToString().EndsWith("api/")
+                ? $"orders/{id}/status"
+                : $"api/orders/{id}/status";
+
+            try
+            {
+                var response = await client.PutAsJsonAsync(rota, new { Status = status });
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    TempData["Erro"] = "Erro ao atualizar status do pedido na API.";
+                }
+                else
+                {
+                    TempData["Sucesso"] = "Status do pedido atualizado com sucesso!";
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Erro ao atualizar status: {ex.Message}");
+                TempData["Erro"] = "Falha de comunicação com a API.";
+            }
+
+            return RedirectToAction("AdminDashboard");
         }
     }
 }

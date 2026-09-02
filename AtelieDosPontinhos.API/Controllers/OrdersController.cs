@@ -29,7 +29,6 @@ namespace AtelieDosPontinhos.API.Controllers
         {
             System.Diagnostics.Debug.WriteLine("📍 CreateOrder: Iniciando criação de pedido...");
 
-            // 1. Tenta extrair o UserId com fallback seguro para Claims
             var userId = _userManager.GetUserId(User)
                          ?? User.FindFirstValue(ClaimTypes.NameIdentifier)
                          ?? User.FindFirst("sub")?.Value;
@@ -50,7 +49,6 @@ namespace AtelieDosPontinhos.API.Controllers
 
             System.Diagnostics.Debug.WriteLine($"📦 CreateOrder: Recebido DTO com {dto.Items.Count} itens");
 
-            // 2. Instancia a entidade Pedido garantindo a inicialização da lista de Itens
             var pedido = new Pedido
             {
                 UserId = userId,
@@ -63,7 +61,7 @@ namespace AtelieDosPontinhos.API.Controllers
                 Estado = dto.Estado ?? string.Empty,
                 Numero = dto.Numero ?? string.Empty,
                 Complemento = dto.Complemento ?? string.Empty,
-                Itens = new List<PedidoItem>() // Evita NullReferenceException
+                Itens = new List<PedidoItem>()
             };
 
             foreach (var it in dto.Items)
@@ -81,11 +79,9 @@ namespace AtelieDosPontinhos.API.Controllers
             _context.Pedidos.Add(pedido);
             System.Diagnostics.Debug.WriteLine($"📌 CreateOrder: Pedido adicionado ao DbContext");
 
-            // 3. Grava no banco de dados
             await _context.SaveChangesAsync();
             System.Diagnostics.Debug.WriteLine($"✅ CreateOrder: Pedido gravado no banco com sucesso! ID={pedido.Id}");
 
-            // Retorna resposta limpa sem disparar erro de ciclo de JSON
             return Ok(new { success = true, pedidoId = pedido.Id, message = "Pedido criado com sucesso!" });
         }
 
@@ -103,6 +99,7 @@ namespace AtelieDosPontinhos.API.Controllers
             var pedidos = await _context.Pedidos
                 .Where(p => p.UserId == userId)
                 .Include(p => p.Itens)
+                    .ThenInclude(i => i.Product)
                 .AsNoTracking()
                 .ToListAsync();
 
@@ -111,17 +108,17 @@ namespace AtelieDosPontinhos.API.Controllers
             return Ok(pedidos);
         }
 
-        // Admin: lista todos os pedidos com dados do comprador
+        // Admin: lista todos os pedidos com dados do comprador e do produto
         [HttpGet]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AllOrders()
         {
             var pedidos = await _context.Pedidos
                 .Include(p => p.Itens)
+                    .ThenInclude(i => i.Product)
                 .AsNoTracking()
                 .ToListAsync();
 
-            // Mapeia o Email do Usuário a partir da tabela do Identity
             var userIds = pedidos.Select(p => p.UserId).Distinct().ToList();
             var usuarios = await _userManager.Users
                 .Where(u => userIds.Contains(u.Id))
@@ -145,6 +142,7 @@ namespace AtelieDosPontinhos.API.Controllers
                 {
                     i.Id,
                     i.ProductId,
+                    NomeProduto = i.Product != null ? i.Product.Name : $"Produto #{i.ProductId}",
                     i.Quantidade,
                     i.PrecoUnitario
                 })
@@ -152,7 +150,8 @@ namespace AtelieDosPontinhos.API.Controllers
 
             return Ok(resultado);
         }
-        // Admin: atualizar status do pedido (ex: Pago, Enviado, Concluído)
+
+        // Admin: atualizar status do pedido (ex: Pendente, Concluído, Cancelado)
         [HttpPut("{id}/status")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateStatus(int id, [FromBody] UpdateStatusDto dto)

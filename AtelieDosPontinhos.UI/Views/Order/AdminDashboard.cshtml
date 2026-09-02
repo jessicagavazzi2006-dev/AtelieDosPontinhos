@@ -1,109 +1,152 @@
-﻿@model List<System.Text.Json.JsonElement>
+﻿@using System.Text.Json
+@model List<JsonElement>
 
 @{
-    ViewData["Title"] = "Painel Administrativo de Vendas";
+    ViewData["Title"] = "Painel de Controle de Vendas";
+    decimal faturamentoTotal = 0;
 
-    // Cálculo seguro do faturamento total (trata 'valorTotal', 'totalAmount' ou 'total')
-    decimal faturamentoTotal = 0m;
     if (Model != null)
     {
         foreach (var p in Model)
         {
-            if (p.TryGetProperty("valorTotal", out var v1)) faturamentoTotal += v1.GetDecimal();
-            else if (p.TryGetProperty("totalAmount", out var v2)) faturamentoTotal += v2.GetDecimal();
-            else if (p.TryGetProperty("total", out var v3)) faturamentoTotal += v3.GetDecimal();
+            if (p.TryGetProperty("valorTotal", out var v))
+            {
+                faturamentoTotal += v.GetDecimal();
+            }
         }
     }
 }
 
-<div class="container py-5" style="max-width: 1100px;">
-    <div class="row g-4 mb-4">
-        <div class="col-md-8">
-            <h2 class="fw-bold mb-1" style="color: #8a4f91 !important;"><i class="bi bi-shield-lock-fill"></i> Painel de Controle de Vendas</h2>
-            <p class="text-muted mb-0 small">Acompanhamento em tempo real de todas as ordens de serviço do Ateliê dos Pontinhos.</p>
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold" style="color: #8a4f91;">Painel de Controle de Vendas</h2>
+            <p class="text-muted mb-0">Acompanhamento em tempo real de todas as ordens de serviço do Ateliê dos Pontinhos.</p>
         </div>
-        <!-- Card de Faturamento Centralizado -->
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm p-3 bg-success bg-opacity-10 rounded-4 text-end">
-                <span class="text-secondary small fw-semibold">💰 FATURAMENTO BRUTO TOTAL</span>
-                <h3 class="fw-bold text-success mb-0">R$ @faturamentoTotal.ToString("N2")</h3>
-            </div>
+        <div class="card bg-light border-0 shadow-sm px-4 py-3 rounded-4">
+            <span class="small text-muted fw-bold">💰 FATURAMENTO BRUTO TOTAL</span>
+            <h3 class="fw-bold text-success mb-0">R$ @faturamentoTotal.ToString("N2")</h3>
         </div>
     </div>
 
-    <div class="card border-0 shadow-sm rounded-4 bg-white overflow-hidden">
+    @if (TempData["Sucesso"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show rounded-3" role="alert">
+            @TempData["Sucesso"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
         <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0 text-dark">
-                <thead class="table-light text-secondary small fw-semibold">
+            <table class="table table-hover align-middle mb-0 text-center">
+                <thead class="bg-light text-secondary small fw-bold">
                     <tr>
-                        <th class="ps-4 py-3">PEDIDO</th>
-                        <th class="py-3">COMPRADOR</th>
+                        <th class="py-3">PEDIDO</th>
+                        <th class="py-3 text-start">COMPRADOR</th>
                         <th class="py-3">DATA</th>
                         <th class="py-3">LOCALIDADE</th>
                         <th class="py-3">PAGAMENTO</th>
                         <th class="py-3">TOTAL</th>
-                        <th class="py-3 text-center">STATUS</th>
+                        <th class="py-3">STATUS</th>
+                        <th class="py-3">AÇÕES</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @if (Model == null || Model.Count == 0)
-                    {
-                        <tr>
-                            <td colspan="7" class="text-center py-5 text-muted">Nenhuma venda registrada no banco de dados ainda.</td>
-                        </tr>
-                    }
-                    else
+                    @if (Model != null && Model.Any())
                     {
                         foreach (var pedido in Model)
                         {
-                            // Parse seguro de ID
-                            int id = pedido.TryGetProperty("id", out var idP) ? idP.GetInt32() : (pedido.TryGetProperty("Id", out var idP2) ? idP2.GetInt32() : 0);
+                            int id = pedido.GetProperty("id").GetInt32();
+                            string email = pedido.TryGetProperty("emailUsuario", out var e) ? e.GetString()! : "Desconhecido";
+                            string status = pedido.TryGetProperty("status", out var s) ? s.GetString()! : "Pendente";
+                            string cidade = pedido.TryGetProperty("cidade", out var c) ? c.GetString()! : "São Paulo";
+                            string estado = pedido.TryGetProperty("estado", out var est) ? est.GetString()! : "SP";
+                            string pagamento = pedido.TryGetProperty("metodoPagamento", out var m) ? m.GetString()! : "Cartão";
+                            decimal total = pedido.GetProperty("valorTotal").GetDecimal();
+                            DateTime data = pedido.GetProperty("dataPedido").GetDateTime();
 
-                            // Parse seguro de Usuário/Email
-                            string user = "-";
-                            if (pedido.TryGetProperty("userEmail", out var u1)) user = u1.GetString() ?? "-";
-                            else if (pedido.TryGetProperty("emailUsuario", out var u2)) user = u2.GetString() ?? "-";
-                            else if (pedido.TryGetProperty("userId", out var u3)) user = u3.GetString() ?? "-";
-
-                            // Parse seguro de Data
-                            string data = "-";
-                            if (pedido.TryGetProperty("dataPedido", out var d1) && d1.ValueKind != System.Text.Json.JsonValueKind.Null) data = d1.GetDateTime().ToString("dd/MM/yyyy HH:mm");
-                            else if (pedido.TryGetProperty("createdDate", out var d2) && d2.ValueKind != System.Text.Json.JsonValueKind.Null) data = d2.GetDateTime().ToString("dd/MM/yyyy HH:mm");
-                            else if (pedido.TryGetProperty("dataCriacao", out var d3) && d3.ValueKind != System.Text.Json.JsonValueKind.Null) data = d3.GetDateTime().ToString("dd/MM/yyyy HH:mm");
-
-                            // Parse seguro de Cidade e Estado
-                            string cidade = pedido.TryGetProperty("cidade", out var cP) ? (cP.GetString() ?? "") : "";
-                            string estado = pedido.TryGetProperty("estado", out var eP) ? (eP.GetString() ?? "") : "";
-                            string localidade = string.IsNullOrEmpty(cidade) ? "Não informada" : $"{cidade} - {estado}";
-
-                            // Parse seguro do Pagamento
-                            string rawMetodo = "";
-                            if (pedido.TryGetProperty("metodoPagamento", out var m1)) rawMetodo = m1.GetString() ?? "";
-                            else if (pedido.TryGetProperty("paymentMethod", out var m2)) rawMetodo = m2.GetString() ?? "";
-                            string metodo = (rawMetodo == "3" || rawMetodo.ToUpper() == "PIX") ? "PIX" : "Cartão";
-
-                            // Parse seguro do Valor Total
-                            decimal total = 0m;
-                            if (pedido.TryGetProperty("valorTotal", out var t1)) total = t1.GetDecimal();
-                            else if (pedido.TryGetProperty("totalAmount", out var t2)) total = t2.GetDecimal();
-                            else if (pedido.TryGetProperty("total", out var t3)) total = t3.GetDecimal();
-
-                            // Parse seguro do Status
-                            string status = "Confirmado";
-                            if (pedido.TryGetProperty("status", out var stP) && stP.ValueKind != System.Text.Json.JsonValueKind.Null) status = stP.GetString() ?? "Confirmado";
+                            if (pagamento == "1") pagamento = "Cartão de Crédito";
+                            else if (pagamento == "2") pagamento = "Cartão de Débito";
+                            else if (pagamento == "3") pagamento = "PIX";
 
                             <tr>
-                                <td class="ps-4 fw-bold">#@id.ToString("D4")</td>
-                                <td class="text-muted small text-truncate" style="max-width: 180px;" title="@user">@user</td>
-                                <td class="text-secondary small">@data</td>
-                                <td class="fw-semibold text-secondary">@localidade</td>
-                                <td><span class="badge bg-light text-dark border">@metodo</span></td>
+                                <td class="fw-bold text-dark">#@id.ToString("D4")</td>
+                                <td class="text-start text-truncate" style="max-width: 220px;" title="@email">
+                                    <i class="bi bi-person-circle text-secondary me-1"></i> @email
+                                </td>
+                                <td class="small text-muted">@data.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td class="small fw-semibold">@cidade - @estado</td>
+                                <td><span class="badge bg-light text-dark border px-2 py-1 rounded-pill">@pagamento</span></td>
                                 <td class="fw-bold text-dark">R$ @total.ToString("N2")</td>
-                                <td class="text-center">
-                                    <span class="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-1 fw-semibold">@status</span>
+                                <td>
+                                    <form asp-controller="Order" asp-action="AtualizarStatus" method="post" class="d-inline-block">
+                                        <input type="hidden" name="id" value="@id" />
+                                        <select name="status" onchange="this.form.submit()" class="form-select form-select-sm rounded-pill border-0 px-3 fw-bold @(status == "Concluído" ? "bg-success bg-opacity-10 text-success" : "bg-warning bg-opacity-10 text-warning")">
+                                            <option value="Pendente" selected="@(status == "Pendente")">🟡 Pendente</option>
+                                            <option value="Concluído" selected="@(status == "Concluído")">🟢 Concluído</option>
+                                            <option value="Cancelado" selected="@(status == "Cancelado")">🔴 Cancelado</option>
+                                        </select>
+                                    </form>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-outline-purple rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#modalPedido-@id" style="color: #8a4f91; border-color: #8a4f91;">
+                                        🔍 Detalhes
+                                    </button>
+
+                                    <!-- MODAL DE DETALHES -->
+                                    <div class="modal fade text-start" id="modalPedido-@id" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content rounded-4 border-0 shadow">
+                                                <div class="modal-header border-0 pb-0">
+                                                    <h5 class="modal-header-title fw-bold" style="color: #8a4f91;">Detalhes do Pedido #@id.ToString("D4")</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body p-4">
+                                                    @{
+                                                        string numRua = pedido.TryGetProperty("numero", out var num) && num.ValueKind == JsonValueKind.String ? num.GetString()! : "";
+                                                        string cepRua = pedido.TryGetProperty("cep", out var cp) && cp.ValueKind == JsonValueKind.String ? cp.GetString()! : "";
+                                                        string compRua = pedido.TryGetProperty("complemento", out var comp) && comp.ValueKind == JsonValueKind.String ? comp.GetString()! : "";
+                                                    }
+
+                                                    <p class="mb-1 small"><strong>Cliente:</strong> @email</p>
+                                                    <p class="mb-1 small"><strong>Data:</strong> @data.ToString("dd/MM/yyyy HH:mm")</p>
+                                                    <p class="mb-3 small"><strong>Endereço:</strong> @cidade - @estado @(string.IsNullOrEmpty(numRua) ? "" : $", Nº {numRua}") @(string.IsNullOrEmpty(compRua) ? "" : $"({compRua})") @(string.IsNullOrEmpty(cepRua) ? "" : $"- CEP: {cepRua}")</p>
+
+                                                    <h6 class="fw-bold border-bottom pb-2 mb-3">Itens Comprados</h6>
+                                                    <ul class="list-group list-group-flush mb-3">
+                                                        @if (pedido.TryGetProperty("itens", out var itensArr) && itensArr.ValueKind == JsonValueKind.Array)
+                                                        {
+                                                            foreach (var item in itensArr.EnumerateArray())
+                                                            {
+                                                                string nomeProd = item.TryGetProperty("nomeProduto", out var np) && np.ValueKind == JsonValueKind.String ? np.GetString()! : $"Produto #{item.GetProperty("productId").GetInt32()}";
+                                                                int qtd = item.GetProperty("quantidade").GetInt32();
+                                                                decimal preco = item.GetProperty("precoUnitario").GetDecimal();
+
+                                                                <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2">
+                                                                    <span><strong class="text-dark">@nomeProd</strong> <small class="text-muted">(x@(qtd))</small></span>
+                                                                    <span class="fw-semibold text-dark">R$ @((preco * qtd).ToString("N2"))</span>
+                                                                </li>
+                                                            }
+                                                        }
+                                                    </ul>
+                                                    <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+                                                        <span class="fw-bold">Total do Pedido:</span>
+                                                        <span class="fw-bold fs-5 text-success">R$ @total.ToString("N2")</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                         }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="8" class="py-4 text-muted">Nenhum pedido encontrado.</td>
+                        </tr>
                     }
                 </tbody>
             </table>
