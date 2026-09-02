@@ -1,21 +1,33 @@
-# Atelie do Pontinhos
+# Atelie dos Pontinhos
 
-> Aplicação completa ASP.NET Core em arquitetura de camadas para ensino.
+Aplicação ASP.NET Core em arquitetura em camadas (Domain, Application, Infrastructure, API, UI e Desktop) — projeto didático para ensino de EF Core, Identity, APIs e Razor MVC.
 
-## Sobre o Projeto
+Resumo rápido
+- Estrutura em camadas com Repositórios, Services e DbContext.
+- Seed automático que cria dados iniciais e um usuário administrador.
 
-O **AtelieDosPontinhos** é uma loja virtual que vende produtos e materiais de artesanato focado apenas em ponto cruz. O site foi desenvolvido de forma didática para ensino de:
+Projetos principais
+- AtelieDosPontinhos.Domain — Entidades e interfaces
+- AtelieDosPontinhos.Application — Serviços, DTOs e lógica de aplicação
+- AtelieDosPontinhos.Infrastructure — DbContext, Repositórios, Migrations e Seed
+- AtelieDosPontinhos.API — Endpoints REST (Swagger)
+- AtelieDosPontinhos.UI — Interface web (MVC/Razor)
+- AtelieDosPontinhos.Desktop — aplicação desktop (opcional)
 
-- ASP.NET Core (API e MVC/Razor Pages)
-- Arquitetura em camadas
-- Entity Framework Core
+Target framework
+- Todos os projetos principais neste repositório usam .NET 10.0 (TargetFramework: net10.0).
+
+Tecnologias
+- .NET 10
+- ASP.NET Core (Web API + MVC)
+- Entity Framework Core 10.x (SQL Server)
 - ASP.NET Core Identity
-- API REST
-- CRUD completo
-- Razor Views
-- Bootstrap 5
+- Swagger (Swashbuckle)
+- Bootstrap 5 (UI)
 
-## Integrantes do grupo
+Pré-requisitos
+- .NET 10 SDK instalado
+- SQL Server LocalDB (vem com o Visual Studio) ou outro SQL Server
 
 Desenvolvidos pelos alunos:
 - Lucas Richard - Domain, Application, Desktop
@@ -91,127 +103,96 @@ git clone https://github.com/jessicagavazzi2006-dev/AtelieDosPontinhos.git
 cd AtelieDosPontinhos
 ```
 
-### Passo 2: Restaurar pacotes
+2. Restaurar pacotes
 ```bash
 dotnet restore
 ```
 
-### Passo 3: Criar o banco de dados
+3. Criar/aplicar o banco de dados (migrations)
 
-#### Opção 1 — Package Manager Console (Visual Studio)
+Opção A — Package Manager Console (Visual Studio)
 ```powershell
 Update-Database -Project AtelieDosPontinhos.Infrastructure -StartupProject AtelieDosPontinhos.API
 ```
 
-#### Opção 2 — PowerShell / CMD
+Opção B — CLI
 ```bash
 dotnet ef database update --project AtelieDosPontinhos.Infrastructure --startup-project AtelieDosPontinhos.API
 ```
 
-> **Nota:** O banco é criado automaticamente na primeira execução (o Seed Data aplica as migrations).
+Observação: Em ambiente de Development os projetos aplicam migrations/seed automaticamente durante a inicialização.
 
-### Passo 4: Executar a aplicação
+4. Executar a aplicação
 
-#### Rodar a API (Swagger):
+API (Swagger)
 ```bash
 dotnet run --project AtelieDosPontinhos.API
 ```
-Acesse: `https://localhost:5001/swagger`
+URLs (padrão de launchSettings):
+- HTTP: http://localhost:5006
+- HTTPS: https://localhost:7033
+Swagger: http://localhost:5006/swagger (ou https://localhost:7033/swagger)
 
-#### Rodar a UI (MVC):
+UI (MVC)
 ```bash
-dotnet run --project AtelieDosPontinhos..UI
+dotnet run --project AtelieDosPontinhos.UI
 ```
-Acesse: `https://localhost:5002` (ou a porta indicada no terminal)
+URLs (padrão de launchSettings):
+- HTTP: http://localhost:5012
+- HTTPS: https://localhost:7049
 
-## Usuário Administrador
+Credenciais administrativas (seed)
+- Email: admin@site.com
+- Senha: Admin@123
+- Role: Admin
 
-O sistema cria automaticamente um usuário admin:
-
-| Campo | Valor |
-|-------|-------|
-| Email | admin@site.com |
-| Senha | Admin@123 |
-| Role  | Admin |
-
-## Endpoints da API (principais)
-
-### Produtos (novos endpoints detectados)
-| Método | Endpoint | Descrição |
-|--------|----------|-----------|
-| GET | `/api/Products` | Lista todos os produtos |
-| GET | `/api/Products/{id}` | Busca produto por ID |
-| GET | `/api/Products/search?term={term}` | Busca produtos por termo (novo) |
-| GET | `/api/Products/featured` | Produtos em destaque (novo) |
-| GET | `/api/Products/count` | Total de produtos (novo) |
-| POST | `/api/Products` | Cria novo produto (Admin) |
-| PUT | `/api/Products/{id}` | Atualiza produto (Admin) |
-| DELETE | `/api/Products/{id}` | Remove produto (Admin) |
-
-### Categorias
-| Método | Endpoint | Descrição |
-|--------|----------|-----------|
-| GET | `/api/categories` | Lista todas as categorias |
-| POST | `/api/categories` | Cria categoria (Admin) |
-| PUT | `/api/categories/{id}` | Atualiza categoria (Admin) |
-| DELETE | `/api/categories/{id}` | Remove categoria (Admin) |
-
-### Materiais
-| Método | Endpoint | Descrição |
-|--------|----------|-----------|
-| GET | `/api/Material` | Lista todos os materiais |
-| POST | `/api/Material` | Cria material (Admin) |
-| PUT | `/api/Material/{id}` | Atualiza material (Admin) |
-| DELETE | `/api/Material/{id}` | Remove material (Admin) |
-
-### Autenticação
-| Método | Endpoint | Descrição |
-|--------|----------|-----------|
-| POST | `/api/auth/register` | Registra usuário |
-| POST | `/api/auth/login` | Faz login |
-| POST | `/api/auth/logout` | Faz logout |
-| GET | `/api/auth/me` | Dados do usuário |
-
-## Configuração do Banco
-
-A connection string está em `appsettings.json`:
-
+Connection string (padrão)
+Arquivo: AtelieDosPontinhos.API/appsettings.json
 ```json
 {
- "ConnectionStrings": {
-  "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=MaterialDb;Trusted_Connection=True;MultipleActiveResultSets=true"
- }
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=(localdb)\\MSSQLLocalDB;Database=AtelieDB;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True"
+  }
 }
 ```
 
-Para usar outro servidor SQL Server, altere a connection string nos projetos **API** e **UI**.
+API — endpoints principais
 
-## Migrations
+Produtos (controller: api/Product)
+- GET /api/Product — lista produtos
+- GET /api/Product/{id} — busca por id
+- GET /api/Product/search?term={term} — busca por termo
+- POST /api/Product — cria produto
+- PUT /api/Product/{id} — atualiza produto
+- DELETE /api/Product/{id} — remove produto
 
-### Criar nova migration:
+Categorias (controller: api/Category)
+- GET /api/Category — lista categorias
+- GET /api/Category/{id} — busca categoria por id
+- GET /api/Category/search?term={term} — busca por termo
+- POST /api/Category — cria categoria (Admin)
+- PUT /api/Category/{id} — atualiza categoria (Admin)
+- DELETE /api/Category/{id} — remove categoria (Admin)
 
-#### Package Manager Console:
-```powershell
-Add-Migration NomeDaMigration -Project AtelieDosPontinhos.Infrastructure -StartupProject AtelieDosPontinhos.API
-```
+Autenticação / Conta (controller: api/Account)
+- POST /api/Account/register — registra usuário (cadastro)
+- POST /api/Account/login — login (retorna roles)
+- GET /api/Account/user-data?email={email} — retorna endereço/pagamento associado ao e-mail
 
-#### PowerShell:
-```bash
-dotnet ef migrations add NomeDaMigration --project AtelieDosPontinhos.Infrastructure --startup-project AtelieDosPontinhos.API
-```
+Pedidos (controller: api/Orders)
+- POST /api/Orders — criar pedido (Authorize)
+- GET /api/Orders/my — listar pedidos do usuário atual (Authorize)
+- GET /api/Orders — listar todos (Admin)
+- GET /api/Orders/{id} — obter pedido por id (dono ou Admin)
+- PUT /api/Orders/{id}/status — atualizar status (Admin)
 
-### Aplicar migrations:
+Observações sobre API
+- Há implementação de repositórios com métodos adicionais (CountAsync, GetFeaturedAsync, SearchAsync) na camada Infrastructure; nem todos estão expostos diretamente como endpoints REST no controller atual.
+- O CartController existe no código, mas está comentado no repositório atual.
 
-#### Package Manager Console:
-```powershell
-Update-Database -Project AtelieDosPontinhos.Infrastructure -StartupProject AtelieDosPontinhos.API
-```
+Dicas de desenvolvimento
+- Se alterar entidades, crie uma nova migration e aplique-a conforme comandos acima.
+- Use o perfil de launchSettings indicado para obter as mesmas URLs locais mostradas aqui.
 
-#### PowerShell:
-```bash
-dotnet ef database update --project AtelieDosPontinhos.Infrastructure --startup-project AtelieDosPontinhos.API
-```
-
-## Licença
-
-Projeto didático desenvolvido para o Senac — uso educacional.
+Licença
+Projeto didático desenvolvido para fins educacionais.
