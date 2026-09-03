@@ -43,7 +43,8 @@
                                 class="btn btn-light rounded-circle position-absolute top-0 end-0 m-2 shadow-sm d-flex align-items-center justify-content-center"
                                 style="width: 38px; height: 38px; z-index: 10; border: none; background-color: rgba(255, 255, 255, 0.9);"
                                 title="Favoritar">
-                            <i class="bi bi-heart text-danger fs-5"></i>
+                            <!-- Identifica o estado inicial com base na propriedade IsFavorited -->
+                            <i class="@(item.IsFavorited ? "bi bi-heart-fill" : "bi bi-heart") text-danger fs-5" id="fav-icon-@item.Id"></i>
                         </button>
 
                         <a href="/Product/Detalhes/@item.Id" class="text-decoration-none">
@@ -121,8 +122,10 @@
                 .then(data => {
                     if (data.success) {
                         if (data.isFavorited) {
+                            // Preenche o coração de vermelho
                             icone.className = 'bi bi-heart-fill text-danger fs-5';
                         } else {
+                            // Deixa o coração vazado
                             icone.className = 'bi bi-heart text-danger fs-5';
                         }
                     }

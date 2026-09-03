@@ -11,5 +11,8 @@
         public string ImagemUrl { get => CoverImageUrl; set => CoverImageUrl = value; }
         public string Description { get; set; } = string.Empty;
         public string Descricao { get => Description; set => Description = value; }
+
+        // Adicione esta linha para controlar o status do favorito
+        public bool IsFavorited { get; set; } = false;
     }
 }
