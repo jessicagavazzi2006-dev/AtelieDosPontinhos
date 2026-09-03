@@ -1,0 +1,105 @@
+﻿@model AtelieDosPontinhos.UI.Models.UserProfileViewModel
+
+@{
+    ViewData["Title"] = "Meu Perfil";
+}
+
+<div class="container my-5">
+    <h2>Meu Perfil</h2>
+    <hr />
+
+    @if (TempData["Sucesso"] != null)
+    {
+        <div class="alert alert-success">@TempData["Sucesso"]</div>
+    }
+    @if (TempData["Erro"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Erro"]</div>
+    }
+
+    <form asp-action="Profile" method="post">
+        <div class="row">
+            <!-- Dados Pessoais -->
+            <div class="col-md-6 mb-3">
+                <h4>Informações Pessoais</h4>
+
+                <div class="form-group mb-3">
+                    <label>Nome Completo</label>
+                    <input asp-for="Nome" class="form-control" />
+                </div>
+
+                <div class="form-group mb-3">
+                    <label>E-mail (Não pode ser alterado)</label>
+                    <input asp-for="Email" class="form-control" readonly />
+                </div>
+
+                <div class="form-group mb-3">
+                    <label>Telefone</label>
+                    <input asp-for="Telefone" class="form-control" />
+                </div>
+
+                <h4 class="mt-4">Endereço de Entrega</h4>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label>CEP</label>
+                        <input asp-for="Cep" class="form-control" />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label>Cidade</label>
+                        <input asp-for="Cidade" class="form-control" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label>Estado</label>
+                        <input asp-for="Estado" class="form-control" />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label>Número</label>
+                        <input asp-for="Numero" class="form-control" />
+                    </div>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label>Complemento</label>
+                    <input asp-for="Complemento" class="form-control" />
+                </div>
+
+                <div class="form-group mb-3">
+                    <label>Ponto de Referência</label>
+                    <input asp-for="Referencial" class="form-control" />
+                </div>
+            </div>
+
+            <!-- Dados de Pagamento Padrão -->
+            <div class="col-md-6 mb-3">
+                <h4>Preferências de Pagamento</h4>
+
+                <div class="form-group mb-3">
+                    <label>Método de Pagamento Preferido</label>
+                    <select asp-for="Metodo" class="form-control">
+                        <option value="">Selecione...</option>
+                        <option value="Cartão de Crédito">Cartão de Crédito</option>
+                        <option value="Pix">Pix</option>
+                    </select>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label>Nome no Cartão</label>
+                    <input asp-for="Titular" class="form-control" />
+                </div>
+
+                <div class="form-group mb-3">
+                    <label>Número do Cartão</label>
+                    <input asp-for="Cartao" class="form-control" />
+                </div>
+
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg w-100">Salvar Alterações</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

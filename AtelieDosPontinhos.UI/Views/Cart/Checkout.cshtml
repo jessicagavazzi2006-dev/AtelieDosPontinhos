@@ -1,9 +1,9 @@
-﻿@model List<AtelieDosPontinhos.UI.Models.CartItemViewModel>
+﻿@model AtelieDosPontinhos.UI.Models.CheckoutViewModel
 
 @{
     ViewData["Title"] = "Finalizar Pedido";
     decimal totalGeral = 0;
-    string metodoSalvo = ViewBag.MetodoSalvo?.ToString() ?? "Cartão de Crédito";
+    string metodoSalvo = Model.Metodo ?? "Cartão de Crédito";
 }
 
 <div class="container py-5" style="max-width: 950px;">
@@ -12,14 +12,20 @@
     <form asp-controller="Cart" asp-action="ConfirmarPedidoPost" method="post">
 
         <!-- HIDDEN INPUTS PARA GRAVAR OS ITENS DO CARRINHO NO POST -->
-        @for (int i = 0; i < Model.Count; i++)
+        @if (Model.Items != null)
         {
-            var pId = Model[i].Produto.GetType().GetProperty("Id")?.GetValue(Model[i].Produto)
-                    ?? Model[i].Produto.GetType().GetProperty("ProdutoId")?.GetValue(Model[i].Produto);
+            @for (int i = 0; i < Model.Items.Count; i++)
+            {
+                var pId = Model.Items[i].Produto.GetType().GetProperty("Id")?.GetValue(Model.Items[i].Produto)
+                          ?? Model.Items[i].Produto.GetType().GetProperty("ProdutoId")?.GetValue(Model.Items[i].Produto);
 
-            <input type="hidden" name="Items[@i].ProdutoId" value="@pId" />
-            <input type="hidden" name="Items[@i].Quantidade" value="@Model[i].Quantidade" />
-            <input type="hidden" name="Items[@i].PrecoUnitario" value="@(Model[i].Produto.GetType().GetProperty("Price")?.GetValue(Model[i].Produto) ?? Model[i].Produto.GetType().GetProperty("Preco")?.GetValue(Model[i].Produto))" />
+                var pPreco = Model.Items[i].Produto.GetType().GetProperty("Preco")?.GetValue(Model.Items[i].Produto)
+                             ?? Model.Items[i].Produto.GetType().GetProperty("Price")?.GetValue(Model.Items[i].Produto);
+
+                <input type="hidden" name="Items[@i].ProdutoId" value="@pId" />
+                <input type="hidden" name="Items[@i].Quantidade" value="@Model.Items[i].Quantidade" />
+                <input type="hidden" name="Items[@i].PrecoUnitario" value="@pPreco" />
+            }
         }
 
         <div class="row g-4">
@@ -33,27 +39,27 @@
                     <div class="row g-3">
                         <div class="col-md-12">
                             <label class="form-label text-secondary small fw-semibold">E-mail do Destinatário</label>
-                            <input type="text" name="EmailUsuario" class="form-control bg-light border-0 rounded-pill px-3" value="@ViewBag.UserEmail" readonly />
+                            <input type="text" name="EmailUsuario" class="form-control bg-light border-0 rounded-pill px-3" value="@Model.EmailUsuario" readonly />
                         </div>
                         <div class="col-md-4">
                             <label class="form-label text-secondary small fw-semibold">CEP</label>
-                            <input type="text" name="CEP" class="form-control bg-light border-0 rounded-pill px-3" value="@ViewBag.CEP" required />
+                            <input type="text" name="CEP" class="form-control bg-light border-0 rounded-pill px-3" value="@Model.Cep" required />
                         </div>
                         <div class="col-md-5">
                             <label class="form-label text-secondary small fw-semibold">Cidade</label>
-                            <input type="text" name="Cidade" class="form-control bg-light border-0 rounded-pill px-3" value="@ViewBag.Cidade" required />
+                            <input type="text" name="Cidade" class="form-control bg-light border-0 rounded-pill px-3" value="@Model.Cidade" required />
                         </div>
                         <div class="col-md-3">
                             <label class="form-label text-secondary small fw-semibold">Estado (UF)</label>
-                            <input type="text" name="Estado" class="form-control bg-light border-0 rounded-pill px-3" value="@ViewBag.Estado" maxlength="2" required />
+                            <input type="text" name="Estado" class="form-control bg-light border-0 rounded-pill px-3" value="@Model.Estado" maxlength="2" required />
                         </div>
                         <div class="col-md-4">
                             <label class="form-label text-secondary small fw-semibold">Número</label>
-                            <input type="text" name="Numero" class="form-control bg-light border-0 rounded-pill px-3" value="@ViewBag.Numero" required />
+                            <input type="text" name="Numero" class="form-control bg-light border-0 rounded-pill px-3" value="@Model.Numero" required />
                         </div>
                         <div class="col-md-8">
                             <label class="form-label text-secondary small fw-semibold">Complemento / Referência</label>
-                            <input type="text" name="Complemento" class="form-control bg-light border-0 rounded-pill px-3" value="@ViewBag.Referencial" placeholder="Apto, Bloco, Próximo a..." />
+                            <input type="text" name="Complemento" class="form-control bg-light border-0 rounded-pill px-3" value="@Model.Referencial" placeholder="Apto, Bloco, Próximo a..." />
                         </div>
                     </div>
                 </div>
@@ -67,8 +73,8 @@
                         <div class="col-md-6">
                             <label class="form-label text-secondary small fw-semibold">Tipo de Pagamento</label>
                             <select name="TipoPagamento" id="selectPagamento" class="form-select bg-light border-0 rounded-pill px-3" onchange="alternarMetodoPagamento()">
-                                <option value="Cartão de Crédito" selected="@(metodoSalvo == "Cartão de Crédito" || metodoSalvo == "1" || metodoSalvo.ToLower().Contains("crédito") || metodoSalvo.ToLower().Contains("credito"))">💳 Cartão de Crédito</option>
-                                <option value="Cartão de Débito" selected="@(metodoSalvo == "Cartão de Débito" || metodoSalvo == "2" || metodoSalvo.ToLower().Contains("débito") || metodoSalvo.ToLower().Contains("debito"))">💵 Cartão de Débito</option>
+                                <option value="Cartão de Crédito" selected="@(metodoSalvo == "Cartão de Crédito" || metodoSalvo == "1" || metodoSalvo.ToLower().Contains("crédito"))">💳 Cartão de Crédito</option>
+                                <option value="Cartão de Débito" selected="@(metodoSalvo == "Cartão de Débito" || metodoSalvo == "2" || metodoSalvo.ToLower().Contains("débito"))">💵 Cartão de Débito</option>
                                 <option value="Pix" selected="@(metodoSalvo == "Pix" || metodoSalvo == "3" || metodoSalvo.ToLower().Contains("pix"))">📱 PIX</option>
                             </select>
                         </div>
@@ -77,11 +83,11 @@
                         <div id="areaCartao" class="row g-3 col-md-12 m-0 p-0">
                             <div class="col-md-7">
                                 <label class="form-label text-secondary small fw-semibold">Nome Impresso no Cartão</label>
-                                <input type="text" id="inputNomeCartao" name="NomeNoCartao" class="form-control bg-light border-0 rounded-pill px-3" value="@ViewBag.NomeNoCartao" placeholder="Ex: ANA S SILVA" required />
+                                <input type="text" id="inputNomeCartao" name="NomeNoCartao" class="form-control bg-light border-0 rounded-pill px-3" value="@Model.Titular" placeholder="Ex: ANA S SILVA" required />
                             </div>
                             <div class="col-md-12">
-                                <label class="form-label text-secondary small fw-semibold">Número do Cartão </label>
-                                <input type="text" id="inputCartao" name="NumeroCartao" class="form-control bg-light border-0 rounded-pill px-3" value="@ViewBag.NumeroCartao" maxlength="19" placeholder="4532 0000 0000 4321" required />
+                                <label class="form-label text-secondary small fw-semibold">Número do Cartão</label>
+                                <input type="text" id="inputCartao" name="NumeroCartao" class="form-control bg-light border-0 rounded-pill px-3" value="@Model.Cartao" maxlength="19" placeholder="4532 0000 0000 4321" required />
                             </div>
                         </div>
 
@@ -107,19 +113,25 @@
                     <h5 class="fw-bold text-dark mb-4 border-bottom pb-2">Resumo dos Itens</h5>
 
                     <div class="mb-4" style="max-height: 250px; overflow-y: auto;">
-                        @foreach (var item in Model)
+                        @if (Model.Items != null)
                         {
-                            var nomeProduto = item.Produto.GetType().GetProperty("Nome")?.GetValue(item.Produto)?.ToString()
-                                                    ?? item.Produto.GetType().GetProperty("Name")?.GetValue(item.Produto)?.ToString()
-                                                    ?? "Produto Artesanal";
-                            var preco = Convert.ToDecimal(item.Produto.GetType().GetProperty("Preco")?.GetValue(item.Produto) ?? item.Produto.GetType().GetProperty("Price")?.GetValue(item.Produto));
-                            var subtotal = preco * item.Quantidade;
-                            totalGeral += subtotal;
+                            @foreach (var item in Model.Items)
+                            {
+                                var nomeProduto = item.Produto.GetType().GetProperty("Nome")?.GetValue(item.Produto)?.ToString()
+                                                  ?? item.Produto.GetType().GetProperty("Name")?.GetValue(item.Produto)?.ToString()
+                                                  ?? "Produto Artesanal";
 
-                            <div class="d-flex justify-content-between align-items-center mb-3 text-dark fs-6">
-                                <span class="text-truncate" style="max-width: 180px;">@nomeProduto <small class="text-muted">x@item.Quantidade</small></span>
-                                <span class="fw-semibold text-secondary">R$ @subtotal.ToString("N2")</span>
-                            </div>
+                                var preco = Convert.ToDecimal(item.Produto.GetType().GetProperty("Preco")?.GetValue(item.Produto)
+                                                              ?? item.Produto.GetType().GetProperty("Price")?.GetValue(item.Produto) ?? 0);
+
+                                var subtotal = preco * item.Quantidade;
+                                totalGeral += subtotal;
+
+                                <div class="d-flex justify-content-between align-items-center mb-3 text-dark fs-6">
+                                    <span class="text-truncate" style="max-width: 180px;">@nomeProduto <small class="text-muted">x@item.Quantidade</small></span>
+                                    <span class="fw-semibold text-secondary">R$ @subtotal.ToString("N2")</span>
+                                </div>
+                            }
                         }
                     </div>
 
@@ -138,7 +150,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </form>
 </div>
@@ -159,11 +170,11 @@
 
                 if (inputCartao) {
                     inputCartao.required = false;
-                    inputCartao.disabled = true; // Desativa para não enviar lixo no form
+                    inputCartao.disabled = true;
                 }
                 if (inputNomeCartao) {
                     inputNomeCartao.required = false;
-                    inputNomeCartao.disabled = true; // Desativa para não enviar lixo no form
+                    inputNomeCartao.disabled = true;
                 }
             } else {
                 areaCartao.style.setProperty("display", "flex", "important");

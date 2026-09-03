@@ -28,12 +28,12 @@ namespace AtelieDosPontinhos.UI.Controllers
             return View(favoritos);
         }
 
-        // 🤍/❤️ POST: Favorites/ToggleFavorite/5 (Adiciona ou Remove dos favoritos via AJAX)
+        // 🤍/❤️ POST: Favorites/Toggle (Adiciona ou Remove dos favoritos via AJAX)
         [HttpPost]
-        public async Task<IActionResult> ToggleFavorite(int id)
+        public async Task<IActionResult> Toggle(int productId)
         {
             var favoritos = GetFavoritesFromSession();
-            var item = favoritos.FirstOrDefault(p => p.Id == id);
+            var item = favoritos.FirstOrDefault(p => p.Id == productId);
 
             bool isFavorited;
 
@@ -46,10 +46,10 @@ namespace AtelieDosPontinhos.UI.Controllers
             else
             {
                 // Se não existir, busca os dados atualizados na API e insere na lista
-                var client = _httpClientFactory.CreateClient("Api");
+                var client = _httpClientFactory.CreateClient("ApiClient");
                 try
                 {
-                    var response = await client.GetAsync($"api/Product/{id}");
+                    var response = await client.GetAsync($"api/Product/{productId}");
                     if (response.IsSuccessStatusCode)
                     {
                         var produto = await response.Content.ReadFromJsonAsync<ProductViewModel>();

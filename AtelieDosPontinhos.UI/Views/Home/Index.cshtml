@@ -101,7 +101,7 @@
                             cartBadge.innerText = data.totalCount;
                         }
 
-                        // 🍞 Dispara a notificação Toast flutuante de sucesso
+                        // Dispara a notificação Toast flutuante de sucesso
                         const toastEl = document.getElementById('liveToast');
                         if (toastEl) {
                             const toast = new bootstrap.Toast(toastEl);
@@ -114,6 +114,31 @@
                 .catch(error => console.error('Erro ao adicionar ao carrinho:', error));
         }
 
-        // ... sua função toggleFavoritoHome continua logo abaixo ...
+        function toggleFavoritoHome(productId, btn) {
+            const icon = document.getElementById(`fav-icon-${productId}`);
+
+            fetch(`/Favorites/Toggle?productId=${productId}`, {
+                method: 'POST'
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        if (data.isFavorited) {
+                            icon.classList.remove('bi-heart');
+                            icon.classList.add('bi-heart-fill');
+                        } else {
+                            icon.classList.remove('bi-heart-fill');
+                            icon.classList.add('bi-heart');
+                        }
+                    } else {
+                        if (data.redirectUrl) {
+                            window.location.href = data.redirectUrl;
+                        } else {
+                            alert(data.message || 'Faça login para favoritar produtos.');
+                        }
+                    }
+                })
+                .catch(error => console.error('Erro ao atualizar favorito:', error));
+        }
     </script>
 }

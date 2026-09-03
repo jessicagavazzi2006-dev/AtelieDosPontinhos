@@ -14,7 +14,6 @@ namespace AtelieDosPontinhos.API.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-       
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -28,7 +27,7 @@ namespace AtelieDosPontinhos.API.Controllers
         {
             _signInManager = signInManager;
             _userManager = userManager;
-            _roleManager = roleManager; // Corrigido a atribuição sem erro de digitação
+            _roleManager = roleManager;
             _context = context;
         }
 
@@ -63,6 +62,7 @@ namespace AtelieDosPontinhos.API.Controllers
 
                     var novoEndereco = new AtelieDosPontinhos.Domain.Entities.Endereco
                     {
+                        UserId = user.Id, // Vincula o endereço ao ID recém-criado do usuário
                         CEP = request.CEP ?? "",
                         Numero = numeroConvertido,
                         Estado = request.Estado ?? "",
@@ -84,14 +84,13 @@ namespace AtelieDosPontinhos.API.Controllers
             return BadRequest(result.Errors);
         }
 
-        // 🌟 NOVO: A UI vai chamar este método na API para carregar o endereço do cliente na tela
-        // 🌟 CORRIGIDO: Busca o endereço real associado ao e-mail do cliente logado
+        // 🌟 A UI chama este método na API para carregar o endereço e dados do cliente na tela de pagamento
         [HttpGet("user-data")]
         public async Task<IActionResult> GetUserData([FromQuery] string email)
         {
             if (string.IsNullOrEmpty(email)) return BadRequest();
 
-            // 1. Busca o ID do usuário no Identity através do e-mail logado
+            // 1. Busca o ID do usuário no Identity através do e-mail
             var user = await _userManager.FindByEmailAsync(email);
             if (user == null) return NotFound(new { Message = "Usuário não localizado." });
 
@@ -101,7 +100,7 @@ namespace AtelieDosPontinhos.API.Controllers
                 e => e.UserId == user.Id
             );
 
-            // 3. Busca na tabela Pagamentos a preferência gravada
+            // 3. Busca na tabela Pagamentos a preferência gravada (se houver)
             var pagamento = await EntityFrameworkQueryableExtensions.FirstOrDefaultAsync(
                 _context.Set<AtelieDosPontinhos.Domain.Entities.Pagamento>(),
                 p => p.UserId == user.Id
@@ -109,11 +108,10 @@ namespace AtelieDosPontinhos.API.Controllers
 
             if (endereco == null)
             {
-                // Se for um usuário antigo que não passou pelo cadastro novo, devolve vazio para não quebrar
                 return Ok(new { cep = "", cidade = "", estado = "", numero = "", referencial = "", metodo = "1", titular = "", cartao = "" });
             }
 
-            // Entrega os dados reais que o cliente digitou no cadastro para o site preencher as caixinhas
+            // Entrega os dados reais para o front-end preencher os inputs automaticamente
             return Ok(new
             {
                 cep = endereco.CEP ?? "",
@@ -122,12 +120,10 @@ namespace AtelieDosPontinhos.API.Controllers
                 numero = endereco.Numero.ToString(),
                 referencial = endereco.Referencia ?? "",
                 metodo = pagamento != null ? ((int)pagamento.Metodo).ToString() : "1",
-                titular = pagamento != null ? "ANA S SILVA" : "", // Exemplo de titular associado
-                cartao = pagamento != null ? "4532 •••• •••• 4321" : "" // Máscara de 16 dígitos estruturada no banco
+                titular = pagamento != null ? "ANA S SILVA" : "",
+                cartao = pagamento != null ? "4532 •••• •••• 4321" : ""
             });
         }
-
-
 
         // ROTA DE LOGIN
         [HttpPost("login")]
@@ -159,16 +155,12 @@ namespace AtelieDosPontinhos.API.Controllers
         public string Password { get; set; } = string.Empty;
         public string Role { get; set; } = string.Empty;
         public string CEP { get; set; } = string.Empty;
-        public string Logradouro { get; set; } = string.Empty;
         public string Numero { get; set; } = string.Empty;
         public string Complemento { get; set; } = string.Empty;
-        public string Bairro { get; set; } = string.Empty;
         public string Cidade { get; set; } = string.Empty;
         public string Estado { get; set; } = string.Empty;
         public string TipoPagamento { get; set; } = string.Empty;
         public string NomeNoCartao { get; set; } = string.Empty;
         public string NumeroCartaoMascarado { get; set; } = string.Empty;
     }
-
-
 }

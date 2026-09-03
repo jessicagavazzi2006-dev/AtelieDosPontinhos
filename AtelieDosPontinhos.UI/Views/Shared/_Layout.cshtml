@@ -66,6 +66,11 @@
                                         </div>
                                     </li>
                                     <li>
+                                        <a class="dropdown-item py-2 fw-semibold text-secondary" asp-controller="Account" asp-action="Profile">
+                                            👤 Meu Perfil
+                                        </a>
+                                    </li>
+                                    <li>
                                         <a class="dropdown-item py-2 fw-semibold text-secondary" asp-controller="Order" asp-action="Index">
                                             📦 Meus Pedidos
                                         </a>
@@ -201,9 +206,9 @@
                             try
                             {
                                 var itens = System.Text.Json.JsonSerializer.Deserialize<List<AtelieDosPontinhos.UI.Models.CartItemViewModel>>(cartJson);
-                                                totalItens = itens?.Sum(x => x.Quantidade) ?? 0;
+                                                                            totalItens = itens?.Sum(x => x.Quantidade) ?? 0;
                             }
-                                        catch { }
+                                                    catch { }
                         }
                     }
                     document.getElementById("cartCount").innerText = "@totalItens";

@@ -25,6 +25,22 @@ namespace AtelieDosPontinhos.UI.Controllers
             _httpClientFactory = httpClientFactory;
         }
 
+        private void InjetarCookieAutenticacao(HttpClient client)
+        {
+            var apiCookie = HttpContext.Session.GetString("ApiCookie");
+
+            if (string.IsNullOrEmpty(apiCookie))
+            {
+                apiCookie = User.FindFirst("ApiCookie")?.Value;
+            }
+
+            if (!string.IsNullOrEmpty(apiCookie))
+            {
+                client.DefaultRequestHeaders.Remove("Cookie");
+                client.DefaultRequestHeaders.Add("Cookie", apiCookie);
+            }
+        }
+
         [HttpGet]
         public IActionResult Login()
         {
@@ -150,10 +166,8 @@ namespace AtelieDosPontinhos.UI.Controllers
                 return View(model);
 
             var cep = Request.Form["CEP"].ToString();
-            var logradouro = Request.Form["Logradouro"].ToString();
             var numero = Request.Form["Numero"].ToString();
             var complemento = Request.Form["Complemento"].ToString();
-            var bairro = Request.Form["Bairro"].ToString();
             var cidade = Request.Form["Cidade"].ToString();
             var estado = Request.Form["Estado"].ToString();
             var tipoPagamento = Request.Form["TipoPagamento"].ToString();
@@ -166,10 +180,8 @@ namespace AtelieDosPontinhos.UI.Controllers
                 Password = model.Password,
                 Role = "Cliente",
                 CEP = cep,
-                Logradouro = logradouro,
                 Numero = numero,
                 Complemento = complemento,
-                Bairro = bairro,
                 Cidade = cidade,
                 Estado = estado,
                 TipoPagamento = tipoPagamento,
@@ -197,6 +209,106 @@ namespace AtelieDosPontinhos.UI.Controllers
             }
 
             return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Profile()
+        {
+            var userEmail = HttpContext.Session.GetString("UserEmail");
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var client = _httpClientFactory.CreateClient("ApiClient");
+
+            InjetarCookieAutenticacao(client);
+
+            var viewModel = new UserProfileViewModel { Email = userEmail };
+
+            try
+            {
+                string rotaUsuario = client.BaseAddress != null && client.BaseAddress.ToString().EndsWith("api/")
+                    ? $"account/user-data?email={userEmail}"
+                    : $"api/account/user-data?email={userEmail}";
+
+                var response = await client.GetAsync(rotaUsuario);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                    var dadosUsuario = await response.Content.ReadFromJsonAsync<JsonElement>(jsonOptions);
+
+                    viewModel.Nome = ObterPropriedadeString(dadosUsuario, "nome", "Name");
+                    viewModel.Telefone = ObterPropriedadeString(dadosUsuario, "telefone", "Phone");
+                    viewModel.Cep = ObterPropriedadeString(dadosUsuario, "cep", "CEP");
+                    viewModel.Cidade = ObterPropriedadeString(dadosUsuario, "cidade", "Cidade");
+                    viewModel.Estado = ObterPropriedadeString(dadosUsuario, "estado", "Estado");
+                    viewModel.Numero = ObterPropriedadeString(dadosUsuario, "numero", "Numero");
+                    viewModel.Complemento = ObterPropriedadeString(dadosUsuario, "complemento", "Complemento");
+                    viewModel.Referencial = ObterPropriedadeString(dadosUsuario, "referencia", "Referencia", "referencial");
+                    viewModel.Metodo = ObterPropriedadeString(dadosUsuario, "metodo", "Metodo");
+                    viewModel.Titular = ObterPropriedadeString(dadosUsuario, "titular", "NomeNoCartao");
+                    viewModel.Cartao = ObterPropriedadeString(dadosUsuario, "cartao", "NumeroCartao");
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Erro ao carregar perfil: {ex.Message}");
+            }
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Profile(UserProfileViewModel model)
+        {
+            var userEmail = HttpContext.Session.GetString("UserEmail");
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            model.Email = userEmail;
+
+            var client = _httpClientFactory.CreateClient("ApiClient");
+            InjetarCookieAutenticacao(client);
+
+            try
+            {
+                string rotaUpdate = client.BaseAddress != null && client.BaseAddress.ToString().EndsWith("api/")
+                    ? "account/update-profile"
+                    : "api/account/update-profile";
+
+                var response = await client.PutAsJsonAsync(rotaUpdate, model);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["Sucesso"] = "Dados alterados com sucesso!";
+                }
+                else
+                {
+                    TempData["Erro"] = "Não foi possível atualizar os dados.";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["Erro"] = $"Erro ao comunicar com a API: {ex.Message}";
+            }
+
+            return View(model);
+        }
+
+        private string ObterPropriedadeString(JsonElement json, params string[] nomesPropriedade)
+        {
+            foreach (var nome in nomesPropriedade)
+            {
+                if (json.TryGetProperty(nome, out var prop) && prop.ValueKind == JsonValueKind.String)
+                {
+                    return prop.GetString() ?? string.Empty;
+                }
+            }
+            return string.Empty;
         }
 
         // LOGOUT: Limpa a sessão e desautentica os cookies

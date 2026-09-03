@@ -68,9 +68,6 @@ namespace AtelieDosPontinhos.UI.Controllers
             return View(carrinho ?? new List<CartItemViewModel>());
         }
 
-        /// <summary>
-        /// Método assíncrono (AJAX) para adicionar produtos mantendo a navegação na vitrine
-        /// </summary>
         [HttpPost]
         public async Task<IActionResult> AdicionarAoCarrinhoAjax(int id, int quantidade = 1)
         {
@@ -159,9 +156,6 @@ namespace AtelieDosPontinhos.UI.Controllers
             }
         }
 
-        /// <summary>
-        /// Método assíncrono (AJAX) para atualizar a quantidade de um produto no carrinho
-        /// </summary>
         [HttpPost]
         public IActionResult AtualizarQuantidadeAjax(int id, int quantidade)
         {
@@ -336,6 +330,12 @@ namespace AtelieDosPontinhos.UI.Controllers
                 return RedirectToAction("Index");
             }
 
+            var viewModel = new CheckoutViewModel
+            {
+                EmailUsuario = userEmail,
+                Items = carrinho
+            };
+
             var client = _httpClientFactory.CreateClient("ApiClient");
             InjetarCookieAutenticacao(client);
 
@@ -352,14 +352,14 @@ namespace AtelieDosPontinhos.UI.Controllers
                     var jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
                     var dadosUsuario = await response.Content.ReadFromJsonAsync<JsonElement>(jsonOptions);
 
-                    ViewBag.CEP = ObterPropriedadeString(dadosUsuario, "cep", "CEP");
-                    ViewBag.Cidade = ObterPropriedadeString(dadosUsuario, "cidade", "Cidade");
-                    ViewBag.Estado = ObterPropriedadeString(dadosUsuario, "estado", "Estado");
-                    ViewBag.Numero = ObterPropriedadeString(dadosUsuario, "numero", "Numero");
-                    ViewBag.Referencial = ObterPropriedadeString(dadosUsuario, "referencia", "Referencia", "referencial");
-                    ViewBag.MetodoSalvo = ObterPropriedadeString(dadosUsuario, "metodo", "Metodo");
-                    ViewBag.NomeNoCartao = ObterPropriedadeString(dadosUsuario, "titular", "NomeNoCartao");
-                    ViewBag.NumeroCartao = ObterPropriedadeString(dadosUsuario, "cartao", "NumeroCartao");
+                    viewModel.Cep = ObterPropriedadeString(dadosUsuario, "cep", "CEP");
+                    viewModel.Cidade = ObterPropriedadeString(dadosUsuario, "cidade", "Cidade");
+                    viewModel.Estado = ObterPropriedadeString(dadosUsuario, "estado", "Estado");
+                    viewModel.Numero = ObterPropriedadeString(dadosUsuario, "numero", "Numero");
+                    viewModel.Referencial = ObterPropriedadeString(dadosUsuario, "referencia", "Referencia", "referencial");
+                    viewModel.Metodo = ObterPropriedadeString(dadosUsuario, "metodo", "Metodo");
+                    viewModel.Titular = ObterPropriedadeString(dadosUsuario, "titular", "NomeNoCartao");
+                    viewModel.Cartao = ObterPropriedadeString(dadosUsuario, "cartao", "NumeroCartao");
                 }
             }
             catch (Exception ex)
@@ -367,14 +367,11 @@ namespace AtelieDosPontinhos.UI.Controllers
                 System.Diagnostics.Debug.WriteLine($"Nota de integração: {ex.Message}");
             }
 
-            ViewBag.UserEmail = userEmail;
-            ViewBag.ValorTotal = carrinho.Sum(i => (i.Produto?.Price ?? 0m) * i.Quantidade);
-
-            return View(carrinho);
+            return View(viewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> ConfirmarPedidoPost(IFormCollection form)
+        public async Task<IActionResult> ConfirmarPedidoPost(CheckoutViewModel model, IFormCollection form)
         {
             var userEmail = HttpContext.Session.GetString("UserEmail");
             if (string.IsNullOrEmpty(userEmail))
@@ -382,14 +379,22 @@ namespace AtelieDosPontinhos.UI.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
+            // Garante que o email venha preenchido
+            model.EmailUsuario = userEmail;
+
             string tipoPagamento = form["TipoPagamento"].ToString();
+            if (string.IsNullOrEmpty(tipoPagamento))
+            {
+                tipoPagamento = model.Metodo;
+            }
+
             bool ehPix = tipoPagamento.Equals("Pix", StringComparison.OrdinalIgnoreCase) || tipoPagamento == "3";
 
             // 🔒 Validação condicional: Só valida cartão se NÃO for Pix
             if (!ehPix)
             {
-                string nomeCartao = form["NomeNoCartao"];
-                string numeroCartao = form["NumeroCartao"];
+                string nomeCartao = !string.IsNullOrEmpty(form["NomeNoCartao"]) ? form["NomeNoCartao"].ToString() : model.Titular;
+                string numeroCartao = !string.IsNullOrEmpty(form["NumeroCartao"]) ? form["NumeroCartao"].ToString() : model.Cartao;
 
                 if (string.IsNullOrWhiteSpace(nomeCartao) || string.IsNullOrWhiteSpace(numeroCartao))
                 {
@@ -438,11 +443,11 @@ namespace AtelieDosPontinhos.UI.Controllers
                 EmailUsuario = userEmail,
                 ValorTotal = totalPedido,
                 MetodoPagamento = !string.IsNullOrEmpty(tipoPagamento) ? tipoPagamento : "Cartão de Crédito",
-                CEP = form["CEP"].ToString(),
-                Cidade = form["Cidade"].ToString(),
-                Estado = form["Estado"].ToString(),
-                Numero = form["Numero"].ToString(),
-                Complemento = form["Complemento"].ToString(),
+                CEP = !string.IsNullOrEmpty(form["CEP"]) ? form["CEP"].ToString() : model.Cep,
+                Cidade = !string.IsNullOrEmpty(form["Cidade"]) ? form["Cidade"].ToString() : model.Cidade,
+                Estado = !string.IsNullOrEmpty(form["Estado"]) ? form["Estado"].ToString() : model.Estado,
+                Numero = !string.IsNullOrEmpty(form["Numero"]) ? form["Numero"].ToString() : model.Numero,
+                Complemento = !string.IsNullOrEmpty(form["Complemento"]) ? form["Complemento"].ToString() : model.Complemento,
                 Items = itemsDto
             };
 
@@ -474,6 +479,7 @@ namespace AtelieDosPontinhos.UI.Controllers
             TempData["PedidoSucesso"] = "🎉 Compra Confirmada com Sucesso!";
             return RedirectToAction("Index", "Order");
         }
+
         private string ObterPropriedadeString(JsonElement json, params string[] nomesPropriedade)
         {
             foreach (var nome in nomesPropriedade)

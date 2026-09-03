@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
-
 
 namespace AtelieDosPontinhos.API.Controllers
 {
@@ -88,7 +88,7 @@ namespace AtelieDosPontinhos.API.Controllers
             return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, new { id = user.Id, email = user.Email, userName = user.UserName, roles = roles });
         }
 
-        // 4. EDITAR USUÁRIO (ATUALIZAR E-MAIL, SENHA, ROLE)
+        // 4. EDITAR USUÁRIO (ATUALIZAR E-MAIL, SENHA, ROLE) - ADMIN
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateUser(string id, [FromBody] AtelieDosPontinhos.Application.DTOs.UpdateUsuarioDto dto)
@@ -140,7 +140,66 @@ namespace AtelieDosPontinhos.API.Controllers
             return Ok(new { id = user.Id, email = user.Email, userName = user.UserName, roles = roles });
         }
 
-        // 4. REMOVER USUÁRIO
+        // 5. ATUALIZAR O PERFIL DO PRÓPRIO USUÁRIO LOGADO
+        [HttpPut("update-profile")]
+        public async Task<IActionResult> UpdateProfile([FromBody] AtelieDosPontinhos.Application.DTOs.UpdateProfileDto dto)
+        {
+            if (dto == null) return BadRequest(new { message = "Dados inválidos." });
+
+            var userId = _userManager.GetUserId(User);
+            if (string.IsNullOrEmpty(userId))
+            {
+                var userEmailClaim = User.FindFirst(ClaimTypes.Email)?.Value
+                                     ?? User.Identity?.Name;
+
+                if (!string.IsNullOrEmpty(userEmailClaim))
+                {
+                    var userByEmail = await _userManager.FindByEmailAsync(userEmailClaim);
+                    if (userByEmail != null) userId = userByEmail.Id;
+                }
+            }
+
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized(new { message = "Usuário não autenticado." });
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null) return NotFound(new { message = "Usuário não encontrado." });
+
+            // Atualização dos campos de perfil enviados pela UI
+            if (!string.IsNullOrWhiteSpace(dto.Nome))
+            {
+                user.UserName = dto.Nome;
+            }
+
+            if (!string.IsNullOrWhiteSpace(dto.Telefone))
+            {
+                user.PhoneNumber = dto.Telefone;
+            }
+
+            // Nota: Se a sua classe de usuário (ApplicationUser) possuir as propriedades abaixo,
+            // descomente as linhas correspondentes para salvá-las no banco de dados:
+
+            // user.CEP = dto.Cep;
+            // user.Cidade = dto.Cidade;
+            // user.Estado = dto.Estado;
+            // user.Numero = dto.Numero;
+            // user.Complemento = dto.Complemento;
+            // user.Referencia = dto.Referencia;
+            // user.Metodo = dto.Metodo;
+            // user.Titular = dto.Titular;
+            // user.Cartao = dto.Cartao;
+
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+                return BadRequest(new { message = $"Erro ao atualizar perfil: {errors}" });
+            }
+
+            return Ok(new { message = "Perfil atualizado com sucesso!" });
+        }
+
+        // 6. REMOVER USUÁRIO
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(string id)
         {
@@ -158,12 +217,11 @@ namespace AtelieDosPontinhos.API.Controllers
 
         /// <summary>
         /// Retorna a lista de perfis disponíveis.
-        /// GET /api/usuarios/perfis
+        /// GET /api/user/perfis
         /// </summary>
         [HttpGet("perfis")]
         public async Task<ActionResult<IEnumerable<string>>> GetPerfis()
         {
-            // Recupera os nomes das roles cadastradas via RoleManager
             var perfis = await _roleManager.Roles
                 .Where(r => r.Name != null)
                 .Select(r => r.Name!)

@@ -69,7 +69,7 @@
         function removerFavorito(productId) {
             if (!confirm("Deseja remover este produto dos favoritos?")) return;
 
-            fetch(`/Favorites/ToggleFavorite/${productId}`, {
+            fetch(`/Favorites/Toggle?productId=${productId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -88,6 +88,8 @@
                         if (restolista.length === 0) {
                             location.reload();
                         }
+                    } else {
+                        alert('Erro ao remover dos favoritos.');
                     }
                 })
                 .catch(error => console.error('Erro ao remover dos favoritos:', error));
