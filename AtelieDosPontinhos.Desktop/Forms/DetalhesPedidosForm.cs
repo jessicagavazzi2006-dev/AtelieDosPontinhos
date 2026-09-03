@@ -1,4 +1,5 @@
 ﻿using AtelieDosPontinhos.Desktop.DTOs;
+using AtelieDosPontinhos.Desktop.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,6 +17,7 @@ namespace AtelieDosPontinhos.Desktop.Forms
         public Pedido? Pedido { get; set; }
 
         private List<PedidoItem> _itens = new();
+        private readonly UsuariosApiService _usuariosService = new();
 
         public DetalhesPedidosForm()
         {
@@ -27,17 +29,17 @@ namespace AtelieDosPontinhos.Desktop.Forms
         {
             InitializeComponent();
             Pedido = pedido;
-            PreencherDados();
+            _ = PreencherDadosAsync();
         }
 
-        private void DetalhesPedidosForm_Load(object sender, EventArgs e)
+        private async void DetalhesPedidosForm_Load(object sender, EventArgs e)
         {
             if (DesignMode) return;
 
-            PreencherDados();
+            await PreencherDadosAsync();
         }
 
-        private void PreencherDados()
+        private async Task PreencherDadosAsync()
         {
             // Limpa estado anterior
             itemCompradosGrid.Rows.Clear();
@@ -51,8 +53,21 @@ namespace AtelieDosPontinhos.Desktop.Forms
                 return;
             }
 
-            // Cliente (aqui temos apenas UserId; ajuste se tiver nome do cliente)
-            ClienteLbl.Text = $"Cliente: {Pedido.UserId}";
+            // Cliente: tenta buscar o nome do usuário via API. Se não encontrado, mostra o UserId
+            var nomeCliente = Pedido.UserId;
+            try
+            {
+                var usuarios = await _usuariosService.GetAllAsync();
+                var usuario = usuarios.FirstOrDefault(u => u.Id == Pedido.UserId);
+                if (usuario != null && !string.IsNullOrWhiteSpace(usuario.UserName))
+                    nomeCliente = usuario.UserName;
+            }
+            catch
+            {
+                // se falhar, mantemos o UserId
+            }
+
+            ClienteLbl.Text = $"Cliente: {nomeCliente}";
 
             // Data do pedido formatada
             DataLbl.Text = $"Data: {Pedido.DataPedido:dd/MM/yyyy HH:mm}";
@@ -72,18 +87,23 @@ namespace AtelieDosPontinhos.Desktop.Forms
                 : $"Endereço: {enderecoTexto}";
 
             // Itens
+            // Itens: mostra nome, quantidade, preço unitário e preço total por item
             _itens = Pedido.Itens ?? new List<PedidoItem>();
             foreach (var item in _itens)
             {
-                var productName = item.Product?.Name ?? $"Produto #{item.ProductId}";
+                // o backend tem duas formas de retornar os itens:
+                // - quando retorna a entidade completa, item.Product está preenchido
+                // - quando retorna uma projeção (AllOrders) ele inclui NomeProduto e PrecoUnitario
+                // então damos preferência a Product, se estiver ausente usamos os campos projetados
+                var productName = item.Product?.Name ?? item.NomeProduto ?? $"Produto #{item.ProductId}";
                 var quantidade = item.Quantidade;
-                var precoUnitario = item.Product?.Price ?? 0m;
+                var precoUnitario = item.Product?.Price ?? item.PrecoUnitario;
                 var valorItem = precoUnitario * quantidade;
 
-                var itemTexto = $"{productName} x{quantidade}";
-                var precoTexto = valorItem.ToString("C");
+                var precoUnitarioTexto = precoUnitario.ToString("C");
+                var valorItemTexto = valorItem.ToString("C");
 
-                itemCompradosGrid.Rows.Add(itemTexto, precoTexto);
+                itemCompradosGrid.Rows.Add(productName, quantidade, precoUnitarioTexto, valorItemTexto);
             }
 
             // Total do pedido (usa ValorTotal do Pedido)

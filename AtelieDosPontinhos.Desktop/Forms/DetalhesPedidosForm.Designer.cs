@@ -36,6 +36,8 @@
             EnderecoLbl = new Label();
             itemCompradosGrid = new DataGridView();
             itemCol = new DataGridViewTextBoxColumn();
+            quantidadeCol = new DataGridViewTextBoxColumn();
+            precoUnitarioCol = new DataGridViewTextBoxColumn();
             precoCol = new DataGridViewTextBoxColumn();
             TotalDoPedido = new Label();
             totalLbl = new Label();
@@ -82,7 +84,7 @@
             // itemCompradosGrid
             // 
             itemCompradosGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            itemCompradosGrid.Columns.AddRange(new DataGridViewColumn[] { itemCol, precoCol });
+            itemCompradosGrid.Columns.AddRange(new DataGridViewColumn[] { itemCol, quantidadeCol, precoUnitarioCol, precoCol });
             itemCompradosGrid.Location = new Point(12, 120);
             itemCompradosGrid.Name = "itemCompradosGrid";
             itemCompradosGrid.Size = new Size(712, 224);
@@ -93,9 +95,19 @@
             itemCol.HeaderText = "Item";
             itemCol.Name = "itemCol";
             // 
+            // quantidadeCol
+            // 
+            quantidadeCol.HeaderText = "Quantidade";
+            quantidadeCol.Name = "quantidadeCol";
+            // 
+            // precoUnitarioCol
+            // 
+            precoUnitarioCol.HeaderText = "Preço Unitário";
+            precoUnitarioCol.Name = "precoUnitarioCol";
+            // 
             // precoCol
             // 
-            precoCol.HeaderText = "Preço";
+            precoCol.HeaderText = "Total";
             precoCol.Name = "precoCol";
             // 
             // TotalDoPedido
@@ -163,6 +175,8 @@
         private Label EnderecoLbl;
         private DataGridView itemCompradosGrid;
         private DataGridViewTextBoxColumn itemCol;
+        private DataGridViewTextBoxColumn quantidadeCol;
+        private DataGridViewTextBoxColumn precoUnitarioCol;
         private DataGridViewTextBoxColumn precoCol;
         private Label TotalDoPedido;
         private Label totalLbl;
