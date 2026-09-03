@@ -382,6 +382,22 @@ namespace AtelieDosPontinhos.UI.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
+            string tipoPagamento = form["TipoPagamento"].ToString();
+            bool ehPix = tipoPagamento.Equals("Pix", StringComparison.OrdinalIgnoreCase) || tipoPagamento == "3";
+
+            // 🔒 Validação condicional: Só valida cartão se NÃO for Pix
+            if (!ehPix)
+            {
+                string nomeCartao = form["NomeNoCartao"];
+                string numeroCartao = form["NumeroCartao"];
+
+                if (string.IsNullOrWhiteSpace(nomeCartao) || string.IsNullOrWhiteSpace(numeroCartao))
+                {
+                    TempData["Erro"] = "Por favor, preencha todas as informações de pagamento antes de finalizar o pedido.";
+                    return RedirectToAction("Checkout");
+                }
+            }
+
             var carrinho = ObterCarrinhoDaSessao();
             if (carrinho == null || !carrinho.Any())
             {
@@ -421,7 +437,7 @@ namespace AtelieDosPontinhos.UI.Controllers
             {
                 EmailUsuario = userEmail,
                 ValorTotal = totalPedido,
-                MetodoPagamento = !string.IsNullOrEmpty(form["TipoPagamento"]) ? form["TipoPagamento"].ToString() : "1",
+                MetodoPagamento = !string.IsNullOrEmpty(tipoPagamento) ? tipoPagamento : "Cartão de Crédito",
                 CEP = form["CEP"].ToString(),
                 Cidade = form["Cidade"].ToString(),
                 Estado = form["Estado"].ToString(),
@@ -458,7 +474,6 @@ namespace AtelieDosPontinhos.UI.Controllers
             TempData["PedidoSucesso"] = "🎉 Compra Confirmada com Sucesso!";
             return RedirectToAction("Index", "Order");
         }
-
         private string ObterPropriedadeString(JsonElement json, params string[] nomesPropriedade)
         {
             foreach (var nome in nomesPropriedade)

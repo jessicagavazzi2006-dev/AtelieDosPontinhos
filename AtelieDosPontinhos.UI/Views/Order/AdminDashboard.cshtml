@@ -1,5 +1,4 @@
-﻿@using System.Text.Json
-@model List<JsonElement>
+﻿@model List<System.Text.Json.JsonElement>
 
 @{
     ViewData["Title"] = "Painel de Controle de Vendas";
@@ -62,7 +61,13 @@
                             string status = pedido.TryGetProperty("status", out var s) ? s.GetString()! : "Pendente";
                             string cidade = pedido.TryGetProperty("cidade", out var c) ? c.GetString()! : "São Paulo";
                             string estado = pedido.TryGetProperty("estado", out var est) ? est.GetString()! : "SP";
-                            string pagamento = pedido.TryGetProperty("metodoPagamento", out var m) ? m.GetString()! : "Cartão";
+
+                            string pagamento = "Não informado";
+                            if (pedido.TryGetProperty("metodoPagamento", out var m) && m.ValueKind != System.Text.Json.JsonValueKind.Null)
+                                pagamento = m.GetString() ?? "Não informado";
+                            else if (pedido.TryGetProperty("paymentMethod", out var m2) && m2.ValueKind != System.Text.Json.JsonValueKind.Null)
+                                pagamento = m2.GetString() ?? "Não informado";
+
                             decimal total = pedido.GetProperty("valorTotal").GetDecimal();
                             DateTime data = pedido.GetProperty("dataPedido").GetDateTime();
 
@@ -106,9 +111,9 @@
                                                 </div>
                                                 <div class="modal-body p-4">
                                                     @{
-                                                        string numRua = pedido.TryGetProperty("numero", out var num) && num.ValueKind == JsonValueKind.String ? num.GetString()! : "";
-                                                        string cepRua = pedido.TryGetProperty("cep", out var cp) && cp.ValueKind == JsonValueKind.String ? cp.GetString()! : "";
-                                                        string compRua = pedido.TryGetProperty("complemento", out var comp) && comp.ValueKind == JsonValueKind.String ? comp.GetString()! : "";
+                                                        string numRua = pedido.TryGetProperty("numero", out var num) && num.ValueKind == System.Text.Json.JsonValueKind.String ? num.GetString()! : "";
+                                                        string cepRua = pedido.TryGetProperty("cep", out var cp) && cp.ValueKind == System.Text.Json.JsonValueKind.String ? cp.GetString()! : "";
+                                                        string compRua = pedido.TryGetProperty("complemento", out var comp) && comp.ValueKind == System.Text.Json.JsonValueKind.String ? comp.GetString()! : "";
                                                     }
 
                                                     <p class="mb-1 small"><strong>Cliente:</strong> @email</p>
@@ -117,11 +122,11 @@
 
                                                     <h6 class="fw-bold border-bottom pb-2 mb-3">Itens Comprados</h6>
                                                     <ul class="list-group list-group-flush mb-3">
-                                                        @if (pedido.TryGetProperty("itens", out var itensArr) && itensArr.ValueKind == JsonValueKind.Array)
+                                                        @if (pedido.TryGetProperty("itens", out var itensArr) && itensArr.ValueKind == System.Text.Json.JsonValueKind.Array)
                                                         {
                                                             foreach (var item in itensArr.EnumerateArray())
                                                             {
-                                                                string nomeProd = item.TryGetProperty("nomeProduto", out var np) && np.ValueKind == JsonValueKind.String ? np.GetString()! : $"Produto #{item.GetProperty("productId").GetInt32()}";
+                                                                string nomeProd = item.TryGetProperty("nomeProduto", out var np) && np.ValueKind == System.Text.Json.JsonValueKind.String ? np.GetString()! : $"Produto #{item.GetProperty("productId").GetInt32()}";
                                                                 int qtd = item.GetProperty("quantidade").GetInt32();
                                                                 decimal preco = item.GetProperty("precoUnitario").GetDecimal();
 
