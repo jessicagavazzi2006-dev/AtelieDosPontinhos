@@ -22,6 +22,14 @@ namespace AtelieDosPontinhos.Desktop.Forms
             InitializeComponent();
         }
 
+        // Construtor que recebe um Pedido para facilitar a abertura a partir do UserControl
+        public DetalhesPedidosForm(Pedido pedido)
+        {
+            InitializeComponent();
+            Pedido = pedido;
+            PreencherDados();
+        }
+
         private void DetalhesPedidosForm_Load(object sender, EventArgs e)
         {
             if (DesignMode) return;

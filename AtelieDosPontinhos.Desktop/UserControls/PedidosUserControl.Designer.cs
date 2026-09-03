@@ -171,6 +171,7 @@
             btnDetalhes.Size = new Size(99, 39);
             btnDetalhes.TabIndex = 1;
             btnDetalhes.Text = "🔎 Detalhes";
+            btnDetalhes.Click += btnDetalhes_Click;
             // 
             // btnPesquisar
             // 
