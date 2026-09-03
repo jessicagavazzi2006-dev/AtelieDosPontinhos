@@ -133,5 +133,6 @@ namespace AtelieDosPontinhos.Desktop.Forms
 
         private void btnPerfil_Click(object sender, EventArgs e) => Navegar(new PerfilUserControl(), btnPerfil);
 
+        private void btnPedidos_Click(object sender, EventArgs e) => Navegar(new PedidosUserControl(), btnPedidos);
     }
 }
