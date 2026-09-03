@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Finalizar Pedido";
     decimal totalGeral = 0;
-    string metodoSalvo = ViewBag.MetodoSalvo?.ToString() ?? "1";
+    string metodoSalvo = ViewBag.MetodoSalvo?.ToString() ?? "Cartão de Crédito";
 }
 
 <div class="container py-5" style="max-width: 950px;">
@@ -15,7 +15,7 @@
         @for (int i = 0; i < Model.Count; i++)
         {
             var pId = Model[i].Produto.GetType().GetProperty("Id")?.GetValue(Model[i].Produto)
-                   ?? Model[i].Produto.GetType().GetProperty("ProdutoId")?.GetValue(Model[i].Produto);
+                    ?? Model[i].Produto.GetType().GetProperty("ProdutoId")?.GetValue(Model[i].Produto);
 
             <input type="hidden" name="Items[@i].ProdutoId" value="@pId" />
             <input type="hidden" name="Items[@i].Quantidade" value="@Model[i].Quantidade" />
@@ -64,12 +64,12 @@
                     <p class="text-muted small mb-3">Selecione a modalidade de cobrança preferencial para o fechamento:</p>
 
                     <div class="row g-3">
-                        <div class="col-md-5">
+                        <div class="col-md-6">
                             <label class="form-label text-secondary small fw-semibold">Tipo de Pagamento</label>
                             <select name="TipoPagamento" id="selectPagamento" class="form-select bg-light border-0 rounded-pill px-3" onchange="alternarMetodoPagamento()">
-                                <option value="1" selected="@(metodoSalvo == "1" || metodoSalvo.ToLower().Contains("crédito") || metodoSalvo.ToLower().Contains("credito"))">💳 Cartão de Crédito</option>
-                                <option value="2" selected="@(metodoSalvo == "2" || metodoSalvo.ToLower().Contains("débito") || metodoSalvo.ToLower().Contains("debito"))">💵 Cartão de Débito</option>
-                                <option value="3" selected="@(metodoSalvo == "3" || metodoSalvo.ToLower().Contains("pix"))">📱 PIX</option>
+                                <option value="Cartão de Crédito" selected="@(metodoSalvo == "Cartão de Crédito" || metodoSalvo == "1" || metodoSalvo.ToLower().Contains("crédito") || metodoSalvo.ToLower().Contains("credito"))">💳 Cartão de Crédito</option>
+                                <option value="Cartão de Débito" selected="@(metodoSalvo == "Cartão de Débito" || metodoSalvo == "2" || metodoSalvo.ToLower().Contains("débito") || metodoSalvo.ToLower().Contains("debito"))">💵 Cartão de Débito</option>
+                                <option value="Pix" selected="@(metodoSalvo == "Pix" || metodoSalvo == "3" || metodoSalvo.ToLower().Contains("pix"))">📱 PIX</option>
                             </select>
                         </div>
 
@@ -77,11 +77,11 @@
                         <div id="areaCartao" class="row g-3 col-md-12 m-0 p-0">
                             <div class="col-md-7">
                                 <label class="form-label text-secondary small fw-semibold">Nome Impresso no Cartão</label>
-                                <input type="text" id="inputNomeCartao" name="NomeNoCartao" class="form-control bg-light border-0 rounded-pill px-3" value="@ViewBag.NomeNoCartao" placeholder="Ex: ANA S SILVA" />
+                                <input type="text" id="inputNomeCartao" name="NomeNoCartao" class="form-control bg-light border-0 rounded-pill px-3" value="@ViewBag.NomeNoCartao" placeholder="Ex: ANA S SILVA" required />
                             </div>
                             <div class="col-md-12">
                                 <label class="form-label text-secondary small fw-semibold">Número do Cartão </label>
-                                <input type="text" id="inputCartao" name="NumeroCartao" class="form-control bg-light border-0 rounded-pill px-3" value="@ViewBag.NumeroCartao" maxlength="19" placeholder="4532 0000 0000 4321" />
+                                <input type="text" id="inputCartao" name="NumeroCartao" class="form-control bg-light border-0 rounded-pill px-3" value="@ViewBag.NumeroCartao" maxlength="19" placeholder="4532 0000 0000 4321" required />
                             </div>
                         </div>
 
@@ -110,8 +110,8 @@
                         @foreach (var item in Model)
                         {
                             var nomeProduto = item.Produto.GetType().GetProperty("Nome")?.GetValue(item.Produto)?.ToString()
-                                              ?? item.Produto.GetType().GetProperty("Name")?.GetValue(item.Produto)?.ToString()
-                                              ?? "Produto Artesanal";
+                                                    ?? item.Produto.GetType().GetProperty("Name")?.GetValue(item.Produto)?.ToString()
+                                                    ?? "Produto Artesanal";
                             var preco = Convert.ToDecimal(item.Produto.GetType().GetProperty("Preco")?.GetValue(item.Produto) ?? item.Produto.GetType().GetProperty("Price")?.GetValue(item.Produto));
                             var subtotal = preco * item.Quantidade;
                             totalGeral += subtotal;
@@ -152,18 +152,32 @@
         var inputNomeCartao = document.getElementById("inputNomeCartao");
 
         if (select && areaCartao && areaPix) {
-            if (select.value === "3") {
+            if (select.value === "Pix") {
                 areaCartao.style.setProperty("display", "none", "important");
                 areaPix.classList.remove("d-none");
                 areaPix.style.setProperty("display", "block", "important");
-                if (inputCartao) inputCartao.disabled = true;
-                if (inputNomeCartao) inputNomeCartao.disabled = true;
+
+                if (inputCartao) {
+                    inputCartao.required = false;
+                    inputCartao.disabled = true; // Desativa para não enviar lixo no form
+                }
+                if (inputNomeCartao) {
+                    inputNomeCartao.required = false;
+                    inputNomeCartao.disabled = true; // Desativa para não enviar lixo no form
+                }
             } else {
                 areaCartao.style.setProperty("display", "flex", "important");
                 areaPix.classList.add("d-none");
                 areaPix.style.setProperty("display", "none", "important");
-                if (inputCartao) inputCartao.disabled = false;
-                if (inputNomeCartao) inputNomeCartao.disabled = false;
+
+                if (inputCartao) {
+                    inputCartao.disabled = false;
+                    inputCartao.required = true;
+                }
+                if (inputNomeCartao) {
+                    inputNomeCartao.disabled = false;
+                    inputNomeCartao.required = true;
+                }
             }
         }
     }

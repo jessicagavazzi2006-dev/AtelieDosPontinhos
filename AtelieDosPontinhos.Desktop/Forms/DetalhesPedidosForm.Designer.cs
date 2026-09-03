@@ -128,6 +128,7 @@
             FormBorderStyle = FormBorderStyle.None;
             Name = "DetalhesPedidosForm";
             Text = "DetalhesPedidos";
+            Load += DetalhesPedidosForm_Load;
             ((System.ComponentModel.ISupportInitialize)itemCompradosGrid).EndInit();
             ResumeLayout(false);
             PerformLayout();
