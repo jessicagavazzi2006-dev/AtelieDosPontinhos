@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges1 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges2 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             TituloDetalhes = new Label();
             ClienteLbl = new Label();
             DataLbl = new Label();
@@ -37,6 +39,7 @@
             precoCol = new DataGridViewTextBoxColumn();
             TotalDoPedido = new Label();
             totalLbl = new Label();
+            guna2Button1 = new Guna.UI2.WinForms.Guna2Button();
             ((System.ComponentModel.ISupportInitialize)itemCompradosGrid).BeginInit();
             SuspendLayout();
             // 
@@ -113,11 +116,29 @@
             totalLbl.TabIndex = 6;
             totalLbl.Text = "R$";
             // 
+            // guna2Button1
+            // 
+            guna2Button1.CustomizableEdges = customizableEdges1;
+            guna2Button1.DisabledState.BorderColor = Color.DarkGray;
+            guna2Button1.DisabledState.CustomBorderColor = Color.DarkGray;
+            guna2Button1.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
+            guna2Button1.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            guna2Button1.Font = new Font("Segoe UI", 9F);
+            guna2Button1.ForeColor = Color.White;
+            guna2Button1.Location = new Point(587, 9);
+            guna2Button1.Name = "guna2Button1";
+            guna2Button1.ShadowDecoration.CustomizableEdges = customizableEdges2;
+            guna2Button1.Size = new Size(180, 45);
+            guna2Button1.TabIndex = 7;
+            guna2Button1.Text = "Fechar Detalhe";
+            guna2Button1.Click += guna2Button1_Click;
+            // 
             // DetalhesPedidosForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(guna2Button1);
             Controls.Add(totalLbl);
             Controls.Add(TotalDoPedido);
             Controls.Add(itemCompradosGrid);
@@ -145,5 +166,6 @@
         private DataGridViewTextBoxColumn precoCol;
         private Label TotalDoPedido;
         private Label totalLbl;
+        private Guna.UI2.WinForms.Guna2Button guna2Button1;
     }
 }

@@ -81,6 +81,12 @@ namespace AtelieDosPontinhos.Desktop.Forms
             // Total do pedido (usa ValorTotal do Pedido)
             totalLbl.Text = Pedido.ValorTotal.ToString("C");
         }
+
+        private void guna2Button1_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.OK;
+            this.Close();
+        }
     }
 
 }
