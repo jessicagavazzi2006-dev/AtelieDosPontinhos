@@ -46,10 +46,16 @@
                 if (pedido.TryGetProperty("status", out var stP) && stP.ValueKind != System.Text.Json.JsonValueKind.Null)
                     status = stP.GetString() ?? "Confirmado";
 
-                string rawMetodo = "";
-                if (pedido.TryGetProperty("metodoPagamento", out var mP)) rawMetodo = mP.GetString() ?? "";
-                else if (pedido.TryGetProperty("paymentMethod", out var mP2)) rawMetodo = mP2.GetString() ?? "";
-                string metodo = (rawMetodo == "3" || rawMetodo.ToUpper() == "PIX") ? "PIX" : "Cartão";
+                string metodo = "Não informado";
+                if (pedido.TryGetProperty("metodoPagamento", out var mP) && mP.ValueKind != System.Text.Json.JsonValueKind.Null)
+                    metodo = mP.GetString() ?? "Não informado";
+                else if (pedido.TryGetProperty("paymentMethod", out var mP2) && mP2.ValueKind != System.Text.Json.JsonValueKind.Null)
+                    metodo = mP2.GetString() ?? "Não informado";
+
+                // Converte caso venha código numérico legado
+                if (metodo == "1") metodo = "Cartão de Crédito";
+                else if (metodo == "2") metodo = "Cartão de Débito";
+                else if (metodo == "3") metodo = "Pix";
 
                 <div class="card border-0 shadow-sm p-4 rounded-4 bg-white mb-3 border-start border-4 border-success">
                     <div class="row align-items-center">
