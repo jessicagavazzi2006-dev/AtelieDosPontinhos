@@ -30,7 +30,7 @@
                                     <th scope="col" class="py-3">Preço</th>
                                     <th scope="col" class="py-3">Qtd</th>
                                     <th scope="col" class="py-3">Subtotal</th>
-                                    <th scope="col" class="py-3">Ação</th> @* Nova coluna adicionada *@
+                                    <th scope="col" class="py-3">Ação</th>
                                 </tr>
                             </thead>
 
@@ -52,22 +52,28 @@
                                             </div>
                                         </td>
                                         <td class="text-center fw-semibold text-secondary">R$ @precoProduto.ToString("N2")</td>
-                                        <td class="text-center fw-bold text-dark">@item.Quantidade</td>
+
+                                        <!-- Quantidade com botões interativos AJAX -->
+                                        <td class="text-center align-middle">
+                                            <div class="d-flex align-items-center justify-content-center gap-2">
+                                                <button type="button" class="btn btn-sm btn-outline-secondary px-2 py-0 fw-bold" onclick="atualizarQuantidade(@item.Produto.Id, @item.Quantidade - 1)">-</button>
+                                                <span id="qtd-@item.Produto.Id" class="fw-bold text-dark">@item.Quantidade</span>
+                                                <button type="button" class="btn btn-sm btn-outline-secondary px-2 py-0 fw-bold" onclick="atualizarQuantidade(@item.Produto.Id, @item.Quantidade + 1)">+</button>
+                                            </div>
+                                        </td>
+
                                         <td class="text-center fw-bold text-success">R$ @subtotalItem.ToString("N2")</td>
                                         <td class="text-center">
-                                            @* Formulário que dispara a exclusão no Servidor *@
                                             <form asp-controller="Cart" asp-action="RemoverDoCarrinho" method="post" style="display:inline;">
                                                 <input type="hidden" name="id" value="@item.Produto.Id" />
                                                 <button type="submit" class="btn btn-sm btn-danger rounded-pill px-3" title="Remover este produto">
                                                     ❌ Excluir
                                                 </button>
-
                                             </form>
                                         </td>
                                     </tr>
                                 }
                             </tbody>
-
                         </table>
                     </div>
                 </div>
@@ -85,7 +91,7 @@
             <div class="col-lg-4">
                 <div class="card border-0 shadow-sm rounded-3 p-4 bg-light border">
                     <h5 class="fw-bold mb-4 border-bottom pb-2 text-dark">Resumo da Compra</h5>
-                    
+
                     <div class="d-flex justify-content-between mb-3 text-secondary">
                         <span>Quantidade total:</span>
                         <span class="fw-semibold">@Model.Sum(x => x.Quantidade) itens</span>
@@ -109,4 +115,29 @@
             </div>
         </div>
     }
-   
+</div>
+
+@section Scripts {
+    <script>
+        function atualizarQuantidade(productId, novaQuantidade) {
+            const formData = new FormData();
+            formData.append('id', productId);
+            formData.append('quantidade', novaQuantidade);
+
+            fetch('/Cart/AtualizarQuantidadeAjax', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Recarrega a página para atualizar os subtotais, totais e quantidades instantaneamente
+                        location.reload();
+                    } else {
+                        alert(data.message || 'Erro ao atualizar quantidade.');
+                    }
+                })
+                .catch(error => console.error('Erro:', error));
+        }
+    </script>
+}

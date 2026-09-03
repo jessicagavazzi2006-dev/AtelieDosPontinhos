@@ -159,6 +159,37 @@ namespace AtelieDosPontinhos.UI.Controllers
             }
         }
 
+        /// <summary>
+        /// Método assíncrono (AJAX) para atualizar a quantidade de um produto no carrinho
+        /// </summary>
+        [HttpPost]
+        public IActionResult AtualizarQuantidadeAjax(int id, int quantidade)
+        {
+            var carrinho = ObterCarrinhoDaSessao();
+            var item = carrinho.FirstOrDefault(c => c.Produto?.Id == id);
+
+            if (item != null)
+            {
+                if (quantidade <= 0)
+                {
+                    carrinho.Remove(item);
+                }
+                else
+                {
+                    item.Quantidade = quantidade;
+                }
+
+                SalvarCarrinhoNaSessao(carrinho);
+
+                int totalCount = carrinho.Sum(x => x.Quantidade);
+                decimal valorTotal = carrinho.Sum(i => (i.Produto?.Price ?? 0m) * i.Quantidade);
+
+                return Json(new { success = true, totalCount, valorTotal });
+            }
+
+            return Json(new { success = false, message = "Item não encontrado no carrinho." });
+        }
+
         [HttpPost]
         [HttpGet]
         public async Task<IActionResult> AdicionarAoCarrinho(int id, int produtoId = 0, int quantidade = 1)
