@@ -57,7 +57,6 @@
             ClienteLbl.Size = new Size(47, 15);
             ClienteLbl.TabIndex = 1;
             ClienteLbl.Text = "Cliente:";
-            ClienteLbl.Click += this.label1_Click_1;
             // 
             // DataLbl
             // 
@@ -67,7 +66,6 @@
             DataLbl.Size = new Size(34, 15);
             DataLbl.TabIndex = 2;
             DataLbl.Text = "Data:";
-            DataLbl.Click += this.Cliente_Click;
             // 
             // EnderecoLbl
             // 
@@ -130,6 +128,7 @@
             FormBorderStyle = FormBorderStyle.None;
             Name = "DetalhesPedidosForm";
             Text = "DetalhesPedidos";
+            Load += DetalhesPedidosForm_Load;
             ((System.ComponentModel.ISupportInitialize)itemCompradosGrid).EndInit();
             ResumeLayout(false);
             PerformLayout();
