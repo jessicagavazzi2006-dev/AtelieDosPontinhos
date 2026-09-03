@@ -95,9 +95,17 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
+                        // Atualiza o contador do carrinho no menu superior
                         const cartBadge = document.getElementById("cartCount");
                         if (cartBadge) {
                             cartBadge.innerText = data.totalCount;
+                        }
+
+                        // 🍞 Dispara a notificação Toast flutuante de sucesso
+                        const toastEl = document.getElementById('liveToast');
+                        if (toastEl) {
+                            const toast = new bootstrap.Toast(toastEl);
+                            toast.show();
                         }
                     } else {
                         alert(data.message || 'Erro ao adicionar item ao carrinho.');
@@ -106,31 +114,6 @@
                 .catch(error => console.error('Erro ao adicionar ao carrinho:', error));
         }
 
-        function toggleFavoritoHome(productId, btnElement) {
-            const icone = btnElement.querySelector('i');
-
-            fetch(`/Favorites/ToggleFavorite/${productId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-                .then(response => {
-                    if (!response.ok) throw new Error('Erro na requisição');
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.success) {
-                        if (data.isFavorited) {
-                            // Preenche o coração de vermelho
-                            icone.className = 'bi bi-heart-fill text-danger fs-5';
-                        } else {
-                            // Deixa o coração vazado
-                            icone.className = 'bi bi-heart text-danger fs-5';
-                        }
-                    }
-                })
-                .catch(error => console.error('Erro ao alternar favorito:', error));
-        }
+        // ... sua função toggleFavoritoHome continua logo abaixo ...
     </script>
 }
