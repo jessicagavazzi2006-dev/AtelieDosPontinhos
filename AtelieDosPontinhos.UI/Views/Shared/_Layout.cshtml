@@ -121,6 +121,18 @@
         @RenderBody()
     </main>
 
+    <!-- 🍞 Container de Notificações Toast Flutuantes -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1080;">
+        <div id="liveToast" class="toast align-items-center text-white bg-success border-0 shadow-lg" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body fs-6 fw-semibold" id="toastMessage">
+                    🛒 Produto adicionado ao carrinho com sucesso!
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
@@ -189,9 +201,9 @@
                             try
                             {
                                 var itens = System.Text.Json.JsonSerializer.Deserialize<List<AtelieDosPontinhos.UI.Models.CartItemViewModel>>(cartJson);
-                                                                                                        totalItens = itens?.Sum(x => x.Quantidade) ?? 0;
+                                                totalItens = itens?.Sum(x => x.Quantidade) ?? 0;
                             }
-                                                                                catch { }
+                                        catch { }
                         }
                     }
                     document.getElementById("cartCount").innerText = "@totalItens";
@@ -215,5 +227,6 @@
             }
     </script>
 
-    @await RenderSectionAsync("Scripts", required: false)</body>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
 </html>
