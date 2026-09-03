@@ -12,33 +12,26 @@ namespace AtelieDosPontinhos.Desktop.Services
     {
         private readonly HttpClientHelper _http;
 
-        private PedidosApiService()
+        public PedidosApiService()
         {
             _http = HttpClientHelper.Instance;
         }
 
         public async Task<List<Pedido>> GetAllAsync()
         {
-            try
-            {
-                var pedidos = await _http.GetAsync<List<Pedido>>("/api/Pedido");
+       
+                var pedidos = await _http.GetAsync<List<Pedido>>("/api/Order");
                 return pedidos ?? new List<Pedido>();
-            }
-            catch
-            {
-                return new List<Pedido>();
-            }
-
         }
 
         public async Task<Pedido?> GetByIdAsync(int id)
         {
-           return await _http.GetAsync<Pedido>($"/api/Pedido/{id}");
+           return await _http.GetAsync<Pedido>($"/api/Order/{id}");
         }
 
         public async Task<(bool Success, Pedido? pedido, string ErrorMessage)> UpdateAsync(int id, Pedido dto)
         {
-            return await _http.PutAsync<Pedido>($"/api/Pedido/{id}", dto);
+            return await _http.PutAsync<Pedido>($"/api/Order/{id}", dto);
         }
 
         public async Task<List<Pedido>> SearchAsync(string term)
@@ -49,7 +42,7 @@ namespace AtelieDosPontinhos.Desktop.Services
             try
             {
                 var encoded = Uri.EscapeDataString(term);
-                var pedidos = await _http.GetAsync<List<Pedido>>($"/api/Pedido/search?term={encoded}");
+                var pedidos = await _http.GetAsync<List<Pedido>>($"/api/Order/search?term={encoded}");
                 return pedidos ?? new List<Pedido>();
             }
             catch
