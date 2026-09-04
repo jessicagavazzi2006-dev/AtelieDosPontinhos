@@ -30,31 +30,31 @@
         {
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges1 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges2 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            TituloDetalhes = new Label();
+            TituloDetalhesLbl = new Label();
             ClienteLbl = new Label();
             DataLbl = new Label();
             EnderecoLbl = new Label();
             itemCompradosGrid = new DataGridView();
-            TotalDoPedido = new Label();
-            totalLbl = new Label();
-            guna2Button1 = new Guna.UI2.WinForms.Guna2Button();
             itemCol = new DataGridViewTextBoxColumn();
             quantidadeCol = new DataGridViewTextBoxColumn();
             precoUnitarioCol = new DataGridViewTextBoxColumn();
             precoCol = new DataGridViewTextBoxColumn();
+            TotalDoPedido = new Label();
+            totalLbl = new Label();
+            guna2Button1 = new Guna.UI2.WinForms.Guna2Button();
             ((System.ComponentModel.ISupportInitialize)itemCompradosGrid).BeginInit();
             SuspendLayout();
             // 
-            // TituloDetalhes
+            // TituloDetalhesLbl
             // 
-            TituloDetalhes.AutoSize = true;
-            TituloDetalhes.Font = new Font("Yu Gothic", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            TituloDetalhes.ForeColor = Color.FromArgb(58, 52, 64);
-            TituloDetalhes.Location = new Point(12, 22);
-            TituloDetalhes.Name = "TituloDetalhes";
-            TituloDetalhes.Size = new Size(174, 19);
-            TituloDetalhes.TabIndex = 0;
-            TituloDetalhes.Text = "🛍️ Detalhes Do Pedido";
+            TituloDetalhesLbl.AutoSize = true;
+            TituloDetalhesLbl.Font = new Font("Yu Gothic", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            TituloDetalhesLbl.ForeColor = Color.FromArgb(58, 52, 64);
+            TituloDetalhesLbl.Location = new Point(12, 22);
+            TituloDetalhesLbl.Name = "TituloDetalhesLbl";
+            TituloDetalhesLbl.Size = new Size(174, 19);
+            TituloDetalhesLbl.TabIndex = 0;
+            TituloDetalhesLbl.Text = "🛍️ Detalhes Do Pedido";
             // 
             // ClienteLbl
             // 
@@ -97,6 +97,29 @@
             itemCompradosGrid.Size = new Size(452, 224);
             itemCompradosGrid.TabIndex = 4;
             // 
+            // itemCol
+            // 
+            itemCol.HeaderText = "Item";
+            itemCol.Name = "itemCol";
+            itemCol.Width = 120;
+            // 
+            // quantidadeCol
+            // 
+            quantidadeCol.HeaderText = "Quantidade";
+            quantidadeCol.Name = "quantidadeCol";
+            quantidadeCol.Width = 110;
+            // 
+            // precoUnitarioCol
+            // 
+            precoUnitarioCol.HeaderText = "Preço Unitário";
+            precoUnitarioCol.Name = "precoUnitarioCol";
+            precoUnitarioCol.Width = 120;
+            // 
+            // precoCol
+            // 
+            precoCol.HeaderText = "Total";
+            precoCol.Name = "precoCol";
+            // 
             // TotalDoPedido
             // 
             TotalDoPedido.AutoSize = true;
@@ -138,29 +161,6 @@
             guna2Button1.Text = "Fechar";
             guna2Button1.Click += guna2Button1_Click;
             // 
-            // itemCol
-            // 
-            itemCol.HeaderText = "Item";
-            itemCol.Name = "itemCol";
-            itemCol.Width = 120;
-            // 
-            // quantidadeCol
-            // 
-            quantidadeCol.HeaderText = "Quantidade";
-            quantidadeCol.Name = "quantidadeCol";
-            quantidadeCol.Width = 110;
-            // 
-            // precoUnitarioCol
-            // 
-            precoUnitarioCol.HeaderText = "Preço Unitário";
-            precoUnitarioCol.Name = "precoUnitarioCol";
-            precoUnitarioCol.Width = 120;
-            // 
-            // precoCol
-            // 
-            precoCol.HeaderText = "Total";
-            precoCol.Name = "precoCol";
-            // 
             // DetalhesPedidosForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -174,7 +174,7 @@
             Controls.Add(EnderecoLbl);
             Controls.Add(DataLbl);
             Controls.Add(ClienteLbl);
-            Controls.Add(TituloDetalhes);
+            Controls.Add(TituloDetalhesLbl);
             FormBorderStyle = FormBorderStyle.None;
             Name = "DetalhesPedidosForm";
             StartPosition = FormStartPosition.CenterScreen;
@@ -187,7 +187,7 @@
 
         #endregion
 
-        private Label TituloDetalhes;
+        private Label TituloDetalhesLbl;
         private Label ClienteLbl;
         private Label DataLbl;
         private Label EnderecoLbl;

@@ -48,6 +48,9 @@ namespace AtelieDosPontinhos.Desktop.Forms
             itemCompradosGrid.Rows.Clear();
             totalLbl.Text = "R$ 0,00";
 
+            // Reseta título padrão
+            TituloDetalhesLbl.Text = "🛍️ Detalhes Do Pedido";
+
             if (Pedido == null)
             {
                 ClienteLbl.Text = "Cliente: -";
@@ -55,6 +58,9 @@ namespace AtelieDosPontinhos.Desktop.Forms
                 EnderecoLbl.Text = "Endereço: -";
                 return;
             }
+
+            // Adiciona o Id do pedido ao título
+            TituloDetalhesLbl.Text = $"🛍️ Detalhes Do Pedido — #{Pedido.Id}";
 
             // Cliente: tenta buscar o nome do usuário via API. Se não encontrado, mostra o UserId
             var nomeCliente = Pedido.UserId;
