@@ -242,6 +242,10 @@ namespace AtelieDosPontinhos.Desktop.UserControls
             }
         }
 
+        //=================================================
+        // BOTÕES
+        //=================================================
+
         private void btnDetalhes_Click(object sender, EventArgs e)
         {
             if (gridPedidos.SelectedRows.Count == 0)
@@ -260,5 +264,7 @@ namespace AtelieDosPontinhos.Desktop.UserControls
             using var detalhesForm = new DetalhesPedidosForm(pedido);
             detalhesForm.ShowDialog();
         }
+
+        private async void btnAtualizar_Click(object sender, EventArgs e) => await CarregarDadosAsync();
     }
 }

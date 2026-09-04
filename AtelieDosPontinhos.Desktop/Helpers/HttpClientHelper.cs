@@ -233,6 +233,12 @@ namespace AtelieDosPontinhos.Desktop.Helpers
 
                 if (response.IsSuccessStatusCode)
                 {
+                    if (string.IsNullOrWhiteSpace(responseBody))
+                    {
+                        // API retornou sucesso sem conteúdo (204 No Content) -> retorno válido sem objeto
+                        return (true, default, string.Empty);
+                    }
+
                     var data = JsonSerializer.Deserialize<T>(responseBody, _jsonOptions);
                     return (true, data, string.Empty);
                 }

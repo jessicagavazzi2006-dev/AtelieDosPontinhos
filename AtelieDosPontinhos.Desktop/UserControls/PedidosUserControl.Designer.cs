@@ -36,29 +36,27 @@
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges6 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges7 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges8 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges9 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges10 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             gridPedidos = new DataGridView();
-            colId = new DataGridViewTextBoxColumn();
-            colName = new DataGridViewTextBoxColumn();
-            colDateTime = new DataGridViewTextBoxColumn();
-            colLocation = new DataGridViewTextBoxColumn();
-            colPay = new DataGridViewTextBoxColumn();
-            colTotal = new DataGridViewTextBoxColumn();
-            colStatus = new DataGridViewComboBoxColumn();
             pnlToolbar = new Panel();
             btnAtualizar = new Guna.UI2.WinForms.Guna2Button();
-            btnEditar = new Guna.UI2.WinForms.Guna2Button();
             btnDetalhes = new Guna.UI2.WinForms.Guna2Button();
             btnPesquisar = new Guna.UI2.WinForms.Guna2Button();
             txtPesquisa = new Guna.UI2.WinForms.Guna2TextBox();
             lblTitulo = new Label();
+            colStatus = new DataGridViewComboBoxColumn();
+            colTotal = new DataGridViewTextBoxColumn();
+            colPay = new DataGridViewTextBoxColumn();
+            colLocation = new DataGridViewTextBoxColumn();
+            colDateTime = new DataGridViewTextBoxColumn();
+            colName = new DataGridViewTextBoxColumn();
+            colId = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)gridPedidos).BeginInit();
             pnlToolbar.SuspendLayout();
             SuspendLayout();
             // 
             // gridPedidos
             // 
+            gridPedidos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             gridPedidos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             gridPedidos.Columns.AddRange(new DataGridViewColumn[] { colId, colName, colDateTime, colLocation, colPay, colTotal, colStatus });
             gridPedidos.Location = new Point(46, 141);
@@ -67,49 +65,9 @@
             gridPedidos.Size = new Size(713, 336);
             gridPedidos.TabIndex = 5;
             // 
-            // colId
-            // 
-            colId.FillWeight = 99.7183F;
-            colId.HeaderText = "ID";
-            colId.Name = "colId";
-            colId.Width = 70;
-            // 
-            // colName
-            // 
-            colName.HeaderText = "Comprador";
-            colName.Name = "colName";
-            // 
-            // colDateTime
-            // 
-            colDateTime.HeaderText = "Data";
-            colDateTime.Name = "colDateTime";
-            // 
-            // colLocation
-            // 
-            colLocation.HeaderText = "Localidade";
-            colLocation.Name = "colLocation";
-            // 
-            // colPay
-            // 
-            colPay.HeaderText = "Pagamento";
-            colPay.Name = "colPay";
-            // 
-            // colTotal
-            // 
-            colTotal.HeaderText = "Total";
-            colTotal.Name = "colTotal";
-            // 
-            // colStatus
-            // 
-            colStatus.HeaderText = "Status";
-            colStatus.Name = "colStatus";
-            colStatus.Resizable = DataGridViewTriState.True;
-            colStatus.SortMode = DataGridViewColumnSortMode.Automatic;
-            // 
             // pnlToolbar
             // 
             pnlToolbar.Controls.Add(btnAtualizar);
-            pnlToolbar.Controls.Add(btnEditar);
             pnlToolbar.Controls.Add(btnDetalhes);
             pnlToolbar.Controls.Add(btnPesquisar);
             pnlToolbar.Controls.Add(txtPesquisa);
@@ -129,45 +87,28 @@
             btnAtualizar.FillColor = Color.Goldenrod;
             btnAtualizar.Font = new Font("Segoe UI", 9F);
             btnAtualizar.ForeColor = Color.White;
-            btnAtualizar.Location = new Point(491, 14);
+            btnAtualizar.Location = new Point(590, 14);
             btnAtualizar.Name = "btnAtualizar";
             btnAtualizar.ShadowDecoration.CustomizableEdges = customizableEdges2;
             btnAtualizar.Size = new Size(89, 39);
             btnAtualizar.TabIndex = 1;
             btnAtualizar.Text = "🔃 Atualizar";
-            // 
-            // btnEditar
-            // 
-            btnEditar.BorderRadius = 5;
-            btnEditar.CustomizableEdges = customizableEdges3;
-            btnEditar.DisabledState.BorderColor = Color.DarkGray;
-            btnEditar.DisabledState.CustomBorderColor = Color.DarkGray;
-            btnEditar.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
-            btnEditar.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
-            btnEditar.FillColor = Color.RoyalBlue;
-            btnEditar.Font = new Font("Segoe UI", 9F);
-            btnEditar.ForeColor = Color.White;
-            btnEditar.Location = new Point(399, 13);
-            btnEditar.Name = "btnEditar";
-            btnEditar.ShadowDecoration.CustomizableEdges = customizableEdges4;
-            btnEditar.Size = new Size(86, 39);
-            btnEditar.TabIndex = 1;
-            btnEditar.Text = "✏️ Editar";
+            btnAtualizar.Click += btnAtualizar_Click;
             // 
             // btnDetalhes
             // 
             btnDetalhes.BorderRadius = 5;
-            btnDetalhes.CustomizableEdges = customizableEdges5;
+            btnDetalhes.CustomizableEdges = customizableEdges3;
             btnDetalhes.DisabledState.BorderColor = Color.DarkGray;
             btnDetalhes.DisabledState.CustomBorderColor = Color.DarkGray;
             btnDetalhes.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
             btnDetalhes.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
-            btnDetalhes.FillColor = Color.DarkOrange;
+            btnDetalhes.FillColor = Color.RoyalBlue;
             btnDetalhes.Font = new Font("Segoe UI", 9F);
             btnDetalhes.ForeColor = Color.White;
-            btnDetalhes.Location = new Point(586, 14);
+            btnDetalhes.Location = new Point(485, 14);
             btnDetalhes.Name = "btnDetalhes";
-            btnDetalhes.ShadowDecoration.CustomizableEdges = customizableEdges6;
+            btnDetalhes.ShadowDecoration.CustomizableEdges = customizableEdges4;
             btnDetalhes.Size = new Size(99, 39);
             btnDetalhes.TabIndex = 1;
             btnDetalhes.Text = "🔎 Detalhes";
@@ -176,7 +117,7 @@
             // btnPesquisar
             // 
             btnPesquisar.BorderRadius = 5;
-            btnPesquisar.CustomizableEdges = customizableEdges7;
+            btnPesquisar.CustomizableEdges = customizableEdges5;
             btnPesquisar.DisabledState.BorderColor = Color.DarkGray;
             btnPesquisar.DisabledState.CustomBorderColor = Color.DarkGray;
             btnPesquisar.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
@@ -186,7 +127,7 @@
             btnPesquisar.ForeColor = Color.White;
             btnPesquisar.Location = new Point(275, 13);
             btnPesquisar.Name = "btnPesquisar";
-            btnPesquisar.ShadowDecoration.CustomizableEdges = customizableEdges8;
+            btnPesquisar.ShadowDecoration.CustomizableEdges = customizableEdges6;
             btnPesquisar.Size = new Size(86, 39);
             btnPesquisar.TabIndex = 1;
             btnPesquisar.Text = "Pesquisar";
@@ -194,7 +135,7 @@
             // txtPesquisa
             // 
             txtPesquisa.BorderRadius = 5;
-            txtPesquisa.CustomizableEdges = customizableEdges9;
+            txtPesquisa.CustomizableEdges = customizableEdges7;
             txtPesquisa.DefaultText = "";
             txtPesquisa.DisabledState.BorderColor = Color.FromArgb(208, 208, 208);
             txtPesquisa.DisabledState.FillColor = Color.FromArgb(226, 226, 226);
@@ -207,7 +148,7 @@
             txtPesquisa.Name = "txtPesquisa";
             txtPesquisa.PlaceholderText = "🔎 Pesquisar por nome...";
             txtPesquisa.SelectedText = "";
-            txtPesquisa.ShadowDecoration.CustomizableEdges = customizableEdges10;
+            txtPesquisa.ShadowDecoration.CustomizableEdges = customizableEdges8;
             txtPesquisa.Size = new Size(257, 36);
             txtPesquisa.TabIndex = 0;
             // 
@@ -221,6 +162,50 @@
             lblTitulo.Size = new Size(225, 19);
             lblTitulo.TabIndex = 3;
             lblTitulo.Text = "🛍️ Gerenciamento de Pedidos";
+            // 
+            // colStatus
+            // 
+            colStatus.FillWeight = 97.6189F;
+            colStatus.HeaderText = "Status";
+            colStatus.Name = "colStatus";
+            colStatus.Resizable = DataGridViewTriState.True;
+            colStatus.SortMode = DataGridViewColumnSortMode.Automatic;
+            // 
+            // colTotal
+            // 
+            colTotal.FillWeight = 97.6189F;
+            colTotal.HeaderText = "Total";
+            colTotal.Name = "colTotal";
+            // 
+            // colPay
+            // 
+            colPay.FillWeight = 97.6189F;
+            colPay.HeaderText = "Pagamento";
+            colPay.Name = "colPay";
+            // 
+            // colLocation
+            // 
+            colLocation.FillWeight = 97.6189F;
+            colLocation.HeaderText = "Localidade";
+            colLocation.Name = "colLocation";
+            // 
+            // colDateTime
+            // 
+            colDateTime.FillWeight = 124.315414F;
+            colDateTime.HeaderText = "Data";
+            colDateTime.Name = "colDateTime";
+            // 
+            // colName
+            // 
+            colName.FillWeight = 136.654144F;
+            colName.HeaderText = "Comprador";
+            colName.Name = "colName";
+            // 
+            // colId
+            // 
+            colId.FillWeight = 48.27308F;
+            colId.HeaderText = "ID";
+            colId.Name = "colId";
             // 
             // PedidosUserControl
             // 
@@ -253,7 +238,6 @@
         private Guna.UI2.WinForms.Guna2TextBox txtPesquisa;
         private Label lblTitulo;
         private Guna.UI2.WinForms.Guna2Button guna2Button1;
-        private Guna.UI2.WinForms.Guna2Button btnEditar;
         private DataGridViewTextBoxColumn colId;
         private DataGridViewTextBoxColumn colName;
         private DataGridViewTextBoxColumn colDateTime;
