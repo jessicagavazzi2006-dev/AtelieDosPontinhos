@@ -67,7 +67,7 @@ namespace AtelieDosPontinhos.Desktop.UserControls
                 var usuarios = tarefaUsuarios.Result;
 
                 // cria dicionário para mapear userId -> userName
-                _userMap = usuarios.ToDictionary(u => u.Id, u => u.UserName);
+                _userMap = usuarios.ToDictionary(u => u.Id, u => u.UserName ?? string.Empty);
                 PopularGrid(_todosPedidos);
             }
             catch (Exception ex)
@@ -136,19 +136,30 @@ namespace AtelieDosPontinhos.Desktop.UserControls
 
         private void FiltrarPedidos()
         {
-            var termo = txtPesquisa.Text.Trim().ToLower();
+            var termo = txtPesquisa.Text.Trim();
             if (string.IsNullOrWhiteSpace(termo))
             {
                 PopularGrid(_todosPedidos);
                 return;
             }
-            var filtrados = _todosPedidos.Where(p => p.Id.ToString().Contains(termo, StringComparison.OrdinalIgnoreCase) ||
-                p.UserId.ToLower().Contains(termo, StringComparison.OrdinalIgnoreCase) ||
-                p.Cidade?.ToLower().Contains(termo, StringComparison.OrdinalIgnoreCase) == true ||
-                p.Estado?.ToLower().Contains(termo, StringComparison.OrdinalIgnoreCase) == true ||
-                p.MetodoPagamento?.ToLower().Contains(termo, StringComparison.OrdinalIgnoreCase) == true ||
-                NormalizeStatus(p.Status).ToLower().Contains(termo, StringComparison.OrdinalIgnoreCase)
+
+            var filtrados = _todosPedidos.Where(p =>
+                // busca por ID
+                p.Id.ToString().IndexOf(termo, StringComparison.OrdinalIgnoreCase) >= 0
+                // busca pelo nome do usuário através do dicionário userId -> userName
+                || (_userMap != null && _userMap.TryGetValue(p.UserId, out var nome) && !string.IsNullOrWhiteSpace(nome)
+                    && nome.IndexOf(termo, StringComparison.OrdinalIgnoreCase) >= 0)
+                // cidade / estado (partial, case-insensitive)
+                || (p.Cidade?.IndexOf(termo, StringComparison.OrdinalIgnoreCase) >= 0)
+                || (p.Estado?.IndexOf(termo, StringComparison.OrdinalIgnoreCase) >= 0)
+                // método de pagamento: compara tanto o valor bruto quanto o nome mapeado
+                || (p.MetodoPagamento?.IndexOf(termo, StringComparison.OrdinalIgnoreCase) >= 0)
+                || (MapPaymentName(p.MetodoPagamento).IndexOf(termo, StringComparison.OrdinalIgnoreCase) >= 0)
+                // status
+                || (NormalizeStatus(p.Status).IndexOf(termo, StringComparison.OrdinalIgnoreCase) >= 0)
             ).ToList();
+
+            PopularGrid(filtrados);
         }
 
         private void ConfigurarGrid()
@@ -284,6 +295,6 @@ namespace AtelieDosPontinhos.Desktop.UserControls
 
         private async void btnAtualizar_Click(object sender, EventArgs e) => await CarregarDadosAsync();
 
-        private void btnPesquisar_Click(object sender, EventArgs e) => FiltrarPedidos();
+        private void txtPesquisa_TextChanged(object sender, EventArgs e) => FiltrarPedidos();
     }
 }

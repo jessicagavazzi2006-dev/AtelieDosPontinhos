@@ -104,7 +104,6 @@ namespace AtelieDosPontinhos.Desktop.UserControls
             }
         }
 
-        private void btnPesquisar_Click(object sender, EventArgs e) => FiltrarGames();
         private void txtPesquisa_TextChanged(object sender, EventArgs e) => FiltrarGames();
 
         private void FiltrarGames()

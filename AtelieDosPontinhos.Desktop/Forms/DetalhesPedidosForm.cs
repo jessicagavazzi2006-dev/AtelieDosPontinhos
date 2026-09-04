@@ -29,8 +29,8 @@ namespace AtelieDosPontinhos.Desktop.Forms
         public DetalhesPedidosForm(Pedido pedido)
         {
             InitializeComponent();
+            itemCompradosGrid.AllowUserToAddRows = false;
             Pedido = pedido;
-            _ = PreencherDadosAsync();
         }
 
         private async void DetalhesPedidosForm_Load(object sender, EventArgs e)

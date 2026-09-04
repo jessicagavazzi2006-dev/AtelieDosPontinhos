@@ -82,7 +82,6 @@ namespace AtelieDosPontinhos.Desktop.UserControls
 
         }
         private void txtPesquisa_TextChanged(object sender, EventArgs e) => FiltrarUsuarios();
-        private void btnPesquisar_Click(object sender, EventArgs e) => FiltrarUsuarios();
 
         private void FiltrarUsuarios()
         {
