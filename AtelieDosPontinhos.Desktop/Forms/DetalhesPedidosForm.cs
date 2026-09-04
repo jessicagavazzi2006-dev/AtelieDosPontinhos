@@ -1,5 +1,6 @@
 ﻿using AtelieDosPontinhos.Desktop.DTOs;
 using AtelieDosPontinhos.Desktop.Services;
+using AtelieDosPontinhos.Desktop.Themes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -37,6 +38,8 @@ namespace AtelieDosPontinhos.Desktop.Forms
             if (DesignMode) return;
 
             await PreencherDadosAsync();
+
+            AtelieDosPontinhosTheme.AplicarEstiloGrid(itemCompradosGrid);
         }
 
         private async Task PreencherDadosAsync()
@@ -114,6 +117,11 @@ namespace AtelieDosPontinhos.Desktop.Forms
         {
             this.DialogResult = DialogResult.OK;
             this.Close();
+        }
+
+        private void EnderecoLbl_Click(object sender, EventArgs e)
+        {
+
         }
     }
 
