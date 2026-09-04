@@ -37,19 +37,19 @@
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges7 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges8 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             gridPedidos = new DataGridView();
+            colId = new DataGridViewTextBoxColumn();
+            colName = new DataGridViewTextBoxColumn();
+            colDateTime = new DataGridViewTextBoxColumn();
+            colLocation = new DataGridViewTextBoxColumn();
+            colPay = new DataGridViewTextBoxColumn();
+            colTotal = new DataGridViewTextBoxColumn();
+            colStatus = new DataGridViewComboBoxColumn();
             pnlToolbar = new Panel();
             btnAtualizar = new Guna.UI2.WinForms.Guna2Button();
             btnDetalhes = new Guna.UI2.WinForms.Guna2Button();
             btnPesquisar = new Guna.UI2.WinForms.Guna2Button();
             txtPesquisa = new Guna.UI2.WinForms.Guna2TextBox();
             lblTitulo = new Label();
-            colStatus = new DataGridViewComboBoxColumn();
-            colTotal = new DataGridViewTextBoxColumn();
-            colPay = new DataGridViewTextBoxColumn();
-            colLocation = new DataGridViewTextBoxColumn();
-            colDateTime = new DataGridViewTextBoxColumn();
-            colName = new DataGridViewTextBoxColumn();
-            colId = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)gridPedidos).BeginInit();
             pnlToolbar.SuspendLayout();
             SuspendLayout();
@@ -64,6 +64,50 @@
             gridPedidos.RowHeadersVisible = false;
             gridPedidos.Size = new Size(713, 336);
             gridPedidos.TabIndex = 5;
+            // 
+            // colId
+            // 
+            colId.FillWeight = 48.27308F;
+            colId.HeaderText = "ID";
+            colId.Name = "colId";
+            // 
+            // colName
+            // 
+            colName.FillWeight = 136.654144F;
+            colName.HeaderText = "Comprador";
+            colName.Name = "colName";
+            // 
+            // colDateTime
+            // 
+            colDateTime.FillWeight = 124.315414F;
+            colDateTime.HeaderText = "Data";
+            colDateTime.Name = "colDateTime";
+            // 
+            // colLocation
+            // 
+            colLocation.FillWeight = 97.6189F;
+            colLocation.HeaderText = "Localidade";
+            colLocation.Name = "colLocation";
+            // 
+            // colPay
+            // 
+            colPay.FillWeight = 97.6189F;
+            colPay.HeaderText = "Pagamento";
+            colPay.Name = "colPay";
+            // 
+            // colTotal
+            // 
+            colTotal.FillWeight = 97.6189F;
+            colTotal.HeaderText = "Total";
+            colTotal.Name = "colTotal";
+            // 
+            // colStatus
+            // 
+            colStatus.FillWeight = 97.6189F;
+            colStatus.HeaderText = "Status";
+            colStatus.Name = "colStatus";
+            colStatus.Resizable = DataGridViewTriState.True;
+            colStatus.SortMode = DataGridViewColumnSortMode.Automatic;
             // 
             // pnlToolbar
             // 
@@ -131,6 +175,7 @@
             btnPesquisar.Size = new Size(86, 39);
             btnPesquisar.TabIndex = 1;
             btnPesquisar.Text = "Pesquisar";
+            btnPesquisar.Click += btnPesquisar_Click;
             // 
             // txtPesquisa
             // 
@@ -162,50 +207,6 @@
             lblTitulo.Size = new Size(225, 19);
             lblTitulo.TabIndex = 3;
             lblTitulo.Text = "🛍️ Gerenciamento de Pedidos";
-            // 
-            // colStatus
-            // 
-            colStatus.FillWeight = 97.6189F;
-            colStatus.HeaderText = "Status";
-            colStatus.Name = "colStatus";
-            colStatus.Resizable = DataGridViewTriState.True;
-            colStatus.SortMode = DataGridViewColumnSortMode.Automatic;
-            // 
-            // colTotal
-            // 
-            colTotal.FillWeight = 97.6189F;
-            colTotal.HeaderText = "Total";
-            colTotal.Name = "colTotal";
-            // 
-            // colPay
-            // 
-            colPay.FillWeight = 97.6189F;
-            colPay.HeaderText = "Pagamento";
-            colPay.Name = "colPay";
-            // 
-            // colLocation
-            // 
-            colLocation.FillWeight = 97.6189F;
-            colLocation.HeaderText = "Localidade";
-            colLocation.Name = "colLocation";
-            // 
-            // colDateTime
-            // 
-            colDateTime.FillWeight = 124.315414F;
-            colDateTime.HeaderText = "Data";
-            colDateTime.Name = "colDateTime";
-            // 
-            // colName
-            // 
-            colName.FillWeight = 136.654144F;
-            colName.HeaderText = "Comprador";
-            colName.Name = "colName";
-            // 
-            // colId
-            // 
-            colId.FillWeight = 48.27308F;
-            colId.HeaderText = "ID";
-            colId.Name = "colId";
             // 
             // PedidosUserControl
             // 

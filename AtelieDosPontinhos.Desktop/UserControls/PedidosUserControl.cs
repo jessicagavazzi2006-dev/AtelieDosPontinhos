@@ -134,6 +134,23 @@ namespace AtelieDosPontinhos.Desktop.UserControls
             return metodo;
         }
 
+        private void FiltrarPedidos()
+        {
+            var termo = txtPesquisa.Text.Trim().ToLower();
+            if (string.IsNullOrWhiteSpace(termo))
+            {
+                PopularGrid(_todosPedidos);
+                return;
+            }
+            var filtrados = _todosPedidos.Where(p => p.Id.ToString().Contains(termo, StringComparison.OrdinalIgnoreCase) ||
+                p.UserId.ToLower().Contains(termo, StringComparison.OrdinalIgnoreCase) ||
+                p.Cidade?.ToLower().Contains(termo, StringComparison.OrdinalIgnoreCase) == true ||
+                p.Estado?.ToLower().Contains(termo, StringComparison.OrdinalIgnoreCase) == true ||
+                p.MetodoPagamento?.ToLower().Contains(termo, StringComparison.OrdinalIgnoreCase) == true ||
+                NormalizeStatus(p.Status).ToLower().Contains(termo, StringComparison.OrdinalIgnoreCase)
+            ).ToList();
+        }
+
         private void ConfigurarGrid()
         {
             gridPedidos.Rows.Clear();
@@ -266,5 +283,7 @@ namespace AtelieDosPontinhos.Desktop.UserControls
         }
 
         private async void btnAtualizar_Click(object sender, EventArgs e) => await CarregarDadosAsync();
+
+        private void btnPesquisar_Click(object sender, EventArgs e) => FiltrarPedidos();
     }
 }
