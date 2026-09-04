@@ -168,10 +168,10 @@
             txtPesquisa.HoverState.BorderColor = Color.FromArgb(94, 148, 255);
             txtPesquisa.Location = new Point(12, 14);
             txtPesquisa.Name = "txtPesquisa";
-            txtPesquisa.PlaceholderText = "🔎 Pesquisar pelo nome ou email...";
+            txtPesquisa.PlaceholderText = "🔎 Pesquisar pelo email, local, status...";
             txtPesquisa.SelectedText = "";
             txtPesquisa.ShadowDecoration.CustomizableEdges = customizableEdges6;
-            txtPesquisa.Size = new Size(246, 36);
+            txtPesquisa.Size = new Size(255, 36);
             txtPesquisa.TabIndex = 0;
             txtPesquisa.TextChanged += txtPesquisa_TextChanged;
             // 
