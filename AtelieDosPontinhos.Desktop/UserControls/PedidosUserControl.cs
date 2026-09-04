@@ -146,15 +146,19 @@ namespace AtelieDosPontinhos.Desktop.UserControls
             var filtrados = _todosPedidos.Where(p =>
                 // busca por ID
                 p.Id.ToString().IndexOf(termo, StringComparison.OrdinalIgnoreCase) >= 0
+
                 // busca pelo nome do usuário através do dicionário userId -> userName
                 || (_userMap != null && _userMap.TryGetValue(p.UserId, out var nome) && !string.IsNullOrWhiteSpace(nome)
                     && nome.IndexOf(termo, StringComparison.OrdinalIgnoreCase) >= 0)
+
                 // cidade / estado (partial, case-insensitive)
                 || (p.Cidade?.IndexOf(termo, StringComparison.OrdinalIgnoreCase) >= 0)
                 || (p.Estado?.IndexOf(termo, StringComparison.OrdinalIgnoreCase) >= 0)
+
                 // método de pagamento: compara tanto o valor bruto quanto o nome mapeado
                 || (p.MetodoPagamento?.IndexOf(termo, StringComparison.OrdinalIgnoreCase) >= 0)
                 || (MapPaymentName(p.MetodoPagamento).IndexOf(termo, StringComparison.OrdinalIgnoreCase) >= 0)
+
                 // status
                 || (NormalizeStatus(p.Status).IndexOf(termo, StringComparison.OrdinalIgnoreCase) >= 0)
             ).ToList();
@@ -173,6 +177,8 @@ namespace AtelieDosPontinhos.Desktop.UserControls
 
             gridPedidos.ReadOnly = false;
 
+
+            // cria colunas no DataGridView (ID, Comprador, Data, Localidade, Pagamento, Total, Status)
             gridPedidos.Columns.Add(new DataGridViewTextBoxColumn { Name = "colId", HeaderText = "ID", ReadOnly = true });
             gridPedidos.Columns.Add(new DataGridViewTextBoxColumn { Name = "colUser", HeaderText = "Comprador", ReadOnly = true });
             gridPedidos.Columns.Add(new DataGridViewTextBoxColumn { Name = "colData", HeaderText = "Data", ReadOnly = true });

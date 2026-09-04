@@ -28,20 +28,20 @@
         /// </summary>
         private void InitializeComponent()
         {
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges1 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges2 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges3 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges4 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             TituloDetalhes = new Label();
             ClienteLbl = new Label();
             DataLbl = new Label();
             EnderecoLbl = new Label();
             itemCompradosGrid = new DataGridView();
-            TotalDoPedido = new Label();
-            totalLbl = new Label();
-            guna2Button1 = new Guna.UI2.WinForms.Guna2Button();
             itemCol = new DataGridViewTextBoxColumn();
             quantidadeCol = new DataGridViewTextBoxColumn();
             precoUnitarioCol = new DataGridViewTextBoxColumn();
             precoCol = new DataGridViewTextBoxColumn();
+            TotalDoPedido = new Label();
+            totalLbl = new Label();
+            guna2Button1 = new Guna.UI2.WinForms.Guna2Button();
             ((System.ComponentModel.ISupportInitialize)itemCompradosGrid).BeginInit();
             SuspendLayout();
             // 
@@ -94,8 +94,32 @@
             itemCompradosGrid.Location = new Point(12, 140);
             itemCompradosGrid.Name = "itemCompradosGrid";
             itemCompradosGrid.RowHeadersVisible = false;
-            itemCompradosGrid.Size = new Size(452, 224);
+            itemCompradosGrid.Size = new Size(503, 224);
             itemCompradosGrid.TabIndex = 4;
+            // 
+            // itemCol
+            // 
+            itemCol.HeaderText = "Item";
+            itemCol.Name = "itemCol";
+            itemCol.Width = 120;
+            // 
+            // quantidadeCol
+            // 
+            quantidadeCol.HeaderText = "Quantidade";
+            quantidadeCol.Name = "quantidadeCol";
+            quantidadeCol.Width = 110;
+            // 
+            // precoUnitarioCol
+            // 
+            precoUnitarioCol.HeaderText = "Preço Unitário";
+            precoUnitarioCol.Name = "precoUnitarioCol";
+            precoUnitarioCol.Width = 140;
+            // 
+            // precoCol
+            // 
+            precoCol.HeaderText = "Total";
+            precoCol.Name = "precoCol";
+            precoCol.Width = 130;
             // 
             // TotalDoPedido
             // 
@@ -122,7 +146,7 @@
             // guna2Button1
             // 
             guna2Button1.BorderRadius = 10;
-            guna2Button1.CustomizableEdges = customizableEdges1;
+            guna2Button1.CustomizableEdges = customizableEdges3;
             guna2Button1.DisabledState.BorderColor = Color.DarkGray;
             guna2Button1.DisabledState.CustomBorderColor = Color.DarkGray;
             guna2Button1.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
@@ -130,43 +154,20 @@
             guna2Button1.FillColor = Color.DarkRed;
             guna2Button1.Font = new Font("Segoe UI", 9F);
             guna2Button1.ForeColor = Color.White;
-            guna2Button1.Location = new Point(369, 22);
+            guna2Button1.Location = new Point(420, 22);
             guna2Button1.Name = "guna2Button1";
-            guna2Button1.ShadowDecoration.CustomizableEdges = customizableEdges2;
+            guna2Button1.ShadowDecoration.CustomizableEdges = customizableEdges4;
             guna2Button1.Size = new Size(95, 41);
             guna2Button1.TabIndex = 7;
             guna2Button1.Text = "Fechar";
             guna2Button1.Click += guna2Button1_Click;
-            // 
-            // itemCol
-            // 
-            itemCol.HeaderText = "Item";
-            itemCol.Name = "itemCol";
-            itemCol.Width = 120;
-            // 
-            // quantidadeCol
-            // 
-            quantidadeCol.HeaderText = "Quantidade";
-            quantidadeCol.Name = "quantidadeCol";
-            quantidadeCol.Width = 110;
-            // 
-            // precoUnitarioCol
-            // 
-            precoUnitarioCol.HeaderText = "Preço Unitário";
-            precoUnitarioCol.Name = "precoUnitarioCol";
-            precoUnitarioCol.Width = 120;
-            // 
-            // precoCol
-            // 
-            precoCol.HeaderText = "Total";
-            precoCol.Name = "precoCol";
             // 
             // DetalhesPedidosForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
-            ClientSize = new Size(498, 418);
+            ClientSize = new Size(548, 418);
             Controls.Add(guna2Button1);
             Controls.Add(totalLbl);
             Controls.Add(TotalDoPedido);
