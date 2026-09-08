@@ -20,6 +20,9 @@ namespace AtelieDosPontinhos.Desktop.UserControls
         public DashboardUserControl()
         {
             InitializeComponent();
+
+            //painelDoCard.BackColor = Color.FromArgb(255, 230, 220);
+            //painelDoCard.Tag = "KeepBackColor";
         }
 
         private async void DashboardUserControl_Load(object sender, EventArgs e)
@@ -38,6 +41,9 @@ namespace AtelieDosPontinhos.Desktop.UserControls
 
             //aplica estilo no DataGridView(tabela)
             AtelieDosPontinhosTheme.AplicarEstiloGrid(gridUltimosProdutos);
+
+           
+
 
             await CarregarDadosAsync();
         }
@@ -106,6 +112,11 @@ namespace AtelieDosPontinhos.Desktop.UserControls
             cardCategorias.Visible = !carregando;
             lblUltimosProdutos.Visible = !carregando;
             gridUltimosProdutos.Visible = !carregando;
+        }
+
+        private void pnlCorCategorias_Paint(object sender, PaintEventArgs e)
+        {
+            
         }
     }
 }

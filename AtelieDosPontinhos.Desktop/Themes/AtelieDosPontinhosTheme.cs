@@ -1,14 +1,6 @@
-﻿// =============================================================================
-// AtelieDosPontinhos.Desktop - Themes/AppTheme.cs
-// =============================================================================
-//  CONCEITO: Design System / Theme Manager
-//
-// Centraliza TODAS as cores, fontes e estilos da aplicação baseados na 
-// paleta de tons pastéis (Lavanda e Creme).
-// =============================================================================
-
-using System.Drawing;
+﻿using System.Drawing;
 using System.Windows.Forms;
+using Guna.UI2.WinForms;
 
 namespace AtelieDosPontinhos.Desktop.Themes
 {
@@ -29,7 +21,7 @@ namespace AtelieDosPontinhos.Desktop.Themes
         public static Color BegeCreme => Color.FromArgb(243, 235, 225);        // #F3EBE1
 
         /// <summary>Roxo Primário — botões principais, paginação e seleção ativa</summary>
-        public static Color RoxoPrimario => Color.FromArgb(140, 107, 177);     // #8C6BB1
+        public static Color RoxoPrimario => Color.FromArgb(155, 113, 206);     // #9B71CE
 
         /// <summary>Roxo Variante — hover de botões primários</summary>
         public static Color RoxoVariante => Color.FromArgb(115, 85, 148);      // Tom mais escuro do roxo
@@ -96,8 +88,8 @@ namespace AtelieDosPontinhos.Desktop.Themes
         public static void AplicarEstiloGrid(DataGridView grid)
         {
             // Estilo geral (fundo branco, bordas sutis)
-            grid.BackgroundColor = Branco;
-            grid.BorderStyle = BorderStyle.None;
+            grid.BackgroundColor = CinzaFundo;
+            grid.BorderStyle = BorderStyle.Fixed3D;
             grid.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
             grid.GridColor = GridBorda;
 
@@ -133,6 +125,102 @@ namespace AtelieDosPontinhos.Desktop.Themes
             grid.AllowUserToAddRows = false;
             grid.AllowUserToDeleteRows = false;
             grid.AllowUserToResizeRows = false;
+        }
+
+        /// <summary>
+        /// Aplica estilos básicos de cores a um formulário e controles comuns (tema claro).
+        /// Use após InitializeComponent().
+        /// </summary>
+        public static void AplicarEstiloFormulario(Form form)
+        {
+            form.BackColor = CinzaFundo;
+            form.ForeColor = TextoPrincipal;
+
+            ApplyToControlRecursive(form);
+        }
+
+        // Aplica recursivamente estilos especificos por tipo (inclui Guna2 controls e Panel)
+        private static void ApplyToControlRecursive(Control control)
+        {
+            foreach (Control c in control.Controls)
+            {
+                bool keepBack = c?.Tag?.ToString() == "KeepBackColor";
+                switch (c)
+                {
+                    case Label lbl:
+                        lbl.ForeColor = TextoPrincipal;
+                        break;
+
+                    case Panel pnl:
+                        if (!keepBack) pnl.BackColor = Branco;
+                        break;
+
+
+
+                    case DataGridView dgv:
+                        AplicarEstiloGrid(dgv);
+                        break;
+
+                    //case Guna2DataGridView gDgv:
+                    //    // Guna2DataGridView herda bastante do DataGridView mas tem propriedades próprias
+                    //    AplicarEstiloGrid(gDgv);
+                    //    gDgv.BackgroundColor = Branco;
+                    //    gDgv.ThemeStyle.AlternatingRowsStyle.BackColor = GridLinhaImpar;
+                    //    gDgv.ThemeStyle.BackColor = GridLinhaPar;
+                    //    gDgv.ThemeStyle.HeaderStyle.BackColor = GridCabecalhoFundo;
+                    //    gDgv.ThemeStyle.HeaderStyle.ForeColor = GridCabecalhoTexto;
+                    //    gDgv.ThemeStyle.RowsStyle.BackColor = GridLinhaPar;
+                    //    gDgv.ThemeStyle.RowsStyle.ForeColor = TextoPrincipal;
+                    //    break;
+
+                    case Guna2Button gBtn:
+                        gBtn.FillColor = BotaoPrimarioFundo;
+                        gBtn.ForeColor = BotaoPrimarioTexto;
+                        gBtn.Font = FonteNormal;
+                        gBtn.BorderColor = Color.Transparent;
+                        gBtn.HoverState.FillColor = BotaoPrimarioHover;
+                        gBtn.HoverState.ForeColor = BotaoPrimarioTexto;
+                        gBtn.DisabledState.FillColor = Color.FromArgb(240, 240, 240);
+                        gBtn.DisabledState.ForeColor = TextoSecundario;
+                        break;
+
+                    case Guna2TextBox gTxt:
+                        gTxt.FillColor = Branco;
+                        gTxt.ForeColor = TextoPrincipal;
+                        gTxt.PlaceholderForeColor = TextoSecundario;
+                        gTxt.BorderColor = BordaSuave;
+                        gTxt.DisabledState.FillColor = Color.FromArgb(245, 245, 245);
+                        break;
+
+                    case Guna2ComboBox gCombo:
+                        gCombo.FillColor = Branco;
+                        gCombo.ForeColor = TextoPrincipal;
+                        gCombo.BorderColor = BordaSuave;
+                        gCombo.ItemHeight = 26;
+                        break;
+
+                    case Guna2CheckBox gChk:
+                        gChk.ForeColor = TextoPrincipal;
+                        gChk.CheckedState.BorderColor = RoxoPrimario;
+                        gChk.CheckedState.FillColor = RoxoPrimario;
+                        break;
+
+                    case Button btn:
+                        btn.BackColor = BotaoPrimarioFundo;
+                        btn.ForeColor = BotaoPrimarioTexto;
+                        btn.FlatStyle = FlatStyle.Flat;
+                        break;
+
+                    default:
+                        // Para outros controles, aplica cor de texto quando fizer sentido
+                        c.ForeColor = TextoPrincipal;
+                        break;
+                }
+
+                // Reaplicar para filhos
+                if (c.HasChildren)
+                    ApplyToControlRecursive(c);
+            }
         }
     }
 }

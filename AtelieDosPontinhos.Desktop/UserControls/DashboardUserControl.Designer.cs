@@ -185,6 +185,7 @@
             pnlCorCategorias.Name = "pnlCorCategorias";
             pnlCorCategorias.Size = new Size(234, 20);
             pnlCorCategorias.TabIndex = 1;
+            pnlCorCategorias.Paint += pnlCorCategorias_Paint;
             // 
             // lblUltimosProdutos
             // 
