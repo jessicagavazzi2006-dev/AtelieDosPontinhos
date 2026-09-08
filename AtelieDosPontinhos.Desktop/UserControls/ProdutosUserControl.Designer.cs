@@ -38,15 +38,12 @@
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges8 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges9 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges10 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges11 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges12 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             lblTitulo = new Label();
             pnlToolbar = new Panel();
             btnAtualizar = new Guna.UI2.WinForms.Guna2Button();
             btnExcluir = new Guna.UI2.WinForms.Guna2Button();
             btnEditar = new Guna.UI2.WinForms.Guna2Button();
             btnNovo = new Guna.UI2.WinForms.Guna2Button();
-            btnPesquisar = new Guna.UI2.WinForms.Guna2Button();
             txtPesquisa = new Guna.UI2.WinForms.Guna2TextBox();
             gridProdutos = new DataGridView();
             colId = new DataGridViewTextBoxColumn();
@@ -76,7 +73,6 @@
             pnlToolbar.Controls.Add(btnExcluir);
             pnlToolbar.Controls.Add(btnEditar);
             pnlToolbar.Controls.Add(btnNovo);
-            pnlToolbar.Controls.Add(btnPesquisar);
             pnlToolbar.Controls.Add(txtPesquisa);
             pnlToolbar.Location = new Point(45, 59);
             pnlToolbar.Name = "pnlToolbar";
@@ -159,29 +155,10 @@
             btnNovo.Text = "➕ Novo Produto";
             btnNovo.Click += btnNovo_Click;
             // 
-            // btnPesquisar
-            // 
-            btnPesquisar.BorderRadius = 5;
-            btnPesquisar.CustomizableEdges = customizableEdges9;
-            btnPesquisar.DisabledState.BorderColor = Color.DarkGray;
-            btnPesquisar.DisabledState.CustomBorderColor = Color.DarkGray;
-            btnPesquisar.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
-            btnPesquisar.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
-            btnPesquisar.FillColor = Color.FromArgb(177, 145, 217);
-            btnPesquisar.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnPesquisar.ForeColor = Color.White;
-            btnPesquisar.Location = new Point(223, 13);
-            btnPesquisar.Name = "btnPesquisar";
-            btnPesquisar.ShadowDecoration.CustomizableEdges = customizableEdges10;
-            btnPesquisar.Size = new Size(86, 39);
-            btnPesquisar.TabIndex = 1;
-            btnPesquisar.Text = "Pesquisar";
-            btnPesquisar.Click += btnPesquisar_Click;
-            // 
             // txtPesquisa
             // 
             txtPesquisa.BorderRadius = 5;
-            txtPesquisa.CustomizableEdges = customizableEdges11;
+            txtPesquisa.CustomizableEdges = customizableEdges9;
             txtPesquisa.DefaultText = "";
             txtPesquisa.DisabledState.BorderColor = Color.FromArgb(208, 208, 208);
             txtPesquisa.DisabledState.FillColor = Color.FromArgb(226, 226, 226);
@@ -192,10 +169,10 @@
             txtPesquisa.HoverState.BorderColor = Color.FromArgb(94, 148, 255);
             txtPesquisa.Location = new Point(12, 14);
             txtPesquisa.Name = "txtPesquisa";
-            txtPesquisa.PlaceholderText = "🔎 Pesquisar por nome...";
+            txtPesquisa.PlaceholderText = "🔎 Pesquisar pelo nome do produto...";
             txtPesquisa.SelectedText = "";
-            txtPesquisa.ShadowDecoration.CustomizableEdges = customizableEdges12;
-            txtPesquisa.Size = new Size(205, 36);
+            txtPesquisa.ShadowDecoration.CustomizableEdges = customizableEdges10;
+            txtPesquisa.Size = new Size(300, 36);
             txtPesquisa.TabIndex = 0;
             txtPesquisa.TextChanged += txtPesquisa_TextChanged;
             // 
@@ -275,7 +252,6 @@
         private Guna.UI2.WinForms.Guna2Button btnExcluir;
         private Guna.UI2.WinForms.Guna2Button btnEditar;
         private Guna.UI2.WinForms.Guna2Button btnNovo;
-        private Guna.UI2.WinForms.Guna2Button btnPesquisar;
         private Guna.UI2.WinForms.Guna2TextBox txtPesquisa;
         private DataGridView gridProdutos;
         private DataGridViewTextBoxColumn colId;

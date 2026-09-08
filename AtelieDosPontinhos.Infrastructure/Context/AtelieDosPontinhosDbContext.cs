@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace AtelieDosPontinhos.Infrastructure.Context
 {
-    public class AtelieDosPontinhosDbContext : IdentityDbContext<ApplicationUser>
+    public class AtelieDosPontinhosDbContext : IdentityDbContext
     {
         public AtelieDosPontinhosDbContext(DbContextOptions<AtelieDosPontinhosDbContext> options) : base(options)
         {
@@ -36,20 +36,20 @@ namespace AtelieDosPontinhos.Infrastructure.Context
                 b.HasKey(u => u.Id);
             });
 
-            modelBuilder.Entity<Endereco>(eb =>
-            {
-                eb.HasKey(e => e.Id);
-                eb.Property(e => e.CEP).HasMaxLength(20);
-                eb.HasOne<ApplicationUser>()
-                  .WithMany()
-                  .HasForeignKey(e => e.UserId)
-                  .OnDelete(DeleteBehavior.Cascade);
-            });
+            //modelBuilder.Entity<Endereco>(eb =>
+            //{
+            //    eb.HasKey(e => e.Id);
+            //    eb.Property(e => e.CEP).HasMaxLength(20);
+            //    eb.HasOne<ApplicationUser>()
+            //      .WithMany()
+            //      .HasForeignKey(e => e.UserId)
+            //      .OnDelete(DeleteBehavior.Cascade);
+            //});
 
-            // 🖼️ CONFIGURAÇÃO DA IMAGEM LONGA EM BASE64:
-            modelBuilder.Entity<Product>()
-                .Property(p => p.CoverImageUrl)
-                .HasColumnType("nvarchar(max)");
+            //// 🖼️ CONFIGURAÇÃO DA IMAGEM LONGA EM BASE64:
+            //modelBuilder.Entity<Product>()
+            //    .Property(p => p.CoverImageUrl)
+            //    .HasColumnType("nvarchar(max)");
 
             // Aplicar configurações específicas de entidade
             modelBuilder.ApplyConfiguration(new ProductConfiguration());

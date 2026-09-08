@@ -28,24 +28,21 @@
         /// </summary>
         private void InitializeComponent()
         {
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges13 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges14 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges15 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges16 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges17 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges18 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges19 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges20 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges21 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges22 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges23 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges24 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges1 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges2 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges3 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges4 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges5 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges6 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges7 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges8 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges9 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges10 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             pnlToolbar = new Panel();
             btnAtualizar = new Guna.UI2.WinForms.Guna2Button();
             btnExcluir = new Guna.UI2.WinForms.Guna2Button();
             btnEditar = new Guna.UI2.WinForms.Guna2Button();
             btnNovo = new Guna.UI2.WinForms.Guna2Button();
-            btnPesquisar = new Guna.UI2.WinForms.Guna2Button();
             txtPesquisa = new Guna.UI2.WinForms.Guna2TextBox();
             lblTitulo = new Label();
             gridUsuarios = new DataGridView();
@@ -63,7 +60,6 @@
             pnlToolbar.Controls.Add(btnExcluir);
             pnlToolbar.Controls.Add(btnEditar);
             pnlToolbar.Controls.Add(btnNovo);
-            pnlToolbar.Controls.Add(btnPesquisar);
             pnlToolbar.Controls.Add(txtPesquisa);
             pnlToolbar.Location = new Point(46, 57);
             pnlToolbar.Name = "pnlToolbar";
@@ -73,7 +69,7 @@
             // btnAtualizar
             // 
             btnAtualizar.BorderRadius = 5;
-            btnAtualizar.CustomizableEdges = customizableEdges13;
+            btnAtualizar.CustomizableEdges = customizableEdges1;
             btnAtualizar.DisabledState.BorderColor = Color.DarkGray;
             btnAtualizar.DisabledState.CustomBorderColor = Color.DarkGray;
             btnAtualizar.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
@@ -83,7 +79,7 @@
             btnAtualizar.ForeColor = Color.White;
             btnAtualizar.Location = new Point(604, 13);
             btnAtualizar.Name = "btnAtualizar";
-            btnAtualizar.ShadowDecoration.CustomizableEdges = customizableEdges14;
+            btnAtualizar.ShadowDecoration.CustomizableEdges = customizableEdges2;
             btnAtualizar.Size = new Size(89, 39);
             btnAtualizar.TabIndex = 1;
             btnAtualizar.Text = "🔃 Atualizar";
@@ -92,7 +88,7 @@
             // btnExcluir
             // 
             btnExcluir.BorderRadius = 5;
-            btnExcluir.CustomizableEdges = customizableEdges15;
+            btnExcluir.CustomizableEdges = customizableEdges3;
             btnExcluir.DisabledState.BorderColor = Color.DarkGray;
             btnExcluir.DisabledState.CustomBorderColor = Color.DarkGray;
             btnExcluir.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
@@ -102,7 +98,7 @@
             btnExcluir.ForeColor = Color.White;
             btnExcluir.Location = new Point(512, 13);
             btnExcluir.Name = "btnExcluir";
-            btnExcluir.ShadowDecoration.CustomizableEdges = customizableEdges16;
+            btnExcluir.ShadowDecoration.CustomizableEdges = customizableEdges4;
             btnExcluir.Size = new Size(86, 39);
             btnExcluir.TabIndex = 1;
             btnExcluir.Text = "🗑️ Excluir";
@@ -111,7 +107,7 @@
             // btnEditar
             // 
             btnEditar.BorderRadius = 5;
-            btnEditar.CustomizableEdges = customizableEdges17;
+            btnEditar.CustomizableEdges = customizableEdges5;
             btnEditar.DisabledState.BorderColor = Color.DarkGray;
             btnEditar.DisabledState.CustomBorderColor = Color.DarkGray;
             btnEditar.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
@@ -121,7 +117,7 @@
             btnEditar.ForeColor = Color.White;
             btnEditar.Location = new Point(420, 13);
             btnEditar.Name = "btnEditar";
-            btnEditar.ShadowDecoration.CustomizableEdges = customizableEdges18;
+            btnEditar.ShadowDecoration.CustomizableEdges = customizableEdges6;
             btnEditar.Size = new Size(86, 39);
             btnEditar.TabIndex = 1;
             btnEditar.Text = "✏️ Editar";
@@ -130,7 +126,7 @@
             // btnNovo
             // 
             btnNovo.BorderRadius = 5;
-            btnNovo.CustomizableEdges = customizableEdges19;
+            btnNovo.CustomizableEdges = customizableEdges7;
             btnNovo.DisabledState.BorderColor = Color.DarkGray;
             btnNovo.DisabledState.CustomBorderColor = Color.DarkGray;
             btnNovo.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
@@ -140,35 +136,16 @@
             btnNovo.ForeColor = Color.White;
             btnNovo.Location = new Point(328, 13);
             btnNovo.Name = "btnNovo";
-            btnNovo.ShadowDecoration.CustomizableEdges = customizableEdges20;
+            btnNovo.ShadowDecoration.CustomizableEdges = customizableEdges8;
             btnNovo.Size = new Size(86, 39);
             btnNovo.TabIndex = 1;
             btnNovo.Text = "➕ Novo Usuário";
             btnNovo.Click += btnNovo_Click;
             // 
-            // btnPesquisar
-            // 
-            btnPesquisar.BorderRadius = 5;
-            btnPesquisar.CustomizableEdges = customizableEdges21;
-            btnPesquisar.DisabledState.BorderColor = Color.DarkGray;
-            btnPesquisar.DisabledState.CustomBorderColor = Color.DarkGray;
-            btnPesquisar.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
-            btnPesquisar.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
-            btnPesquisar.FillColor = Color.FromArgb(177, 145, 217);
-            btnPesquisar.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnPesquisar.ForeColor = Color.White;
-            btnPesquisar.Location = new Point(223, 13);
-            btnPesquisar.Name = "btnPesquisar";
-            btnPesquisar.ShadowDecoration.CustomizableEdges = customizableEdges22;
-            btnPesquisar.Size = new Size(86, 39);
-            btnPesquisar.TabIndex = 1;
-            btnPesquisar.Text = "Pesquisar";
-            btnPesquisar.Click += btnPesquisar_Click;
-            // 
             // txtPesquisa
             // 
             txtPesquisa.BorderRadius = 5;
-            txtPesquisa.CustomizableEdges = customizableEdges23;
+            txtPesquisa.CustomizableEdges = customizableEdges9;
             txtPesquisa.DefaultText = "";
             txtPesquisa.DisabledState.BorderColor = Color.FromArgb(208, 208, 208);
             txtPesquisa.DisabledState.FillColor = Color.FromArgb(226, 226, 226);
@@ -179,10 +156,10 @@
             txtPesquisa.HoverState.BorderColor = Color.FromArgb(94, 148, 255);
             txtPesquisa.Location = new Point(12, 14);
             txtPesquisa.Name = "txtPesquisa";
-            txtPesquisa.PlaceholderText = "🔎 Pesquisar por nome ou email...";
+            txtPesquisa.PlaceholderText = "🔎 Pesquisar pelo nome ou email...";
             txtPesquisa.SelectedText = "";
-            txtPesquisa.ShadowDecoration.CustomizableEdges = customizableEdges24;
-            txtPesquisa.Size = new Size(205, 36);
+            txtPesquisa.ShadowDecoration.CustomizableEdges = customizableEdges10;
+            txtPesquisa.Size = new Size(310, 36);
             txtPesquisa.TabIndex = 0;
             txtPesquisa.TextChanged += txtPesquisa_TextChanged;
             // 
@@ -252,7 +229,6 @@
         private Guna.UI2.WinForms.Guna2Button btnExcluir;
         private Guna.UI2.WinForms.Guna2Button btnEditar;
         private Guna.UI2.WinForms.Guna2Button btnNovo;
-        private Guna.UI2.WinForms.Guna2Button btnPesquisar;
         private Guna.UI2.WinForms.Guna2TextBox txtPesquisa;
         private Label lblTitulo;
         private DataGridView gridUsuarios;

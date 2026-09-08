@@ -67,7 +67,7 @@ namespace AtelieDosPontinhos.Desktop.UserControls
                 var usuarios = tarefaUsuarios.Result;
 
                 // cria dicionário para mapear userId -> userName
-                _userMap = usuarios.ToDictionary(u => u.Id, u => u.UserName);
+                _userMap = usuarios.ToDictionary(u => u.Id, u => u.UserName ?? string.Empty);
                 PopularGrid(_todosPedidos);
             }
             catch (Exception ex)
@@ -134,6 +134,38 @@ namespace AtelieDosPontinhos.Desktop.UserControls
             return metodo;
         }
 
+        private void FiltrarPedidos()
+        {
+            var termo = txtPesquisa.Text.Trim();
+            if (string.IsNullOrWhiteSpace(termo))
+            {
+                PopularGrid(_todosPedidos);
+                return;
+            }
+
+            var filtrados = _todosPedidos.Where(p =>
+                // busca por ID
+                p.Id.ToString().IndexOf(termo, StringComparison.OrdinalIgnoreCase) >= 0
+
+                // busca pelo nome do usuário através do dicionário userId -> userName
+                || (_userMap != null && _userMap.TryGetValue(p.UserId, out var nome) && !string.IsNullOrWhiteSpace(nome)
+                    && nome.IndexOf(termo, StringComparison.OrdinalIgnoreCase) >= 0)
+
+                // cidade / estado (partial, case-insensitive)
+                || (p.Cidade?.IndexOf(termo, StringComparison.OrdinalIgnoreCase) >= 0)
+                || (p.Estado?.IndexOf(termo, StringComparison.OrdinalIgnoreCase) >= 0)
+
+                // método de pagamento: compara tanto o valor bruto quanto o nome mapeado
+                || (p.MetodoPagamento?.IndexOf(termo, StringComparison.OrdinalIgnoreCase) >= 0)
+                || (MapPaymentName(p.MetodoPagamento).IndexOf(termo, StringComparison.OrdinalIgnoreCase) >= 0)
+
+                // status
+                || (NormalizeStatus(p.Status).IndexOf(termo, StringComparison.OrdinalIgnoreCase) >= 0)
+            ).ToList();
+
+            PopularGrid(filtrados);
+        }
+
         private void ConfigurarGrid()
         {
             gridPedidos.Rows.Clear();
@@ -145,6 +177,8 @@ namespace AtelieDosPontinhos.Desktop.UserControls
 
             gridPedidos.ReadOnly = false;
 
+
+            // cria colunas no DataGridView (ID, Comprador, Data, Localidade, Pagamento, Total, Status)
             gridPedidos.Columns.Add(new DataGridViewTextBoxColumn { Name = "colId", HeaderText = "ID", ReadOnly = true });
             gridPedidos.Columns.Add(new DataGridViewTextBoxColumn { Name = "colUser", HeaderText = "Comprador", ReadOnly = true });
             gridPedidos.Columns.Add(new DataGridViewTextBoxColumn { Name = "colData", HeaderText = "Data", ReadOnly = true });
@@ -242,6 +276,10 @@ namespace AtelieDosPontinhos.Desktop.UserControls
             }
         }
 
+        //=================================================
+        // BOTÕES
+        //=================================================
+
         private void btnDetalhes_Click(object sender, EventArgs e)
         {
             if (gridPedidos.SelectedRows.Count == 0)
@@ -260,5 +298,9 @@ namespace AtelieDosPontinhos.Desktop.UserControls
             using var detalhesForm = new DetalhesPedidosForm(pedido);
             detalhesForm.ShowDialog();
         }
+
+        private async void btnAtualizar_Click(object sender, EventArgs e) => await CarregarDadosAsync();
+
+        private void txtPesquisa_TextChanged(object sender, EventArgs e) => FiltrarPedidos();
     }
 }
