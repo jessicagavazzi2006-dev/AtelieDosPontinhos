@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 #region SERVICES
-
 // Controllers (API) + Configuração para ignorar ciclos de serialização JSON
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -39,6 +38,12 @@ builder.Services.AddDbContext<AtelieDosPontinhosDbContext>(options =>
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<AtelieDosPontinhosDbContext>()
     .AddDefaultTokenProviders();
+
+// 🔥 Permite espaços e acentuação no nome de usuário/perfil
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+ ";
+});
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
@@ -73,20 +78,16 @@ builder.Services.AddAuthorization();
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 #endregion
 
 #region DEPENDENCY INJECTION
-
 builder.Services.AddScoped<AtelieDosPontinhos.Application.Interfaces.IProductService, AtelieDosPontinhos.Application.Services.ProductServices>();
 builder.Services.AddScoped<AtelieDosPontinhos.Domain.Interfaces.IProductRepository, AtelieDosPontinhos.Infrastructure.Repositories.ProductRepository>();
-
 #endregion
 
 var app = builder.Build();
 
 #region PIPELINE
-
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -108,11 +109,9 @@ app.UseAuthorization();
 
 // Mapeia os endpoints de API para controllers
 app.MapControllers();
-
 #endregion
 
 #region SEED DATA
-
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -126,17 +125,14 @@ using (var scope = app.Services.CreateScope())
         logger.LogWarning(ex, "Falha ao executar SeedData na API durante inicialização. Ignorando.");
     }
 }
-
 #endregion
 
 #region DEBUG DB CONNECTION
-
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AtelieDosPontinhosDbContext>();
     Console.WriteLine("DB CONECTADO: " + db.Database.GetConnectionString());
 }
-
 #endregion
 
 app.Run();

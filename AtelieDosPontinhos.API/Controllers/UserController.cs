@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AtelieDosPontinhos.Domain.Entities;
+using AtelieDosPontinhos.Infrastructure.Context;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,15 +16,18 @@ namespace AtelieDosPontinhos.API.Controllers
     [Authorize] // Requer autenticação por padrão
     public class UserController : ControllerBase
     {
-        // Dependências: UserManager para usuários e RoleManager para perfis/roles
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly AtelieDosPontinhosDbContext _context; // Injetado para salvar Endereço, Pagamento e Nome
 
-        // Injetar UserManager e RoleManager
-        public UserController(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        public UserController(
+            UserManager<IdentityUser> userManager,
+            RoleManager<IdentityRole> roleManager,
+            AtelieDosPontinhosDbContext context)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _context = context;
         }
 
         // 1. LISTAR TODOS OS USUÁRIOS
@@ -125,7 +130,6 @@ namespace AtelieDosPontinhos.API.Controllers
                 }
             }
 
-            // Atualiza roles
             var currentRoles = await _userManager.GetRolesAsync(user);
             if (!string.IsNullOrWhiteSpace(dto.Role) && !currentRoles.Contains(dto.Role))
             {
@@ -140,17 +144,15 @@ namespace AtelieDosPontinhos.API.Controllers
             return Ok(new { id = user.Id, email = user.Email, userName = user.UserName, roles = roles });
         }
 
-        // 5. ATUALIZAR O PERFIL DO PRÓPRIO USUÁRIO LOGADO
-        [HttpPut("update-profile")]
-        public async Task<IActionResult> UpdateProfile([FromBody] AtelieDosPontinhos.Application.DTOs.UpdateProfileDto dto)
+        // 5. OBTER O PERFIL DO PRÓPRIO USUÁRIO LOGADO (Para preencher a tela)
+        [HttpGet("profile")]
+        public async Task<IActionResult> GetProfile()
         {
-            if (dto == null) return BadRequest(new { message = "Dados inválidos." });
-
             var userId = _userManager.GetUserId(User);
             if (string.IsNullOrEmpty(userId))
             {
                 var userEmailClaim = User.FindFirst(ClaimTypes.Email)?.Value
-                                     ?? User.Identity?.Name;
+                                   ?? User.Identity?.Name;
 
                 if (!string.IsNullOrEmpty(userEmailClaim))
                 {
@@ -165,30 +167,57 @@ namespace AtelieDosPontinhos.API.Controllers
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null) return NotFound(new { message = "Usuário não encontrado." });
 
-            // Atualização dos campos de perfil enviados pela UI
-            if (!string.IsNullOrWhiteSpace(dto.Nome))
+            var endereco = await _context.Enderecos.FirstOrDefaultAsync(e => e.UserId == userId);
+            var pagamento = await _context.Pagamentos.FirstOrDefaultAsync(p => p.UserId == userId);
+
+            return Ok(new
             {
-                user.UserName = dto.Nome;
+                nome = endereco?.NomeCompleto ?? user.UserName,
+                email = user.Email,
+                telefone = user.PhoneNumber,
+                cep = endereco?.CEP,
+                cidade = endereco?.Cidade,
+                estado = endereco?.Estado,
+                numero = endereco?.Numero.ToString(),
+                //complemento = endereco?.Complemento,
+                referencial = endereco?.Referencia,
+                metodo = pagamento?.Metodo.ToString(),
+                titular = "",
+                cartao = ""
+            });
+        }
+
+        // 6. ATUALIZAR O PERFIL DO PRÓPRIO USUÁRIO LOGADO
+        [HttpPut("update-profile")]
+        public async Task<IActionResult> UpdateProfile([FromBody] AtelieDosPontinhos.Application.DTOs.UpdateProfileDto dto)
+        {
+            if (dto == null) return BadRequest(new { message = "Dados inválidos." });
+
+            var userId = _userManager.GetUserId(User);
+            if (string.IsNullOrEmpty(userId))
+            {
+                var userEmailClaim = User.FindFirst(ClaimTypes.Email)?.Value
+                                   ?? User.Identity?.Name;
+
+                if (!string.IsNullOrEmpty(userEmailClaim))
+                {
+                    var userByEmail = await _userManager.FindByEmailAsync(userEmailClaim);
+                    if (userByEmail != null) userId = userByEmail.Id;
+                }
             }
+
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized(new { message = "Usuário não autenticado." });
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null) return NotFound(new { message = "Usuário não encontrado." });
 
             if (!string.IsNullOrWhiteSpace(dto.Telefone))
             {
                 user.PhoneNumber = dto.Telefone;
             }
 
-            // Nota: Se a sua classe de usuário (ApplicationUser) possuir as propriedades abaixo,
-            // descomente as linhas correspondentes para salvá-las no banco de dados:
-
-            // user.CEP = dto.Cep;
-            // user.Cidade = dto.Cidade;
-            // user.Estado = dto.Estado;
-            // user.Numero = dto.Numero;
-            // user.Complemento = dto.Complemento;
-            // user.Referencia = dto.Referencia;
-            // user.Metodo = dto.Metodo;
-            // user.Titular = dto.Titular;
-            // user.Cartao = dto.Cartao;
-
+            // O UserName NÃO é alterado aqui para preservar o login do Identity.
             var result = await _userManager.UpdateAsync(user);
             if (!result.Succeeded)
             {
@@ -196,10 +225,47 @@ namespace AtelieDosPontinhos.API.Controllers
                 return BadRequest(new { message = $"Erro ao atualizar perfil: {errors}" });
             }
 
+            // ATUALIZAÇÃO DO ENDEREÇO (Salvando também o Nome Completo do usuário para exibição)
+            var endereco = await _context.Enderecos.FirstOrDefaultAsync(e => e.UserId == userId);
+            if (endereco == null)
+            {
+                endereco = new Endereco { UserId = userId };
+                _context.Enderecos.Add(endereco);
+            }
+
+            if (!string.IsNullOrWhiteSpace(dto.Nome))
+            {
+                endereco.NomeCompleto = dto.Nome;
+            }
+
+            endereco.CEP = dto.Cep;
+            endereco.Cidade = dto.Cidade;
+            endereco.Estado = dto.Estado;
+
+            if (int.TryParse(dto.Numero, out int numParsed))
+            {
+                endereco.Numero = numParsed;
+            }
+
+            // ATUALIZAÇÃO DO PAGAMENTO
+            var pagamento = await _context.Pagamentos.FirstOrDefaultAsync(p => p.UserId == userId);
+            if (pagamento == null)
+            {
+                pagamento = new Pagamento { UserId = userId };
+                _context.Pagamentos.Add(pagamento);
+            }
+
+            if (Enum.TryParse<AtelieDosPontinhos.Domain.Enums.PaymentMethod>(dto.Metodo, true, out var metodoParsed))
+            {
+                pagamento.Metodo = metodoParsed;
+            }
+
+            await _context.SaveChangesAsync();
+
             return Ok(new { message = "Perfil atualizado com sucesso!" });
         }
 
-        // 6. REMOVER USUÁRIO
+        // 7. REMOVER USUÁRIO
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(string id)
         {
@@ -215,10 +281,6 @@ namespace AtelieDosPontinhos.API.Controllers
             return NoContent();
         }
 
-        /// <summary>
-        /// Retorna a lista de perfis disponíveis.
-        /// GET /api/user/perfis
-        /// </summary>
         [HttpGet("perfis")]
         public async Task<ActionResult<IEnumerable<string>>> GetPerfis()
         {

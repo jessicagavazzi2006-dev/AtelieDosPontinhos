@@ -28,13 +28,21 @@ namespace AtelieDosPontinhos.Infrastructure.Context
         {
             base.OnModelCreating(modelBuilder);
 
+
             // Mapeamento explícito para evitar conflitos de herança com o IdentityUser
          
-            modelBuilder.Entity<ApplicationUser>(b =>
-            {
-                b.ToTable("AspNetUsers");
-                b.HasKey(u => u.Id);
-            });
+            //modelBuilder.Entity<ApplicationUser>(b =>
+            //{
+            //    b.ToTable("AspNetUsers");
+            //    b.HasKey(u => u.Id);
+            //});
+
+            //// Mapeamento explícito para evitar conflitos de herança com o IdentityUser
+            //modelBuilder.Entity<ApplicationUser>(b =>
+            //{
+            //    b.ToTable("AspNetUsers");
+            //});
+
 
             //modelBuilder.Entity<Endereco>(eb =>
             //{
