@@ -31,7 +31,7 @@ namespace AtelieDosPontinhos.Desktop.Forms
             // assina mudanças de tema para reagir enquanto o form estiver aberto
             ThemeManager.ThemeChanged += OnThemeChanged;
 
-            this.FormClosing += (s, e) => FormAnimator.AnimateCloseOverlay(this, e, closeWithSlide: true, durationMs: 120, offset: 40);
+            //this.FormClosing += (s, e) => FormAnimator.AnimateCloseOverlay(this, e, closeWithSlide: true, durationMs: 120, offset: 40);
 
         }
 
@@ -43,7 +43,7 @@ namespace AtelieDosPontinhos.Desktop.Forms
             Pedido = pedido;
             ThemeManager.ApplyTheme(this, animate: false);
             ThemeManager.ThemeChanged += OnThemeChanged;
-            this.FormClosing += (s, e) => FormAnimator.AnimateCloseOverlay(this, e, closeWithSlide: true, durationMs: 120, offset: 40);
+            //this.FormClosing += (s, e) => FormAnimator.AnimateCloseOverlay(this, e, closeWithSlide: true, durationMs: 120, offset: 40);
         }
 
         private async void DetalhesPedidosForm_Load(object sender, EventArgs e)
@@ -134,8 +134,8 @@ namespace AtelieDosPontinhos.Desktop.Forms
 
         private void guna2Button1_Click(object sender, EventArgs e)
         {
-
-            this.Close();
+            
+            FormAnimator.CloseWithFade(this, durationMs: 300);
 
             //this.Hide();
         }
