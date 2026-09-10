@@ -20,5 +20,6 @@ namespace AtelieDosPontinhos.Domain.Entities
         // Navegação (opcional)
         [ForeignKey(nameof(UserId))]
         public IdentityUser? User { get; set; }
+        //public string Complemento { get; set; }
     }
 }

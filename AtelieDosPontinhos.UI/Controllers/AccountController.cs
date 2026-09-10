@@ -25,22 +25,6 @@ namespace AtelieDosPontinhos.UI.Controllers
             _httpClientFactory = httpClientFactory;
         }
 
-        private void InjetarCookieAutenticacao(HttpClient client)
-        {
-            var apiCookie = HttpContext.Session.GetString("ApiCookie");
-
-            if (string.IsNullOrEmpty(apiCookie))
-            {
-                apiCookie = User.FindFirst("ApiCookie")?.Value;
-            }
-
-            if (!string.IsNullOrEmpty(apiCookie))
-            {
-                client.DefaultRequestHeaders.Remove("Cookie");
-                client.DefaultRequestHeaders.Add("Cookie", apiCookie);
-            }
-        }
-
         [HttpGet]
         public IActionResult Login()
         {
@@ -75,24 +59,20 @@ namespace AtelieDosPontinhos.UI.Controllers
 
                     if (loginResult != null && loginResult.Succeeded)
                     {
-                        // 🔐 Extrai o cookie da resposta Set-Cookie
                         var apiCookie = response.Headers.FirstOrDefault(h => h.Key == "Set-Cookie").Value?.FirstOrDefault() ?? string.Empty;
 
-                        // Se não houver Set-Cookie no header padrão, tenta extrair via TryGetValues
                         if (string.IsNullOrEmpty(apiCookie) && response.Headers.TryGetValues("set-cookie", out var cookieValues))
                         {
                             apiCookie = string.Join("; ", cookieValues);
                         }
 
-                        // Cria as claims do usuário autenticado
                         var claims = new List<Claim>
                         {
                             new Claim(ClaimTypes.Email, loginResult.Email),
                             new Claim(ClaimTypes.Name, loginResult.Email),
-                            new Claim("ApiCookie", apiCookie)  // Armazena o cookie na Claim
+                            new Claim("ApiCookie", apiCookie)
                         };
 
-                        // Adiciona as roles às claims
                         if (loginResult.Roles != null && loginResult.Roles.Any())
                         {
                             foreach (var role in loginResult.Roles)
@@ -101,7 +81,6 @@ namespace AtelieDosPontinhos.UI.Controllers
                             }
                         }
 
-                        // Cria a identidade autenticada da UI
                         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                         var authProperties = new AuthenticationProperties
                         {
@@ -109,13 +88,11 @@ namespace AtelieDosPontinhos.UI.Controllers
                             ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(60)
                         };
 
-                        // Realiza login no contexto MVC da UI
                         await HttpContext.SignInAsync(
                             CookieAuthenticationDefaults.AuthenticationScheme,
                             new ClaimsPrincipal(claimsIdentity),
                             authProperties);
 
-                        // 💾 Grava dados na sessão (incluindo o Cookie da API)
                         HttpContext.Session.SetString("UserEmail", loginResult.Email);
 
                         if (!string.IsNullOrEmpty(apiCookie))
@@ -128,7 +105,6 @@ namespace AtelieDosPontinhos.UI.Controllers
                             HttpContext.Session.SetString("UserRoles", string.Join(",", loginResult.Roles));
                         }
 
-                        // 🎉 Redireciona para a Tela Inicial
                         return RedirectToAction("Index", "Home");
                     }
                 }
@@ -222,34 +198,33 @@ namespace AtelieDosPontinhos.UI.Controllers
 
             var client = _httpClientFactory.CreateClient("ApiClient");
 
-            InjetarCookieAutenticacao(client);
+            var apiCookie = HttpContext.Session.GetString("ApiCookie") ?? User.FindFirst("ApiCookie")?.Value;
+            if (!string.IsNullOrEmpty(apiCookie))
+            {
+                client.DefaultRequestHeaders.Remove("Cookie");
+                client.DefaultRequestHeaders.Add("Cookie", apiCookie);
+            }
 
             var viewModel = new UserProfileViewModel { Email = userEmail };
 
             try
             {
-                string rotaUsuario = client.BaseAddress != null && client.BaseAddress.ToString().EndsWith("api/")
-                    ? $"account/user-data?email={userEmail}"
-                    : $"api/account/user-data?email={userEmail}";
+                string rotaPerfil = client.BaseAddress != null && client.BaseAddress.ToString().EndsWith("api/")
+                    ? "User/profile"
+                    : "api/User/profile";
 
-                var response = await client.GetAsync(rotaUsuario);
+                var response = await client.GetAsync(rotaPerfil);
 
                 if (response.IsSuccessStatusCode)
                 {
                     var jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-                    var dadosUsuario = await response.Content.ReadFromJsonAsync<JsonElement>(jsonOptions);
+                    var dadosPerfil = await response.Content.ReadFromJsonAsync<UserProfileViewModel>(jsonOptions);
 
-                    viewModel.Nome = ObterPropriedadeString(dadosUsuario, "nome", "Name");
-                    viewModel.Telefone = ObterPropriedadeString(dadosUsuario, "telefone", "Phone");
-                    viewModel.Cep = ObterPropriedadeString(dadosUsuario, "cep", "CEP");
-                    viewModel.Cidade = ObterPropriedadeString(dadosUsuario, "cidade", "Cidade");
-                    viewModel.Estado = ObterPropriedadeString(dadosUsuario, "estado", "Estado");
-                    viewModel.Numero = ObterPropriedadeString(dadosUsuario, "numero", "Numero");
-                    viewModel.Complemento = ObterPropriedadeString(dadosUsuario, "complemento", "Complemento");
-                    viewModel.Referencial = ObterPropriedadeString(dadosUsuario, "referencia", "Referencia", "referencial");
-                    viewModel.Metodo = ObterPropriedadeString(dadosUsuario, "metodo", "Metodo");
-                    viewModel.Titular = ObterPropriedadeString(dadosUsuario, "titular", "NomeNoCartao");
-                    viewModel.Cartao = ObterPropriedadeString(dadosUsuario, "cartao", "NumeroCartao");
+                    if (dadosPerfil != null)
+                    {
+                        viewModel = dadosPerfil;
+                        viewModel.Email = userEmail; // Assegura o e-mail preenchido
+                    }
                 }
             }
             catch (Exception ex)
@@ -263,6 +238,11 @@ namespace AtelieDosPontinhos.UI.Controllers
         [HttpPost]
         public async Task<IActionResult> Profile(UserProfileViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
             var userEmail = HttpContext.Session.GetString("UserEmail");
             if (string.IsNullOrEmpty(userEmail))
             {
@@ -272,23 +252,31 @@ namespace AtelieDosPontinhos.UI.Controllers
             model.Email = userEmail;
 
             var client = _httpClientFactory.CreateClient("ApiClient");
-            InjetarCookieAutenticacao(client);
+
+            var apiCookie = HttpContext.Session.GetString("ApiCookie") ?? User.FindFirst("ApiCookie")?.Value;
+            if (!string.IsNullOrEmpty(apiCookie))
+            {
+                client.DefaultRequestHeaders.Remove("Cookie");
+                client.DefaultRequestHeaders.Add("Cookie", apiCookie);
+            }
 
             try
             {
                 string rotaUpdate = client.BaseAddress != null && client.BaseAddress.ToString().EndsWith("api/")
-                    ? "account/update-profile"
-                    : "api/account/update-profile";
+                    ? "User/update-profile"
+                    : "api/User/update-profile";
 
                 var response = await client.PutAsJsonAsync(rotaUpdate, model);
 
-                if (response.IsSuccessStatusCode)
+                if (response.IsSuccessStatusCode || ((int)response.StatusCode >= 200 && (int)response.StatusCode < 300))
                 {
                     TempData["Sucesso"] = "Dados alterados com sucesso!";
+                    return RedirectToAction("Profile");
                 }
                 else
                 {
-                    TempData["Erro"] = "Não foi possível atualizar os dados.";
+                    var erroDetalhe = await response.Content.ReadAsStringAsync();
+                    TempData["Erro"] = $"Erro da API: {erroDetalhe}";
                 }
             }
             catch (Exception ex)
@@ -297,18 +285,6 @@ namespace AtelieDosPontinhos.UI.Controllers
             }
 
             return View(model);
-        }
-
-        private string ObterPropriedadeString(JsonElement json, params string[] nomesPropriedade)
-        {
-            foreach (var nome in nomesPropriedade)
-            {
-                if (json.TryGetProperty(nome, out var prop) && prop.ValueKind == JsonValueKind.String)
-                {
-                    return prop.GetString() ?? string.Empty;
-                }
-            }
-            return string.Empty;
         }
 
         // LOGOUT: Limpa a sessão e desautentica os cookies
