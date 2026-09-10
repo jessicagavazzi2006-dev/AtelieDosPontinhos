@@ -17,5 +17,24 @@ namespace AtelieDosPontinhos.UI.Models
         [Display(Name = "Confirmar senha")]
         [Compare("Password", ErrorMessage = "As senhas não conferem.")]
         public string ConfirmPassword { get; set; } = string.Empty;
+
+        // Novos campos mapeados diretamente
+        public string CEP { get; set; } = string.Empty;
+
+        public string Logradouro { get; set; } = string.Empty;
+
+        public string Numero { get; set; } = string.Empty;
+
+        public string? Complemento { get; set; }
+
+        public string Bairro { get; set; } = string.Empty;
+
+        public string Cidade { get; set; } = string.Empty;
+
+        public string Estado { get; set; } = string.Empty;
+
+        public string TipoPagamento { get; set; } = string.Empty;
+        public string? NomeNoCartao { get; set; }
+        public string? NumeroCartaoMascarado { get; set; }
     }
 }

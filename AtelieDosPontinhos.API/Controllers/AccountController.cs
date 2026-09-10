@@ -40,7 +40,7 @@ namespace AtelieDosPontinhos.API.Controllers
                 return BadRequest(new { Message = "E-mail e senha são obrigatórios." });
             }
 
-            var user = new IdentityUser { UserName = request.Email, Email = request.Email };
+            var user = new IdentityUser { UserName = request.Nome, Email = request.Email };
             var result = await _userManager.CreateAsync(user, request.Password);
 
             if (result.Succeeded)
@@ -151,6 +151,7 @@ namespace AtelieDosPontinhos.API.Controllers
 
     public class RegisterRequest
     {
+        public string Nome { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
         public string Role { get; set; } = string.Empty;

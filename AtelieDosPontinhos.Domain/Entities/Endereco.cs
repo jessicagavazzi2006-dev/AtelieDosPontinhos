@@ -16,6 +16,7 @@ namespace AtelieDosPontinhos.Domain.Entities
 
         // FK para IdentityUser (string)
         public string? UserId { get; set; }
+        //public string NomeCompleto { get; set; }
 
         // Navegação (opcional)
         [ForeignKey(nameof(UserId))]
