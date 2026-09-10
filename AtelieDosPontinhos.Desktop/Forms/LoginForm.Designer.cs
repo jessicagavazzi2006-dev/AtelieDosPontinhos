@@ -28,13 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges1 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges2 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges3 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges4 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges5 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges6 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges7 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges8 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges9 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges10 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges11 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges12 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges13 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges14 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             pbLogo = new PictureBox();
             lblBemVindo = new Label();
             lblTextoFacaLogin = new Label();
@@ -57,9 +57,9 @@
             // pbLogo
             // 
             pbLogo.Image = Properties.Resources.Logo_Ateliê_dos_pontinhos_maior;
-            pbLogo.Location = new Point(76, 23);
+            pbLogo.Location = new Point(146, 23);
             pbLogo.Name = "pbLogo";
-            pbLogo.Size = new Size(261, 80);
+            pbLogo.Size = new Size(125, 80);
             pbLogo.SizeMode = PictureBoxSizeMode.Zoom;
             pbLogo.TabIndex = 0;
             pbLogo.TabStop = false;
@@ -100,7 +100,7 @@
             // txtEmail
             // 
             txtEmail.BorderRadius = 5;
-            txtEmail.CustomizableEdges = customizableEdges1;
+            txtEmail.CustomizableEdges = customizableEdges8;
             txtEmail.DefaultText = "";
             txtEmail.DisabledState.BorderColor = Color.FromArgb(208, 208, 208);
             txtEmail.DisabledState.FillColor = Color.FromArgb(226, 226, 226);
@@ -114,7 +114,7 @@
             txtEmail.Name = "txtEmail";
             txtEmail.PlaceholderText = "seuemail@hotmail.com.br";
             txtEmail.SelectedText = "";
-            txtEmail.ShadowDecoration.CustomizableEdges = customizableEdges2;
+            txtEmail.ShadowDecoration.CustomizableEdges = customizableEdges9;
             txtEmail.Size = new Size(378, 36);
             txtEmail.TabIndex = 2;
             // 
@@ -132,7 +132,7 @@
             // txtSenha
             // 
             txtSenha.BorderRadius = 5;
-            txtSenha.CustomizableEdges = customizableEdges3;
+            txtSenha.CustomizableEdges = customizableEdges10;
             txtSenha.DefaultText = "";
             txtSenha.DisabledState.BorderColor = Color.FromArgb(208, 208, 208);
             txtSenha.DisabledState.FillColor = Color.FromArgb(226, 226, 226);
@@ -146,7 +146,7 @@
             txtSenha.Name = "txtSenha";
             txtSenha.PlaceholderText = "•••••••••••";
             txtSenha.SelectedText = "";
-            txtSenha.ShadowDecoration.CustomizableEdges = customizableEdges4;
+            txtSenha.ShadowDecoration.CustomizableEdges = customizableEdges11;
             txtSenha.Size = new Size(378, 36);
             txtSenha.TabIndex = 2;
             txtSenha.UseSystemPasswordChar = true;
@@ -154,7 +154,7 @@
             // btnEntrar
             // 
             btnEntrar.BorderRadius = 10;
-            btnEntrar.CustomizableEdges = customizableEdges5;
+            btnEntrar.CustomizableEdges = customizableEdges12;
             btnEntrar.DisabledState.BorderColor = Color.DarkGray;
             btnEntrar.DisabledState.CustomBorderColor = Color.DarkGray;
             btnEntrar.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
@@ -164,7 +164,7 @@
             btnEntrar.ForeColor = Color.White;
             btnEntrar.Location = new Point(76, 333);
             btnEntrar.Name = "btnEntrar";
-            btnEntrar.ShadowDecoration.CustomizableEdges = customizableEdges6;
+            btnEntrar.ShadowDecoration.CustomizableEdges = customizableEdges13;
             btnEntrar.Size = new Size(261, 45);
             btnEntrar.TabIndex = 3;
             btnEntrar.Text = "Entrar";
@@ -254,7 +254,7 @@
             btnFechar.ForeColor = Color.White;
             btnFechar.Location = new Point(382, 12);
             btnFechar.Name = "btnFechar";
-            btnFechar.ShadowDecoration.CustomizableEdges = customizableEdges7;
+            btnFechar.ShadowDecoration.CustomizableEdges = customizableEdges14;
             btnFechar.ShadowDecoration.Mode = Guna.UI2.WinForms.Enums.ShadowMode.Circle;
             btnFechar.Size = new Size(30, 30);
             btnFechar.TabIndex = 5;
