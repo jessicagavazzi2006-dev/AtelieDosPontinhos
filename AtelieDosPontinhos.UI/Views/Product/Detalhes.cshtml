@@ -70,7 +70,7 @@
             const icone = document.getElementById('iconeFavorito');
             const texto = document.getElementById('textoFavorito');
 
-            fetch(`/Favorites/ToggleFavorite/${productId}`, {
+            fetch(`/Favorites/Toggle?productId=${productId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
