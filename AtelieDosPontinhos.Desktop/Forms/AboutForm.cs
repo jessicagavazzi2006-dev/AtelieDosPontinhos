@@ -16,10 +16,33 @@ namespace AtelieDosPontinhos.Desktop.Forms
         {
             InitializeComponent();
         }
+        private void AboutForm_Load(object sender, EventArgs e)
+        {
+            if (DesignMode) return;
+        }
 
         private void btnFechar_Click(object sender, EventArgs e)
         {
             System.Windows.Forms.Application.Exit();
         }
+
+        private void lblLinkReadme_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+            {
+                FileName = "https://github.com/AtelieDosPontinhos/AtelieDosPontinhos/blob/main/README.md",
+                UseShellExecute = true
+            });
+        }
+
+        private void lblLinkGitHub_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+            {
+                FileName = "https://github.com/AtelieDosPontinhos/AtelieDosPontinhos",
+                UseShellExecute = true
+            });
+        }
+
     }
 }

@@ -28,13 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges6 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges11 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AboutForm));
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges7 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges8 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges9 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges10 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            panel1 = new Panel();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges12 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges13 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges14 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges15 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            pnlTelaSobre = new Panel();
             lblCamadasSistemas = new Label();
             lblTituloArquitetura = new Label();
             lblDescricao3 = new Label();
@@ -63,7 +63,7 @@
             lblResumo = new Label();
             lblTituloSobreProjeto = new Label();
             pbLogo = new PictureBox();
-            panel1.SuspendLayout();
+            pnlTelaSobre.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)cpbFoto3).BeginInit();
             ((System.ComponentModel.ISupportInitialize)cpbFoto2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)cpbFoto1).BeginInit();
@@ -79,41 +79,41 @@
             ((System.ComponentModel.ISupportInitialize)pbLogo).BeginInit();
             SuspendLayout();
             // 
-            // panel1
+            // pnlTelaSobre
             // 
-            panel1.BackColor = Color.White;
-            panel1.Controls.Add(lblCamadasSistemas);
-            panel1.Controls.Add(lblTituloArquitetura);
-            panel1.Controls.Add(lblDescricao3);
-            panel1.Controls.Add(lblDescricao2);
-            panel1.Controls.Add(lblDescricao1);
-            panel1.Controls.Add(lblLinkReadme);
-            panel1.Controls.Add(lblLinkGitHub);
-            panel1.Controls.Add(lblTituloLinks);
-            panel1.Controls.Add(lblNome3);
-            panel1.Controls.Add(lblNome2);
-            panel1.Controls.Add(lblNome1);
-            panel1.Controls.Add(cpbFoto3);
-            panel1.Controls.Add(cpbFoto2);
-            panel1.Controls.Add(cpbFoto1);
-            panel1.Controls.Add(pbHtml5);
-            panel1.Controls.Add(pbCSS);
-            panel1.Controls.Add(pbBootstrap);
-            panel1.Controls.Add(pbGuna);
-            panel1.Controls.Add(pbSqlServer);
-            panel1.Controls.Add(pbSql);
-            panel1.Controls.Add(pbCharp);
-            panel1.Controls.Add(pbEntity);
-            panel1.Controls.Add(pbDotnet);
-            panel1.Controls.Add(lblTituloTecnologiaUtil);
-            panel1.Controls.Add(btnFechar);
-            panel1.Controls.Add(lblResumo);
-            panel1.Controls.Add(lblTituloSobreProjeto);
-            panel1.Controls.Add(pbLogo);
-            panel1.Location = new Point(12, 12);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(560, 726);
-            panel1.TabIndex = 0;
+            pnlTelaSobre.BackColor = Color.White;
+            pnlTelaSobre.Controls.Add(lblCamadasSistemas);
+            pnlTelaSobre.Controls.Add(lblTituloArquitetura);
+            pnlTelaSobre.Controls.Add(lblDescricao3);
+            pnlTelaSobre.Controls.Add(lblDescricao2);
+            pnlTelaSobre.Controls.Add(lblDescricao1);
+            pnlTelaSobre.Controls.Add(lblLinkReadme);
+            pnlTelaSobre.Controls.Add(lblLinkGitHub);
+            pnlTelaSobre.Controls.Add(lblTituloLinks);
+            pnlTelaSobre.Controls.Add(lblNome3);
+            pnlTelaSobre.Controls.Add(lblNome2);
+            pnlTelaSobre.Controls.Add(lblNome1);
+            pnlTelaSobre.Controls.Add(cpbFoto3);
+            pnlTelaSobre.Controls.Add(cpbFoto2);
+            pnlTelaSobre.Controls.Add(cpbFoto1);
+            pnlTelaSobre.Controls.Add(pbHtml5);
+            pnlTelaSobre.Controls.Add(pbCSS);
+            pnlTelaSobre.Controls.Add(pbBootstrap);
+            pnlTelaSobre.Controls.Add(pbGuna);
+            pnlTelaSobre.Controls.Add(pbSqlServer);
+            pnlTelaSobre.Controls.Add(pbSql);
+            pnlTelaSobre.Controls.Add(pbCharp);
+            pnlTelaSobre.Controls.Add(pbEntity);
+            pnlTelaSobre.Controls.Add(pbDotnet);
+            pnlTelaSobre.Controls.Add(lblTituloTecnologiaUtil);
+            pnlTelaSobre.Controls.Add(btnFechar);
+            pnlTelaSobre.Controls.Add(lblResumo);
+            pnlTelaSobre.Controls.Add(lblTituloSobreProjeto);
+            pnlTelaSobre.Controls.Add(pbLogo);
+            pnlTelaSobre.Location = new Point(12, 12);
+            pnlTelaSobre.Name = "pnlTelaSobre";
+            pnlTelaSobre.Size = new Size(560, 726);
+            pnlTelaSobre.TabIndex = 0;
             // 
             // lblCamadasSistemas
             // 
@@ -171,6 +171,7 @@
             lblLinkReadme.TabIndex = 12;
             lblLinkReadme.TabStop = true;
             lblLinkReadme.Text = "linkLabel2";
+            lblLinkReadme.LinkClicked += lblLinkReadme_LinkClicked;
             // 
             // lblLinkGitHub
             // 
@@ -181,6 +182,7 @@
             lblLinkGitHub.TabIndex = 11;
             lblLinkGitHub.TabStop = true;
             lblLinkGitHub.Text = "linkLabel1";
+            lblLinkGitHub.LinkClicked += lblLinkGitHub_LinkClicked;
             // 
             // lblTituloLinks
             // 
@@ -232,7 +234,7 @@
             cpbFoto3.ImageRotate = 0F;
             cpbFoto3.Location = new Point(370, 164);
             cpbFoto3.Name = "cpbFoto3";
-            cpbFoto3.ShadowDecoration.CustomizableEdges = customizableEdges6;
+            cpbFoto3.ShadowDecoration.CustomizableEdges = customizableEdges11;
             cpbFoto3.ShadowDecoration.Mode = Guna.UI2.WinForms.Enums.ShadowMode.Circle;
             cpbFoto3.Size = new Size(116, 110);
             cpbFoto3.SizeMode = PictureBoxSizeMode.Zoom;
@@ -245,7 +247,7 @@
             cpbFoto2.ImageRotate = 0F;
             cpbFoto2.Location = new Point(229, 164);
             cpbFoto2.Name = "cpbFoto2";
-            cpbFoto2.ShadowDecoration.CustomizableEdges = customizableEdges7;
+            cpbFoto2.ShadowDecoration.CustomizableEdges = customizableEdges12;
             cpbFoto2.ShadowDecoration.Mode = Guna.UI2.WinForms.Enums.ShadowMode.Circle;
             cpbFoto2.Size = new Size(115, 110);
             cpbFoto2.SizeMode = PictureBoxSizeMode.Zoom;
@@ -258,7 +260,7 @@
             cpbFoto1.ImageRotate = 0F;
             cpbFoto1.Location = new Point(68, 164);
             cpbFoto1.Name = "cpbFoto1";
-            cpbFoto1.ShadowDecoration.CustomizableEdges = customizableEdges8;
+            cpbFoto1.ShadowDecoration.CustomizableEdges = customizableEdges13;
             cpbFoto1.ShadowDecoration.Mode = Guna.UI2.WinForms.Enums.ShadowMode.Circle;
             cpbFoto1.Size = new Size(118, 110);
             cpbFoto1.SizeMode = PictureBoxSizeMode.Zoom;
@@ -369,7 +371,7 @@
             // btnFechar
             // 
             btnFechar.BorderRadius = 5;
-            btnFechar.CustomizableEdges = customizableEdges9;
+            btnFechar.CustomizableEdges = customizableEdges14;
             btnFechar.DisabledState.BorderColor = Color.DarkGray;
             btnFechar.DisabledState.CustomBorderColor = Color.DarkGray;
             btnFechar.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
@@ -379,7 +381,7 @@
             btnFechar.ForeColor = Color.White;
             btnFechar.Location = new Point(446, 12);
             btnFechar.Name = "btnFechar";
-            btnFechar.ShadowDecoration.CustomizableEdges = customizableEdges10;
+            btnFechar.ShadowDecoration.CustomizableEdges = customizableEdges15;
             btnFechar.Size = new Size(97, 40);
             btnFechar.TabIndex = 3;
             btnFechar.Text = "Fechar";
@@ -422,13 +424,14 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(177, 145, 217);
             ClientSize = new Size(584, 750);
-            Controls.Add(panel1);
+            Controls.Add(pnlTelaSobre);
             FormBorderStyle = FormBorderStyle.None;
             Name = "AboutForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "AboutForm";
-            panel1.ResumeLayout(false);
-            panel1.PerformLayout();
+            Load += AboutForm_Load;
+            pnlTelaSobre.ResumeLayout(false);
+            pnlTelaSobre.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)cpbFoto3).EndInit();
             ((System.ComponentModel.ISupportInitialize)cpbFoto2).EndInit();
             ((System.ComponentModel.ISupportInitialize)cpbFoto1).EndInit();
@@ -447,7 +450,7 @@
 
         #endregion
 
-        private Panel panel1;
+        private Panel pnlTelaSobre;
         private PictureBox pbLogo;
         private Label lblTituloSobreProjeto;
         private Label lblResumo;
