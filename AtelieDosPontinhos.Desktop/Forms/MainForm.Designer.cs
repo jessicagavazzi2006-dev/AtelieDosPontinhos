@@ -28,24 +28,24 @@
         /// </summary>
         private void InitializeComponent()
         {
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges19 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges20 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges21 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges22 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges23 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges24 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges25 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges26 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges27 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges28 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges29 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges30 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges31 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges32 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges33 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges34 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges35 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges36 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges1 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges2 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges3 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges4 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges5 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges6 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges7 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges8 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges9 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges10 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges11 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges12 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges13 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges14 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges15 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges16 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges17 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges18 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             lblSessao = new Label();
             pnlHeader = new Panel();
             lblPerfil = new Label();
@@ -53,6 +53,7 @@
             btnLogout = new Guna.UI2.WinForms.Guna2Button();
             lblUsuario = new Label();
             lblTituloApp = new Label();
+            btnSobreProjeto = new Guna.UI2.WinForms.Guna2Button();
             pnlLogo = new Panel();
             lblSidebarLogo = new Label();
             lblSidebarSub = new Label();
@@ -64,7 +65,6 @@
             btnProdutos = new Guna.UI2.WinForms.Guna2Button();
             btnDashboard = new Guna.UI2.WinForms.Guna2Button();
             pnlConteudo = new Panel();
-            btnSobreProjeto = new Guna.UI2.WinForms.Guna2Button();
             pnlHeader.SuspendLayout();
             pnlLogo.SuspendLayout();
             pnlSidebar.SuspendLayout();
@@ -82,7 +82,6 @@
             // 
             // pnlHeader
             // 
-            pnlHeader.Controls.Add(btnSobreProjeto);
             pnlHeader.Controls.Add(lblPerfil);
             pnlHeader.Controls.Add(darkModebtn);
             pnlHeader.Controls.Add(btnLogout);
@@ -107,16 +106,18 @@
             // 
             // darkModebtn
             // 
-            darkModebtn.CustomizableEdges = customizableEdges19;
+            darkModebtn.BorderRadius = 5;
+            darkModebtn.CustomizableEdges = customizableEdges1;
             darkModebtn.DisabledState.BorderColor = Color.DarkGray;
             darkModebtn.DisabledState.CustomBorderColor = Color.DarkGray;
             darkModebtn.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
             darkModebtn.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            darkModebtn.FillColor = Color.FromArgb(155, 113, 206);
             darkModebtn.Font = new Font("Segoe UI", 9F);
             darkModebtn.ForeColor = Color.White;
             darkModebtn.Location = new Point(789, 28);
             darkModebtn.Name = "darkModebtn";
-            darkModebtn.ShadowDecoration.CustomizableEdges = customizableEdges20;
+            darkModebtn.ShadowDecoration.CustomizableEdges = customizableEdges2;
             darkModebtn.Size = new Size(106, 40);
             darkModebtn.TabIndex = 1;
             darkModebtn.Click += darkModebtn_Click;
@@ -124,7 +125,7 @@
             // btnLogout
             // 
             btnLogout.BorderRadius = 5;
-            btnLogout.CustomizableEdges = customizableEdges21;
+            btnLogout.CustomizableEdges = customizableEdges3;
             btnLogout.DisabledState.BorderColor = Color.DarkGray;
             btnLogout.DisabledState.CustomBorderColor = Color.DarkGray;
             btnLogout.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
@@ -134,7 +135,7 @@
             btnLogout.ForeColor = Color.White;
             btnLogout.Location = new Point(917, 28);
             btnLogout.Name = "btnLogout";
-            btnLogout.ShadowDecoration.CustomizableEdges = customizableEdges22;
+            btnLogout.ShadowDecoration.CustomizableEdges = customizableEdges4;
             btnLogout.Size = new Size(94, 40);
             btnLogout.TabIndex = 0;
             btnLogout.Text = "Sair";
@@ -162,6 +163,24 @@
             lblTituloApp.Size = new Size(221, 27);
             lblTituloApp.TabIndex = 0;
             lblTituloApp.Text = "Ateliê dos Pontinhos";
+            // 
+            // btnSobreProjeto
+            // 
+            btnSobreProjeto.CustomizableEdges = customizableEdges5;
+            btnSobreProjeto.DisabledState.BorderColor = Color.DarkGray;
+            btnSobreProjeto.DisabledState.CustomBorderColor = Color.DarkGray;
+            btnSobreProjeto.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
+            btnSobreProjeto.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            btnSobreProjeto.FillColor = Color.FromArgb(155, 113, 206);
+            btnSobreProjeto.Font = new Font("Yu Gothic", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            btnSobreProjeto.ForeColor = Color.White;
+            btnSobreProjeto.Location = new Point(0, 271);
+            btnSobreProjeto.Name = "btnSobreProjeto";
+            btnSobreProjeto.ShadowDecoration.CustomizableEdges = customizableEdges6;
+            btnSobreProjeto.Size = new Size(200, 40);
+            btnSobreProjeto.TabIndex = 2;
+            btnSobreProjeto.Text = "Sobre o Projeto";
+            btnSobreProjeto.Click += btnSobreProjeto_Click;
             // 
             // pnlLogo
             // 
@@ -199,6 +218,7 @@
             // pnlSidebar
             // 
             pnlSidebar.BackColor = Color.FromArgb(155, 113, 206);
+            pnlSidebar.Controls.Add(btnSobreProjeto);
             pnlSidebar.Controls.Add(btnPedidos);
             pnlSidebar.Controls.Add(btnPerfil);
             pnlSidebar.Controls.Add(lblSessao);
@@ -213,7 +233,7 @@
             // 
             // btnPedidos
             // 
-            btnPedidos.CustomizableEdges = customizableEdges23;
+            btnPedidos.CustomizableEdges = customizableEdges7;
             btnPedidos.DisabledState.BorderColor = Color.DarkGray;
             btnPedidos.DisabledState.CustomBorderColor = Color.DarkGray;
             btnPedidos.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
@@ -223,7 +243,7 @@
             btnPedidos.ForeColor = Color.White;
             btnPedidos.Location = new Point(0, 225);
             btnPedidos.Name = "btnPedidos";
-            btnPedidos.ShadowDecoration.CustomizableEdges = customizableEdges24;
+            btnPedidos.ShadowDecoration.CustomizableEdges = customizableEdges8;
             btnPedidos.Size = new Size(200, 45);
             btnPedidos.TabIndex = 1;
             btnPedidos.Text = "Pedidos";
@@ -231,7 +251,7 @@
             // 
             // btnPerfil
             // 
-            btnPerfil.CustomizableEdges = customizableEdges25;
+            btnPerfil.CustomizableEdges = customizableEdges9;
             btnPerfil.DisabledState.BorderColor = Color.DarkGray;
             btnPerfil.DisabledState.CustomBorderColor = Color.DarkGray;
             btnPerfil.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
@@ -241,7 +261,7 @@
             btnPerfil.ForeColor = Color.White;
             btnPerfil.Location = new Point(0, 180);
             btnPerfil.Name = "btnPerfil";
-            btnPerfil.ShadowDecoration.CustomizableEdges = customizableEdges26;
+            btnPerfil.ShadowDecoration.CustomizableEdges = customizableEdges10;
             btnPerfil.Size = new Size(200, 45);
             btnPerfil.TabIndex = 0;
             btnPerfil.Text = "Meu Perfil";
@@ -249,7 +269,7 @@
             // 
             // btnUsuarios
             // 
-            btnUsuarios.CustomizableEdges = customizableEdges27;
+            btnUsuarios.CustomizableEdges = customizableEdges11;
             btnUsuarios.DisabledState.BorderColor = Color.DarkGray;
             btnUsuarios.DisabledState.CustomBorderColor = Color.DarkGray;
             btnUsuarios.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
@@ -259,7 +279,7 @@
             btnUsuarios.ForeColor = Color.White;
             btnUsuarios.Location = new Point(0, 135);
             btnUsuarios.Name = "btnUsuarios";
-            btnUsuarios.ShadowDecoration.CustomizableEdges = customizableEdges28;
+            btnUsuarios.ShadowDecoration.CustomizableEdges = customizableEdges12;
             btnUsuarios.Size = new Size(200, 45);
             btnUsuarios.TabIndex = 0;
             btnUsuarios.Text = "Usuários";
@@ -267,7 +287,7 @@
             // 
             // btnCategorias
             // 
-            btnCategorias.CustomizableEdges = customizableEdges29;
+            btnCategorias.CustomizableEdges = customizableEdges13;
             btnCategorias.DisabledState.BorderColor = Color.DarkGray;
             btnCategorias.DisabledState.CustomBorderColor = Color.DarkGray;
             btnCategorias.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
@@ -277,7 +297,7 @@
             btnCategorias.ForeColor = Color.White;
             btnCategorias.Location = new Point(0, 90);
             btnCategorias.Name = "btnCategorias";
-            btnCategorias.ShadowDecoration.CustomizableEdges = customizableEdges30;
+            btnCategorias.ShadowDecoration.CustomizableEdges = customizableEdges14;
             btnCategorias.Size = new Size(200, 45);
             btnCategorias.TabIndex = 0;
             btnCategorias.Text = "Categorias";
@@ -285,7 +305,7 @@
             // 
             // btnProdutos
             // 
-            btnProdutos.CustomizableEdges = customizableEdges31;
+            btnProdutos.CustomizableEdges = customizableEdges15;
             btnProdutos.DisabledState.BorderColor = Color.DarkGray;
             btnProdutos.DisabledState.CustomBorderColor = Color.DarkGray;
             btnProdutos.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
@@ -295,7 +315,7 @@
             btnProdutos.ForeColor = Color.White;
             btnProdutos.Location = new Point(0, 45);
             btnProdutos.Name = "btnProdutos";
-            btnProdutos.ShadowDecoration.CustomizableEdges = customizableEdges32;
+            btnProdutos.ShadowDecoration.CustomizableEdges = customizableEdges16;
             btnProdutos.Size = new Size(200, 45);
             btnProdutos.TabIndex = 0;
             btnProdutos.Text = "Produtos";
@@ -303,7 +323,7 @@
             // 
             // btnDashboard
             // 
-            btnDashboard.CustomizableEdges = customizableEdges33;
+            btnDashboard.CustomizableEdges = customizableEdges17;
             btnDashboard.DisabledState.BorderColor = Color.DarkGray;
             btnDashboard.DisabledState.CustomBorderColor = Color.DarkGray;
             btnDashboard.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
@@ -313,7 +333,7 @@
             btnDashboard.ForeColor = Color.White;
             btnDashboard.Location = new Point(0, 0);
             btnDashboard.Name = "btnDashboard";
-            btnDashboard.ShadowDecoration.CustomizableEdges = customizableEdges34;
+            btnDashboard.ShadowDecoration.CustomizableEdges = customizableEdges18;
             btnDashboard.Size = new Size(200, 45);
             btnDashboard.TabIndex = 0;
             btnDashboard.Text = "Dashboard";
@@ -325,22 +345,6 @@
             pnlConteudo.Name = "pnlConteudo";
             pnlConteudo.Size = new Size(805, 501);
             pnlConteudo.TabIndex = 0;
-            // 
-            // btnSobreProjeto
-            // 
-            btnSobreProjeto.CustomizableEdges = customizableEdges35;
-            btnSobreProjeto.DisabledState.BorderColor = Color.DarkGray;
-            btnSobreProjeto.DisabledState.CustomBorderColor = Color.DarkGray;
-            btnSobreProjeto.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
-            btnSobreProjeto.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
-            btnSobreProjeto.Font = new Font("Segoe UI", 9F);
-            btnSobreProjeto.ForeColor = Color.White;
-            btnSobreProjeto.Location = new Point(663, 28);
-            btnSobreProjeto.Name = "btnSobreProjeto";
-            btnSobreProjeto.ShadowDecoration.CustomizableEdges = customizableEdges36;
-            btnSobreProjeto.Size = new Size(110, 40);
-            btnSobreProjeto.TabIndex = 2;
-            btnSobreProjeto.Text = "Sobre o Porjeto";
             // 
             // MainForm
             // 
