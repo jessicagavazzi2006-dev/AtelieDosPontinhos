@@ -30,6 +30,8 @@ namespace AtelieDosPontinhos.Desktop.Forms
         public MainForm()
         {
             InitializeComponent();
+            this.Opacity = 0;
+            this.Shown += (s, e) => FormAnimator.FadeIn(this, 320);
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -47,9 +49,15 @@ namespace AtelieDosPontinhos.Desktop.Forms
 
             ConfigurarPermissoes();
 
+            // garante modo inicial claro
+            _isDarkMode = false;
+            ThemeManager.SetDarkMode(_isDarkMode); // garante state global
             // aplica tema padrão (claro) ao carregar
             AtelieDosPontinhosTheme.AplicarEstiloFormulario(this);
+            // atualiza texto do botão de alternância para indicar ação (entrar no Dark)
+            try { darkModebtn.Text = "Dark"; } catch { /* ignore se botão não existir em design */ }
 
+            // marca sidebars com cor fixa
             pnlSidebar.BackColor = Color.FromArgb(155, 113, 206);
             pnlSidebar.Tag = "KeepBackColor";
             pnlLogo.BackColor = Color.FromArgb(108, 58, 169);
@@ -58,6 +66,9 @@ namespace AtelieDosPontinhos.Desktop.Forms
             lblSidebarLogo.Tag = "KeepBackColor";
             lblSidebarSub.ForeColor = Color.White;
             lblSidebarSub.Tag = "KeepBackColor";
+            lblSessao.BackColor = Color.FromArgb(155, 113, 206);
+            lblSessao.Tag = "KeepBackColor";
+
             NavegarParaDashboard();
         }
 
@@ -93,28 +104,44 @@ namespace AtelieDosPontinhos.Desktop.Forms
             Navegar(new DashboardUserControl(), btnDashboard);
         }
 
-        private void Navegar(UserControl Control, Guna2Button? botao = null)
+        private async void Navegar(UserControl Control, Guna2Button? botao = null)
         {
-            //Remove o UserControl anterior
-            if (_controleAtual != null)
-            {
-                pnlConteudo.Controls.Remove(_controleAtual);
-                _controleAtual.Dispose();
-                _controleAtual = null;
-            }
+            // Remove o UserControl anterior (mas vamos animar a saída)
+            var old = _controleAtual;
 
-            //Adiona o novo UserControl(Tela interna)
-            Control.Dock = DockStyle.Fill;
-            pnlConteudo.Controls.Add(Control);
+            // Prepare new control (don't dock fill yet - animator will finalize)
+            Control.Dock = DockStyle.None;
+            Control.Height = pnlConteudo.ClientSize.Height;
+            Control.Width = pnlConteudo.ClientSize.Width;
+
+            // Add new control behind the scenes (animator will bring to front)
+            if (!pnlConteudo.Controls.Contains(Control))
+                pnlConteudo.Controls.Add(Control);
+
             _controleAtual = Control;
 
             AtualizarBotaoAtivo(botao);
 
-            // Reaplica tema ao formulário (garante que o novo UserControl receba o estilo)
+            // aplica tema ao formulário (garante cores no novo controle)
             if (_isDarkMode)
                 AtelieDosPontinhosDarkTheme.AplicarEstiloFormulario(this);
             else
                 AtelieDosPontinhosTheme.AplicarEstiloFormulario(this);
+
+            // anima troca (direção da esquerda para direita ou direita para esquerda conforme preferência)
+            try
+            {
+                await UserControlAnimator.SlideSwitchAsync(pnlConteudo, Control, old, UserControlAnimator.SlideDirection.RightToLeft, durationMs: 320, removeOldImmediately: true);
+            }
+            catch
+            {
+                Control.Dock = DockStyle.Fill;
+                if (old != null && pnlConteudo.Controls.Contains(old))
+                {
+                    pnlConteudo.Controls.Remove(old);
+                    try { old.Dispose(); } catch { }
+                }
+            }
         }
 
         private async void btnLogout_Click(object sender, EventArgs e)
@@ -153,24 +180,21 @@ namespace AtelieDosPontinhos.Desktop.Forms
 
         private void btnPedidos_Click(object sender, EventArgs e) => Navegar(new PedidosUserControl(), btnPedidos);
 
-        private void darkModebtn_Click(object sender, EventArgs e)
+        public void darkModebtn_Click(object sender, EventArgs e)
         {
-            // alterna o modo e reaplica o tema correspondente
             _isDarkMode = !_isDarkMode;
 
-            //if (_isDarkMode)
-            //{
-            //    AtelieDosPontinhosDarkTheme.AplicarEstiloFormulario(this);
-            //    // opcional: ajustar texto do botão
+            // atualiza estado global (notifica outros forms)
+            ThemeManager.SetDarkMode(_isDarkMode);
 
-            //}
-            //else
-            //{
-            //    AtelieDosPontinhosTheme.AplicarEstiloFormulario(this);
+            // anima a transição no MainForm (mantém comportamento atual)
+            ThemeTransitionAnimator.Transition(this, _isDarkMode, 420);
 
-            //}
-            ThemeTransitionAnimator.Transition(this, _isDarkMode, 200);
-            
+            try { darkModebtn.Text = _isDarkMode ? "Light" : "Dark"; } catch { }
+        }
+
+        private void pnlHeader_Paint(object sender, PaintEventArgs e)
+        {
 
         }
     }

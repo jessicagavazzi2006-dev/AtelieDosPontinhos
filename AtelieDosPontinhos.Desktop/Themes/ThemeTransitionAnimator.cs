@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Reflection;
 using System.Windows.Forms;
 using Guna.UI2.WinForms;
 
@@ -15,6 +16,10 @@ namespace AtelieDosPontinhos.Desktop.Themes
             public Color To;
         }
 
+        /// <summary>
+        /// Transição sincronizada de tema (BackColor + ForeColor) para Form e todos os controles filhos.
+        /// Use: ThemeTransitionAnimator.Transition(this, toDark, durationMs);
+        /// </summary>
         public static void Transition(Form form, bool toDark, int durationMs = 360)
         {
             var items = new List<AnimatedColor>();
@@ -30,7 +35,10 @@ namespace AtelieDosPontinhos.Desktop.Themes
             var targetGridHeader = toDark ? AtelieDosPontinhosDarkTheme.Cabecalho : AtelieDosPontinhosTheme.GridCabecalhoFundo;
             var targetGridFore = toDark ? AtelieDosPontinhosDarkTheme.TextoClaro : AtelieDosPontinhosTheme.TextoPrincipal;
 
-            // form background + fore
+            // reduce flicker
+            MakeDoubleBufferedRecursive(form);
+
+            // form colors
             items.Add(new AnimatedColor { Setter = c => form.BackColor = c, From = form.BackColor, To = targetFormBg });
             items.Add(new AnimatedColor { Setter = c => form.ForeColor = c, From = form.ForeColor, To = targetLabelFore });
 
@@ -38,48 +46,60 @@ namespace AtelieDosPontinhos.Desktop.Themes
             {
                 foreach (Control c in parent.Controls)
                 {
-                    // preserve controls flagged to keep custom background color but still animate forecolor
                     var keepBack = c?.Tag?.ToString() == "KeepBackColor";
 
-                    // Animate BackColor where sensible
+                    // Panels
                     if (!keepBack)
                     {
-                        // Panel-like controls
                         if (c is Panel pnl)
                             items.Add(new AnimatedColor { Setter = col => pnl.BackColor = col, From = pnl.BackColor, To = targetPanelBg });
+
                         if (c is Guna2Panel gp)
                             items.Add(new AnimatedColor { Setter = col => gp.FillColor = col, From = gp.FillColor, To = targetPanelBg });
                     }
 
-                    // Animate ForeColor for most controls (labels, buttons, textboxes, etc.)
+                    // Labels: animar tanto ForeColor quanto BackColor se tiver BackColor não-Transparent
                     if (c is Label lbl)
                     {
                         items.Add(new AnimatedColor { Setter = col => lbl.ForeColor = col, From = lbl.ForeColor, To = targetLabelFore });
+                        if (lbl.BackColor != Color.Transparent && !keepBack)
+                            items.Add(new AnimatedColor { Setter = col => lbl.BackColor = col, From = lbl.BackColor, To = targetPanelBg });
                     }
+                    // Guna2HtmlLabel
+                    else if (c is Guna.UI2.WinForms.Guna2HtmlLabel gh)
+                    {
+                        items.Add(new AnimatedColor { Setter = col => gh.ForeColor = col, From = gh.ForeColor, To = targetLabelFore });
+                    }
+                    // Buttons (Guna2)
                     else if (c is Guna2Button gbtn)
                     {
                         items.Add(new AnimatedColor { Setter = col => gbtn.FillColor = col, From = gbtn.FillColor, To = targetBtnFill });
                         items.Add(new AnimatedColor { Setter = col => gbtn.ForeColor = col, From = gbtn.ForeColor, To = targetBtnFore });
                     }
+                    // Buttons (WinForms)
                     else if (c is Button btn)
                     {
                         items.Add(new AnimatedColor { Setter = col => btn.BackColor = col, From = btn.BackColor, To = targetBtnFill });
                         items.Add(new AnimatedColor { Setter = col => btn.ForeColor = col, From = btn.ForeColor, To = targetBtnFore });
                     }
+                    // TextBoxes (Guna2)
                     else if (c is Guna2TextBox gtxt)
                     {
                         items.Add(new AnimatedColor { Setter = col => gtxt.FillColor = col, From = gtxt.FillColor, To = targetTxtFill });
                         items.Add(new AnimatedColor { Setter = col => gtxt.ForeColor = col, From = gtxt.ForeColor, To = targetLabelFore });
                     }
+                    // ComboBox (Guna2)
                     else if (c is Guna2ComboBox gcombo)
                     {
                         items.Add(new AnimatedColor { Setter = col => gcombo.FillColor = col, From = gcombo.FillColor, To = targetTxtFill });
                         items.Add(new AnimatedColor { Setter = col => gcombo.ForeColor = col, From = gcombo.ForeColor, To = targetLabelFore });
                     }
+                    // CheckBox (Guna2)
                     else if (c is Guna2CheckBox gchk)
                     {
                         items.Add(new AnimatedColor { Setter = col => gchk.ForeColor = col, From = gchk.ForeColor, To = targetLabelFore });
                     }
+                    // DataGridView
                     else if (c is DataGridView dgv)
                     {
                         items.Add(new AnimatedColor { Setter = col => dgv.BackgroundColor = col, From = dgv.BackgroundColor, To = targetGridBg });
@@ -91,12 +111,15 @@ namespace AtelieDosPontinhos.Desktop.Themes
                     }
                     else
                     {
-                        // generic attempt: animate ForeColor (most controls support)
+                        // generic ForeColor
                         try
                         {
                             items.Add(new AnimatedColor { Setter = col => c.ForeColor = col, From = c.ForeColor, To = targetLabelFore });
+                            // if control has explicit BackColor and not flagged, animate it too
+                            if (c.BackColor != Color.Transparent && !keepBack)
+                                items.Add(new AnimatedColor { Setter = col => c.BackColor = col, From = c.BackColor, To = targetPanelBg });
                         }
-                        catch { /* ignore controls that don't allow ForeColor change */ }
+                        catch { }
                     }
 
                     if (c.HasChildren) Collect(c);
@@ -117,19 +140,19 @@ namespace AtelieDosPontinhos.Desktop.Themes
             timer.Tick += (s, e) =>
             {
                 var elapsed = Environment.TickCount - start;
-                var t = Math.Min(1f, (float)elapsed / durationMs);
+                var raw = Math.Min(1f, (float)elapsed / durationMs);
+                var t = Ease(raw);
 
                 foreach (var a in items)
                 {
-                    var col = LerpColor(a.From, a.To, t);
+                    var col = Lerp(a.From, a.To, t);
                     try { a.Setter(col); } catch { }
                 }
 
-                if (t >= 1f)
+                if (raw >= 1f)
                 {
                     timer.Stop();
                     timer.Dispose();
-                    // Finalize only non-color properties and ensure exact final colors (preserves KeepBackColor)
                     FinalizeTheme(form, toDark);
                 }
             };
@@ -139,15 +162,14 @@ namespace AtelieDosPontinhos.Desktop.Themes
 
         private static void FinalizeTheme(Form form, bool toDark)
         {
-            // Aplica propriedades não-visuais e garante que cores finais estejam corretas.
-            // Ambos os temas respeitam o Tag = "KeepBackColor".
+            // garante propriedades não-animadas e valor exato final
             if (toDark)
                 AtelieDosPontinhosDarkTheme.AplicarEstiloFormulario(form);
             else
                 AtelieDosPontinhosTheme.AplicarEstiloFormulario(form);
         }
 
-        private static Color LerpColor(Color a, Color b, float t)
+        private static Color Lerp(Color a, Color b, float t)
         {
             int A = (int)(a.A + (b.A - a.A) * t);
             int R = (int)(a.R + (b.R - a.R) * t);
@@ -157,5 +179,24 @@ namespace AtelieDosPontinhos.Desktop.Themes
         }
 
         private static int Clamp(int v) => Math.Max(0, Math.Min(255, v));
+
+        // easing suave
+        private static float Ease(float x) => x < 0.5f ? 4f * x * x * x : 1f - (float)Math.Pow(-2f * x + 2f, 3) / 2f;
+
+        // ativa DoubleBuffered (incl. Panels) via reflexão para reduzir flicker durante animação
+        private static void MakeDoubleBufferedRecursive(Control parent)
+        {
+            foreach (Control c in parent.Controls)
+            {
+                try
+                {
+                    var pi = c.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+                    pi?.SetValue(c, true, null);
+                }
+                catch { }
+
+                if (c.HasChildren) MakeDoubleBufferedRecursive(c);
+            }
+        }
     }
 }

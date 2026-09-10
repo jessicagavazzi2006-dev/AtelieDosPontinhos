@@ -1,5 +1,6 @@
 ﻿using AtelieDosPontinhos.Desktop.Helpers;
 using AtelieDosPontinhos.Desktop.Services;
+using AtelieDosPontinhos.Desktop.Themes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,10 +16,13 @@ namespace AtelieDosPontinhos.Desktop.Forms
 {
     public partial class LoginForm : Form
     {
+        private bool _isDarkMode = false;
         private AuthApiService _authService = null!;
         public LoginForm()
         {
             InitializeComponent();
+            this.Opacity = 0;
+            this.Shown += (s, e) => FormAnimator.FadeIn(this, 320);
         }
 
         private void LoginForm_Load(object sender, EventArgs e)
@@ -32,6 +36,9 @@ namespace AtelieDosPontinhos.Desktop.Forms
 
             txtEmail.Text = "admin@site.com";
             txtSenha.Text = "Admin@123";
+
+            _isDarkMode = false;
+            ThemeManager.SetDarkMode(_isDarkMode);
         }
 
         private async void btnEntrar_Click(object sender, EventArgs e)
@@ -125,6 +132,18 @@ namespace AtelieDosPontinhos.Desktop.Forms
             System.Windows.Forms.Application.Exit();
         }
 
+        private void darkModebtn_Click(object sender, EventArgs e)
+        {
+            _isDarkMode = !_isDarkMode;
+
+            // atualiza estado global (notifica outros forms)
+            ThemeManager.SetDarkMode(_isDarkMode);
+
+            // anima a transição no MainForm (mantém comportamento atual)
+            ThemeTransitionAnimator.Transition(this, _isDarkMode, 420);
+
+            try { darkModebtn.Text = _isDarkMode ? "Light" : "Dark"; } catch { }
+        }
     }
 }
 

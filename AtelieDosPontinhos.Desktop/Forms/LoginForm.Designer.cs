@@ -311,5 +311,6 @@
         private Label lblErro;
         private Label lblVersao;
         private Guna.UI2.WinForms.Guna2CircleButton btnFechar;
+        private Guna.UI2.WinForms.Guna2Button darkModebtn;
     }
 }

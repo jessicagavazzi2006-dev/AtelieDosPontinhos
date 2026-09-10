@@ -44,12 +44,12 @@
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges14 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges15 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges16 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            pnlUsuario = new Panel();
-            lblPerfil = new Label();
-            lblUsuario = new Label();
+            lblSessao = new Label();
             pnlHeader = new Panel();
+            lblPerfil = new Label();
             darkModebtn = new Guna.UI2.WinForms.Guna2Button();
             btnLogout = new Guna.UI2.WinForms.Guna2Button();
+            lblUsuario = new Label();
             lblTituloApp = new Label();
             pnlLogo = new Panel();
             lblSidebarLogo = new Label();
@@ -61,54 +61,45 @@
             btnCategorias = new Guna.UI2.WinForms.Guna2Button();
             btnProdutos = new Guna.UI2.WinForms.Guna2Button();
             btnDashboard = new Guna.UI2.WinForms.Guna2Button();
-            lblSessao = new Label();
             pnlConteudo = new Panel();
-            pnlUsuario.SuspendLayout();
             pnlHeader.SuspendLayout();
             pnlLogo.SuspendLayout();
             pnlSidebar.SuspendLayout();
             SuspendLayout();
             // 
-            // pnlUsuario
+            // lblSessao
             // 
-            pnlUsuario.Controls.Add(lblPerfil);
-            pnlUsuario.Controls.Add(lblUsuario);
-            pnlUsuario.Location = new Point(0, 0);
-            pnlUsuario.Name = "pnlUsuario";
-            pnlUsuario.Size = new Size(200, 100);
-            pnlUsuario.TabIndex = 0;
+            lblSessao.AutoSize = true;
+            lblSessao.ForeColor = Color.White;
+            lblSessao.Location = new Point(12, 420);
+            lblSessao.Name = "lblSessao";
+            lblSessao.Size = new Size(16, 15);
+            lblSessao.TabIndex = 0;
+            lblSessao.Text = "...";
+            // 
+            // pnlHeader
+            // 
+            pnlHeader.Controls.Add(lblPerfil);
+            pnlHeader.Controls.Add(darkModebtn);
+            pnlHeader.Controls.Add(btnLogout);
+            pnlHeader.Controls.Add(lblUsuario);
+            pnlHeader.Controls.Add(lblTituloApp);
+            pnlHeader.Location = new Point(0, 0);
+            pnlHeader.Name = "pnlHeader";
+            pnlHeader.Size = new Size(1024, 100);
+            pnlHeader.TabIndex = 0;
+            pnlHeader.Paint += pnlHeader_Paint;
             // 
             // lblPerfil
             // 
             lblPerfil.AutoSize = true;
             lblPerfil.Font = new Font("Yu Gothic", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             lblPerfil.ForeColor = Color.FromArgb(58, 52, 64);
-            lblPerfil.Location = new Point(22, 54);
+            lblPerfil.Location = new Point(21, 52);
             lblPerfil.Name = "lblPerfil";
             lblPerfil.Size = new Size(36, 16);
             lblPerfil.TabIndex = 0;
             lblPerfil.Text = "Perfil";
-            // 
-            // lblUsuario
-            // 
-            lblUsuario.AutoSize = true;
-            lblUsuario.Font = new Font("Yu Gothic", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblUsuario.ForeColor = Color.FromArgb(58, 52, 64);
-            lblUsuario.Location = new Point(22, 28);
-            lblUsuario.Name = "lblUsuario";
-            lblUsuario.Size = new Size(98, 21);
-            lblUsuario.TabIndex = 0;
-            lblUsuario.Text = "👤 Usuário";
-            // 
-            // pnlHeader
-            // 
-            pnlHeader.Controls.Add(darkModebtn);
-            pnlHeader.Controls.Add(btnLogout);
-            pnlHeader.Controls.Add(lblTituloApp);
-            pnlHeader.Location = new Point(201, 0);
-            pnlHeader.Name = "pnlHeader";
-            pnlHeader.Size = new Size(823, 100);
-            pnlHeader.TabIndex = 0;
             // 
             // darkModebtn
             // 
@@ -120,10 +111,10 @@
             darkModebtn.Font = new Font("Segoe UI", 9F);
             darkModebtn.ForeColor = Color.White;
             darkModebtn.Image = Properties.Resources.sun_and_moon;
-            darkModebtn.Location = new Point(651, 28);
+            darkModebtn.Location = new Point(789, 28);
             darkModebtn.Name = "darkModebtn";
             darkModebtn.ShadowDecoration.CustomizableEdges = customizableEdges2;
-            darkModebtn.Size = new Size(41, 40);
+            darkModebtn.Size = new Size(106, 40);
             darkModebtn.TabIndex = 1;
             darkModebtn.Click += darkModebtn_Click;
             // 
@@ -138,7 +129,7 @@
             btnLogout.FillColor = Color.Brown;
             btnLogout.Font = new Font("Segoe UI", 9F);
             btnLogout.ForeColor = Color.White;
-            btnLogout.Location = new Point(698, 28);
+            btnLogout.Location = new Point(917, 28);
             btnLogout.Name = "btnLogout";
             btnLogout.ShadowDecoration.CustomizableEdges = customizableEdges4;
             btnLogout.Size = new Size(94, 40);
@@ -146,12 +137,24 @@
             btnLogout.Text = "Sair";
             btnLogout.Click += btnLogout_Click;
             // 
+            // lblUsuario
+            // 
+            lblUsuario.AutoSize = true;
+            lblUsuario.BackColor = SystemColors.Control;
+            lblUsuario.Font = new Font("Yu Gothic", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblUsuario.ForeColor = Color.FromArgb(58, 52, 64);
+            lblUsuario.Location = new Point(26, 28);
+            lblUsuario.Name = "lblUsuario";
+            lblUsuario.Size = new Size(98, 21);
+            lblUsuario.TabIndex = 0;
+            lblUsuario.Text = "👤 Usuário";
+            // 
             // lblTituloApp
             // 
             lblTituloApp.AutoSize = true;
             lblTituloApp.Font = new Font("Yu Gothic", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblTituloApp.ForeColor = Color.FromArgb(58, 52, 64);
-            lblTituloApp.Location = new Point(37, 39);
+            lblTituloApp.Location = new Point(199, 37);
             lblTituloApp.Name = "lblTituloApp";
             lblTituloApp.Size = new Size(221, 27);
             lblTituloApp.TabIndex = 0;
@@ -195,11 +198,11 @@
             pnlSidebar.BackColor = Color.FromArgb(155, 113, 206);
             pnlSidebar.Controls.Add(btnPedidos);
             pnlSidebar.Controls.Add(btnPerfil);
+            pnlSidebar.Controls.Add(lblSessao);
             pnlSidebar.Controls.Add(btnUsuarios);
             pnlSidebar.Controls.Add(btnCategorias);
             pnlSidebar.Controls.Add(btnProdutos);
             pnlSidebar.Controls.Add(btnDashboard);
-            pnlSidebar.Controls.Add(lblSessao);
             pnlSidebar.Location = new Point(0, 175);
             pnlSidebar.Name = "pnlSidebar";
             pnlSidebar.Size = new Size(200, 445);
@@ -313,16 +316,6 @@
             btnDashboard.Text = "Dashboard";
             btnDashboard.Click += btnDashboard_Click_1;
             // 
-            // lblSessao
-            // 
-            lblSessao.AutoSize = true;
-            lblSessao.ForeColor = Color.White;
-            lblSessao.Location = new Point(12, 420);
-            lblSessao.Name = "lblSessao";
-            lblSessao.Size = new Size(16, 15);
-            lblSessao.TabIndex = 0;
-            lblSessao.Text = "...";
-            // 
             // pnlConteudo
             // 
             pnlConteudo.Location = new Point(208, 109);
@@ -339,14 +332,11 @@
             Controls.Add(pnlLogo);
             Controls.Add(pnlHeader);
             Controls.Add(pnlConteudo);
-            Controls.Add(pnlUsuario);
             FormBorderStyle = FormBorderStyle.None;
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "MainForm";
             Load += MainForm_Load;
-            pnlUsuario.ResumeLayout(false);
-            pnlUsuario.PerformLayout();
             pnlHeader.ResumeLayout(false);
             pnlHeader.PerformLayout();
             pnlLogo.ResumeLayout(false);
@@ -357,10 +347,6 @@
         }
 
         #endregion
-
-        private Panel pnlUsuario;
-        private Label lblPerfil;
-        private Label lblUsuario;
         private Panel pnlHeader;
         private Guna.UI2.WinForms.Guna2Button btnLogout;
         private Label lblTituloApp;
@@ -377,5 +363,7 @@
         private Guna.UI2.WinForms.Guna2Button btnUsuarios;
         private Guna.UI2.WinForms.Guna2Button btnPedidos;
         private Guna.UI2.WinForms.Guna2Button darkModebtn;
+        private Label lblPerfil;
+        private Label lblUsuario;
     }
 }
