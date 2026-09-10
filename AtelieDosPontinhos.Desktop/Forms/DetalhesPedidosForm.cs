@@ -1,4 +1,5 @@
 ﻿using AtelieDosPontinhos.Desktop.DTOs;
+using AtelieDosPontinhos.Desktop.Helpers;
 using AtelieDosPontinhos.Desktop.Services;
 using AtelieDosPontinhos.Desktop.Themes;
 using System;
@@ -23,6 +24,15 @@ namespace AtelieDosPontinhos.Desktop.Forms
         public DetalhesPedidosForm()
         {
             InitializeComponent();
+
+            // aplica tema atual sem animação
+            ThemeManager.ApplyTheme(this, animate: false);
+
+            // assina mudanças de tema para reagir enquanto o form estiver aberto
+            ThemeManager.ThemeChanged += OnThemeChanged;
+
+            this.FormClosing += (s, e) => FormAnimator.AnimateCloseOverlay(this, e, closeWithSlide: true, durationMs: 120, offset: 40);
+
         }
 
         // Construtor que recebe um Pedido para facilitar a abertura a partir do UserControl
@@ -31,6 +41,9 @@ namespace AtelieDosPontinhos.Desktop.Forms
             InitializeComponent();
             itemCompradosGrid.AllowUserToAddRows = false;
             Pedido = pedido;
+            ThemeManager.ApplyTheme(this, animate: false);
+            ThemeManager.ThemeChanged += OnThemeChanged;
+            this.FormClosing += (s, e) => FormAnimator.AnimateCloseOverlay(this, e, closeWithSlide: true, durationMs: 120, offset: 40);
         }
 
         private async void DetalhesPedidosForm_Load(object sender, EventArgs e)
@@ -39,7 +52,7 @@ namespace AtelieDosPontinhos.Desktop.Forms
 
             await PreencherDadosAsync();
 
-            AtelieDosPontinhosTheme.AplicarEstiloGrid(itemCompradosGrid);
+            
         }
 
         private async Task PreencherDadosAsync()
@@ -48,6 +61,9 @@ namespace AtelieDosPontinhos.Desktop.Forms
             itemCompradosGrid.Rows.Clear();
             totalLbl.Text = "R$ 0,00";
 
+            // Reseta título padrão
+            TituloDetalhesLbl.Text = "🛍️ Detalhes Do Pedido";
+
             if (Pedido == null)
             {
                 ClienteLbl.Text = "Cliente: -";
@@ -55,6 +71,9 @@ namespace AtelieDosPontinhos.Desktop.Forms
                 EnderecoLbl.Text = "Endereço: -";
                 return;
             }
+
+            // Adiciona o Id do pedido ao título
+            TituloDetalhesLbl.Text = $"🛍️ Detalhes Do Pedido — #{Pedido.Id}";
 
             // Cliente: tenta buscar o nome do usuário via API. Se não encontrado, mostra o UserId
             var nomeCliente = Pedido.UserId;
@@ -115,14 +134,30 @@ namespace AtelieDosPontinhos.Desktop.Forms
 
         private void guna2Button1_Click(object sender, EventArgs e)
         {
-            this.DialogResult = DialogResult.OK;
+
             this.Close();
+
+            //this.Hide();
         }
 
         private void EnderecoLbl_Click(object sender, EventArgs e)
         {
 
         }
+
+        private void OnThemeChanged(bool isDark)
+        {
+            // Reaplica com animação leve (invocar no thread da UI)
+            if (this.IsHandleCreated && !this.IsDisposed)
+                this.Invoke(() => ThemeManager.ApplyTheme(this, animate: true, durationMs: 300));
+        }
+
+        //protected override void OnFormClosed(FormClosedEventArgs e)
+        //{
+        //    base.OnFormClosed(e);
+        //    // remove handler para evitar leak
+        //    ThemeManager.ThemeChanged -= OnThemeChanged;
+        //}
     }
 
 }

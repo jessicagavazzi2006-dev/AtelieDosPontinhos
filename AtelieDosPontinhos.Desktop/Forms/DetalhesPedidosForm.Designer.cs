@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges3 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges4 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            TituloDetalhes = new Label();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges1 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges2 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            TituloDetalhesLbl = new Label();
             ClienteLbl = new Label();
             DataLbl = new Label();
             EnderecoLbl = new Label();
@@ -45,16 +45,16 @@
             ((System.ComponentModel.ISupportInitialize)itemCompradosGrid).BeginInit();
             SuspendLayout();
             // 
-            // TituloDetalhes
+            // TituloDetalhesLbl
             // 
-            TituloDetalhes.AutoSize = true;
-            TituloDetalhes.Font = new Font("Yu Gothic", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            TituloDetalhes.ForeColor = Color.FromArgb(58, 52, 64);
-            TituloDetalhes.Location = new Point(12, 22);
-            TituloDetalhes.Name = "TituloDetalhes";
-            TituloDetalhes.Size = new Size(174, 19);
-            TituloDetalhes.TabIndex = 0;
-            TituloDetalhes.Text = "🛍️ Detalhes Do Pedido";
+            TituloDetalhesLbl.AutoSize = true;
+            TituloDetalhesLbl.Font = new Font("Yu Gothic", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            TituloDetalhesLbl.ForeColor = Color.FromArgb(58, 52, 64);
+            TituloDetalhesLbl.Location = new Point(12, 22);
+            TituloDetalhesLbl.Name = "TituloDetalhesLbl";
+            TituloDetalhesLbl.Size = new Size(174, 19);
+            TituloDetalhesLbl.TabIndex = 0;
+            TituloDetalhesLbl.Text = "🛍️ Detalhes Do Pedido";
             // 
             // ClienteLbl
             // 
@@ -94,7 +94,7 @@
             itemCompradosGrid.Location = new Point(12, 140);
             itemCompradosGrid.Name = "itemCompradosGrid";
             itemCompradosGrid.RowHeadersVisible = false;
-            itemCompradosGrid.Size = new Size(503, 224);
+            itemCompradosGrid.Size = new Size(452, 224);
             itemCompradosGrid.TabIndex = 4;
             // 
             // itemCol
@@ -113,13 +113,12 @@
             // 
             precoUnitarioCol.HeaderText = "Preço Unitário";
             precoUnitarioCol.Name = "precoUnitarioCol";
-            precoUnitarioCol.Width = 140;
+            precoUnitarioCol.Width = 120;
             // 
             // precoCol
             // 
             precoCol.HeaderText = "Total";
             precoCol.Name = "precoCol";
-            precoCol.Width = 130;
             // 
             // TotalDoPedido
             // 
@@ -146,7 +145,7 @@
             // guna2Button1
             // 
             guna2Button1.BorderRadius = 10;
-            guna2Button1.CustomizableEdges = customizableEdges3;
+            guna2Button1.CustomizableEdges = customizableEdges1;
             guna2Button1.DisabledState.BorderColor = Color.DarkGray;
             guna2Button1.DisabledState.CustomBorderColor = Color.DarkGray;
             guna2Button1.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
@@ -154,9 +153,9 @@
             guna2Button1.FillColor = Color.DarkRed;
             guna2Button1.Font = new Font("Segoe UI", 9F);
             guna2Button1.ForeColor = Color.White;
-            guna2Button1.Location = new Point(420, 22);
+            guna2Button1.Location = new Point(369, 22);
             guna2Button1.Name = "guna2Button1";
-            guna2Button1.ShadowDecoration.CustomizableEdges = customizableEdges4;
+            guna2Button1.ShadowDecoration.CustomizableEdges = customizableEdges2;
             guna2Button1.Size = new Size(95, 41);
             guna2Button1.TabIndex = 7;
             guna2Button1.Text = "Fechar";
@@ -167,7 +166,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
-            ClientSize = new Size(548, 418);
+            ClientSize = new Size(498, 418);
             Controls.Add(guna2Button1);
             Controls.Add(totalLbl);
             Controls.Add(TotalDoPedido);
@@ -175,7 +174,7 @@
             Controls.Add(EnderecoLbl);
             Controls.Add(DataLbl);
             Controls.Add(ClienteLbl);
-            Controls.Add(TituloDetalhes);
+            Controls.Add(TituloDetalhesLbl);
             FormBorderStyle = FormBorderStyle.None;
             Name = "DetalhesPedidosForm";
             StartPosition = FormStartPosition.CenterScreen;
@@ -188,7 +187,7 @@
 
         #endregion
 
-        private Label TituloDetalhes;
+        private Label TituloDetalhesLbl;
         private Label ClienteLbl;
         private Label DataLbl;
         private Label EnderecoLbl;
