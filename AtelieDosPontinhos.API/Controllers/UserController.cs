@@ -172,7 +172,7 @@ namespace AtelieDosPontinhos.API.Controllers
 
             return Ok(new
             {
-                nome = endereco?.NomeCompleto ?? user.UserName,
+                nome = user?.NormalizedUserName ?? user.UserName,
                 email = user.Email,
                 telefone = user.PhoneNumber,
                 cep = endereco?.CEP,
@@ -233,11 +233,13 @@ namespace AtelieDosPontinhos.API.Controllers
                 _context.Enderecos.Add(endereco);
             }
 
-            if (!string.IsNullOrWhiteSpace(dto.Nome))
-            {
-                endereco.NomeCompleto = dto.Nome;
-            }
-
+            //if (!string.IsNullOrWhiteSpace(dto.Nome))
+            //{
+            //    endereco.NomeCompleto = dto.Nome;
+            //}
+            user.NormalizedUserName = dto.Nome; // Atualiza o e-mail do usuário
+            user.PhoneNumber = dto.Telefone; // Atualiza o telefone do usuário
+            user.Email = dto.Email; // Atualiza o e-mail do usuário
             endereco.CEP = dto.Cep;
             endereco.Cidade = dto.Cidade;
             endereco.Estado = dto.Estado;

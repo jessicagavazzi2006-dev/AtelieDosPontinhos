@@ -141,35 +141,36 @@ namespace AtelieDosPontinhos.UI.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            var cep = Request.Form["CEP"].ToString();
-            var numero = Request.Form["Numero"].ToString();
-            var complemento = Request.Form["Complemento"].ToString();
-            var cidade = Request.Form["Cidade"].ToString();
-            var estado = Request.Form["Estado"].ToString();
-            var tipoPagamento = Request.Form["TipoPagamento"].ToString();
-            var nomeNoCartao = Request.Form["NomeNoCartao"].ToString();
-            var numeroCartaoMascarado = Request.Form["NumeroCartaoMascarado"].ToString();
-
+            // Mapeando a model para o objeto que a API espera
             var apiModel = new
             {
+                // 👇 CORREÇÃO: Usar "Nome" para preencher o UserName que a API exige
+                Nome = model.Email,
+
                 Email = model.Email,
                 Password = model.Password,
                 Role = "Cliente",
-                CEP = cep,
-                Numero = numero,
-                Complemento = complemento,
-                Cidade = cidade,
-                Estado = estado,
-                TipoPagamento = tipoPagamento,
-                NomeNoCartao = nomeNoCartao,
-                NumeroCartaoMascarado = numeroCartaoMascarado
+                CEP = model.CEP,
+                Logradouro = model.Logradouro,
+                Numero = model.Numero,
+                Complemento = model.Complemento ?? "",
+                Bairro = model.Bairro,
+                Cidade = model.Cidade,
+                Estado = model.Estado,
+                TipoPagamento = model.TipoPagamento,
+                NomeNoCartao = model.NomeNoCartao ?? "",
+                NumeroCartaoMascarado = model.NumeroCartaoMascarado ?? ""
             };
 
             var client = _httpClientFactory.CreateClient();
 
             try
             {
-                var jsonContent = new StringContent(JsonSerializer.Serialize(apiModel), Encoding.UTF8, "application/json");
+                // Garante que o JSON vá como "email", "password", etc, evitando rejeição da API
+                var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
+                var json = JsonSerializer.Serialize(apiModel, options);
+                var jsonContent = new StringContent(json, Encoding.UTF8, "application/json");
+
                 var response = await client.PostAsync($"{_apiUrl}/register", jsonContent);
 
                 if (response.IsSuccessStatusCode)
@@ -177,7 +178,10 @@ namespace AtelieDosPontinhos.UI.Controllers
                     TempData["SuccessMessage"] = "Cadastro realizado com sucesso! Faça seu login.";
                     return RedirectToAction("Login");
                 }
-                ModelState.AddModelError(string.Empty, "A API recusou o cadastro. Verifique os requisitos de senha ou se o e-mail já existe.");
+
+                // Lê o erro exato que a API devolveu para facilitar o debug
+                var erroApi = await response.Content.ReadAsStringAsync();
+                ModelState.AddModelError(string.Empty, $"A API recusou o cadastro. Verifique os dados. Detalhe: {erroApi}");
             }
             catch
             {
