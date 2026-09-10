@@ -1,5 +1,6 @@
 ﻿using AtelieDosPontinhos.Desktop.DTOs;
 using AtelieDosPontinhos.Desktop.Forms;
+using AtelieDosPontinhos.Desktop.Helpers;
 using AtelieDosPontinhos.Desktop.Services;
 using AtelieDosPontinhos.Desktop.Themes;
 using System;
@@ -296,7 +297,11 @@ namespace AtelieDosPontinhos.Desktop.UserControls
                 return;
             }
             using var detalhesForm = new DetalhesPedidosForm(pedido);
+            ThemeManager.ApplyTheme(detalhesForm, animate: false);
+            // centralizar antes de ShowDialog se necessário (StartPosition)
+            FormAnimator.ShowDialogWithSlideFade(detalhesForm, this, 360, 40);
             detalhesForm.ShowDialog();
+
         }
 
         private async void btnAtualizar_Click(object sender, EventArgs e) => await CarregarDadosAsync();

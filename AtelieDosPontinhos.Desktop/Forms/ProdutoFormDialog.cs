@@ -1,5 +1,6 @@
 ﻿
 using AtelieDosPontinhos.Desktop.DTOs;
+using AtelieDosPontinhos.Desktop.Themes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -37,6 +38,11 @@ namespace AtelieDosPontinhos.Desktop.Forms
         public ProdutoFormDialog()
         {
             InitializeComponent();
+            // aplica tema atual sem animação
+            ThemeManager.ApplyTheme(this, animate: false);
+
+            // assina mudanças de tema para reagir enquanto o form estiver aberto
+            ThemeManager.ThemeChanged += OnThemeChanged;
         }
 
         public ProdutoFormDialog(List<CategoriaResponseDto> categorias, ProductResponseDto? produto)
@@ -67,6 +73,10 @@ namespace AtelieDosPontinhos.Desktop.Forms
 
             //Preenche campos se estiver no modo edição
             PreencherCampos();
+            //if (!_isDarkMode)
+            //{
+            //    // Aplicar tema claro
+            //}
         }
 
         // =====================================================================
@@ -179,6 +189,19 @@ namespace AtelieDosPontinhos.Desktop.Forms
         private void btnCancelar_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+        private void OnThemeChanged(bool isDark)
+        {
+            // Reaplica com animação leve (invocar no thread da UI)
+            if (this.IsHandleCreated && !this.IsDisposed)
+                this.Invoke(() => ThemeManager.ApplyTheme(this, animate: true, durationMs: 300));
+        }
+
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+            base.OnFormClosed(e);
+            // remove handler para evitar leak
+            ThemeManager.ThemeChanged -= OnThemeChanged;
         }
     }
 }
