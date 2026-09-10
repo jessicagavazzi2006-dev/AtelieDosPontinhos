@@ -28,17 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges1 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges6 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AboutForm));
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges2 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges3 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges4 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges5 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges7 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges8 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges9 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges10 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             panel1 = new Panel();
+            lblCamadasSistemas = new Label();
+            lblTituloArquitetura = new Label();
             lblDescricao3 = new Label();
             lblDescricao2 = new Label();
             lblDescricao1 = new Label();
-            lblLinkPaginaWeb = new LinkLabel();
+            lblLinkReadme = new LinkLabel();
             lblLinkGitHub = new LinkLabel();
             lblTituloLinks = new Label();
             lblNome3 = new Label();
@@ -61,8 +63,6 @@
             lblResumo = new Label();
             lblTituloSobreProjeto = new Label();
             pbLogo = new PictureBox();
-            lblTituloArquitetura = new Label();
-            lblCamadasSistemas = new Label();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)cpbFoto3).BeginInit();
             ((System.ComponentModel.ISupportInitialize)cpbFoto2).BeginInit();
@@ -87,7 +87,7 @@
             panel1.Controls.Add(lblDescricao3);
             panel1.Controls.Add(lblDescricao2);
             panel1.Controls.Add(lblDescricao1);
-            panel1.Controls.Add(lblLinkPaginaWeb);
+            panel1.Controls.Add(lblLinkReadme);
             panel1.Controls.Add(lblLinkGitHub);
             panel1.Controls.Add(lblTituloLinks);
             panel1.Controls.Add(lblNome3);
@@ -114,6 +114,26 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(560, 726);
             panel1.TabIndex = 0;
+            // 
+            // lblCamadasSistemas
+            // 
+            lblCamadasSistemas.AutoSize = true;
+            lblCamadasSistemas.Location = new Point(45, 441);
+            lblCamadasSistemas.Name = "lblCamadasSistemas";
+            lblCamadasSistemas.Size = new Size(289, 15);
+            lblCamadasSistemas.TabIndex = 17;
+            lblCamadasSistemas.Text = "Domain, Application, Infrastructure, API, UI e Desktop";
+            // 
+            // lblTituloArquitetura
+            // 
+            lblTituloArquitetura.AutoSize = true;
+            lblTituloArquitetura.Font = new Font("Yu Gothic", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblTituloArquitetura.ForeColor = Color.FromArgb(58, 52, 64);
+            lblTituloArquitetura.Location = new Point(29, 411);
+            lblTituloArquitetura.Name = "lblTituloArquitetura";
+            lblTituloArquitetura.Size = new Size(196, 19);
+            lblTituloArquitetura.TabIndex = 16;
+            lblTituloArquitetura.Text = "🖥️ Arquitetura do sistema";
             // 
             // lblDescricao3
             // 
@@ -142,15 +162,15 @@
             lblDescricao1.TabIndex = 13;
             lblDescricao1.Text = "Responsável pelo design visual, identidade da marca e experiência do usuário.";
             // 
-            // lblLinkPaginaWeb
+            // lblLinkReadme
             // 
-            lblLinkPaginaWeb.AutoSize = true;
-            lblLinkPaginaWeb.Location = new Point(29, 696);
-            lblLinkPaginaWeb.Name = "lblLinkPaginaWeb";
-            lblLinkPaginaWeb.Size = new Size(60, 15);
-            lblLinkPaginaWeb.TabIndex = 12;
-            lblLinkPaginaWeb.TabStop = true;
-            lblLinkPaginaWeb.Text = "linkLabel2";
+            lblLinkReadme.AutoSize = true;
+            lblLinkReadme.Location = new Point(29, 696);
+            lblLinkReadme.Name = "lblLinkReadme";
+            lblLinkReadme.Size = new Size(60, 15);
+            lblLinkReadme.TabIndex = 12;
+            lblLinkReadme.TabStop = true;
+            lblLinkReadme.Text = "linkLabel2";
             // 
             // lblLinkGitHub
             // 
@@ -169,9 +189,9 @@
             lblTituloLinks.ForeColor = Color.FromArgb(58, 52, 64);
             lblTituloLinks.Location = new Point(27, 631);
             lblTituloLinks.Name = "lblTituloLinks";
-            lblTituloLinks.Size = new Size(179, 19);
+            lblTituloLinks.Size = new Size(175, 19);
             lblTituloLinks.TabIndex = 10;
-            lblTituloLinks.Text = "🔗 Links para  o projeto";
+            lblTituloLinks.Text = "🔗 Links para o projeto";
             // 
             // lblNome3
             // 
@@ -212,7 +232,7 @@
             cpbFoto3.ImageRotate = 0F;
             cpbFoto3.Location = new Point(370, 164);
             cpbFoto3.Name = "cpbFoto3";
-            cpbFoto3.ShadowDecoration.CustomizableEdges = customizableEdges1;
+            cpbFoto3.ShadowDecoration.CustomizableEdges = customizableEdges6;
             cpbFoto3.ShadowDecoration.Mode = Guna.UI2.WinForms.Enums.ShadowMode.Circle;
             cpbFoto3.Size = new Size(116, 110);
             cpbFoto3.SizeMode = PictureBoxSizeMode.Zoom;
@@ -225,7 +245,7 @@
             cpbFoto2.ImageRotate = 0F;
             cpbFoto2.Location = new Point(229, 164);
             cpbFoto2.Name = "cpbFoto2";
-            cpbFoto2.ShadowDecoration.CustomizableEdges = customizableEdges2;
+            cpbFoto2.ShadowDecoration.CustomizableEdges = customizableEdges7;
             cpbFoto2.ShadowDecoration.Mode = Guna.UI2.WinForms.Enums.ShadowMode.Circle;
             cpbFoto2.Size = new Size(115, 110);
             cpbFoto2.SizeMode = PictureBoxSizeMode.Zoom;
@@ -238,7 +258,7 @@
             cpbFoto1.ImageRotate = 0F;
             cpbFoto1.Location = new Point(68, 164);
             cpbFoto1.Name = "cpbFoto1";
-            cpbFoto1.ShadowDecoration.CustomizableEdges = customizableEdges3;
+            cpbFoto1.ShadowDecoration.CustomizableEdges = customizableEdges8;
             cpbFoto1.ShadowDecoration.Mode = Guna.UI2.WinForms.Enums.ShadowMode.Circle;
             cpbFoto1.Size = new Size(118, 110);
             cpbFoto1.SizeMode = PictureBoxSizeMode.Zoom;
@@ -349,7 +369,7 @@
             // btnFechar
             // 
             btnFechar.BorderRadius = 5;
-            btnFechar.CustomizableEdges = customizableEdges4;
+            btnFechar.CustomizableEdges = customizableEdges9;
             btnFechar.DisabledState.BorderColor = Color.DarkGray;
             btnFechar.DisabledState.CustomBorderColor = Color.DarkGray;
             btnFechar.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
@@ -359,7 +379,7 @@
             btnFechar.ForeColor = Color.White;
             btnFechar.Location = new Point(446, 12);
             btnFechar.Name = "btnFechar";
-            btnFechar.ShadowDecoration.CustomizableEdges = customizableEdges5;
+            btnFechar.ShadowDecoration.CustomizableEdges = customizableEdges10;
             btnFechar.Size = new Size(97, 40);
             btnFechar.TabIndex = 3;
             btnFechar.Text = "Fechar";
@@ -395,26 +415,6 @@
             pbLogo.SizeMode = PictureBoxSizeMode.Zoom;
             pbLogo.TabIndex = 0;
             pbLogo.TabStop = false;
-            // 
-            // lblTituloArquitetura
-            // 
-            lblTituloArquitetura.AutoSize = true;
-            lblTituloArquitetura.Font = new Font("Yu Gothic", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblTituloArquitetura.ForeColor = Color.FromArgb(58, 52, 64);
-            lblTituloArquitetura.Location = new Point(29, 411);
-            lblTituloArquitetura.Name = "lblTituloArquitetura";
-            lblTituloArquitetura.Size = new Size(196, 19);
-            lblTituloArquitetura.TabIndex = 16;
-            lblTituloArquitetura.Text = "🖥️ Arquitetura do sistema";
-            // 
-            // lblCamadasSistemas
-            // 
-            lblCamadasSistemas.AutoSize = true;
-            lblCamadasSistemas.Location = new Point(45, 441);
-            lblCamadasSistemas.Name = "lblCamadasSistemas";
-            lblCamadasSistemas.Size = new Size(289, 15);
-            lblCamadasSistemas.TabIndex = 17;
-            lblCamadasSistemas.Text = "Domain, Application, Infrastructure, API, UI e Desktop";
             // 
             // AboutForm
             // 
@@ -471,7 +471,7 @@
         private Label lblDescricao3;
         private Label lblDescricao2;
         private Label lblDescricao1;
-        private LinkLabel lblLinkPaginaWeb;
+        private LinkLabel lblLinkReadme;
         private LinkLabel lblLinkGitHub;
         private Label lblTituloLinks;
         private Label lblCamadasSistemas;
