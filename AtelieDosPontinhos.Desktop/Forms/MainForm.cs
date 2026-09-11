@@ -197,5 +197,21 @@ namespace AtelieDosPontinhos.Desktop.Forms
         {
 
         }
+
+        private void btnSobreProjeto_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using var about = new AboutForm
+                {
+                    StartPosition = FormStartPosition.CenterParent
+                };
+                about.ShowDialog(this);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, $"Não foi possível abrir a tela: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }

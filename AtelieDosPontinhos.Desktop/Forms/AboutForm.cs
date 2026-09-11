@@ -23,23 +23,24 @@ namespace AtelieDosPontinhos.Desktop.Forms
 
         private void btnFechar_Click(object sender, EventArgs e)
         {
-            System.Windows.Forms.Application.Exit();
-        }
-
-        private void lblLinkReadme_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
-            {
-                FileName = "https://github.com/AtelieDosPontinhos/AtelieDosPontinhos/blob/main/README.md",
-                UseShellExecute = true
-            });
+            this.Close();
         }
 
         private void lblLinkGitHub_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
             {
-                FileName = "https://github.com/AtelieDosPontinhos/AtelieDosPontinhos",
+                FileName = "https://github.com/jessicagavazzi2006-dev/AtelieDosPontinhos",
+                UseShellExecute = true
+            });
+            
+        }
+
+        private void lblLinkReadme_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+            {
+                FileName = "https://github.com/jessicagavazzi2006-dev/AtelieDosPontinhos/blob/master/README.md",
                 UseShellExecute = true
             });
         }

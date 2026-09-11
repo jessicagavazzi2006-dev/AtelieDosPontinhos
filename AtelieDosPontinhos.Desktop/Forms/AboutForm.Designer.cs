@@ -28,12 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges11 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges6 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AboutForm));
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges12 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges13 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges14 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges15 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges7 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges8 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges9 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+            Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges10 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             pnlTelaSobre = new Panel();
             lblCamadasSistemas = new Label();
             lblTituloArquitetura = new Label();
@@ -167,10 +167,10 @@
             lblLinkReadme.AutoSize = true;
             lblLinkReadme.Location = new Point(29, 696);
             lblLinkReadme.Name = "lblLinkReadme";
-            lblLinkReadme.Size = new Size(60, 15);
+            lblLinkReadme.Size = new Size(485, 15);
             lblLinkReadme.TabIndex = 12;
             lblLinkReadme.TabStop = true;
-            lblLinkReadme.Text = "linkLabel2";
+            lblLinkReadme.Text = "https://github.com/jessicagavazzi2006-dev/AtelieDosPontinhos/blob/master/README.md";
             lblLinkReadme.LinkClicked += lblLinkReadme_LinkClicked;
             // 
             // lblLinkGitHub
@@ -178,10 +178,10 @@
             lblLinkGitHub.AutoSize = true;
             lblLinkGitHub.Location = new Point(29, 665);
             lblLinkGitHub.Name = "lblLinkGitHub";
-            lblLinkGitHub.Size = new Size(60, 15);
+            lblLinkGitHub.Size = new Size(343, 15);
             lblLinkGitHub.TabIndex = 11;
             lblLinkGitHub.TabStop = true;
-            lblLinkGitHub.Text = "linkLabel1";
+            lblLinkGitHub.Text = "https://github.com/jessicagavazzi2006-dev/AtelieDosPontinhos";
             lblLinkGitHub.LinkClicked += lblLinkGitHub_LinkClicked;
             // 
             // lblTituloLinks
@@ -234,7 +234,7 @@
             cpbFoto3.ImageRotate = 0F;
             cpbFoto3.Location = new Point(370, 164);
             cpbFoto3.Name = "cpbFoto3";
-            cpbFoto3.ShadowDecoration.CustomizableEdges = customizableEdges11;
+            cpbFoto3.ShadowDecoration.CustomizableEdges = customizableEdges6;
             cpbFoto3.ShadowDecoration.Mode = Guna.UI2.WinForms.Enums.ShadowMode.Circle;
             cpbFoto3.Size = new Size(116, 110);
             cpbFoto3.SizeMode = PictureBoxSizeMode.Zoom;
@@ -247,7 +247,7 @@
             cpbFoto2.ImageRotate = 0F;
             cpbFoto2.Location = new Point(229, 164);
             cpbFoto2.Name = "cpbFoto2";
-            cpbFoto2.ShadowDecoration.CustomizableEdges = customizableEdges12;
+            cpbFoto2.ShadowDecoration.CustomizableEdges = customizableEdges7;
             cpbFoto2.ShadowDecoration.Mode = Guna.UI2.WinForms.Enums.ShadowMode.Circle;
             cpbFoto2.Size = new Size(115, 110);
             cpbFoto2.SizeMode = PictureBoxSizeMode.Zoom;
@@ -260,7 +260,7 @@
             cpbFoto1.ImageRotate = 0F;
             cpbFoto1.Location = new Point(68, 164);
             cpbFoto1.Name = "cpbFoto1";
-            cpbFoto1.ShadowDecoration.CustomizableEdges = customizableEdges13;
+            cpbFoto1.ShadowDecoration.CustomizableEdges = customizableEdges8;
             cpbFoto1.ShadowDecoration.Mode = Guna.UI2.WinForms.Enums.ShadowMode.Circle;
             cpbFoto1.Size = new Size(118, 110);
             cpbFoto1.SizeMode = PictureBoxSizeMode.Zoom;
@@ -270,7 +270,7 @@
             // pbHtml5
             // 
             pbHtml5.Image = (Image)resources.GetObject("pbHtml5.Image");
-            pbHtml5.Location = new Point(291, 501);
+            pbHtml5.Location = new Point(382, 499);
             pbHtml5.Name = "pbHtml5";
             pbHtml5.Size = new Size(61, 58);
             pbHtml5.SizeMode = PictureBoxSizeMode.Zoom;
@@ -280,7 +280,7 @@
             // pbCSS
             // 
             pbCSS.Image = (Image)resources.GetObject("pbCSS.Image");
-            pbCSS.Location = new Point(161, 565);
+            pbCSS.Location = new Point(252, 563);
             pbCSS.Name = "pbCSS";
             pbCSS.Size = new Size(59, 58);
             pbCSS.SizeMode = PictureBoxSizeMode.Zoom;
@@ -290,7 +290,7 @@
             // pbBootstrap
             // 
             pbBootstrap.Image = (Image)resources.GetObject("pbBootstrap.Image");
-            pbBootstrap.Location = new Point(226, 565);
+            pbBootstrap.Location = new Point(317, 563);
             pbBootstrap.Name = "pbBootstrap";
             pbBootstrap.Size = new Size(59, 58);
             pbBootstrap.SizeMode = PictureBoxSizeMode.Zoom;
@@ -300,7 +300,7 @@
             // pbGuna
             // 
             pbGuna.Image = (Image)resources.GetObject("pbGuna.Image");
-            pbGuna.Location = new Point(94, 501);
+            pbGuna.Location = new Point(185, 499);
             pbGuna.Name = "pbGuna";
             pbGuna.Size = new Size(59, 58);
             pbGuna.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -310,7 +310,7 @@
             // pbSqlServer
             // 
             pbSqlServer.Image = (Image)resources.GetObject("pbSqlServer.Image");
-            pbSqlServer.Location = new Point(226, 501);
+            pbSqlServer.Location = new Point(317, 499);
             pbSqlServer.Name = "pbSqlServer";
             pbSqlServer.Size = new Size(59, 58);
             pbSqlServer.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -320,7 +320,7 @@
             // pbSql
             // 
             pbSql.Image = (Image)resources.GetObject("pbSql.Image");
-            pbSql.Location = new Point(93, 565);
+            pbSql.Location = new Point(184, 563);
             pbSql.Name = "pbSql";
             pbSql.Size = new Size(60, 58);
             pbSql.SizeMode = PictureBoxSizeMode.Zoom;
@@ -330,7 +330,7 @@
             // pbCharp
             // 
             pbCharp.Image = (Image)resources.GetObject("pbCharp.Image");
-            pbCharp.Location = new Point(29, 565);
+            pbCharp.Location = new Point(120, 563);
             pbCharp.Name = "pbCharp";
             pbCharp.Size = new Size(59, 58);
             pbCharp.SizeMode = PictureBoxSizeMode.Zoom;
@@ -340,7 +340,7 @@
             // pbEntity
             // 
             pbEntity.Image = (Image)resources.GetObject("pbEntity.Image");
-            pbEntity.Location = new Point(161, 501);
+            pbEntity.Location = new Point(252, 499);
             pbEntity.Name = "pbEntity";
             pbEntity.Size = new Size(59, 58);
             pbEntity.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -350,7 +350,7 @@
             // pbDotnet
             // 
             pbDotnet.Image = (Image)resources.GetObject("pbDotnet.Image");
-            pbDotnet.Location = new Point(29, 501);
+            pbDotnet.Location = new Point(120, 499);
             pbDotnet.Name = "pbDotnet";
             pbDotnet.Size = new Size(59, 58);
             pbDotnet.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -371,7 +371,7 @@
             // btnFechar
             // 
             btnFechar.BorderRadius = 5;
-            btnFechar.CustomizableEdges = customizableEdges14;
+            btnFechar.CustomizableEdges = customizableEdges9;
             btnFechar.DisabledState.BorderColor = Color.DarkGray;
             btnFechar.DisabledState.CustomBorderColor = Color.DarkGray;
             btnFechar.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
@@ -381,7 +381,7 @@
             btnFechar.ForeColor = Color.White;
             btnFechar.Location = new Point(446, 12);
             btnFechar.Name = "btnFechar";
-            btnFechar.ShadowDecoration.CustomizableEdges = customizableEdges15;
+            btnFechar.ShadowDecoration.CustomizableEdges = customizableEdges10;
             btnFechar.Size = new Size(97, 40);
             btnFechar.TabIndex = 3;
             btnFechar.Text = "Fechar";

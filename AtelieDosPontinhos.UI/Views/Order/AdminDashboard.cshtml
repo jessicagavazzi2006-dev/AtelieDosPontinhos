@@ -2,29 +2,35 @@
 
 @{
     ViewData["Title"] = "Painel de Controle de Vendas";
-    decimal faturamentoTotal = 0;
 
-    if (Model != null)
-    {
-        foreach (var p in Model)
-        {
-            if (p.TryGetProperty("valorTotal", out var v))
-            {
-                faturamentoTotal += v.GetDecimal();
-            }
-        }
-    }
+    // Recupera o faturamento filtrado vindo da ViewBag do Controller (ou faz fallback para 0)
+    decimal faturamentoTotal = ViewBag.FaturamentoFiltrado != null ? (decimal)ViewBag.FaturamentoFiltrado : 0;
+    string statusAtual = ViewBag.StatusFiltroAtual as string ?? "";
 }
 
 <div class="container py-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
         <div>
             <h2 class="fw-bold" style="color: #8a4f91;">Painel de Controle de Vendas</h2>
             <p class="text-muted mb-0">Acompanhamento em tempo real de todas as ordens de serviço do Ateliê dos Pontinhos.</p>
         </div>
-        <div class="card bg-light border-0 shadow-sm px-4 py-3 rounded-4">
-            <span class="small text-muted fw-bold">💰 FATURAMENTO BRUTO TOTAL</span>
-            <h3 class="fw-bold text-success mb-0">R$ @faturamentoTotal.ToString("N2")</h3>
+
+        <div class="d-flex align-items-center gap-3">
+            <!-- Filtro de Status -->
+            <form method="get" asp-action="AdminDashboard" class="d-flex align-items-center">
+                <select name="statusFiltro" onchange="this.form.submit()" class="form-select form-select-sm rounded-pill border shadow-sm px-3 fw-bold text-secondary" style="min-width: 170px;">
+                    <option value="">🔍 Todos os Status</option>
+                    <option value="Pendente" selected="@(statusAtual == "Pendente")">🟡 Pendente</option>
+                    <option value="Concluído" selected="@(statusAtual == "Concluído")">🟢 Concluído</option>
+                    <option value="Cancelado" selected="@(statusAtual == "Cancelado")">🔴 Cancelado</option>
+                </select>
+            </form>
+
+            <!-- Card de Faturamento (Dinâmico com base no filtro) -->
+            <div class="card bg-light border-0 shadow-sm px-4 py-2 rounded-4">
+                <span class="small text-muted fw-bold" style="font-size: 11px;">💰 FATURAMENTO (@(string.IsNullOrEmpty(statusAtual) ? "TOTAL" : statusAtual.ToUpper()))</span>
+                <h3 class="fw-bold text-success mb-0 fs-4">R$ @faturamentoTotal.ToString("N2")</h3>
+            </div>
         </div>
     </div>
 
@@ -32,6 +38,14 @@
     {
         <div class="alert alert-success alert-dismissible fade show rounded-3" role="alert">
             @TempData["Sucesso"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["Erro"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show rounded-3" role="alert">
+            @TempData["Erro"]
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
@@ -56,9 +70,9 @@
                     {
                         foreach (var pedido in Model)
                         {
-                            int id = pedido.GetProperty("id").GetInt32();
+                            int id = pedido.TryGetProperty("id", out var idProp) ? idProp.GetInt32() : 0;
                             string email = pedido.TryGetProperty("emailUsuario", out var e) ? e.GetString()! : "Desconhecido";
-                            string status = pedido.TryGetProperty("status", out var s) ? s.GetString()! : "Pendente";
+                            string status = pedido.TryGetProperty("status", out var s) ? s.GetString()! : (pedido.TryGetProperty("Status", out var s2) ? s2.GetString()! : "Pendente");
                             string cidade = pedido.TryGetProperty("cidade", out var c) ? c.GetString()! : "São Paulo";
                             string estado = pedido.TryGetProperty("estado", out var est) ? est.GetString()! : "SP";
 
@@ -68,8 +82,13 @@
                             else if (pedido.TryGetProperty("paymentMethod", out var m2) && m2.ValueKind != System.Text.Json.JsonValueKind.Null)
                                 pagamento = m2.GetString() ?? "Não informado";
 
-                            decimal total = pedido.GetProperty("valorTotal").GetDecimal();
-                            DateTime data = pedido.GetProperty("dataPedido").GetDateTime();
+                            decimal total = 0;
+                            if (pedido.TryGetProperty("valorTotal", out var vt)) total = vt.GetDecimal();
+                            else if (pedido.TryGetProperty("Total", out var vt2)) total = vt2.GetDecimal();
+
+                            DateTime data = DateTime.Now;
+                            if (pedido.TryGetProperty("dataPedido", out var dp)) data = dp.GetDateTime();
+                            else if (pedido.TryGetProperty("Data", out var dp2)) data = dp2.GetDateTime();
 
                             if (pagamento == "1") pagamento = "Cartão de Crédito";
                             else if (pagamento == "2") pagamento = "Cartão de Débito";
