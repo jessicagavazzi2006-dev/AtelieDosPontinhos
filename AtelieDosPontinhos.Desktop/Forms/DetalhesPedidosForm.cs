@@ -1,7 +1,7 @@
 ﻿using AtelieDosPontinhos.Desktop.DTOs;
-using AtelieDosPontinhos.Desktop.Helpers;
 using AtelieDosPontinhos.Desktop.Services;
 using AtelieDosPontinhos.Desktop.Themes;
+using AtelieDosPontinhos.Desktop.Helpers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -25,25 +25,26 @@ namespace AtelieDosPontinhos.Desktop.Forms
         {
             InitializeComponent();
 
-            // aplica tema atual sem animação
             ThemeManager.ApplyTheme(this, animate: false);
-
-            // assina mudanças de tema para reagir enquanto o form estiver aberto
             ThemeManager.ThemeChanged += OnThemeChanged;
 
-            //this.FormClosing += (s, e) => FormAnimator.AnimateCloseOverlay(this, e, closeWithSlide: true, durationMs: 120, offset: 40);
-
+            // Usa o mesmo evento para botão X, Alt+F4 e Close().
+            FormClosing += DetalhesPedidosForm_FormClosing;
         }
 
         // Construtor que recebe um Pedido para facilitar a abertura a partir do UserControl
         public DetalhesPedidosForm(Pedido pedido)
         {
             InitializeComponent();
+
             itemCompradosGrid.AllowUserToAddRows = false;
             Pedido = pedido;
+
             ThemeManager.ApplyTheme(this, animate: false);
             ThemeManager.ThemeChanged += OnThemeChanged;
-            //this.FormClosing += (s, e) => FormAnimator.AnimateCloseOverlay(this, e, closeWithSlide: true, durationMs: 120, offset: 40);
+
+            // Também registra a animação neste construtor.
+            FormClosing += DetalhesPedidosForm_FormClosing;
         }
 
         private async void DetalhesPedidosForm_Load(object sender, EventArgs e)
@@ -52,7 +53,8 @@ namespace AtelieDosPontinhos.Desktop.Forms
 
             await PreencherDadosAsync();
 
-            
+            // aplica estilo específico da grid depois de popular (garante cores)
+            AtelieDosPontinhosTheme.AplicarEstiloGrid(itemCompradosGrid);
         }
 
         private async Task PreencherDadosAsync()
@@ -134,10 +136,8 @@ namespace AtelieDosPontinhos.Desktop.Forms
 
         private void guna2Button1_Click(object sender, EventArgs e)
         {
-            
-            FormAnimator.CloseWithFade(this, durationMs: 300);
-
-            //this.Hide();
+            // Apenas solicita fechamento; o handler de FormClosing faz a animação de overlay
+            this.Close();
         }
 
         private void EnderecoLbl_Click(object sender, EventArgs e)
@@ -152,12 +152,25 @@ namespace AtelieDosPontinhos.Desktop.Forms
                 this.Invoke(() => ThemeManager.ApplyTheme(this, animate: true, durationMs: 300));
         }
 
-        //protected override void OnFormClosed(FormClosedEventArgs e)
-        //{
-        //    base.OnFormClosed(e);
-        //    // remove handler para evitar leak
-        //    ThemeManager.ThemeChanged -= OnThemeChanged;
-        //}
-    }
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+            base.OnFormClosed(e);
+            // remove handler para evitar leak
+            ThemeManager.ThemeChanged -= OnThemeChanged;
+        }
+        private void DetalhesPedidosForm_FormClosing(
+    object? sender,
+    FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.WindowsShutDown)
+                return;
 
+            FormAnimator.AnimateOnClosing(
+                this,
+                e,
+                closeWithSlide: true,
+                durationMs: 320,
+                offset: 40);
+        }
+    }
 }
