@@ -192,3 +192,75 @@ body {
     background: white;
     border-top: 1px solid #eee;
 }
+
+/* ============================
+   SUPORTE AO MODO ESCURO (LILÁS PADRÃO)
+============================= */
+body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+[data-bs-theme="dark"] body {
+    background-color: #1a1625 !important;
+    color: #e2d9ed !important;
+}
+
+[data-bs-theme="dark"] .navbar {
+    background-color: #241f31 !important;
+    border-bottom: 1px solid #362f4a !important;
+}
+
+[data-bs-theme="dark"] .card,
+[data-bs-theme="dark"] .Product-detalhe {
+    background-color: #211c2e !important;
+    color: #e2d9ed !important;
+    border-color: #362f4a !important;
+}
+
+/* Força absolutamente qualquer texto, parágrafo, preço, span ou tabela a usar o tom lilás claro */
+[data-bs-theme="dark"] p,
+[data-bs-theme="dark"] span,
+[data-bs-theme="dark"] a:not(.btn),
+[data-bs-theme="dark"] li,
+[data-bs-theme="dark"] label,
+[data-bs-theme="dark"] .text-muted,
+[data-bs-theme="dark"] small,
+[data-bs-theme="dark"] .table td,
+[data-bs-theme="dark"] .table th {
+    color: #e2d9ed !important;
+}
+
+/* Títulos e preços em destaque puro */
+[data-bs-theme="dark"] h1,
+[data-bs-theme="dark"] h2,
+[data-bs-theme="dark"] h3,
+[data-bs-theme="dark"] h4,
+[data-bs-theme="dark"] h5,
+[data-bs-theme="dark"] h6,
+[data-bs-theme="dark"] strong,
+[data-bs-theme="dark"] .price {
+    color: #ffffff !important;
+}
+
+/* Correção para inputs e barras de busca */
+[data-bs-theme="dark"] .form-control,
+[data-bs-theme="dark"] .search-navbar {
+    background-color: #1a1625 !important;
+    border-color: #362f4a !important;
+    color: #e2d9ed !important;
+}
+
+    [data-bs-theme="dark"] .form-control::placeholder,
+    [data-bs-theme="dark"] .search-navbar::placeholder {
+        color: #bfaed6 !important;
+    }
+
+/* Ajuste para badges, pills e marcações secundárias no modo escuro */
+[data-bs-theme="dark"] .badge,
+[data-bs-theme="dark"] .rounded-pill,
+[data-bs-theme="dark"] span[class*="bg-"],
+[data-bs-theme="dark"] div[class*="bg-"] {
+    background-color: #241f31 !important;
+    color: #e2d9ed !important;
+    border: 1px solid #362f4a !important;
+}
