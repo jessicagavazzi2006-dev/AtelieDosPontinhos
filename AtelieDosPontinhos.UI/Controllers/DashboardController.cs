@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using AtelieDosPontinhos.UI.Models;
 
 namespace AtelieDosPontinhos.UI.Controllers
 {
@@ -35,7 +36,7 @@ namespace AtelieDosPontinhos.UI.Controllers
         public async Task<IActionResult> GerenciarProdutos()
         {
             var httpClient = _httpClientFactory.CreateClient();
-            var produtos = await httpClient.GetFromJsonAsync<List<ProdutoViewModel>>(ApiUrl);
+            var produtos = await httpClient.GetFromJsonAsync<List<ProductViewModel>>(ApiUrl);
             return View(produtos);
         }
 
@@ -43,13 +44,13 @@ namespace AtelieDosPontinhos.UI.Controllers
         [HttpGet]
         public async Task<IActionResult> CriarProduto()
         {
-            var model = new ProdutoViewModel();
+            var model = new ProductViewModel();
             model.Categories = await CarregarCategoriasAsync();
             return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CriarProdutoPost(ProdutoViewModel model, IFormFile FotoArquivo)
+        public async Task<IActionResult> CriarProdutoPost(ProductViewModel model, IFormFile FotoArquivo)
         {
             if (FotoArquivo != null && FotoArquivo.Length > 0)
             {
@@ -64,6 +65,9 @@ namespace AtelieDosPontinhos.UI.Controllers
             {
                 ModelState.AddModelError("CoverImageUrl", "A foto do produto é obrigatória.");
             }
+
+            // Garante sincronização das flags de destaque
+            model.IsFeatured = model.Destaque;
 
             if (!ModelState.IsValid)
             {
@@ -90,7 +94,7 @@ namespace AtelieDosPontinhos.UI.Controllers
 
             if (!response.IsSuccessStatusCode) return NotFound();
 
-            var produtoApi = await response.Content.ReadFromJsonAsync<ProdutoViewModel>();
+            var produtoApi = await response.Content.ReadFromJsonAsync<ProductViewModel>();
             if (produtoApi != null)
             {
                 produtoApi.Categories = await CarregarCategoriasAsync();
@@ -99,8 +103,25 @@ namespace AtelieDosPontinhos.UI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditarProdutoPost(ProdutoViewModel model)
+        public async Task<IActionResult> EditarProdutoPost(ProductViewModel model, IFormFile? FotoArquivo)
         {
+            // 1. Processa nova imagem se arquivo foi enviado no upload
+            if (FotoArquivo != null && FotoArquivo.Length > 0)
+            {
+                using (var ms = new MemoryStream())
+                {
+                    await FotoArquivo.CopyToAsync(ms);
+                    var fileBytes = ms.ToArray();
+                    model.CoverImageUrl = $"data:{FotoArquivo.ContentType};base64,{System.Convert.ToBase64String(fileBytes)}";
+                }
+            }
+
+            // 2. Remove validação da foto caso mantida a imagem anterior
+            ModelState.Remove(nameof(model.CoverImageUrl));
+
+            // 3. Sincronização explícita entre Destaque e IsFeatured para o JSON da API
+            model.IsFeatured = model.Destaque;
+
             if (!ModelState.IsValid)
             {
                 model.Categories = await CarregarCategoriasAsync();
@@ -176,7 +197,7 @@ namespace AtelieDosPontinhos.UI.Controllers
         [HttpGet]
         public IActionResult CriarUsuario() => View();
 
-        // 🌟 CRIAÇÃO (SUBMISSÃO DO FORMULÁRIO)
+        // CRIAÇÃO (SUBMISSÃO DO FORMULÁRIO)
         [HttpPost]
         public async Task<IActionResult> CriarUsuario(CriarUsuarioViewModel model, string Role)
         {
@@ -224,44 +245,5 @@ namespace AtelieDosPontinhos.UI.Controllers
 
             return RedirectToAction("GerenciarUsuarios");
         }
-    }
-
-    // ==========================================
-    // VIEW MODELS
-    // ==========================================
-
-    public class ProdutoViewModel
-    {
-        public int Id { get; set; }
-        public string Name { get; set; } = string.Empty;
-        public double Price { get; set; }
-        public string Description { get; set; } = string.Empty;
-        public string CoverImageUrl { get; set; } = string.Empty;
-        public int Stock { get; set; } = 10;
-        public int CategoryId { get; set; } = 1;
-
-        public bool IsFeatured { get; set; }
-        public List<SelectListItem>? Categories { get; set; }
-    }
-
-    public class CategoriaViewModel
-    {
-        public int Id { get; set; }
-        public string Name { get; set; } = string.Empty;
-    }
-
-    public class UsuarioViewModel
-    {
-        public string Id { get; set; } = string.Empty;
-        public string UserName { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-        public bool EmailConfirmed { get; set; }
-    }
-
-    public class CriarUsuarioViewModel
-    {
-        public string Email { get; set; } = string.Empty;
-        public string Password { get; set; } = string.Empty;
-        public string ConfirmPassword { get; set; } = string.Empty;
     }
 }

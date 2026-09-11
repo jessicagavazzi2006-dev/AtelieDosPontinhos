@@ -1,4 +1,4 @@
-﻿@model AtelieDosPontinhos.UI.Controllers.ProdutoViewModel
+﻿@model AtelieDosPontinhos.UI.Models.ProductViewModel
 
 <div class="card">
     <div class="card-header bg-warning text-dark">
@@ -6,48 +6,52 @@
     </div>
     <div class="card-body">
 
-        <!-- 1. ATENÇÃO: Adicionado o enctype="multipart/form-data" para permitir envio de arquivos -->
         <form asp-action="EditarProdutoPost" method="post" enctype="multipart/form-data">
-            
-            <!-- Campo oculto com o ID do produto para o sistema saber quem atualizar -->
+
+            <!-- Campo oculto com o ID do produto -->
             <input type="hidden" asp-for="Id" />
 
             <!-- Campo: Nome do Produto -->
             <div class="form-group mb-3">
-                <label class="form-label">Nome do Produto</label>
+                <label class="form-label fw-bold">Nome do Produto</label>
                 <input asp-for="Name" class="form-control" required />
             </div>
 
             <!-- Campo: Preço -->
             <div class="form-group mb-3">
-                <label class="form-label">Preço (R$)</label>
+                <label class="form-label fw-bold">Preço (R$)</label>
                 <input asp-for="Price" type="number" step="0.01" class="form-control" required />
             </div>
 
             <!-- Campo: Descrição do Produto -->
             <div class="form-group mb-3">
-                <label class="form-label">Descrição do Produto</label>
+                <label class="form-label fw-bold">Descrição do Produto</label>
                 <textarea asp-for="Description" class="form-control" rows="3" required></textarea>
             </div>
 
-            <!-- 2. NOVO CAMPO: Upload de Imagem do Computador -->
-            <div class="form-group mb-3">
-                <label class="form-label">Imagem do Produto (Do Computador)</label>
-                <!-- O 'name="FotoArquivo"' deve bater com o parâmetro IFormFile no seu Controller -->
-                <input type="file" name="FotoArquivo" id="FotoArquivo" class="form-control" accept="image/*" onchange="previewImage(event)" />
-                <small class="text-muted">Selecione uma imagem JPG, PNG ou WebP.</small>
+            <!-- Campo: Destacar Produto (com sincronização explícita) -->
+            <div class="form-check mb-3">
+                <input type="checkbox" class="form-check-input" asp-for="Destaque" id="DestaqueCheck" onchange="syncDestaque(this.checked)" />
+                <input type="hidden" asp-for="IsFeatured" id="IsFeaturedHidden" />
+                <label class="form-check-label fw-bold" for="DestaqueCheck">⭐ Destacar este produto na página inicial</label>
             </div>
 
-            <!-- 3. BÔNUS: Pré-visualização da imagem atual/nova -->
+            <!-- Upload de Imagem do Computador -->
+            <div class="form-group mb-3">
+                <label class="form-label fw-bold">Imagem do Produto (Do Computador)</label>
+                <input type="file" name="FotoArquivo" id="FotoArquivo" class="form-control" accept="image/*" onchange="previewImage(event)" />
+                <small class="text-muted d-block mt-1">Selecione uma imagem JPG, PNG ou WebP.</small>
+            </div>
+
+            <!-- Pré-visualização da imagem atual/nova -->
             <div class="form-group mb-3 text-center">
-                <label class="form-label d-block text-start">Pré-visualização:</label>
+                <label class="form-label d-block text-start fw-bold">Pré-visualização:</label>
                 <img id="imagePreview" src="@Model.CoverImageUrl" alt="Pré-visualização" class="img-thumbnail" style="max-height: 200px; display: @(string.IsNullOrEmpty(Model.CoverImageUrl) ? "none" : "inline-block");" />
             </div>
 
-            <!-- Mantém a URL antiga guardada caso o usuário NÃO escolha uma nova foto -->
+            <!-- Guarda as URLs antigas e dados auxiliares para reenvio caso não alterados -->
             <input type="hidden" asp-for="CoverImageUrl" id="CoverImageUrl" />
-
-            <!-- Campos Ocultos para Valores Padrão -->
+            <input type="hidden" asp-for="ImagemUrl" />
             <input type="hidden" asp-for="Stock" />
             <input type="hidden" asp-for="CategoryId" />
 
@@ -55,12 +59,13 @@
                 <a asp-action="GerenciarProdutos" class="btn btn-secondary">Voltar</a>
                 <button type="submit" class="btn btn-primary">Salvar Alterações</button>
             </div>
+
         </form>
 
     </div>
 </div>
 
-<!-- Script em JavaScript para atualizar a imagem na tela assim que o usuário seleciona o arquivo -->
+<!-- Scripts de Interatividade -->
 <script>
     function previewImage(event) {
         var reader = new FileReader();
@@ -68,9 +73,24 @@
             var output = document.getElementById('imagePreview');
             output.src = reader.result;
             output.style.display = 'inline-block';
-        }
-        if(event.target.files[0]) {
+        };
+        if (event.target.files[0]) {
             reader.readAsDataURL(event.target.files[0]);
         }
     }
+
+    function syncDestaque(isChecked) {
+        var hiddenInput = document.getElementById('IsFeaturedHidden');
+        if (hiddenInput) {
+            hiddenInput.value = isChecked ? 'true' : 'false';
+        }
+    }
+
+    // Executa no carregamento para garantir sincronia inicial entre Destaque e IsFeatured
+    document.addEventListener("DOMContentLoaded", function() {
+        var chk = document.getElementById('DestaqueCheck');
+        if (chk) {
+            syncDestaque(chk.checked);
+        }
+    });
 </script>

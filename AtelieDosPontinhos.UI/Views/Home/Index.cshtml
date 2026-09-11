@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Página Inicial";
+    var todosProdutos = ViewBag.TodosProdutos as List<AtelieDosPontinhos.UI.Models.ProductViewModel> ?? new List<AtelieDosPontinhos.UI.Models.ProductViewModel>();
 }
 
 <div class="container mt-3">
@@ -26,8 +27,9 @@
     </div>
 </div>
 
+<!-- Seção de Produtos em Destaque -->
 <div class="container mt-5 mb-5">
-    <h2 class="text-center mb-4 fw-bold text-secondary">Nossos Produtos</h2>
+    <h2 class="text-center mb-4 fw-bold text-secondary">⭐ Produtos em Destaque</h2>
 
     <div class="row row-cols-1 row-cols-md-3 g-4">
         @if (Model != null && Model.Any())
@@ -37,14 +39,12 @@
                 <div class="col">
                     <div class="card h-100 shadow-sm border-0 rounded-3 overflow-hidden position-relative">
 
-                        <!-- 🤍 Botão Favoritar Flutuante sobre a imagem -->
                         <button type="button"
                                 onclick="toggleFavoritoHome(@item.Id, this)"
                                 class="btn btn-light rounded-circle position-absolute top-0 end-0 m-2 shadow-sm d-flex align-items-center justify-content-center"
                                 style="width: 38px; height: 38px; z-index: 10; border: none; background-color: rgba(255, 255, 255, 0.9);"
                                 title="Favoritar">
-                            <!-- Identifica o estado inicial com base na propriedade IsFavorited -->
-                            <i class="@(item.IsFavorited ? "bi bi-heart-fill" : "bi bi-heart") text-danger fs-5" id="fav-icon-@item.Id"></i>
+                            <i class="@(item.IsFavorited ? "bi bi-heart-fill" : "bi bi-heart") text-danger fs-5" id="fav-icon-destaque-@item.Id"></i>
                         </button>
 
                         <a href="/Product/Detalhes/@item.Id" class="text-decoration-none">
@@ -60,11 +60,9 @@
                             <p class="card-text text-muted text-truncate">@item.Descricao</p>
                             <p class="card-text fs-5 fw-bold text-success mt-auto">R$ @item.Price</p>
 
-                            <!-- Botão AJAX que adiciona sem sair da página -->
                             <button type="button" onclick="adicionarAoCarrinhoHome(@item.Id)" class="btn btn-outline-primary w-100 rounded-pill fw-bold mt-3">
                                 <i class="bi bi-cart-plus-fill"></i> Adicionar ao Carrinho
                             </button>
-
                         </div>
                     </div>
                 </div>
@@ -72,8 +70,58 @@
         }
         else
         {
-            <div class="col-12 text-center py-5">
-                <p class="text-muted fs-5">Nenhum produto encontrado no momento.</p>
+            <div class="col-12 text-center py-4">
+                <p class="text-muted fs-5">Nenhum produto em destaque no momento.</p>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Seção de Todos os Produtos / Catálogo Geral -->
+<div class="container mt-5 mb-5">
+    <h2 class="text-center mb-4 fw-bold text-secondary">🛍️ Todos os Produtos</h2>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        @if (todosProdutos != null && todosProdutos.Any())
+        {
+            foreach (var item in todosProdutos)
+            {
+                <div class="col">
+                    <div class="card h-100 shadow-sm border-0 rounded-3 overflow-hidden position-relative">
+
+                        <button type="button"
+                                onclick="toggleFavoritoHome(@item.Id, this)"
+                                class="btn btn-light rounded-circle position-absolute top-0 end-0 m-2 shadow-sm d-flex align-items-center justify-content-center"
+                                style="width: 38px; height: 38px; z-index: 10; border: none; background-color: rgba(255, 255, 255, 0.9);"
+                                title="Favoritar">
+                            <i class="@(item.IsFavorited ? "bi bi-heart-fill" : "bi bi-heart") text-danger fs-5" id="fav-icon-todos-@item.Id"></i>
+                        </button>
+
+                        <a href="/Product/Detalhes/@item.Id" class="text-decoration-none">
+                            <img src="@item.CoverImageUrl" class="card-img-top" alt="@item.Name" style="height: 250px; object-fit: cover;">
+                        </a>
+
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title fw-bold text-dark">
+                                <a href="/Product/Detalhes/@item.Id" class="text-decoration-none text-dark">
+                                    @(string.IsNullOrEmpty(item.Nome) ? item.Name : item.Nome)
+                                </a>
+                            </h5>
+                            <p class="card-text text-muted text-truncate">@item.Descricao</p>
+                            <p class="card-text fs-5 fw-bold text-success mt-auto">R$ @item.Price</p>
+
+                            <button type="button" onclick="adicionarAoCarrinhoHome(@item.Id)" class="btn btn-outline-primary w-100 rounded-pill fw-bold mt-3">
+                                <i class="bi bi-cart-plus-fill"></i> Adicionar ao Carrinho
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12 text-center py-4">
+                <p class="text-muted fs-5">Nenhum produto cadastrado no catálogo.</p>
             </div>
         }
     </div>
@@ -95,13 +143,11 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // Atualiza o contador do carrinho no menu superior
                         const cartBadge = document.getElementById("cartCount");
                         if (cartBadge) {
                             cartBadge.innerText = data.totalCount;
                         }
 
-                        // Dispara a notificação Toast flutuante de sucesso
                         const toastEl = document.getElementById('liveToast');
                         if (toastEl) {
                             const toast = new bootstrap.Toast(toastEl);
@@ -115,7 +161,8 @@
         }
 
         function toggleFavoritoHome(productId, btn) {
-            const icon = document.getElementById(`fav-icon-${productId}`);
+            const iconDestaque = document.getElementById(`fav-icon-destaque-${productId}`);
+            const iconTodos = document.getElementById(`fav-icon-todos-${productId}`);
 
             fetch(`/Favorites/Toggle?productId=${productId}`, {
                 method: 'POST'
@@ -123,13 +170,18 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        if (data.isFavorited) {
-                            icon.classList.remove('bi-heart');
-                            icon.classList.add('bi-heart-fill');
-                        } else {
-                            icon.classList.remove('bi-heart-fill');
-                            icon.classList.add('bi-heart');
-                        }
+                        const icons = [iconDestaque, iconTodos];
+                        icons.forEach(icon => {
+                            if (icon) {
+                                if (data.isFavorited) {
+                                    icon.classList.remove('bi-heart');
+                                    icon.classList.add('bi-heart-fill');
+                                } else {
+                                    icon.classList.remove('bi-heart-fill');
+                                    icon.classList.add('bi-heart');
+                                }
+                            }
+                        });
                     } else {
                         if (data.redirectUrl) {
                             window.location.href = data.redirectUrl;
