@@ -285,23 +285,43 @@ namespace AtelieDosPontinhos.Desktop.UserControls
         {
             if (gridPedidos.SelectedRows.Count == 0)
             {
-                MessageBox.Show("Selecione um pedido para ver os detalhes.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(
+                    "Selecione um pedido para ver os detalhes.",
+                    "Aviso",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
                 return;
             }
+
             var row = gridPedidos.SelectedRows[0];
             var id = Convert.ToInt32(row.Cells["colId"].Value);
+
             var pedido = _todosPedidos.FirstOrDefault(p => p.Id == id);
+
             if (pedido == null)
             {
-                MessageBox.Show("Pedido não encontrado.", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    "Pedido não encontrado.",
+                    "Erro",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
                 return;
             }
-            using var detalhesForm = new DetalhesPedidosForm(pedido);
-            ThemeManager.ApplyTheme(detalhesForm, animate: false);
-            // centralizar antes de ShowDialog se necessário (StartPosition)
-            FormAnimator.ShowDialogWithSlideFade(detalhesForm, this, 360, 40);
-            detalhesForm.ShowDialog();
 
+            using var detalhesForm = new DetalhesPedidosForm(pedido);
+
+            ThemeManager.ApplyTheme(
+                detalhesForm,
+                animate: false);
+
+            // Este método já abre o formulário com ShowDialog().
+            FormAnimator.ShowDialogWithSlideFade(
+                detalhesForm,
+                this,
+                360,
+                40);
         }
 
         private async void btnAtualizar_Click(object sender, EventArgs e) => await CarregarDadosAsync();

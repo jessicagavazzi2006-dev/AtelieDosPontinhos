@@ -133,7 +133,11 @@ namespace AtelieDosPontinhos.Desktop.Themes
         /// </summary>
         public static void AplicarEstiloFormulario(Form form)
         {
-            form.BackColor = CinzaFundo;
+            if (form.Tag?.ToString() != "KeepBackColor")
+            {
+                form.BackColor = CinzaFundo;
+            }
+
             form.ForeColor = TextoPrincipal;
 
             ApplyToControlRecursive(form);

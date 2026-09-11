@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using AtelieDosPontinhos.Desktop.Helpers;
 
 namespace AtelieDosPontinhos.Desktop.Forms
 {
@@ -38,18 +39,24 @@ namespace AtelieDosPontinhos.Desktop.Forms
         public ProdutoFormDialog()
         {
             InitializeComponent();
-            // aplica tema atual sem animação
-            ThemeManager.ApplyTheme(this, animate: false);
 
-            // assina mudanças de tema para reagir enquanto o form estiver aberto
+            ThemeManager.ApplyTheme(this, animate: false);
             ThemeManager.ThemeChanged += OnThemeChanged;
+
+            FormClosing += ProdutoFormDialog_FormClosing;
         }
 
         public ProdutoFormDialog(List<CategoriaResponseDto> categorias, ProductResponseDto? produto)
         {
             _categorias = categorias;
             _produtoExistente = produto;
+
             InitializeComponent();
+
+            ThemeManager.ApplyTheme(this, animate: false);
+            ThemeManager.ThemeChanged += OnThemeChanged;
+
+            FormClosing += ProdutoFormDialog_FormClosing;
         }
 
         // =====================================================================
@@ -109,16 +116,21 @@ namespace AtelieDosPontinhos.Desktop.Forms
                     "Validação",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
+
                 return;
             }
 
-            if (!decimal.TryParse(txtPreco.Text, out decimal precoValido) || precoValido <= 0)
+            if (!decimal.TryParse(
+                    txtPreco.Text,
+                    out decimal precoValido) ||
+                precoValido <= 0)
             {
                 MessageBox.Show(
                     "Informe um preço válido.",
                     "Validação",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
+
                 return;
             }
 
@@ -129,16 +141,21 @@ namespace AtelieDosPontinhos.Desktop.Forms
                     "Validação",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
+
                 return;
             }
 
-            if (!int.TryParse(txtEstoque.Text, out int estoqueValido) || estoqueValido < 0)
+            if (!int.TryParse(
+                    txtEstoque.Text,
+                    out int estoqueValido) ||
+                estoqueValido < 0)
             {
                 MessageBox.Show(
                     "Informe um valor de estoque válido.",
                     "Validação",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
+
                 return;
             }
 
@@ -149,6 +166,7 @@ namespace AtelieDosPontinhos.Desktop.Forms
                     "Validação",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
+
                 return;
             }
 
@@ -182,13 +200,14 @@ namespace AtelieDosPontinhos.Desktop.Forms
                 };
             }
 
-            this.DialogResult = DialogResult.OK;
-            this.Close();
+            DialogResult = DialogResult.OK;
+            Close();
         }
 
         private void btnCancelar_Click(object sender, EventArgs e)
         {
-            this.Close();
+            DialogResult = DialogResult.Cancel;
+            Close();
         }
         private void OnThemeChanged(bool isDark)
         {
@@ -202,6 +221,21 @@ namespace AtelieDosPontinhos.Desktop.Forms
             base.OnFormClosed(e);
             // remove handler para evitar leak
             ThemeManager.ThemeChanged -= OnThemeChanged;
+        }
+
+        private void ProdutoFormDialog_FormClosing(
+    object? sender,
+    FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.WindowsShutDown)
+                return;
+
+            FormAnimator.AnimateOnClosing(
+                this,
+                e,
+                closeWithSlide: true,
+                durationMs: 320,
+                offset: 40);
         }
     }
 }

@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using AtelieDosPontinhos.Desktop.Helpers;
+using AtelieDosPontinhos.Desktop.Themes;
 
 namespace AtelieDosPontinhos.Desktop.Forms
 {
@@ -31,9 +33,18 @@ namespace AtelieDosPontinhos.Desktop.Forms
         public UsuarioFormDialog()
         {
             InitializeComponent();
+
+            ThemeManager.ApplyTheme(
+                this,
+                animate: false);
+
+            ThemeManager.ThemeChanged += OnThemeChanged;
+            FormClosing += UsuarioFormDialog_FormClosing;
         }
 
-        public UsuarioFormDialog(List<string> perfis, UsuarioResponseDto? usuarioExistente = null) : this()
+        public UsuarioFormDialog(
+    List<string> perfis,
+    UsuarioResponseDto? usuarioExistente = null) : this()
         {
             _perfis = perfis;
             _usuarioExistente = usuarioExistente;
@@ -46,14 +57,17 @@ namespace AtelieDosPontinhos.Desktop.Forms
                 txtNome.Text = _usuarioExistente.UserName;
                 txtEmail.Text = _usuarioExistente.Email;
 
-                if (cmbPerfil.Items.Contains(_usuarioExistente.PerfilPrincipal))
+                if (cmbPerfil.Items.Contains(
+                        _usuarioExistente.PerfilPrincipal))
                 {
-                    cmbPerfil.SelectedItem = _usuarioExistente.PerfilPrincipal;
+                    cmbPerfil.SelectedItem =
+                        _usuarioExistente.PerfilPrincipal;
                 }
             }
             else
             {
                 lblTituloForm.Text = "➕ Novo Usuário";
+
                 if (cmbPerfil.Items.Count > 0)
                     cmbPerfil.SelectedIndex = 0;
             }
@@ -138,13 +152,51 @@ namespace AtelieDosPontinhos.Desktop.Forms
 
         private void btnCancelar_Click(object sender, EventArgs e)
         {
-            this.DialogResult = DialogResult.OK;
-            this.Close();
+            DialogResult = DialogResult.Cancel;
+            Close();
         }
 
         private void UsuarioFormDialog_Load(object sender, EventArgs e)
         {
 
+        }
+        private void UsuarioFormDialog_FormClosing(
+    object? sender,
+    FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.WindowsShutDown)
+                return;
+
+            FormAnimator.AnimateOnClosing(
+                this,
+                e,
+                closeWithSlide: true,
+                durationMs: 320,
+                offset: 40);
+        }
+
+        private void OnThemeChanged(bool isDark)
+        {
+            if (IsHandleCreated &&
+                !IsDisposed &&
+                !Disposing)
+            {
+                BeginInvoke((MethodInvoker)(() =>
+                {
+                    if (!IsDisposed)
+                    {
+                        ThemeManager.ApplyTheme(
+                            this,
+                            animate: true,
+                            durationMs: 300);
+                    }
+                }));
+            }
+        }
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+            ThemeManager.ThemeChanged -= OnThemeChanged;
+            base.OnFormClosed(e);
         }
     }
 }

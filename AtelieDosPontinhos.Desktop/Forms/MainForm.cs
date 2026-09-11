@@ -206,11 +206,21 @@ namespace AtelieDosPontinhos.Desktop.Forms
                 {
                     StartPosition = FormStartPosition.CenterParent
                 };
-                about.ShowDialog(this);
+
+                FormAnimator.ShowDialogWithSlideFade(
+                    about,
+                    this,
+                    durationMs: 360,
+                    offset: 40);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(this, $"Não foi possível abrir a tela: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    this,
+                    $"Não foi possível abrir a tela: {ex.Message}",
+                    "Erro",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
         }
     }
