@@ -76,7 +76,11 @@ namespace AtelieDosPontinhos.Desktop.Themes
 
         public static void AplicarEstiloFormulario(Form form)
         {
-            form.BackColor = FundoEscuro;
+            if (form.Tag?.ToString() != "KeepBackColor")
+            {
+                form.BackColor = FundoEscuro;
+            }
+
             form.ForeColor = TextoClaro;
 
             ApplyToControlRecursive(form);
