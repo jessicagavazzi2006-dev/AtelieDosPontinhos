@@ -1,20 +1,20 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SeuProjeto.Models
+namespace AtelieDosPontinhos.UI.Models // Ou o namespace correspondente ao seu projeto
 {
-    [Table("Produtos")] // Define o nome da tabela que será criada no banco de dados
+    [Table("Produtos")]
     public class Product
     {
-        [Key] // Define que o Id é a Chave Primária no banco
+        [Key]
         public int Id { get; set; }
 
         [Required]
-        [StringLength(100)] // Evita que o banco crie um campo de texto infinito (NVARCHAR(MAX))
+        [StringLength(100)]
         public string Nome { get; set; }
 
         [Required]
-        [Column(TypeName = "decimal(18,2)")] // Garante que o banco salve o preço com duas casas decimais
+        [Column(TypeName = "decimal(18,2)")]
         public decimal Preco { get; set; }
 
         public string Descricao { get; set; }
@@ -23,5 +23,8 @@ namespace SeuProjeto.Models
 
         [Required]
         public string Categoria { get; set; }
+
+        // Adicione esta linha abaixo para corrigir o erro:
+        public bool Destaque { get; set; }
     }
 }

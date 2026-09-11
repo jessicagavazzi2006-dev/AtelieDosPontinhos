@@ -18,8 +18,9 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        // 1. Busca os produtos do banco de dados
-        var productsFromDb = _context.Products.ToList();
+        // 1. Busca os produtos em destaque aceitando tanto a flag Destaque quanto IsFeatured (evita falha por nome do campo na entidade DB)
+        var destaqueFromDb = _context.Products.Where(p => p.Destaque || p.IsFeatured).ToList();
+        var todosFromDb = _context.Products.ToList();
 
         // 2. Recupera os produtos favoritos salvos na sessão
         var favJson = HttpContext.Session.GetString(SESSION_KEY);
@@ -35,18 +36,37 @@ public class HomeController : Controller
             catch { }
         }
 
-        // 3. Converte para ProductViewModel e define se está favoritado
-        var productViewModels = productsFromDb.Select(p => new ProductViewModel
+        // 3. Converte os produtos em destaque para ViewModel mapeando status de favorito e flags de destaque
+        var destaqueViewModels = destaqueFromDb.Select(p => new ProductViewModel
         {
             Id = p.Id,
             Name = p.Name,
             Price = p.Price,
             CoverImageUrl = p.CoverImageUrl,
             Description = p.Description ?? string.Empty,
-            IsFavorited = favoriteIds.Contains(p.Id) // Verifica se o ID está na lista da sessão
+            Destaque = true,
+            IsFeatured = true,
+            IsFavorited = favoriteIds.Contains(p.Id)
         }).ToList();
 
-        // 4. Retorna para a View
-        return View(productViewModels);
+        // 4. Converte todos os produtos para ViewModel mapeando status de favorito e flags de destaque
+        var todosViewModels = todosFromDb.Select(p => new ProductViewModel
+        {
+            Id = p.Id,
+            Name = p.Name,
+            Price = p.Price,
+            CoverImageUrl = p.CoverImageUrl,
+            Description = p.Description ?? string.Empty,
+            Destaque = p.Destaque || p.IsFeatured,
+            IsFeatured = p.Destaque || p.IsFeatured,
+            IsFavorited = favoriteIds.Contains(p.Id)
+        }).ToList();
+
+        // 5. Disponibiliza ambas as listas para a View através da ViewBag
+        ViewBag.ProdutosDestaque = destaqueViewModels;
+        ViewBag.TodosProdutos = todosViewModels;
+
+        // Retorna a View passando a lista de destaques como modelo principal
+        return View(destaqueViewModels);
     }
 }
