@@ -1,24 +1,23 @@
-﻿@model List<System.Text.Json.JsonElement>
+﻿
+@model List<System.Text.Json.JsonElement>
 
 @{
     ViewData["Title"] = "Painel de Controle de Vendas";
 
-    // Recupera o faturamento filtrado vindo da ViewBag do Controller (ou faz fallback para 0)
     decimal faturamentoTotal = ViewBag.FaturamentoFiltrado != null ? (decimal)ViewBag.FaturamentoFiltrado : 0;
     string statusAtual = ViewBag.StatusFiltroAtual as string ?? "";
 }
 
 <div class="container py-4">
-    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
-        <div>
-            <h2 class="fw-bold" style="color: #8a4f91;">Painel de Controle de Vendas</h2>
-            <p class="text-muted mb-0">Acompanhamento em tempo real de todas as ordens de serviço do Ateliê dos Pontinhos.</p>
+    <div class="row align-items-center mb-4 gy-3">
+        <div class="col-12 col-lg-6">
+            <h2 class="fw-bold fs-3" style="color: #8a4f91;">Painel de Controle de Vendas</h2>
+            <p class="text-muted mb-0 small">Acompanhamento em tempo real de todas as ordens de serviço do Ateliê dos Pontinhos.</p>
         </div>
 
-        <div class="d-flex align-items-center gap-3">
-            <!-- Filtro de Status -->
-            <form method="get" asp-action="AdminDashboard" class="d-flex align-items-center">
-                <select name="statusFiltro" onchange="this.form.submit()" class="form-select form-select-sm rounded-pill border shadow-sm px-3 fw-bold text-secondary" style="min-width: 170px;">
+        <div class="col-12 col-lg-6 d-flex flex-wrap justify-content-lg-end align-items-center gap-2">
+            <form method="get" asp-action="AdminDashboard" class="mb-0">
+                <select name="statusFiltro" onchange="this.form.submit()" class="form-select form-select-sm rounded-pill border shadow-sm fw-bold text-secondary" style="min-width: 175px; padding-right: 2.5rem !important;">
                     <option value="">🔍 Todos os Status</option>
                     <option value="Pendente" selected="@(statusAtual == "Pendente")">🟡 Pendente</option>
                     <option value="Concluído" selected="@(statusAtual == "Concluído")">🟢 Concluído</option>
@@ -26,10 +25,9 @@
                 </select>
             </form>
 
-            <!-- Card de Faturamento (Dinâmico com base no filtro) -->
-            <div class="card bg-light border-0 shadow-sm px-4 py-2 rounded-4">
-                <span class="small text-muted fw-bold" style="font-size: 11px;">💰 FATURAMENTO (@(string.IsNullOrEmpty(statusAtual) ? "TOTAL" : statusAtual.ToUpper()))</span>
-                <h3 class="fw-bold text-success mb-0 fs-4">R$ @faturamentoTotal.ToString("N2")</h3>
+            <div class="card bg-light border-0 shadow-sm px-3 py-2 rounded-4 mb-0">
+                <span class="small text-muted fw-bold" style="font-size: 10px;">💰 FATURAMENTO (@(string.IsNullOrEmpty(statusAtual) ? "TOTAL" : statusAtual.ToUpper()))</span>
+                <h3 class="fw-bold text-success mb-0 fs-5">R$ @faturamentoTotal.ToString("N2")</h3>
             </div>
         </div>
     </div>
@@ -55,14 +53,14 @@
             <table class="table table-hover align-middle mb-0 text-center">
                 <thead class="bg-light text-secondary small fw-bold">
                     <tr>
-                        <th class="py-3">PEDIDO</th>
-                        <th class="py-3 text-start">COMPRADOR</th>
-                        <th class="py-3">DATA</th>
-                        <th class="py-3">LOCALIDADE</th>
-                        <th class="py-3">PAGAMENTO</th>
-                        <th class="py-3">TOTAL</th>
-                        <th class="py-3">STATUS</th>
-                        <th class="py-3">AÇÕES</th>
+                        <th class="py-3 px-2" style="width: 8%;">PEDIDO</th>
+                        <th class="py-3 px-2 text-start" style="width: 22%;">COMPRADOR</th>
+                        <th class="py-3 px-2" style="width: 14%;">DATA</th>
+                        <th class="py-3 px-2" style="width: 12%;">LOCALIDADE</th>
+                        <th class="py-3 px-2" style="width: 14%;">PAGAMENTO</th>
+                        <th class="py-3 px-2" style="width: 10%;">TOTAL</th>
+                        <th class="py-3 px-2" style="width: 10%;">STATUS</th>
+                        <th class="py-3 px-2" style="width: 10%;">AÇÕES</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -95,27 +93,27 @@
                             else if (pagamento == "3") pagamento = "PIX";
 
                             <tr>
-                                <td class="fw-bold text-dark">#@id.ToString("D4")</td>
-                                <td class="text-start text-truncate" style="max-width: 220px;" title="@email">
+                                <td class="fw-bold text-dark px-2">#@id.ToString("D4")</td>
+                                <td class="text-start text-truncate px-2" style="max-width: 180px;" title="@email">
                                     <i class="bi bi-person-circle text-secondary me-1"></i> @email
                                 </td>
-                                <td class="small text-muted">@data.ToString("dd/MM/yyyy HH:mm")</td>
-                                <td class="small fw-semibold">@cidade - @estado</td>
-                                <td><span class="badge bg-light text-dark border px-2 py-1 rounded-pill">@pagamento</span></td>
-                                <td class="fw-bold text-dark">R$ @total.ToString("N2")</td>
-                                <td>
+                                <td class="small text-muted px-2">@data.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td class="small fw-semibold px-2">@cidade - @estado</td>
+                                <td class="px-2"><span class="badge bg-light text-dark border px-2 py-1 rounded-pill">@pagamento</span></td>
+                                <td class="fw-bold text-dark px-2">R$ @total.ToString("N2")</td>
+                                <td class="px-2">
                                     <form asp-controller="Order" asp-action="AtualizarStatus" method="post" class="d-inline-block">
                                         <input type="hidden" name="id" value="@id" />
                                         <select name="status" onchange="this.form.submit()"
                                                 class="form-select form-select-sm rounded-pill border-0 ps-3 pe-4 fw-bold @(status == "Concluído" ? "bg-success bg-opacity-10 text-success" : status == "Cancelado" ? "bg-danger bg-opacity-10 text-danger" : "bg-warning bg-opacity-10 text-warning")"
-                                                style="min-width: 140px;">
+                                                style="min-width: 130px;">
                                             <option value="Pendente" selected="@(status == "Pendente")">🟡 Pendente</option>
                                             <option value="Concluído" selected="@(status == "Concluído")">🟢 Concluído</option>
                                             <option value="Cancelado" selected="@(status == "Cancelado")">🔴 Cancelado</option>
                                         </select>
                                     </form>
                                 </td>
-                                <td>
+                                <td class="px-2">
                                     <button type="button" class="btn btn-sm btn-outline-purple rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#modalPedido-@id" style="color: #8a4f91; border-color: #8a4f91;">
                                         🔍 Detalhes
                                     </button>
@@ -179,3 +177,5 @@
         </div>
     </div>
 </div>
+
+```

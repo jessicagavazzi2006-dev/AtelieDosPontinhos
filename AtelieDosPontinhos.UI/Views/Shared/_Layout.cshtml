@@ -9,6 +9,15 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <!-- Ícones do Bootstrap -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Script preventivo para evitar flash branco ao carregar em modo escuro -->
+    <script>
+            (function() {
+                const savedTheme = localStorage.getItem("theme") ||
+                    (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+                document.documentElement.setAttribute("data-bs-theme", savedTheme);
+            })();
+    </script>
 </head>
 <body>
 
@@ -22,7 +31,7 @@
 
     <header>
         <!-- Navbar fixa com sobreposição correta -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow fixed-top" style="z-index: 1030;">
+        <nav class="navbar navbar-expand-lg border-bottom shadow fixed-top" style="z-index: 1030;">
             <div class="container">
 
                 <a class="navbar-brand d-flex align-items-center" asp-controller="Home" asp-action="Index">
@@ -46,6 +55,11 @@
 
                     <div class="d-flex align-items-center gap-3 fs-5 ms-auto">
 
+                        <!-- Botão de Alternância de Tema (Dark/Light Mode) - Apenas Ícone -->
+                        <button class="btn btn-outline-secondary rounded-circle p-0 d-flex align-items-center justify-content-center" id="btn-theme-toggle" type="button" title="Alternar tema" style="width: 38px; height: 38px;">
+                            <i id="theme-icon" class="bi bi-sun-fill fs-5"></i>
+                        </button>
+
                         @* ❤️ Link direto para os Favoritos *@
                         <a asp-controller="Favorites" asp-action="Index" title="Meus Favoritos" class="text-decoration-none d-flex align-items-center fs-6 fw-semibold text-danger">
                             <i class="bi bi-heart-fill me-1"></i> Favoritos
@@ -55,7 +69,7 @@
                         {
                             @* 👤 Menu Dropdown limpo para o usuário logado *@
                             <div class="dropdown">
-                                <button class="btn btn-light dropdown-toggle border rounded-pill px-3 py-1 fs-6 d-flex align-items-center gap-2 bg-light text-dark fw-semibold shadow-sm" type="button" id="userMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                <button class="btn dropdown-toggle border rounded-pill px-3 py-1 fs-6 d-flex align-items-center gap-2 fw-semibold shadow-sm" type="button" id="userMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i class="bi bi-person-circle text-primary fs-5"></i>
                                     <span style="max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">@userEmail.Split('@')[0]</span>
                                 </button>
@@ -140,6 +154,38 @@
 
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
+    <!-- Script de Controle do Modo Escuro / Claro -->
+    <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const btnToggle = document.getElementById("btn-theme-toggle");
+                const themeIcon = document.getElementById("theme-icon");
+                const htmlElement = document.documentElement;
+
+                function updateThemeUI(theme) {
+                    if (theme === "dark") {
+                        themeIcon.className = "bi bi-moon-fill text-warning fs-5";
+                    } else {
+                        themeIcon.className = "bi bi-sun-fill text-secondary fs-5";
+                    }
+                }
+
+                // Sincronizar o estado visual inicial com o atributo atual do HTML
+                const currentTheme = htmlElement.getAttribute("data-bs-theme") || "light";
+                updateThemeUI(currentTheme);
+
+                if (btnToggle) {
+                    btnToggle.addEventListener("click", function() {
+                        const activeTheme = htmlElement.getAttribute("data-bs-theme");
+                        const newTheme = activeTheme === "dark" ? "light" : "dark";
+
+                        htmlElement.setAttribute("data-bs-theme", newTheme);
+                        localStorage.setItem("theme", newTheme);
+                        updateThemeUI(newTheme);
+                    });
+                }
+            });
+    </script>
+
     <script>
             const input = document.querySelector(".search-navbar");
             const resultsBox = document.getElementById("searchResults");
@@ -206,9 +252,9 @@
                             try
                             {
                                 var itens = System.Text.Json.JsonSerializer.Deserialize<List<AtelieDosPontinhos.UI.Models.CartItemViewModel>>(cartJson);
-                                                                            totalItens = itens?.Sum(x => x.Quantidade) ?? 0;
+                                                        totalItens = itens?.Sum(x => x.Quantidade) ?? 0;
                             }
-                                                    catch { }
+                                                catch { }
                         }
                     }
                     document.getElementById("cartCount").innerText = "@totalItens";
