@@ -264,3 +264,50 @@ body {
     color: #e2d9ed !important;
     border: 1px solid #362f4a !important;
 }
+
+/* Efeito Glassmorphism na Header / Navbar */
+.navbar-custom {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Card Moderno com Microinteração */
+.product-card {
+    border: none;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    background: #ffffff;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+    .product-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    /* Zoom suave na foto do produto */
+    .product-card .img-container {
+        overflow: hidden;
+        position: relative;
+    }
+
+    .product-card img {
+        transition: transform 0.6s ease;
+    }
+
+    .product-card:hover img {
+        transform: scale(1.06);
+    }
+
+/* Badge de Destaque Sofisticada (Efeito Shimmer) */
+.badge-destaque {
+    background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #feada6 100%);
+    color: #4a154b;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 20px;
+    box-shadow: 0 2px 10px rgba(255, 154, 158, 0.4);
+}
