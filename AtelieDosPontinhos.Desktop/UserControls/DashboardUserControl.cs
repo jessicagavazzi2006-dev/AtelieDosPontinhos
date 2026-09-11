@@ -68,7 +68,7 @@ namespace AtelieDosPontinhos.Desktop.UserControls
                 cardProdutosLblNumero.Text = produto.Count.ToString();
                 cardCategoriasLblNumero.Text = categorias.Count.ToString();
                 // conta apenas pedidos com status "Concluído"
-                cardVendaslblNumero.Text = pedidos.Count(p => string.Equals(p.Status, "Concluído", StringComparison.OrdinalIgnoreCase)).ToString();
+                cardVendaslblNumero.Text = pedidos.Count(p => string.Equals(p.Status, "Concluido", StringComparison.OrdinalIgnoreCase)).ToString();
 
                 //Atualiza os dados do card
                 //AtualizarNumeroCard(cardProdutos, produto.Count().ToString());
@@ -119,11 +119,6 @@ namespace AtelieDosPontinhos.Desktop.UserControls
             cardCategorias.Visible = !carregando;
             lblUltimosProdutos.Visible = !carregando;
             gridUltimosProdutos.Visible = !carregando;
-        }
-
-        private void pnlCorCategorias_Paint(object sender, PaintEventArgs e)
-        {
-            
         }
     }
 }

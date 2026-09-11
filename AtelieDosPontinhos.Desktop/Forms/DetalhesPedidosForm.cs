@@ -30,6 +30,7 @@ namespace AtelieDosPontinhos.Desktop.Forms
 
             // Usa o mesmo evento para botão X, Alt+F4 e Close().
             FormClosing += DetalhesPedidosForm_FormClosing;
+
         }
 
         // Construtor que recebe um Pedido para facilitar a abertura a partir do UserControl
@@ -50,11 +51,12 @@ namespace AtelieDosPontinhos.Desktop.Forms
         private async void DetalhesPedidosForm_Load(object sender, EventArgs e)
         {
             if (DesignMode) return;
+            BackColor = Color.FromArgb(177, 145, 217);
+            Tag = "KeepBackColor";
 
             await PreencherDadosAsync();
 
-            // aplica estilo específico da grid depois de popular (garante cores)
-            AtelieDosPontinhosTheme.AplicarEstiloGrid(itemCompradosGrid);
+
         }
 
         private async Task PreencherDadosAsync()
@@ -134,12 +136,6 @@ namespace AtelieDosPontinhos.Desktop.Forms
             totalLbl.Text = Pedido.ValorTotal.ToString("C");
         }
 
-        private void guna2Button1_Click(object sender, EventArgs e)
-        {
-            // Apenas solicita fechamento; o handler de FormClosing faz a animação de overlay
-            this.Close();
-        }
-
         private void EnderecoLbl_Click(object sender, EventArgs e)
         {
 
@@ -171,6 +167,12 @@ namespace AtelieDosPontinhos.Desktop.Forms
                 closeWithSlide: true,
                 durationMs: 320,
                 offset: 40);
+        }
+
+        private void btnFechar_Click(object sender, EventArgs e)
+        {
+            // Apenas solicita fechamento; o handler de FormClosing faz a animação de overlay
+            this.Close();
         }
     }
 }
