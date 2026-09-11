@@ -123,17 +123,36 @@ namespace AtelieDosPontinhos.Desktop.UserControls
         private async void btnNovo_Click(object sender, EventArgs e)
         {
             using var form = new ProdutoFormDialog(_categorias, null);
-            if (form.ShowDialog() == DialogResult.OK && form.ProdutoDto != null)
+
+            var resultado = FormAnimator.ShowDialogWithSlideFade(
+                form,
+                this,
+                durationMs: 360,
+                offset: 40);
+
+            if (resultado == DialogResult.OK &&
+                form.ProdutoDto != null)
             {
-                var (success, _, error) = await _produtosService.CreateAsync(form.ProdutoDto);
+                var (success, _, error) =
+                    await _produtosService.CreateAsync(form.ProdutoDto);
+
                 if (success)
                 {
-                    MessageBox.Show("✅ Produto criado com sucesso", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(
+                        "✅ Produto criado com sucesso",
+                        "Sucesso",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+
                     await CarregarDadosAsync();
                 }
                 else
                 {
-                    MessageBox.Show($"❌ {error}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(
+                        $"❌ {error}",
+                        "Erro",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
                 }
             }
         }
@@ -141,23 +160,53 @@ namespace AtelieDosPontinhos.Desktop.UserControls
         private async void btnEditar_Click(object sender, EventArgs e)
         {
             var produto = ObterGameSelecionado();
+
             if (produto == null)
             {
-                MessageBox.Show($"Selecione um produto para editar", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(
+                    "Selecione um produto para editar.",
+                    "Aviso",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
                 return;
             }
-            using var form = new ProdutoFormDialog(_categorias, produto);
-            if (form.ShowDialog() == DialogResult.OK && form.UpdateDto != null)
+
+            using var form = new ProdutoFormDialog(
+                _categorias,
+                produto);
+
+            var resultado = FormAnimator.ShowDialogWithSlideFade(
+                form,
+                this,
+                durationMs: 360,
+                offset: 40);
+
+            if (resultado == DialogResult.OK &&
+                form.UpdateDto != null)
             {
-                var (success, _, error) = await _produtosService.UpdateAsync(produto.Id, form.UpdateDto);
+                var (success, _, error) =
+                    await _produtosService.UpdateAsync(
+                        produto.Id,
+                        form.UpdateDto);
+
                 if (success)
                 {
-                    MessageBox.Show("✅ Produto atualizado", "sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(
+                        "✅ Produto atualizado",
+                        "Sucesso",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+
                     await CarregarDadosAsync();
                 }
                 else
                 {
-                    MessageBox.Show($"❌ {error}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(
+                        $"❌ {error}",
+                        "Erro",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
                 }
             }
         }

@@ -102,18 +102,37 @@ namespace AtelieDosPontinhos.Desktop.UserControls
 
         private async void btnNovo_Click(object sender, EventArgs e)
         {
-            using var form = new UsuarioFormDialog(_perfil, null);
-            if (form.ShowDialog() == DialogResult.OK && form.CreateDto != null)
+            using var form = new UsuarioFormDialog(_perfil);
+
+            var resultado = FormAnimator.ShowDialogWithSlideFade(
+                form,
+                this,
+                durationMs: 360,
+                offset: 40);
+
+            if (resultado == DialogResult.OK &&
+                form.CreateDto != null)
             {
-                var (success, _, error) = await _usuarioService.CreateAsync(form.CreateDto);
+                var (success, _, error) =
+                    await _usuarioService.CreateAsync(form.CreateDto);
+
                 if (success)
                 {
-                    MessageBox.Show("✅ Usuário criado com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(
+                        "✅ Usuário criado com sucesso!",
+                        "Sucesso",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+
                     await CarregarDadosAsync();
                 }
                 else
                 {
-                    MessageBox.Show($"❌ {error}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(
+                        $"❌ {error}",
+                        "Erro",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
                 }
             }
         }
@@ -121,24 +140,53 @@ namespace AtelieDosPontinhos.Desktop.UserControls
         private async void btnEditar_Click(object sender, EventArgs e)
         {
             var usuario = ObterUsuarioSelecionado();
+
             if (usuario == null)
             {
-                MessageBox.Show("Selecione um usuário para editar.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(
+                    "Selecione um usuário para editar.",
+                    "Aviso",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+
                 return;
             }
 
-            using var form = new UsuarioFormDialog(_perfil, usuario);
-            if (form.ShowDialog() == DialogResult.OK && form.UpdateDto != null)
+            using var form = new UsuarioFormDialog(
+                _perfil,
+                usuario);
+
+            var resultado = FormAnimator.ShowDialogWithSlideFade(
+                form,
+                this,
+                durationMs: 360,
+                offset: 40);
+
+            if (resultado == DialogResult.OK &&
+                form.UpdateDto != null)
             {
-                var (success, _, error) = await _usuarioService.UpdateAsync(usuario.Id, form.UpdateDto);
+                var (success, _, error) =
+                    await _usuarioService.UpdateAsync(
+                        usuario.Id,
+                        form.UpdateDto);
+
                 if (success)
                 {
-                    MessageBox.Show("✅ Usuário atualizado com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(
+                        "✅ Usuário atualizado com sucesso!",
+                        "Sucesso",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+
                     await CarregarDadosAsync();
                 }
                 else
                 {
-                    MessageBox.Show($"❌ {error}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(
+                        $"❌ {error}",
+                        "Erro",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
                 }
             }
         }
