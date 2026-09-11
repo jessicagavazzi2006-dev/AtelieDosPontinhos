@@ -17,6 +17,8 @@ namespace AtelieDosPontinhos.Desktop.UserControls
     {
         private ProdutosApiService _produtoService = null;
         private CategoriasApiService _categoriasService = null;
+        private PedidosApiService _pedidosService = null;
+
         public DashboardUserControl()
         {
             InitializeComponent();
@@ -33,6 +35,7 @@ namespace AtelieDosPontinhos.Desktop.UserControls
             //inicializa serviços 
             _produtoService = new ProdutosApiService();
             _categoriasService = new CategoriasApiService();
+            _pedidosService = new PedidosApiService();
 
 
             //Preenche dados dinamicos da sessão
@@ -55,13 +58,17 @@ namespace AtelieDosPontinhos.Desktop.UserControls
             {
                 var tarefaProduto = _produtoService.GetAllAsync();
                 var tarefasCategorias = _categoriasService.GetAllAsync();
-                await Task.WhenAll(tarefaProduto, tarefasCategorias);
+                var tarefaPedidos = _pedidosService.GetAllAsync();
+                await Task.WhenAll(tarefaProduto, tarefasCategorias, tarefaPedidos);
 
                 var produto = tarefaProduto.Result;
                 var categorias = tarefasCategorias.Result;
+                var pedidos = tarefaPedidos.Result;
 
                 cardProdutosLblNumero.Text = produto.Count.ToString();
                 cardCategoriasLblNumero.Text = categorias.Count.ToString();
+                // conta apenas pedidos com status "Concluído"
+                cardVendaslblNumero.Text = pedidos.Count(p => string.Equals(p.Status, "Concluido", StringComparison.OrdinalIgnoreCase)).ToString();
 
                 //Atualiza os dados do card
                 //AtualizarNumeroCard(cardProdutos, produto.Count().ToString());
@@ -112,11 +119,6 @@ namespace AtelieDosPontinhos.Desktop.UserControls
             cardCategorias.Visible = !carregando;
             lblUltimosProdutos.Visible = !carregando;
             gridUltimosProdutos.Visible = !carregando;
-        }
-
-        private void pnlCorCategorias_Paint(object sender, PaintEventArgs e)
-        {
-            
         }
     }
 }

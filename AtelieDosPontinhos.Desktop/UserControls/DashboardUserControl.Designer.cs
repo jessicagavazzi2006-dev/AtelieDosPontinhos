@@ -39,8 +39,6 @@
             cardCategoriasLblNumero = new Label();
             cardCategoriasLblDesc = new Label();
             cardCategoriasLblTitulo = new Label();
-            pnlCorProdutos = new Panel();
-            pnlCorCategorias = new Panel();
             lblUltimosProdutos = new Label();
             gridUltimosProdutos = new DataGridView();
             colId = new DataGridViewTextBoxColumn();
@@ -49,9 +47,14 @@
             colStock = new DataGridViewTextBoxColumn();
             colCategory = new DataGridViewTextBoxColumn();
             colIsFeatured = new DataGridViewCheckBoxColumn();
+            panel1 = new Panel();
+            cardVendaslblNumero = new Label();
+            cardVendaslblDesc = new Label();
+            cardVendaslblTitulo = new Label();
             cardProdutos.SuspendLayout();
             cardCategorias.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)gridUltimosProdutos).BeginInit();
+            panel1.SuspendLayout();
             SuspendLayout();
             // 
             // lblTitulo
@@ -81,7 +84,7 @@
             lblCarregando.AutoSize = true;
             lblCarregando.Font = new Font("Yu Gothic", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblCarregando.ForeColor = Color.FromArgb(58, 52, 64);
-            lblCarregando.Location = new Point(49, 86);
+            lblCarregando.Location = new Point(49, 79);
             lblCarregando.Name = "lblCarregando";
             lblCarregando.Size = new Size(203, 17);
             lblCarregando.TabIndex = 0;
@@ -93,16 +96,16 @@
             cardProdutos.Controls.Add(cardProdutosLblDesc);
             cardProdutos.Controls.Add(cardProdutosLblNumero);
             cardProdutos.Controls.Add(cardProdutosLblTitulo);
-            cardProdutos.Location = new Point(49, 112);
+            cardProdutos.Location = new Point(49, 99);
             cardProdutos.Name = "cardProdutos";
-            cardProdutos.Size = new Size(234, 135);
+            cardProdutos.Size = new Size(203, 105);
             cardProdutos.TabIndex = 1;
             // 
             // cardProdutosLblDesc
             // 
             cardProdutosLblDesc.AutoSize = true;
             cardProdutosLblDesc.Font = new Font("Yu Gothic", 9F);
-            cardProdutosLblDesc.Location = new Point(16, 105);
+            cardProdutosLblDesc.Location = new Point(14, 80);
             cardProdutosLblDesc.Name = "cardProdutosLblDesc";
             cardProdutosLblDesc.Size = new Size(175, 16);
             cardProdutosLblDesc.TabIndex = 0;
@@ -112,7 +115,7 @@
             // 
             cardProdutosLblNumero.AutoSize = true;
             cardProdutosLblNumero.Font = new Font("Yu Gothic", 26.25F, FontStyle.Bold);
-            cardProdutosLblNumero.Location = new Point(16, 55);
+            cardProdutosLblNumero.Location = new Point(14, 30);
             cardProdutosLblNumero.Name = "cardProdutosLblNumero";
             cardProdutosLblNumero.Size = new Size(40, 45);
             cardProdutosLblNumero.TabIndex = 0;
@@ -122,7 +125,7 @@
             // 
             cardProdutosLblTitulo.AutoSize = true;
             cardProdutosLblTitulo.Font = new Font("Yu Gothic", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            cardProdutosLblTitulo.Location = new Point(16, 30);
+            cardProdutosLblTitulo.Location = new Point(14, 5);
             cardProdutosLblTitulo.Name = "cardProdutosLblTitulo";
             cardProdutosLblTitulo.Size = new Size(89, 17);
             cardProdutosLblTitulo.TabIndex = 0;
@@ -134,16 +137,16 @@
             cardCategorias.Controls.Add(cardCategoriasLblNumero);
             cardCategorias.Controls.Add(cardCategoriasLblDesc);
             cardCategorias.Controls.Add(cardCategoriasLblTitulo);
-            cardCategorias.Location = new Point(306, 112);
+            cardCategorias.Location = new Point(258, 99);
             cardCategorias.Name = "cardCategorias";
-            cardCategorias.Size = new Size(234, 137);
+            cardCategorias.Size = new Size(205, 105);
             cardCategorias.TabIndex = 1;
             // 
             // cardCategoriasLblNumero
             // 
             cardCategoriasLblNumero.AutoSize = true;
             cardCategoriasLblNumero.Font = new Font("Yu Gothic", 26.25F, FontStyle.Bold);
-            cardCategoriasLblNumero.Location = new Point(16, 55);
+            cardCategoriasLblNumero.Location = new Point(13, 30);
             cardCategoriasLblNumero.Name = "cardCategoriasLblNumero";
             cardCategoriasLblNumero.Size = new Size(40, 45);
             cardCategoriasLblNumero.TabIndex = 0;
@@ -153,7 +156,7 @@
             // 
             cardCategoriasLblDesc.AutoSize = true;
             cardCategoriasLblDesc.Font = new Font("Yu Gothic", 9F);
-            cardCategoriasLblDesc.Location = new Point(16, 105);
+            cardCategoriasLblDesc.Location = new Point(13, 80);
             cardCategoriasLblDesc.Name = "cardCategoriasLblDesc";
             cardCategoriasLblDesc.Size = new Size(184, 16);
             cardCategoriasLblDesc.TabIndex = 0;
@@ -163,36 +166,18 @@
             // 
             cardCategoriasLblTitulo.AutoSize = true;
             cardCategoriasLblTitulo.Font = new Font("Yu Gothic", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            cardCategoriasLblTitulo.Location = new Point(16, 30);
+            cardCategoriasLblTitulo.Location = new Point(13, 5);
             cardCategoriasLblTitulo.Name = "cardCategoriasLblTitulo";
             cardCategoriasLblTitulo.Size = new Size(101, 17);
             cardCategoriasLblTitulo.TabIndex = 0;
             cardCategoriasLblTitulo.Text = "🏷️ Categorias";
-            // 
-            // pnlCorProdutos
-            // 
-            pnlCorProdutos.BackColor = Color.FromArgb(177, 145, 217);
-            pnlCorProdutos.ForeColor = Color.White;
-            pnlCorProdutos.Location = new Point(49, 112);
-            pnlCorProdutos.Name = "pnlCorProdutos";
-            pnlCorProdutos.Size = new Size(234, 20);
-            pnlCorProdutos.TabIndex = 1;
-            // 
-            // pnlCorCategorias
-            // 
-            pnlCorCategorias.BackColor = Color.FromArgb(177, 145, 217);
-            pnlCorCategorias.Location = new Point(306, 112);
-            pnlCorCategorias.Name = "pnlCorCategorias";
-            pnlCorCategorias.Size = new Size(234, 20);
-            pnlCorCategorias.TabIndex = 1;
-            pnlCorCategorias.Paint += pnlCorCategorias_Paint;
             // 
             // lblUltimosProdutos
             // 
             lblUltimosProdutos.AutoSize = true;
             lblUltimosProdutos.Font = new Font("Yu Gothic", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
             lblUltimosProdutos.ForeColor = Color.FromArgb(58, 52, 64);
-            lblUltimosProdutos.Location = new Point(49, 263);
+            lblUltimosProdutos.Location = new Point(49, 212);
             lblUltimosProdutos.Name = "lblUltimosProdutos";
             lblUltimosProdutos.Size = new Size(249, 19);
             lblUltimosProdutos.TabIndex = 0;
@@ -203,10 +188,10 @@
             gridUltimosProdutos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             gridUltimosProdutos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             gridUltimosProdutos.Columns.AddRange(new DataGridViewColumn[] { colId, colName, colPrice, colStock, colCategory, colIsFeatured });
-            gridUltimosProdutos.Location = new Point(49, 287);
+            gridUltimosProdutos.Location = new Point(49, 237);
             gridUltimosProdutos.Name = "gridUltimosProdutos";
             gridUltimosProdutos.RowHeadersVisible = false;
-            gridUltimosProdutos.Size = new Size(673, 205);
+            gridUltimosProdutos.Size = new Size(702, 255);
             gridUltimosProdutos.TabIndex = 2;
             // 
             // colId
@@ -245,13 +230,53 @@
             colIsFeatured.HeaderText = "Destaque";
             colIsFeatured.Name = "colIsFeatured";
             // 
+            // panel1
+            // 
+            panel1.BackColor = Color.White;
+            panel1.Controls.Add(cardVendaslblNumero);
+            panel1.Controls.Add(cardVendaslblDesc);
+            panel1.Controls.Add(cardVendaslblTitulo);
+            panel1.Location = new Point(469, 99);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(205, 105);
+            panel1.TabIndex = 3;
+            // 
+            // cardVendaslblNumero
+            // 
+            cardVendaslblNumero.AutoSize = true;
+            cardVendaslblNumero.Font = new Font("Yu Gothic", 26.25F, FontStyle.Bold);
+            cardVendaslblNumero.Location = new Point(10, 32);
+            cardVendaslblNumero.Name = "cardVendaslblNumero";
+            cardVendaslblNumero.Size = new Size(40, 45);
+            cardVendaslblNumero.TabIndex = 1;
+            cardVendaslblNumero.Text = "0";
+            // 
+            // cardVendaslblDesc
+            // 
+            cardVendaslblDesc.AutoSize = true;
+            cardVendaslblDesc.Font = new Font("Yu Gothic", 9F);
+            cardVendaslblDesc.Location = new Point(10, 82);
+            cardVendaslblDesc.Name = "cardVendaslblDesc";
+            cardVendaslblDesc.Size = new Size(145, 16);
+            cardVendaslblDesc.TabIndex = 2;
+            cardVendaslblDesc.Text = "Total de todas as vendas";
+            // 
+            // cardVendaslblTitulo
+            // 
+            cardVendaslblTitulo.AutoSize = true;
+            cardVendaslblTitulo.Font = new Font("Yu Gothic", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            cardVendaslblTitulo.Location = new Point(10, 7);
+            cardVendaslblTitulo.Name = "cardVendaslblTitulo";
+            cardVendaslblTitulo.Size = new Size(74, 17);
+            cardVendaslblTitulo.TabIndex = 3;
+            cardVendaslblTitulo.Text = "💲Vendas";
+            // 
             // DashboardUserControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(panel1);
             Controls.Add(gridUltimosProdutos);
-            Controls.Add(pnlCorCategorias);
-            Controls.Add(pnlCorProdutos);
             Controls.Add(cardCategorias);
             Controls.Add(cardProdutos);
             Controls.Add(lblUltimosProdutos);
@@ -266,6 +291,8 @@
             cardCategorias.ResumeLayout(false);
             cardCategorias.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)gridUltimosProdutos).EndInit();
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -277,8 +304,6 @@
         private Label lblCarregando;
         private Panel cardProdutos;
         private Panel cardCategorias;
-        private Panel pnlCorProdutos;
-        private Panel pnlCorCategorias;
         private Label lblUltimosProdutos;
         private DataGridView gridUltimosProdutos;
         private Label cardProdutosLblDesc;
@@ -293,5 +318,9 @@
         private DataGridViewTextBoxColumn colStock;
         private DataGridViewTextBoxColumn colCategory;
         private DataGridViewCheckBoxColumn colIsFeatured;
+        private Panel panel1;
+        private Label cardVendaslblNumero;
+        private Label cardVendaslblDesc;
+        private Label cardVendaslblTitulo;
     }
 }

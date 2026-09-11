@@ -30,72 +30,92 @@
         {
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges1 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
             Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges2 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-            TituloDetalhesLbl = new Label();
-            ClienteLbl = new Label();
-            DataLbl = new Label();
-            EnderecoLbl = new Label();
+            panel1 = new Panel();
+            btnFechar = new Guna.UI2.WinForms.Guna2Button();
+            totalLbl = new Label();
+            TotalDoPedido = new Label();
             itemCompradosGrid = new DataGridView();
             itemCol = new DataGridViewTextBoxColumn();
             quantidadeCol = new DataGridViewTextBoxColumn();
             precoUnitarioCol = new DataGridViewTextBoxColumn();
             precoCol = new DataGridViewTextBoxColumn();
-            TotalDoPedido = new Label();
-            totalLbl = new Label();
-            guna2Button1 = new Guna.UI2.WinForms.Guna2Button();
+            EnderecoLbl = new Label();
+            DataLbl = new Label();
+            ClienteLbl = new Label();
+            TituloDetalhesLbl = new Label();
+            panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)itemCompradosGrid).BeginInit();
             SuspendLayout();
             // 
-            // TituloDetalhesLbl
+            // panel1
             // 
-            TituloDetalhesLbl.AutoSize = true;
-            TituloDetalhesLbl.Font = new Font("Yu Gothic", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            TituloDetalhesLbl.ForeColor = Color.FromArgb(58, 52, 64);
-            TituloDetalhesLbl.Location = new Point(12, 22);
-            TituloDetalhesLbl.Name = "TituloDetalhesLbl";
-            TituloDetalhesLbl.Size = new Size(174, 19);
-            TituloDetalhesLbl.TabIndex = 0;
-            TituloDetalhesLbl.Text = "🛍️ Detalhes Do Pedido";
+            panel1.BackColor = Color.White;
+            panel1.Controls.Add(btnFechar);
+            panel1.Controls.Add(totalLbl);
+            panel1.Controls.Add(TotalDoPedido);
+            panel1.Controls.Add(itemCompradosGrid);
+            panel1.Controls.Add(EnderecoLbl);
+            panel1.Controls.Add(DataLbl);
+            panel1.Controls.Add(ClienteLbl);
+            panel1.Controls.Add(TituloDetalhesLbl);
+            panel1.Location = new Point(12, 12);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(495, 412);
+            panel1.TabIndex = 0;
             // 
-            // ClienteLbl
+            // btnFechar
             // 
-            ClienteLbl.AutoSize = true;
-            ClienteLbl.Font = new Font("Yu Gothic", 9F);
-            ClienteLbl.Location = new Point(12, 59);
-            ClienteLbl.Name = "ClienteLbl";
-            ClienteLbl.Size = new Size(49, 16);
-            ClienteLbl.TabIndex = 1;
-            ClienteLbl.Text = "Cliente:";
+            btnFechar.BackColor = Color.Transparent;
+            btnFechar.BorderRadius = 10;
+            btnFechar.CustomizableEdges = customizableEdges1;
+            btnFechar.DisabledState.BorderColor = Color.DarkGray;
+            btnFechar.DisabledState.CustomBorderColor = Color.DarkGray;
+            btnFechar.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
+            btnFechar.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+            btnFechar.FillColor = Color.DarkRed;
+            btnFechar.Font = new Font("Segoe UI", 9F);
+            btnFechar.ForeColor = Color.White;
+            btnFechar.Location = new Point(378, 18);
+            btnFechar.Name = "btnFechar";
+            btnFechar.ShadowDecoration.CustomizableEdges = customizableEdges2;
+            btnFechar.Size = new Size(95, 41);
+            btnFechar.TabIndex = 23;
+            btnFechar.Text = "Fechar";
+            btnFechar.Click += btnFechar_Click;
             // 
-            // DataLbl
+            // totalLbl
             // 
-            DataLbl.AutoSize = true;
-            DataLbl.Font = new Font("Yu Gothic", 9F);
-            DataLbl.Location = new Point(12, 84);
-            DataLbl.Name = "DataLbl";
-            DataLbl.Size = new Size(37, 16);
-            DataLbl.TabIndex = 2;
-            DataLbl.Text = "Data:";
+            totalLbl.AutoSize = true;
+            totalLbl.BackColor = Color.Transparent;
+            totalLbl.Font = new Font("Yu Gothic", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            totalLbl.ForeColor = Color.ForestGreen;
+            totalLbl.Location = new Point(148, 378);
+            totalLbl.Name = "totalLbl";
+            totalLbl.Size = new Size(25, 17);
+            totalLbl.TabIndex = 22;
+            totalLbl.Text = "R$";
             // 
-            // EnderecoLbl
+            // TotalDoPedido
             // 
-            EnderecoLbl.AutoSize = true;
-            EnderecoLbl.Font = new Font("Yu Gothic", 9F);
-            EnderecoLbl.Location = new Point(12, 110);
-            EnderecoLbl.Name = "EnderecoLbl";
-            EnderecoLbl.Size = new Size(62, 16);
-            EnderecoLbl.TabIndex = 3;
-            EnderecoLbl.Text = "Endereço:";
-            EnderecoLbl.Click += EnderecoLbl_Click;
+            TotalDoPedido.AutoSize = true;
+            TotalDoPedido.BackColor = Color.Transparent;
+            TotalDoPedido.Font = new Font("Yu Gothic UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            TotalDoPedido.ForeColor = Color.FromArgb(58, 52, 64);
+            TotalDoPedido.Location = new Point(21, 375);
+            TotalDoPedido.Name = "TotalDoPedido";
+            TotalDoPedido.Size = new Size(121, 20);
+            TotalDoPedido.TabIndex = 21;
+            TotalDoPedido.Text = "Total Do Pedido:";
             // 
             // itemCompradosGrid
             // 
             itemCompradosGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             itemCompradosGrid.Columns.AddRange(new DataGridViewColumn[] { itemCol, quantidadeCol, precoUnitarioCol, precoCol });
-            itemCompradosGrid.Location = new Point(12, 140);
+            itemCompradosGrid.Location = new Point(21, 136);
             itemCompradosGrid.Name = "itemCompradosGrid";
             itemCompradosGrid.RowHeadersVisible = false;
             itemCompradosGrid.Size = new Size(452, 224);
-            itemCompradosGrid.TabIndex = 4;
+            itemCompradosGrid.TabIndex = 20;
             // 
             // itemCol
             // 
@@ -120,84 +140,83 @@
             precoCol.HeaderText = "Total";
             precoCol.Name = "precoCol";
             // 
-            // TotalDoPedido
+            // EnderecoLbl
             // 
-            TotalDoPedido.AutoSize = true;
-            TotalDoPedido.Font = new Font("Yu Gothic UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            TotalDoPedido.ForeColor = Color.FromArgb(58, 52, 64);
-            TotalDoPedido.Location = new Point(12, 379);
-            TotalDoPedido.Name = "TotalDoPedido";
-            TotalDoPedido.Size = new Size(121, 20);
-            TotalDoPedido.TabIndex = 5;
-            TotalDoPedido.Text = "Total Do Pedido:";
+            EnderecoLbl.AutoSize = true;
+            EnderecoLbl.BackColor = Color.Transparent;
+            EnderecoLbl.Font = new Font("Yu Gothic", 9F);
+            EnderecoLbl.Location = new Point(21, 106);
+            EnderecoLbl.Name = "EnderecoLbl";
+            EnderecoLbl.Size = new Size(62, 16);
+            EnderecoLbl.TabIndex = 19;
+            EnderecoLbl.Text = "Endereço:";
             // 
-            // totalLbl
+            // DataLbl
             // 
-            totalLbl.AutoSize = true;
-            totalLbl.Font = new Font("Yu Gothic", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            totalLbl.ForeColor = Color.ForestGreen;
-            totalLbl.Location = new Point(139, 382);
-            totalLbl.Name = "totalLbl";
-            totalLbl.Size = new Size(25, 17);
-            totalLbl.TabIndex = 6;
-            totalLbl.Text = "R$";
+            DataLbl.AutoSize = true;
+            DataLbl.BackColor = Color.Transparent;
+            DataLbl.Font = new Font("Yu Gothic", 9F);
+            DataLbl.Location = new Point(21, 80);
+            DataLbl.Name = "DataLbl";
+            DataLbl.Size = new Size(37, 16);
+            DataLbl.TabIndex = 18;
+            DataLbl.Text = "Data:";
             // 
-            // guna2Button1
+            // ClienteLbl
             // 
-            guna2Button1.BorderRadius = 10;
-            guna2Button1.CustomizableEdges = customizableEdges1;
-            guna2Button1.DisabledState.BorderColor = Color.DarkGray;
-            guna2Button1.DisabledState.CustomBorderColor = Color.DarkGray;
-            guna2Button1.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
-            guna2Button1.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
-            guna2Button1.FillColor = Color.DarkRed;
-            guna2Button1.Font = new Font("Segoe UI", 9F);
-            guna2Button1.ForeColor = Color.White;
-            guna2Button1.Location = new Point(369, 22);
-            guna2Button1.Name = "guna2Button1";
-            guna2Button1.ShadowDecoration.CustomizableEdges = customizableEdges2;
-            guna2Button1.Size = new Size(95, 41);
-            guna2Button1.TabIndex = 7;
-            guna2Button1.Text = "Fechar";
-            guna2Button1.Click += guna2Button1_Click;
+            ClienteLbl.AutoSize = true;
+            ClienteLbl.BackColor = Color.Transparent;
+            ClienteLbl.Font = new Font("Yu Gothic", 9F);
+            ClienteLbl.Location = new Point(21, 55);
+            ClienteLbl.Name = "ClienteLbl";
+            ClienteLbl.Size = new Size(49, 16);
+            ClienteLbl.TabIndex = 17;
+            ClienteLbl.Text = "Cliente:";
+            // 
+            // TituloDetalhesLbl
+            // 
+            TituloDetalhesLbl.AutoSize = true;
+            TituloDetalhesLbl.BackColor = Color.Transparent;
+            TituloDetalhesLbl.Font = new Font("Yu Gothic", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            TituloDetalhesLbl.ForeColor = Color.FromArgb(58, 52, 64);
+            TituloDetalhesLbl.Location = new Point(21, 18);
+            TituloDetalhesLbl.Name = "TituloDetalhesLbl";
+            TituloDetalhesLbl.Size = new Size(174, 19);
+            TituloDetalhesLbl.TabIndex = 16;
+            TituloDetalhesLbl.Text = "🛍️ Detalhes Do Pedido";
             // 
             // DetalhesPedidosForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.White;
-            ClientSize = new Size(498, 418);
-            Controls.Add(guna2Button1);
-            Controls.Add(totalLbl);
-            Controls.Add(TotalDoPedido);
-            Controls.Add(itemCompradosGrid);
-            Controls.Add(EnderecoLbl);
-            Controls.Add(DataLbl);
-            Controls.Add(ClienteLbl);
-            Controls.Add(TituloDetalhesLbl);
+            BackColor = Color.FromArgb(177, 145, 217);
+            ClientSize = new Size(519, 436);
+            Controls.Add(panel1);
             FormBorderStyle = FormBorderStyle.None;
             Name = "DetalhesPedidosForm";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "DetalhesPedidos";
             Load += DetalhesPedidosForm_Load;
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)itemCompradosGrid).EndInit();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
 
-        private Label TituloDetalhesLbl;
-        private Label ClienteLbl;
-        private Label DataLbl;
-        private Label EnderecoLbl;
-        private DataGridView itemCompradosGrid;
-        private Label TotalDoPedido;
+        private Panel panel1;
+        private Guna.UI2.WinForms.Guna2Button btnFechar;
         private Label totalLbl;
-        private Guna.UI2.WinForms.Guna2Button guna2Button1;
+        private Label TotalDoPedido;
+        private DataGridView itemCompradosGrid;
         private DataGridViewTextBoxColumn itemCol;
         private DataGridViewTextBoxColumn quantidadeCol;
         private DataGridViewTextBoxColumn precoUnitarioCol;
         private DataGridViewTextBoxColumn precoCol;
+        private Label EnderecoLbl;
+        private Label DataLbl;
+        private Label ClienteLbl;
+        private Label TituloDetalhesLbl;
     }
 }
