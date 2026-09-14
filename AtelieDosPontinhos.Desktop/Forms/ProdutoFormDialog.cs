@@ -43,7 +43,7 @@ namespace AtelieDosPontinhos.Desktop.Forms
             ThemeManager.ApplyTheme(this, animate: false);
             ThemeManager.ThemeChanged += OnThemeChanged;
 
-            FormClosing += ProdutoFormDialog_FormClosing;
+            //FormClosing += ProdutoFormDialog_FormClosing; (corregir problema!)
         }
 
         public ProdutoFormDialog(List<CategoriaResponseDto> categorias, ProductResponseDto? produto)
@@ -56,7 +56,7 @@ namespace AtelieDosPontinhos.Desktop.Forms
             ThemeManager.ApplyTheme(this, animate: false);
             ThemeManager.ThemeChanged += OnThemeChanged;
 
-            FormClosing += ProdutoFormDialog_FormClosing;
+            //FormClosing += ProdutoFormDialog_FormClosing; (corrirgir problema!)
         }
 
         // =====================================================================
@@ -200,7 +200,7 @@ namespace AtelieDosPontinhos.Desktop.Forms
                 };
             }
 
-            DialogResult = DialogResult.OK;
+            this.DialogResult = DialogResult.OK;
             Close();
         }
 

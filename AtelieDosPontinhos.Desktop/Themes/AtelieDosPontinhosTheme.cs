@@ -87,6 +87,10 @@ namespace AtelieDosPontinhos.Desktop.Themes
         /// </summary>
         public static void AplicarEstiloGrid(DataGridView grid)
         {
+            if (grid.Tag?.ToString() != "KeepEditable")
+            {
+                grid.ReadOnly = true;
+            }
             // Estilo geral (fundo branco, bordas sutis)
             grid.BackgroundColor = CinzaFundo;
             grid.BorderStyle = BorderStyle.Fixed3D;

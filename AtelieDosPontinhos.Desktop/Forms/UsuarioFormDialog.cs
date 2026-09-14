@@ -39,7 +39,7 @@ namespace AtelieDosPontinhos.Desktop.Forms
                 animate: false);
 
             ThemeManager.ThemeChanged += OnThemeChanged;
-            FormClosing += UsuarioFormDialog_FormClosing;
+            //FormClosing += UsuarioFormDialog_FormClosing; (corrigir problema!)
         }
 
         public UsuarioFormDialog(

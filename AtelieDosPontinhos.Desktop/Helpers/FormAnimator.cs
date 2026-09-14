@@ -112,7 +112,7 @@ namespace AtelieDosPontinhos.Desktop.Helpers
             int offset = 40)
         {
             if (form == null || form.IsDisposed)
-                return DialogResult.None;
+                return DialogResult.OK;
 
             durationMs = Math.Max(1, durationMs);
 

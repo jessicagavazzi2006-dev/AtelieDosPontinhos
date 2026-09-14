@@ -102,7 +102,7 @@ namespace AtelieDosPontinhos.Desktop.UserControls
 
         private async void btnNovo_Click(object sender, EventArgs e)
         {
-            using var form = new UsuarioFormDialog(_perfil);
+            using var form = new UsuarioFormDialog(_perfil, null);
 
             var resultado = FormAnimator.ShowDialogWithSlideFade(
                 form,
