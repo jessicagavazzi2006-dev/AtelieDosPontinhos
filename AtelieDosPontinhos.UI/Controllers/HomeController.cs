@@ -19,7 +19,7 @@ public class HomeController : Controller
     public IActionResult Index()
     {
         // 1. Busca os produtos em destaque aceitando tanto a flag Destaque quanto IsFeatured (evita falha por nome do campo na entidade DB)
-        var destaqueFromDb = _context.Products.Where(p => p.Destaque || p.IsFeatured).ToList();
+        var destaqueFromDb = _context.Products.Where(p => p.IsFeatured).ToList();
         var todosFromDb = _context.Products.ToList();
 
         // 2. Recupera os produtos favoritos salvos na sessão
@@ -57,8 +57,8 @@ public class HomeController : Controller
             Price = p.Price,
             CoverImageUrl = p.CoverImageUrl,
             Description = p.Description ?? string.Empty,
-            Destaque = p.Destaque || p.IsFeatured,
-            IsFeatured = p.Destaque || p.IsFeatured,
+            Destaque = p.IsFeatured,
+            IsFeatured = p.IsFeatured,
             IsFavorited = favoriteIds.Contains(p.Id)
         }).ToList();
 

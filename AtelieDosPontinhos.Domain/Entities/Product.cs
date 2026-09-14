@@ -16,7 +16,7 @@
         public bool IsFeatured { get; set; }
 
         // Propriedade adicionada para o destaque da página inicial
-        public bool Destaque { get; set; }
+        //public bool Destaque { get; set; }
 
         public int CategoryId { get; set; }
 
