@@ -64,7 +64,7 @@ builder.Services.AddHttpClient("ApiClientAuth", client =>
     client.BaseAddress = new Uri(apiBaseUrl);
 });
 
-// 🌟 CORREÇÃO: Adicionado o cliente "Api" utilizado pelo ProductController
+// Adicionado o cliente "Api" utilizado pelo ProductController
 builder.Services.AddHttpClient("Api", client =>
 {
     client.BaseAddress = new Uri(apiBaseUrl);
@@ -79,7 +79,7 @@ builder.Services.AddHttpClient("ApiClient", client =>
 .AddHttpMessageHandler<ApiCookieHandler>();
 
 // =====================================================================
-// MVC
+// MVC & BANCO DE DADOS
 // =====================================================================
 builder.Services.AddControllersWithViews();
 
@@ -90,8 +90,8 @@ builder.Services.AddDbContext<AtelieDosPontinhosDbContext>(options =>
         sqlOptions.EnableRetryOnFailure();
     }));
 
-// Identity (UI)
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+// Identity (UI) ajustado para utilizar ApplicationUser
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
     options.Password.RequireDigit = true;
     options.Password.RequiredLength = 6;

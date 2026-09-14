@@ -4,6 +4,7 @@ using AtelieDosPontinhos.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtelieDosPontinhos.Infrastructure.Migrations
 {
     [DbContext(typeof(AtelieDosPontinhosDbContext))]
-    partial class AtelieDosPontinhosDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260914192653_SolucaoFinalIdentity")]
+    partial class SolucaoFinalIdentity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -189,6 +192,36 @@ namespace AtelieDosPontinhos.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Materials");
+                });
+
+            modelBuilder.Entity("AtelieDosPontinhos.Domain.Entities.Pagamento", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DataPagamento")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Metodo")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PedidoId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<decimal>("Valor")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Pagamentos");
                 });
 
             modelBuilder.Entity("AtelieDosPontinhos.Domain.Entities.Pedido", b =>
@@ -453,42 +486,6 @@ namespace AtelieDosPontinhos.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Pagamento", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("DataPagamento")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Metodo")
-                        .HasColumnType("int");
-
-                    b.Property<string>("NomeCartao")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NumeroCartao")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("PedidoId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<decimal>("Valor")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Pagamentos");
-                });
-
             modelBuilder.Entity("AtelieDosPontinhos.Domain.Entities.CartItem", b =>
                 {
                     b.HasOne("AtelieDosPontinhos.Domain.Entities.Product", "Product")
@@ -501,6 +498,15 @@ namespace AtelieDosPontinhos.Infrastructure.Migrations
                 });
 
             modelBuilder.Entity("AtelieDosPontinhos.Domain.Entities.Endereco", b =>
+                {
+                    b.HasOne("AtelieDosPontinhos.Domain.Entities.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("AtelieDosPontinhos.Domain.Entities.Pagamento", b =>
                 {
                     b.HasOne("AtelieDosPontinhos.Domain.Entities.ApplicationUser", "User")
                         .WithMany()
@@ -607,15 +613,6 @@ namespace AtelieDosPontinhos.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Pagamento", b =>
-                {
-                    b.HasOne("AtelieDosPontinhos.Domain.Entities.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("AtelieDosPontinhos.Domain.Entities.Category", b =>

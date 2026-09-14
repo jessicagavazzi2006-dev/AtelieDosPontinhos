@@ -4,6 +4,8 @@ namespace AtelieDosPontinhos.UI.Models
 {
     public class RegisterClienteViewModel
     {
+        public string UserName { get; set; }
+
         [Required(ErrorMessage = "O e-mail é obrigatório.")]
         [EmailAddress(ErrorMessage = "Informe um e-mail válido.")]
         public string Email { get; set; } = string.Empty;
