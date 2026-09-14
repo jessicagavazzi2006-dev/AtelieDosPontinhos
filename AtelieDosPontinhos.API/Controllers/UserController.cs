@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -16,12 +17,12 @@ namespace AtelieDosPontinhos.API.Controllers
     [Authorize] // Requer autenticação por padrão
     public class UserController : ControllerBase
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly AtelieDosPontinhosDbContext _context; // Injetado para salvar Endereço, Pagamento e Nome
+        private readonly AtelieDosPontinhosDbContext _context;
 
         public UserController(
-            UserManager<IdentityUser> userManager,
+            UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager,
             AtelieDosPontinhosDbContext context)
         {
@@ -43,6 +44,7 @@ namespace AtelieDosPontinhos.API.Controllers
                 result.Add(new
                 {
                     id = u.Id,
+                    nome = u.Nome,
                     email = u.Email,
                     userName = u.UserName,
                     roles = roles
@@ -59,7 +61,7 @@ namespace AtelieDosPontinhos.API.Controllers
             var user = await _userManager.FindByIdAsync(id);
             if (user == null) return NotFound(new { message = "Usuário não encontrado." });
             var roles = await _userManager.GetRolesAsync(user);
-            return Ok(new { id = user.Id, email = user.Email, userName = user.UserName, roles = roles });
+            return Ok(new { id = user.Id, nome = user.Nome, email = user.Email, userName = user.UserName, roles = roles });
         }
 
         // 3. CRIAR USUÁRIO (Admin)
@@ -75,7 +77,7 @@ namespace AtelieDosPontinhos.API.Controllers
             var existing = await _userManager.FindByEmailAsync(dto.Email);
             if (existing != null) return BadRequest(new { message = "E-mail já cadastrado." });
 
-            var user = new IdentityUser { UserName = dto.UserName, Email = dto.Email };
+            var user = new ApplicationUser { UserName = dto.UserName, Email = dto.Email, Nome = dto.UserName };
             var result = await _userManager.CreateAsync(user, dto.Password);
             if (!result.Succeeded)
             {
@@ -90,7 +92,7 @@ namespace AtelieDosPontinhos.API.Controllers
             }
 
             var roles = await _userManager.GetRolesAsync(user);
-            return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, new { id = user.Id, email = user.Email, userName = user.UserName, roles = roles });
+            return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, new { id = user.Id, nome = user.Nome, email = user.Email, userName = user.UserName, roles = roles });
         }
 
         // 4. EDITAR USUÁRIO (ATUALIZAR E-MAIL, SENHA, ROLE) - ADMIN
@@ -141,10 +143,10 @@ namespace AtelieDosPontinhos.API.Controllers
             }
 
             var roles = await _userManager.GetRolesAsync(user);
-            return Ok(new { id = user.Id, email = user.Email, userName = user.UserName, roles = roles });
+            return Ok(new { id = user.Id, nome = user.Nome, email = user.Email, userName = user.UserName, roles = roles });
         }
 
-        // 5. OBTER O PERFIL DO PRÓPRIO USUÁRIO LOGADO (Para preencher a tela)
+        // 5. OBTER O PERFIL DO PRÓPRIO USUÁRIO LOGADO
         [HttpGet("profile")]
         public async Task<IActionResult> GetProfile()
         {
@@ -172,18 +174,18 @@ namespace AtelieDosPontinhos.API.Controllers
 
             return Ok(new
             {
-                nome = user?.NormalizedUserName ?? user.UserName,
+                nome = string.IsNullOrWhiteSpace(user.Nome) ? user.UserName : user.Nome,
                 email = user.Email,
                 telefone = user.PhoneNumber,
                 cep = endereco?.CEP,
                 cidade = endereco?.Cidade,
                 estado = endereco?.Estado,
                 numero = endereco?.Numero.ToString(),
-                //complemento = endereco?.Complemento,
-                referencial = endereco?.Referencia,
+                referencia = endereco?.Referencia,
                 metodo = pagamento?.Metodo.ToString(),
-                titular = "",
-                cartao = ""
+                // Retorna os dados persistidos em vez de strings vazias
+                titular = pagamento?.NomeCartao ?? "",
+                cartao = pagamento?.NumeroCartao ?? ""
             });
         }
 
@@ -212,12 +214,11 @@ namespace AtelieDosPontinhos.API.Controllers
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null) return NotFound(new { message = "Usuário não encontrado." });
 
-            if (!string.IsNullOrWhiteSpace(dto.Telefone))
-            {
-                user.PhoneNumber = dto.Telefone;
-            }
+            // 1. Atualiza dados do Usuário
+            if (!string.IsNullOrWhiteSpace(dto.Nome)) user.Nome = dto.Nome;
+            if (!string.IsNullOrWhiteSpace(dto.Telefone)) user.PhoneNumber = dto.Telefone;
+            if (!string.IsNullOrWhiteSpace(dto.Email)) user.Email = dto.Email;
 
-            // O UserName NÃO é alterado aqui para preservar o login do Identity.
             var result = await _userManager.UpdateAsync(user);
             if (!result.Succeeded)
             {
@@ -225,7 +226,7 @@ namespace AtelieDosPontinhos.API.Controllers
                 return BadRequest(new { message = $"Erro ao atualizar perfil: {errors}" });
             }
 
-            // ATUALIZAÇÃO DO ENDEREÇO (Salvando também o Nome Completo do usuário para exibição)
+            // 2. Atualiza Endereço
             var endereco = await _context.Enderecos.FirstOrDefaultAsync(e => e.UserId == userId);
             if (endereco == null)
             {
@@ -233,23 +234,17 @@ namespace AtelieDosPontinhos.API.Controllers
                 _context.Enderecos.Add(endereco);
             }
 
-            //if (!string.IsNullOrWhiteSpace(dto.Nome))
-            //{
-            //    endereco.NomeCompleto = dto.Nome;
-            //}
-            user.NormalizedUserName = dto.Nome; // Atualiza o e-mail do usuário
-            user.PhoneNumber = dto.Telefone; // Atualiza o telefone do usuário
-            user.Email = dto.Email; // Atualiza o e-mail do usuário
-            endereco.CEP = dto.Cep;
-            endereco.Cidade = dto.Cidade;
-            endereco.Estado = dto.Estado;
+            endereco.CEP = dto.Cep ?? string.Empty;
+            endereco.Cidade = dto.Cidade ?? string.Empty;
+            endereco.Estado = dto.Estado ?? string.Empty;
+            endereco.Referencia = dto.Referencial ?? string.Empty;
 
             if (int.TryParse(dto.Numero, out int numParsed))
             {
                 endereco.Numero = numParsed;
             }
 
-            // ATUALIZAÇÃO DO PAGAMENTO
+            // 3. Atualiza Pagamento (Grava o Método, Nome impresso e Número do cartão)
             var pagamento = await _context.Pagamentos.FirstOrDefaultAsync(p => p.UserId == userId);
             if (pagamento == null)
             {
@@ -261,6 +256,9 @@ namespace AtelieDosPontinhos.API.Controllers
             {
                 pagamento.Metodo = metodoParsed;
             }
+
+            pagamento.NomeCartao = dto.Titular ?? string.Empty;
+            pagamento.NumeroCartao = dto.Cartao ?? string.Empty;
 
             await _context.SaveChangesAsync();
 

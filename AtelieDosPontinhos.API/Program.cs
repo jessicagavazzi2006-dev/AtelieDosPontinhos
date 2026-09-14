@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using AtelieDosPontinhos.Domain.Entities;
 using AtelieDosPontinhos.Infrastructure.Context;
 using AtelieDosPontinhos.Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
@@ -34,16 +35,10 @@ builder.Services.AddDbContext<AtelieDosPontinhosDbContext>(options =>
             sqlOptions.EnableRetryOnFailure();
         }));
 
-// Identity
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+// Identity configurado com ApplicationUser
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<AtelieDosPontinhosDbContext>()
     .AddDefaultTokenProviders();
-
-// 🔥 Permite espaços e acentuação no nome de usuário/perfil
-builder.Services.Configure<IdentityOptions>(options =>
-{
-    options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+ ";
-});
 
 builder.Services.ConfigureApplicationCookie(options =>
 {

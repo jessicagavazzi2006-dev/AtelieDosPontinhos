@@ -31,7 +31,6 @@ namespace AtelieDosPontinhos.UI.Controllers
             return View();
         }
 
-        // LOGIN (POST) - PROCESSA O LOGON E VALIDA PERMISSÕES DO SISTEMA
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
@@ -134,19 +133,16 @@ namespace AtelieDosPontinhos.UI.Controllers
             return View();
         }
 
-        // POST: Register
         [HttpPost]
         public async Task<IActionResult> Register(RegisterClienteViewModel model)
         {
             if (!ModelState.IsValid)
                 return View(model);
 
-            // Mapeando a model para o objeto que a API espera
+            // CORREÇÃO: Enviando o valor digitado no formulário como "Nome"
             var apiModel = new
             {
-                // 👇 CORREÇÃO: Usar "Nome" para preencher o UserName que a API exige
-                Nome = model.Email,
-
+                Nome = model.UserName,
                 Email = model.Email,
                 Password = model.Password,
                 Role = "Cliente",
@@ -166,7 +162,6 @@ namespace AtelieDosPontinhos.UI.Controllers
 
             try
             {
-                // Garante que o JSON vá como "email", "password", etc, evitando rejeição da API
                 var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
                 var json = JsonSerializer.Serialize(apiModel, options);
                 var jsonContent = new StringContent(json, Encoding.UTF8, "application/json");
@@ -179,13 +174,12 @@ namespace AtelieDosPontinhos.UI.Controllers
                     return RedirectToAction("Login");
                 }
 
-                // Lê o erro exato que a API devolveu para facilitar o debug
                 var erroApi = await response.Content.ReadAsStringAsync();
-                ModelState.AddModelError(string.Empty, $"A API recusou o cadastro. Verifique os dados. Detalhe: {erroApi}");
+                ModelState.AddModelError(string.Empty, $"A API recusou o cadastro. Detalhe: {erroApi}");
             }
             catch
             {
-                ModelState.AddModelError(string.Empty, "Erro ao se comunicar com a API para salvar o cliente com dados Express.");
+                ModelState.AddModelError(string.Empty, "Erro ao se comunicar com a API para salvar o cliente.");
             }
 
             return View(model);
@@ -227,7 +221,7 @@ namespace AtelieDosPontinhos.UI.Controllers
                     if (dadosPerfil != null)
                     {
                         viewModel = dadosPerfil;
-                        viewModel.Email = userEmail; // Assegura o e-mail preenchido
+                        viewModel.Email = userEmail;
                     }
                 }
             }
@@ -291,7 +285,6 @@ namespace AtelieDosPontinhos.UI.Controllers
             return View(model);
         }
 
-        // LOGOUT: Limpa a sessão e desautentica os cookies
         public async Task<IActionResult> Logout()
         {
             HttpContext.Session?.Clear();

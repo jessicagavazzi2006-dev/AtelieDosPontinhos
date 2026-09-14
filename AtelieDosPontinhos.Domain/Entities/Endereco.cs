@@ -1,7 +1,5 @@
 ﻿using System;
-
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.AspNetCore.Identity;
 
 namespace AtelieDosPontinhos.Domain.Entities
 {
@@ -14,13 +12,10 @@ namespace AtelieDosPontinhos.Domain.Entities
         public string Referencia { get; set; } = string.Empty;
         public string Cidade { get; set; } = string.Empty;
 
-        // FK para IdentityUser (string)
         public string? UserId { get; set; }
-        //public string NomeCompleto { get; set; }
 
-        // Navegação (opcional)
+        // Alterado de IdentityUser para ApplicationUser
         [ForeignKey(nameof(UserId))]
-        public IdentityUser? User { get; set; }
-        //public string Complemento { get; set; }
+        public virtual ApplicationUser? User { get; set; }
     }
 }

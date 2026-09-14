@@ -19,6 +19,10 @@
                     <h5 class="fw-bold mb-3 pb-2 border-bottom text-secondary">👤 Dados de Acesso</h5>
                     <div class="row g-3 mb-4">
                         <div class="col-md-12">
+                            <label asp-for="UserName" class="form-label fw-semibold text-secondary">Nome do Usuário</label>
+                            <input asp-for="UserName" class="form-control form-control-lg bg-light border-0 fs-6" placeholder="Digite seu nome de usuário" required />
+                        </div>
+                        <div class="col-md-12">
                             <label asp-for="Email" class="form-label fw-semibold text-secondary">Endereço de E-mail</label>
                             <input asp-for="Email" class="form-control form-control-lg bg-light border-0 fs-6" placeholder="nome@exemplo.com" required />
                             <span asp-validation-for="Email" class="text-danger small"></span>

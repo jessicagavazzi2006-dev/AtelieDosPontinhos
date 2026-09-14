@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace AtelieDosPontinhos.API.Controllers
@@ -14,14 +12,14 @@ namespace AtelieDosPontinhos.API.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly AtelieDosPontinhosDbContext _context;
 
         public AccountController(
-            SignInManager<IdentityUser> signInManager,
-            UserManager<IdentityUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
+            UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager,
             AtelieDosPontinhosDbContext context)
         {
@@ -31,7 +29,6 @@ namespace AtelieDosPontinhos.API.Controllers
             _context = context;
         }
 
-        // ASSINATURA INTEGRADA PARA CADASTRO EXPRESS
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
@@ -40,7 +37,15 @@ namespace AtelieDosPontinhos.API.Controllers
                 return BadRequest(new { Message = "E-mail e senha são obrigatórios." });
             }
 
-            var user = new IdentityUser { UserName = request.Nome, Email = request.Email };
+            // O UserName permanece sendo o Email (sem afetar as regras padrão do Identity)
+            // O Nome Completo é gravado na propriedade personalizada
+            var user = new ApplicationUser
+            {
+                UserName = request.Email,
+                Email = request.Email,
+                Nome = request.Nome ?? string.Empty
+            };
+
             var result = await _userManager.CreateAsync(user, request.Password);
 
             if (result.Succeeded)
@@ -54,15 +59,13 @@ namespace AtelieDosPontinhos.API.Controllers
 
                 await _userManager.AddToRoleAsync(user, roleName);
 
-                // FLUXO DE GRAVAÇÃO DO CHECKOUT EXPRESS NO BANCO
                 try
                 {
-                    int numeroConvertido = 0;
-                    int.TryParse(request.Numero, out numeroConvertido);
+                    int.TryParse(request.Numero, out int numeroConvertido);
 
-                    var novoEndereco = new AtelieDosPontinhos.Domain.Entities.Endereco
+                    var novoEndereco = new Endereco
                     {
-                        UserId = user.Id, // Vincula o endereço ao ID recém-criado do usuário
+                        UserId = user.Id,
                         CEP = request.CEP ?? "",
                         Numero = numeroConvertido,
                         Estado = request.Estado ?? "",
@@ -75,7 +78,7 @@ namespace AtelieDosPontinhos.API.Controllers
                 }
                 catch (Exception ex)
                 {
-                    System.Diagnostics.Debug.WriteLine($"Erro ao gravar endereço express: {ex.Message}");
+                    System.Diagnostics.Debug.WriteLine($"Erro ao gravar endereço: {ex.Message}");
                 }
 
                 return Ok(new { Succeeded = true, Message = "Usuário cadastrado com sucesso!" });
@@ -84,51 +87,10 @@ namespace AtelieDosPontinhos.API.Controllers
             return BadRequest(result.Errors);
         }
 
-        // 🌟 A UI chama este método na API para carregar o endereço e dados do cliente na tela de pagamento
-        [HttpGet("user-data")]
-        public async Task<IActionResult> GetUserData([FromQuery] string email)
-        {
-            if (string.IsNullOrEmpty(email)) return BadRequest();
-
-            // 1. Busca o ID do usuário no Identity através do e-mail
-            var user = await _userManager.FindByEmailAsync(email);
-            if (user == null) return NotFound(new { Message = "Usuário não localizado." });
-
-            // 2. Busca na tabela Enderecos o registro que pertence a este ID de usuário específico
-            var endereco = await EntityFrameworkQueryableExtensions.FirstOrDefaultAsync(
-                _context.Set<AtelieDosPontinhos.Domain.Entities.Endereco>(),
-                e => e.UserId == user.Id
-            );
-
-            // 3. Busca na tabela Pagamentos a preferência gravada (se houver)
-            var pagamento = await EntityFrameworkQueryableExtensions.FirstOrDefaultAsync(
-                _context.Set<AtelieDosPontinhos.Domain.Entities.Pagamento>(),
-                p => p.UserId == user.Id
-            );
-
-            if (endereco == null)
-            {
-                return Ok(new { cep = "", cidade = "", estado = "", numero = "", referencial = "", metodo = "1", titular = "", cartao = "" });
-            }
-
-            // Entrega os dados reais para o front-end preencher os inputs automaticamente
-            return Ok(new
-            {
-                cep = endereco.CEP ?? "",
-                cidade = endereco.Cidade ?? "",
-                estado = endereco.Estado ?? "",
-                numero = endereco.Numero.ToString(),
-                referencial = endereco.Referencia ?? "",
-                metodo = pagamento != null ? ((int)pagamento.Metodo).ToString() : "1",
-                titular = pagamento != null ? "ANA S SILVA" : "",
-                cartao = pagamento != null ? "4532 •••• •••• 4321" : ""
-            });
-        }
-
-        // ROTA DE LOGIN
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
+            // Fluxo original padrão por Email/UserName mantido 100% intacto
             var result = await _signInManager.PasswordSignInAsync(request.Email, request.Password, false, false);
 
             if (result.Succeeded)
@@ -140,6 +102,32 @@ namespace AtelieDosPontinhos.API.Controllers
             }
 
             return Unauthorized(new { Succeeded = false, Message = "Usuário ou senha inválidos" });
+        }
+
+        [HttpGet("user-data")]
+        public async Task<IActionResult> GetUserData([FromQuery] string email)
+        {
+            if (string.IsNullOrEmpty(email)) return BadRequest();
+
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null) return NotFound(new { Message = "Usuário não localizado." });
+
+            var endereco = await _context.Enderecos.FirstOrDefaultAsync(e => e.UserId == user.Id);
+            var pagamento = await _context.Pagamentos.FirstOrDefaultAsync(p => p.UserId == user.Id);
+
+            return Ok(new
+            {
+                nome = user.Nome, // Retorna a propriedade customizada
+                email = user.Email,
+                cep = endereco?.CEP ?? "",
+                cidade = endereco?.Cidade ?? "",
+                estado = endereco?.Estado ?? "",
+                numero = endereco != null ? endereco.Numero.ToString() : "",
+                referencial = endereco?.Referencia ?? "",
+                metodo = pagamento != null ? ((int)pagamento.Metodo).ToString() : "1",
+                titular = pagamento != null ? "ANA S SILVA" : "",
+                cartao = pagamento != null ? "4532 •••• •••• 4321" : ""
+            });
         }
     }
 

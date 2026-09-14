@@ -1,74 +1,43 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AtelieDosPontinhos.Domain.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using AtelieDosPontinhos.Domain;
-using AtelieDosPontinhos.Domain.Entities;
-using AtelieDosPontinhos.Infrastructure.Configurations;
-using AtelieDosPontinhos.Infrastructure.Identity;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace AtelieDosPontinhos.Infrastructure.Context
 {
-    public class AtelieDosPontinhosDbContext : IdentityDbContext
+    public class AtelieDosPontinhosDbContext : IdentityDbContext<ApplicationUser>
     {
-        public AtelieDosPontinhosDbContext(DbContextOptions<AtelieDosPontinhosDbContext> options) : base(options)
+        public AtelieDosPontinhosDbContext(DbContextOptions<AtelieDosPontinhosDbContext> options)
+            : base(options)
         {
         }
 
-        // 🛠️ TABELAS DO SISTEMA
-        public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Product> Products { get; set; }
         public DbSet<Endereco> Enderecos { get; set; }
         public DbSet<Pagamento> Pagamentos { get; set; }
-        public DbSet<Material> Materials { get; set; }
-        public DbSet<Product_Material> ProductMaterials { get; set; }
         public DbSet<Pedido> Pedidos { get; set; }
         public DbSet<PedidoItem> PedidoItens { get; set; }
+        public DbSet<CartItem> CartItems { get; set; }
+        public DbSet<Material> Materials { get; set; }
+        public DbSet<Product_Material> ProductMaterials { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(builder);
 
+            // Chave composta para a tabela N:N de produtos e materiais
+            builder.Entity<Product_Material>()
+                .HasKey(pm => new { pm.ProductId, pm.MaterialId });
 
-            // Mapeamento explícito para evitar conflitos de herança com o IdentityUser
-         
-            //modelBuilder.Entity<ApplicationUser>(b =>
-            //{
-            //    b.ToTable("AspNetUsers");
-            //    b.HasKey(u => u.Id);
-            //});
+            builder.Entity<Product_Material>()
+                .HasOne(pm => pm.Product)
+                .WithMany(p => p.Product_Materials)
+                .HasForeignKey(pm => pm.ProductId);
 
-            //// Mapeamento explícito para evitar conflitos de herança com o IdentityUser
-            //modelBuilder.Entity<ApplicationUser>(b =>
-            //{
-            //    b.ToTable("AspNetUsers");
-            //});
-
-
-            //modelBuilder.Entity<Endereco>(eb =>
-            //{
-            //    eb.HasKey(e => e.Id);
-            //    eb.Property(e => e.CEP).HasMaxLength(20);
-            //    eb.HasOne<ApplicationUser>()
-            //      .WithMany()
-            //      .HasForeignKey(e => e.UserId)
-            //      .OnDelete(DeleteBehavior.Cascade);
-            //});
-
-            //// 🖼️ CONFIGURAÇÃO DA IMAGEM LONGA EM BASE64:
-            //modelBuilder.Entity<Product>()
-            //    .Property(p => p.CoverImageUrl)
-            //    .HasColumnType("nvarchar(max)");
-
-            // Aplicar configurações específicas de entidade
-            modelBuilder.ApplyConfiguration(new ProductConfiguration());
-            modelBuilder.ApplyConfiguration(new CategoryConfiguration());
-            modelBuilder.ApplyConfiguration(new MaterialConfiguration());
-            modelBuilder.ApplyConfiguration(new PagamentoConfiguration());
-            modelBuilder.ApplyConfiguration(new EnderecoConfiguration());
-            modelBuilder.ApplyConfiguration(new Product_MaterialConfiguration());
-
-            modelBuilder.Entity<Pedido>().Property(p => p.ValorTotal).HasColumnType("decimal(18,2)");
-            modelBuilder.Entity<PedidoItem>().Property(pi => pi.PrecoUnitario).HasColumnType("decimal(18,2)");
+            builder.Entity<Product_Material>()
+                .HasOne(pm => pm.Material)
+                .WithMany(m => m.Product_Materials)
+                .HasForeignKey(pm => pm.MaterialId);
         }
     }
 }
