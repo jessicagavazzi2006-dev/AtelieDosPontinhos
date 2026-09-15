@@ -33,6 +33,34 @@
         font-weight: 600;
         transition: all 0.2s ease;
     }
+
+    /* Estilização adaptativa da Faixa Divisória (Modo Claro / Escuro) */
+    .faixa-catalogo {
+        background: linear-gradient(135deg, #f8f1fa 0%, #ede3f2 100%) !important;
+        border: 1px solid #e2d1e6 !important;
+        transition: all 0.3s ease;
+    }
+
+    [data-bs-theme="dark"] .faixa-catalogo {
+        background: linear-gradient(135deg, #2b233a 0%, #1e1929 100%) !important;
+        border: 1px solid #3d3252 !important;
+    }
+
+    .faixa-linha-divisoria {
+        border-color: #d1b8dc !important;
+    }
+
+    [data-bs-theme="dark"] .faixa-linha-divisoria {
+        border-color: #4a3e63 !important;
+    }
+
+    .faixa-texto-sub {
+        color: #6c587a !important;
+    }
+
+    [data-bs-theme="dark"] .faixa-texto-sub {
+        color: #bfaed6 !important;
+    }
 </style>
 
 <div class="container mt-3 py-2">
@@ -116,19 +144,18 @@
         }
     </div>
 
-    <!-- FAIXA DIVISÓRIA ESTRUTURADA -->
+    <!-- FAIXA DIVISÓRIA ESTRUTURADA (ADAPTÁVEL CLARO/ESCURO) -->
     <div class="my-5 py-2 position-relative">
-        <div class="rounded-4 p-4 text-center shadow-sm"
-             style="background: linear-gradient(135deg, #2b233a 0%, #1e1929 100%); border: 1px solid #3d3252;">
+        <div class="rounded-4 p-4 text-center shadow-sm faixa-catalogo">
             <div class="d-flex align-items-center justify-content-center gap-3">
-                <div class="flex-grow-1 border-bottom" style="border-color: #4a3e63 !important;"></div>
+                <div class="flex-grow-1 border-bottom faixa-linha-divisoria"></div>
                 <span class="badge rounded-pill px-4 py-2 text-uppercase tracking-wide"
                       style="background-color: #D97FA8; color: #fff; font-size: 0.85rem; letter-spacing: 1px;">
                     ✨ Explore Nosso Catálogo Completo
                 </span>
-                <div class="flex-grow-1 border-bottom" style="border-color: #4a3e63 !important;"></div>
+                <div class="flex-grow-1 border-bottom faixa-linha-divisoria"></div>
             </div>
-            <p class="text-muted small mb-0 mt-2" style="color: #bfaed6 !important;">
+            <p class="small mb-0 mt-2 faixa-texto-sub">
                 Confira todas as peças exclusivas confeccionadas com carinho no Ateliê
             </p>
         </div>

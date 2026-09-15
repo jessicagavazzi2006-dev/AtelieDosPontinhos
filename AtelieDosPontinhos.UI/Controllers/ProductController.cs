@@ -51,6 +51,61 @@ namespace AtelieDosPontinhos.UI.Controllers
             }
         };
 
+        // 🔍 API Endpoint: Pesquisa de produtos em tempo real (Autocomplete)
+        [HttpGet("api/Product/search")]
+        public async Task<IActionResult> Search([FromQuery] string term)
+        {
+            if (string.IsNullOrWhiteSpace(term))
+            {
+                return Json(new List<object>());
+            }
+
+            var client = _httpClientFactory.CreateClient("Api");
+            List<ProductViewModel> produtos = null;
+
+            try
+            {
+                // Tenta buscar na API externa
+                var response = await client.GetAsync("api/Product");
+                if (response.IsSuccessStatusCode)
+                {
+                    produtos = await response.Content.ReadFromJsonAsync<List<ProductViewModel>>(_jsonOptions);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Erro ao buscar produtos para pesquisa na API: {ex.Message}");
+            }
+
+            // Se falhar na API, utiliza a lista local de fallback
+            if (produtos == null || !produtos.Any())
+            {
+                produtos = _products;
+            }
+
+            // Normaliza nomes caso venham com outra propriedade (Name/Nome)
+            foreach (var p in produtos)
+            {
+                if (string.IsNullOrEmpty(p.Nome) && !string.IsNullOrEmpty(p.Name))
+                {
+                    p.Nome = p.Name;
+                }
+            }
+
+            // Filtra os produtos com base no termo digitado
+            var resultadosFiltrados = produtos
+                .Where(p => (!string.IsNullOrEmpty(p.Nome) && p.Nome.Contains(term, StringComparison.OrdinalIgnoreCase)) ||
+                            (!string.IsNullOrEmpty(p.Descricao) && p.Descricao.Contains(term, StringComparison.OrdinalIgnoreCase)))
+                .Select(p => new {
+                    id = p.Id,
+                    name = p.Nome ?? p.Name
+                })
+                .Take(6) // Limita a 6 sugestões para ficar elegante
+                .ToList();
+
+            return Json(resultadosFiltrados);
+        }
+
         // 📦 GET: Lista os produtos da API e exibe a tabela
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -88,7 +143,6 @@ namespace AtelieDosPontinhos.UI.Controllers
 
             try
             {
-                // Tenta buscar no endpoint padrão de produto
                 var response = await client.GetAsync($"api/Product/{id}");
 
                 if (response.IsSuccessStatusCode)
@@ -105,13 +159,11 @@ namespace AtelieDosPontinhos.UI.Controllers
                 System.Diagnostics.Debug.WriteLine($"Erro ao conectar na API para detalhes do produto {id}: {ex.Message}");
             }
 
-            // Fallback para lista em memória caso não encontre na API
             if (product == null)
             {
                 product = _products.FirstOrDefault(p => p.Id == id);
             }
 
-            // Garante o mapeamento do nome caso a propriedade venha vazia do JSON
             if (product != null && string.IsNullOrEmpty(product.Nome) && !string.IsNullOrEmpty(product.Name))
             {
                 product.Nome = product.Name;
