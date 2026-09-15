@@ -231,6 +231,9 @@ namespace AtelieDosPontinhos.Desktop.UserControls
             var changedColumn = gridPedidos.Columns[e.ColumnIndex].Name;
             if (changedColumn != "colStatus") return;
 
+            // Desativa o evento temporariamente para evitar loops/reentrância
+            gridPedidos.CellValueChanged -= GridPedidos_CellValueChanged;
+
             try
             {
                 var row = gridPedidos.Rows[e.RowIndex];
@@ -238,13 +241,10 @@ namespace AtelieDosPontinhos.Desktop.UserControls
                 var novoStatus = row.Cells["colStatus"].Value?.ToString() ?? "Pendente";
 
                 var pedido = _todosPedidos.FirstOrDefault(x => x.Id == id);
-                if (pedido == null) return;
-
-                if (pedido.Status == novoStatus) return;
+                if (pedido == null || pedido.Status == novoStatus) return;
 
                 pedido.Status = novoStatus;
 
-                // tenta usar o endpoint específico de status quando disponível
                 try
                 {
                     var (success, updated, error) = await _pedidosService.UpdateStatusAsync(id, novoStatus);
@@ -261,7 +261,6 @@ namespace AtelieDosPontinhos.Desktop.UserControls
                 }
                 catch
                 {
-                    // fallback para UpdateAsync caso UpdateStatusAsync não exista
                     var (success, updated, error) = await _pedidosService.UpdateAsync(id, pedido);
                     if (!success)
                     {
@@ -274,6 +273,11 @@ namespace AtelieDosPontinhos.Desktop.UserControls
             {
                 MessageBox.Show($"Erro ao processar alteração de status: {ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 await CarregarDadosAsync();
+            }
+            finally
+            {
+                // Reativa o evento após concluir
+                gridPedidos.CellValueChanged += GridPedidos_CellValueChanged;
             }
         }
 
