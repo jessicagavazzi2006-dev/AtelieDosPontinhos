@@ -101,7 +101,7 @@ namespace AtelieDosPontinhos.Desktop.UserControls
                 // mapeia metodo de pagamento (pode vir como id) para um nome legível
                 var pagamento = MapPaymentName(p.MetodoPagamento);
 
-                gridPedidos.Rows.Add(
+                int rowIndex = gridPedidos.Rows.Add(
                     p.Id,
                     userName,
                     p.DataPedido.ToString("dd/MM/yyyy"),
@@ -110,6 +110,9 @@ namespace AtelieDosPontinhos.Desktop.UserControls
                     p.ValorTotal.ToString("C"),
                     status
                 );
+
+                // garante que a célula de status daquela linha NÃO seja ReadOnly
+                gridPedidos.Rows[rowIndex].Cells["colStatus"].ReadOnly = false;
             }
         }
 
@@ -169,9 +172,11 @@ namespace AtelieDosPontinhos.Desktop.UserControls
 
         private void ConfigurarGrid()
         {
+            gridPedidos.Tag = "KeepEditable";
             gridPedidos.Rows.Clear();
             gridPedidos.Columns.Clear();
             gridPedidos.AutoGenerateColumns = false;
+            gridPedidos.EditMode = DataGridViewEditMode.EditOnEnter;
             gridPedidos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             gridPedidos.MultiSelect = false;
             gridPedidos.AllowUserToAddRows = false;
@@ -192,7 +197,10 @@ namespace AtelieDosPontinhos.Desktop.UserControls
                 Name = "colStatus",
                 HeaderText = "Status",
                 FlatStyle = FlatStyle.Flat,
-                ValueType = typeof(string)
+                ValueType = typeof(string),
+                ReadOnly = false, // coluna editável
+                DisplayStyle = DataGridViewComboBoxDisplayStyle.DropDownButton,
+                DisplayStyleForCurrentCellOnly = false
             };
             colStatus.Items.AddRange(new string[] { "Concluido", "Pendente", "Cancelado" });
             gridPedidos.Columns.Add(colStatus);

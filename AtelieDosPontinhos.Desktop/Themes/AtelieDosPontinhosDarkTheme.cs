@@ -40,6 +40,10 @@ namespace AtelieDosPontinhos.Desktop.Themes
 
         public static void AplicarEstiloGrid(DataGridView grid)
         {
+            if (grid.Tag?.ToString() != "KeepEditable")
+            {
+                grid.ReadOnly = true;
+            }
             grid.BackgroundColor = LinhaPar;
             grid.BorderStyle = BorderStyle.None;
             grid.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;

@@ -124,13 +124,13 @@ namespace AtelieDosPontinhos.Desktop.UserControls
         {
             using var form = new ProdutoFormDialog(_categorias, null);
 
-            var resultado = FormAnimator.ShowDialogWithSlideFade(
-                form,
-                this,
-                durationMs: 360,
-                offset: 40);
+            //var resultado = FormAnimator.ShowDialogWithSlideFade(
+            //    form,
+            //    this,
+            //    durationMs: 360,
+            //    offset: 40);
 
-            if (resultado == DialogResult.OK &&
+            if (form.ShowDialog() == DialogResult.OK &&
                 form.ProdutoDto != null)
             {
                 var (success, _, error) =
@@ -176,13 +176,13 @@ namespace AtelieDosPontinhos.Desktop.UserControls
                 _categorias,
                 produto);
 
-            var resultado = FormAnimator.ShowDialogWithSlideFade(
-                form,
-                this,
-                durationMs: 360,
-                offset: 40);
+            //var resultado = FormAnimator.ShowDialogWithSlideFade(
+            //    form,
+            //    this,
+            //    durationMs: 360,
+            //    offset: 40);
 
-            if (resultado == DialogResult.OK &&
+            if (form.ShowDialog() == DialogResult.OK &&
                 form.UpdateDto != null)
             {
                 var (success, _, error) =

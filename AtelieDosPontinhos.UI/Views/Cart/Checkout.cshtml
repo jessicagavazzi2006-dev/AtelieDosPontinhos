@@ -83,11 +83,11 @@
                         <div id="areaCartao" class="row g-3 col-md-12 m-0 p-0">
                             <div class="col-md-7">
                                 <label class="form-label text-secondary small fw-semibold">Nome Impresso no Cartão</label>
-                                <input type="text" id="inputNomeCartao" name="NomeNoCartao" class="form-control bg-light border-0 rounded-pill px-3" value="@Model.Titular" placeholder="Ex: ANA S SILVA" required />
+                                <input type="text" id="inputNomeCartao" name="NomeNoCartao" class="form-control bg-light border-0 rounded-pill px-3" value="@Model.Titular" placeholder="Ex: ANA S SILVA" />
                             </div>
                             <div class="col-md-12">
                                 <label class="form-label text-secondary small fw-semibold">Número do Cartão</label>
-                                <input type="text" id="inputCartao" name="NumeroCartao" class="form-control bg-light border-0 rounded-pill px-3" value="@Model.Cartao" maxlength="19" placeholder="4532 0000 0000 4321" required />
+                                <input type="text" id="inputCartao" name="NumeroCartao" class="form-control bg-light border-0 rounded-pill px-3" value="@Model.Cartao" maxlength="19" placeholder="4532 0000 0000 4321" />
                             </div>
                         </div>
 
@@ -170,11 +170,9 @@
 
                 if (inputCartao) {
                     inputCartao.required = false;
-                    inputCartao.disabled = true;
                 }
                 if (inputNomeCartao) {
                     inputNomeCartao.required = false;
-                    inputNomeCartao.disabled = true;
                 }
             } else {
                 areaCartao.style.setProperty("display", "flex", "important");
@@ -182,11 +180,9 @@
                 areaPix.style.setProperty("display", "none", "important");
 
                 if (inputCartao) {
-                    inputCartao.disabled = false;
                     inputCartao.required = true;
                 }
                 if (inputNomeCartao) {
-                    inputNomeCartao.disabled = false;
                     inputNomeCartao.required = true;
                 }
             }

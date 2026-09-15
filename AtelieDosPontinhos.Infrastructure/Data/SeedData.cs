@@ -1,37 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.IO;
 using AtelieDosPontinhos.Domain.Entities;
 using AtelieDosPontinhos.Infrastructure.Context;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-
 namespace AtelieDosPontinhos.Infrastructure.Data
 {
     public static class SeedData
     {
-        /// <summary>
-        /// Popula o banco de dados com roles, usuários, categorias e produtos iniciais.
-        /// Idempotente: pode ser chamado várias vezes sem duplicar dados.
-        /// </summary>
-        /// <summary>
-        /// Popula o banco. Opcionalmente pode receber o caminho de wwwroot (webRootPath)
-        /// para carregar imagens dinâmicas quando disponível.
-        /// </summary>
         public static async Task SeedAsync(IServiceProvider serviceProvider, string? webRootPath = null)
         {
             using var scope = serviceProvider.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<AtelieDosPontinhosDbContext>();
-            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
             var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-            // Garante que o banco exista antes de tentar aplicar migrations ou criar objetos.
-            // Conecta ao catálogo 'master' e verifica se a database já existe; se existir, aplicamos migrations,
-            // caso contrário, criamos com EnsureCreatedAsync.
             try
             {
                 var strategy = context.Database.CreateExecutionStrategy();
@@ -39,7 +27,6 @@ namespace AtelieDosPontinhos.Infrastructure.Data
                 {
                     try
                     {
-                        // Use apenas MigrateAsync: EF Core irá criar o banco e a tabela de histórico quando necessário
                         await context.Database.MigrateAsync();
                     }
                     catch (Exception migrateEx)
@@ -64,18 +51,18 @@ namespace AtelieDosPontinhos.Infrastructure.Data
             }
 
             // 2. Users (Admin e Cliente)
-            // 👤 2. Users (Admin e Cliente) - 🌟 BLINDADO CONTRA CONCORRÊNCIA
             var adminEmail = "admin@site.com";
             try
             {
                 var adminUser = await userManager.FindByEmailAsync(adminEmail);
                 if (adminUser == null)
                 {
-                    var user = new IdentityUser
+                    var user = new ApplicationUser
                     {
                         UserName = adminEmail,
                         Email = adminEmail,
-                        EmailConfirmed = true
+                        EmailConfirmed = true,
+                        Nome = "Administrador"
                     };
                     var result = await userManager.CreateAsync(user, "Admin@123");
                     if (result.Succeeded)
@@ -89,18 +76,18 @@ namespace AtelieDosPontinhos.Infrastructure.Data
                 System.Diagnostics.Debug.WriteLine($"Admin já existente ou erro de concorrência: {ex.Message}");
             }
 
-            // 👤 3. CRIAR CLIENTE - 🌟 BLINDADO CONTRA CONCORRÊNCIA
             var clientEmail = "cliente@site.com";
             try
             {
                 var clientUser = await userManager.FindByEmailAsync(clientEmail);
                 if (clientUser == null)
                 {
-                    var user = new IdentityUser
+                    var user = new ApplicationUser
                     {
                         UserName = clientEmail,
                         Email = clientEmail,
-                        EmailConfirmed = true
+                        EmailConfirmed = true,
+                        Nome = "Cliente Teste"
                     };
                     var result = await userManager.CreateAsync(user, "Cliente@123");
                     if (result.Succeeded)
@@ -114,13 +101,11 @@ namespace AtelieDosPontinhos.Infrastructure.Data
                 System.Diagnostics.Debug.WriteLine($"Cliente já existente ou erro de concorrência: {ex.Message}");
             }
 
-
             // 3. Categorias
             if (!context.Categories.Any())
             {
                 var categorias = new List<Category>
                 {
-                    // Usa imagem padrão disponível em wwwroot/images/products/default.svg para evitar referências a arquivos inexistentes
                     new Category { Name = "Banho", ImageLocal = "/images/products/default.svg" },
                     new Category { Name = "Cama", ImageLocal = "/images/products/default.svg" },
                     new Category { Name = "Infantil", ImageLocal = "/images/products/default.svg" },
@@ -133,14 +118,11 @@ namespace AtelieDosPontinhos.Infrastructure.Data
             }
 
             // 4. Produtos iniciais
-            // 4. Produtos iniciais
             if (!context.Products.Any())
             {
-                // Obtém uma categoria padrão para associar os produtos gerados
                 var defaultCategory = await context.Categories.FirstOrDefaultAsync();
                 var defaultCategoryId = defaultCategory?.Id ?? 1;
 
-                // Se for fornecido o caminho do wwwroot, tenta carregar imagens de /images/products
                 var produtos = new List<Product>();
                 if (!string.IsNullOrWhiteSpace(webRootPath))
                 {
@@ -172,10 +154,8 @@ namespace AtelieDosPontinhos.Infrastructure.Data
                     }
                 }
 
-                // Se nenhuma imagem foi encontrada, mantém o seed manual mínimo (fallback)
                 if (!produtos.Any())
                 {
-                    // Lista explícita de produtos com caminhos web relativos corretos (nome de arquivo deve existir em wwwroot/images/products)
                     produtos.Add(new Product
                     {
                         Name = "Kit de Toalhas Bordadas",

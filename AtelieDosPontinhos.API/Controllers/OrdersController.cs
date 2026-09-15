@@ -1,11 +1,15 @@
-﻿using System.Security.Claims;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using AtelieDosPontinhos.Application.DTOs;
+using AtelieDosPontinhos.Domain.Entities;
+using AtelieDosPontinhos.Infrastructure.Context;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using AtelieDosPontinhos.Infrastructure.Context;
-using AtelieDosPontinhos.Domain.Entities;
-using AtelieDosPontinhos.Application.DTOs;
 
 namespace AtelieDosPontinhos.API.Controllers
 {
@@ -14,9 +18,9 @@ namespace AtelieDosPontinhos.API.Controllers
     public class OrdersController : ControllerBase
     {
         private readonly AtelieDosPontinhosDbContext _context;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public OrdersController(AtelieDosPontinhosDbContext context, UserManager<IdentityUser> userManager)
+        public OrdersController(AtelieDosPontinhosDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _userManager = userManager;

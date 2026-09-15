@@ -341,9 +341,10 @@ namespace AtelieDosPontinhos.UI.Controllers
 
             try
             {
+                // Rota corrigida para consumir o endpoint GET api/User/profile
                 string rotaUsuario = client.BaseAddress != null && client.BaseAddress.ToString().EndsWith("api/")
-                    ? $"account/user-data?email={userEmail}"
-                    : $"api/account/user-data?email={userEmail}";
+                    ? "User/profile"
+                    : "api/User/profile";
 
                 var response = await client.GetAsync(rotaUsuario);
 
