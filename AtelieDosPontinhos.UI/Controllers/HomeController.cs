@@ -2,6 +2,7 @@ using AtelieDosPontinhos.Infrastructure.Context;
 using AtelieDosPontinhos.UI.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
@@ -18,9 +19,12 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        // 1. Busca os produtos em destaque aceitando tanto a flag Destaque quanto IsFeatured (evita falha por nome do campo na entidade DB)
-        var destaqueFromDb = _context.Products.Where(p => p.IsFeatured).ToList();
-        var todosFromDb = _context.Products.ToList();
+        // 1. Busca os produtos no banco incluindo a Categoria relacionada
+        var todosFromDb = _context.Products
+            .Include(p => p.Category)
+            .ToList();
+
+        var destaqueFromDb = todosFromDb.Where(p => p.IsFeatured).ToList();
 
         // 2. Recupera os produtos favoritos salvos na sessão
         var favJson = HttpContext.Session.GetString(SESSION_KEY);
@@ -36,33 +40,39 @@ public class HomeController : Controller
             catch { }
         }
 
-        // 3. Converte os produtos em destaque para ViewModel mapeando status de favorito e flags de destaque
+        // 3. Converte os produtos em destaque para ViewModel mapeando a propriedade Categoria via p.Category?.Name
         var destaqueViewModels = destaqueFromDb.Select(p => new ProductViewModel
         {
             Id = p.Id,
             Name = p.Name,
+            Nome = p.Name,
             Price = p.Price,
             CoverImageUrl = p.CoverImageUrl,
-            Description = p.Description ?? string.Empty,
+            Descricao = p.Description ?? string.Empty,
             Destaque = true,
             IsFeatured = true,
-            IsFavorited = favoriteIds.Contains(p.Id)
+            IsFavorited = favoriteIds.Contains(p.Id),
+            CategoryId = p.CategoryId,
+            Categoria = p.Category?.Name ?? string.Empty
         }).ToList();
 
-        // 4. Converte todos os produtos para ViewModel mapeando status de favorito e flags de destaque
+        // 4. Converte todos os produtos para ViewModel mapeando a categoria para o filtro JavaScript
         var todosViewModels = todosFromDb.Select(p => new ProductViewModel
         {
             Id = p.Id,
             Name = p.Name,
+            Nome = p.Name,
             Price = p.Price,
             CoverImageUrl = p.CoverImageUrl,
-            Description = p.Description ?? string.Empty,
+            Descricao = p.Description ?? string.Empty,
             Destaque = p.IsFeatured,
             IsFeatured = p.IsFeatured,
-            IsFavorited = favoriteIds.Contains(p.Id)
+            IsFavorited = favoriteIds.Contains(p.Id),
+            CategoryId = p.CategoryId,
+            Categoria = p.Category?.Name ?? string.Empty
         }).ToList();
 
-        // 5. Disponibiliza ambas as listas para a View através da ViewBag
+        // 5. Disponibiliza as listas para a View através da ViewBag
         ViewBag.ProdutosDestaque = destaqueViewModels;
         ViewBag.TodosProdutos = todosViewModels;
 

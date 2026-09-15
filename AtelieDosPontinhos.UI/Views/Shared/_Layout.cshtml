@@ -19,7 +19,7 @@
             })();
     </script>
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
 
     @* 👥 Capturando as informações diretamente da Session para usar no Layout *@
     @{
@@ -30,84 +30,99 @@
     }
 
     <header>
-        <!-- Navbar fixa com sobreposição correta -->
-        <nav class="navbar navbar-expand-lg border-bottom shadow fixed-top" style="z-index: 1030;">
-            <div class="container">
+        <!-- Navbar moderna fixa com leve efeito de desfoque -->
+        <nav class="navbar navbar-expand-lg border-bottom shadow-sm fixed-top backdrop-blur" style="z-index: 1030; background-color: var(--bs-body-bg);">
+            <div class="container py-1">
 
-                <a class="navbar-brand d-flex align-items-center" asp-controller="Home" asp-action="Index">
-                    <img src="~/images/logo/logo.png" class="logo-navbar rounded-circle me-2" alt="Logo" style="width: 40px; height: 40px; object-fit: cover;" />
-                    <strong>Ateliê dos Pontinhos</strong>
+                <a class="navbar-brand d-flex align-items-center gap-2 fw-bold text-decoration-none" asp-controller="Home" asp-action="Index">
+                    <img src="~/images/logo/logo.png" class="logo-navbar rounded-circle shadow-sm" alt="Logo" style="width: 42px; height: 42px; object-fit: cover; border: 2px solid var(--bs-border-color);" />
+                    <span class="fs-5 tracking-tight">Ateliê dos Pontinhos</span>
                 </a>
 
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <button class="navbar-toggler border-0 shadow-none p-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Alternar navegação">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="collapse navbar-collapse mt-3 mt-lg-0" id="navbarNav">
 
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    </ul>
-
-                    <div class="flex-grow-1 px-3 position-relative" style="max-width: 500px;">
-                        <input type="search" class="form-control search-navbar" placeholder="Buscar produtos e categorias..." />
-                        <div id="searchResults" class="list-group position-absolute w-100 mt-1 shadow" style="z-index:9999; display:none;"></div>
+                    <!-- Barra de Pesquisa Centralizada -->
+                    <div class="flex-grow-1 mx-lg-4 my-2 my-lg-0 position-relative" style="max-width: 520px;">
+                        <div class="input-group">
+                            <span class="input-group-text border-end-0 bg-transparent text-muted ps-3">
+                                <i class="bi bi-search"></i>
+                            </span>
+                            <input type="search" class="form-control border-start-0 ps-0 search-navbar rounded-end-pill py-2 shadow-none" placeholder="Buscar mimos, linhas, produtos..." aria-label="Buscar" />
+                        </div>
+                        <div id="searchResults" class="list-group position-absolute w-100 mt-2 shadow-lg rounded-3 overflow-hidden" style="z-index:9999; display:none;"></div>
                     </div>
 
-                    <div class="d-flex align-items-center gap-3 fs-5 ms-auto">
+                    <!-- Ações da Navbar -->
+                    <div class="d-flex align-items-center gap-3 ms-auto pt-2 pt-lg-0">
 
-                        <!-- Botão de Alternância de Tema (Dark/Light Mode) - Apenas Ícone -->
-                        <button class="btn btn-outline-secondary rounded-circle p-0 d-flex align-items-center justify-content-center" id="btn-theme-toggle" type="button" title="Alternar tema" style="width: 38px; height: 38px;">
-                            <i id="theme-icon" class="bi bi-sun-fill fs-5"></i>
+                        <!-- Alternador de Tema -->
+                        <button class="btn btn-outline-secondary rounded-circle p-0 d-flex align-items-center justify-content-center shadow-sm" id="btn-theme-toggle" type="button" title="Alternar tema" style="width: 38px; height: 38px;">
+                            <i id="theme-icon" class="bi bi-sun-fill fs-6"></i>
                         </button>
 
-                        @* ❤️ Link direto para os Favoritos *@
-                        <a asp-controller="Favorites" asp-action="Index" title="Meus Favoritos" class="text-decoration-none d-flex align-items-center fs-6 fw-semibold text-danger">
-                            <i class="bi bi-heart-fill me-1"></i> Favoritos
+                        <!-- Favoritos -->
+                        <a asp-controller="Favorites" asp-action="Index" title="Meus Favoritos" class="btn btn-outline-secondary rounded-circle p-0 d-flex align-items-center justify-content-center text-danger shadow-sm" style="width: 38px; height: 38px;">
+                            <i class="bi bi-heart-fill fs-6"></i>
                         </a>
 
+                        <!-- Carrinho -->
+                        <a asp-controller="Cart" asp-action="Index" class="btn btn-outline-secondary rounded-circle p-0 d-flex align-items-center justify-content-center text-body position-relative shadow-sm" title="Carrinho de Compras" style="width: 38px; height: 38px; cursor: pointer;">
+                            <i class="bi bi-bag-fill fs-6"></i>
+                            <span class="cart-badge badge bg-danger position-absolute top-0 start-100 translate-middle rounded-pill px-2 py-1 fs-6 shadow-sm" id="cartCount">0</span>
+                        </a>
+
+                        <div class="vr d-none d-lg-block my-1 mx-1 opacity-25"></div>
+
+                        <!-- Autenticação / Perfil -->
                         @if (isLogged)
                         {
-                            @* 👤 Menu Dropdown limpo para o usuário logado *@
                             <div class="dropdown">
-                                <button class="btn dropdown-toggle border rounded-pill px-3 py-1 fs-6 d-flex align-items-center gap-2 fw-semibold shadow-sm" type="button" id="userMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="bi bi-person-circle text-primary fs-5"></i>
-                                    <span style="max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">@userEmail.Split('@')[0]</span>
+                                <button class="btn border rounded-pill px-3 py-1 fs-6 d-flex align-items-center gap-2 fw-semibold shadow-sm text-body" type="button" id="userMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-person-circle fs-5 text-primary"></i>
+                                    <span style="max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">@userEmail.Split('@')[0]</span>
+                                    <i class="bi bi-chevron-down small opacity-50 ms-1"></i>
                                 </button>
-                                <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2 rounded-3 py-2" aria-labelledby="userMenuButton">
+                                <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 mt-2 rounded-3 py-2" aria-labelledby="userMenuButton">
                                     <li>
-                                        <div class="px-3 py-1 text-muted small border-bottom mb-1">
-                                            Logado como:<br><strong>@userEmail</strong>
+                                        <div class="px-3 py-2 border-bottom mb-1 bg-body-tertiary">
+                                            <span class="text-muted small d-block">Logado como:</span>
+                                            <strong class="small text-break">@userEmail</strong>
                                         </div>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item py-2 fw-semibold text-secondary" asp-controller="Account" asp-action="Profile">
-                                            👤 Meu Perfil
+                                        <a class="dropdown-item py-2 fw-medium d-flex align-items-center gap-2 text-secondary" asp-controller="Account" asp-action="Profile">
+                                            <i class="bi bi-person me-1"></i> Meu Perfil
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item py-2 fw-semibold text-secondary" asp-controller="Order" asp-action="Index">
-                                            📦 Meus Pedidos
+                                        <a class="dropdown-item py-2 fw-medium d-flex align-items-center gap-2 text-secondary" asp-controller="Order" asp-action="Index">
+                                            <i class="bi bi-box-seam me-1"></i> Meus Pedidos
                                         </a>
                                     </li>
 
                                     @if (isAdmin)
                                     {
+                                        <li><hr class="dropdown-divider"></li>
                                         <li>
-                                            <a class="dropdown-item py-2 fw-semibold" asp-controller="Order" asp-action="AdminDashboard" style="color: #8a4f91;">
-                                                📋 Painel de Vendas
+                                            <a class="dropdown-item py-2 fw-medium d-flex align-items-center gap-2" asp-controller="Order" asp-action="AdminDashboard" style="color: #8a4f91;">
+                                                <i class="bi bi-graph-up-arrow me-1"></i> Painel de Vendas
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item py-2 fw-semibold text-purple" asp-controller="Dashboard" asp-action="AdminPanel">
-                                                🔐 Painel Admin
+                                            <a class="dropdown-item py-2 fw-medium d-flex align-items-center gap-2 text-purple" asp-controller="Dashboard" asp-action="AdminPanel">
+                                                <i class="bi bi-shield-lock me-1"></i> Painel Admin
                                             </a>
                                         </li>
                                     }
 
                                     <li><hr class="dropdown-divider"></li>
                                     <li>
-                                        <a class="dropdown-item py-2 fw-semibold text-danger" asp-controller="Account" asp-action="Logout">
-                                            🚪 Sair
+                                        <a class="dropdown-item py-2 fw-medium d-flex align-items-center gap-2 text-danger" asp-controller="Account" asp-action="Logout">
+                                            <i class="bi bi-box-arrow-right me-1"></i> Sair
                                         </a>
                                     </li>
                                 </ul>
@@ -115,18 +130,11 @@
                         }
                         else
                         {
-                            <div class="d-flex gap-2 align-items-center me-1">
-                                <a asp-controller="Account" asp-action="Login" class="text-decoration-none text-muted small fw-semibold fs-6">Entrar</a>
-                                <span class="text-muted small fs-6">|</span>
-                                <a asp-controller="Account" asp-action="Register" class="text-decoration-none text-primary small fw-bold fs-6">Cadastrar-se</a>
+                            <div class="d-flex gap-2 align-items-center">
+                                <a asp-controller="Account" asp-action="Login" class="btn btn-sm btn-outline-secondary rounded-pill px-3 fw-semibold">Entrar</a>
+                                <a asp-controller="Account" asp-action="Register" class="btn btn-sm btn-primary rounded-pill px-3 fw-semibold">Cadastrar</a>
                             </div>
-                            <a asp-controller="Account" asp-action="Login" title="Minha conta" class="text-decoration-none">👤</a>
                         }
-
-                        <a asp-controller="Cart" asp-action="Index" class="position-relative text-decoration-none d-inline-block" style="cursor: pointer;">
-                            <span title="Carrinho">🛒</span>
-                            <span class="cart-badge badge bg-danger position-absolute top-0 start-100 translate-middle rounded-pill fs-6" id="cartCount">0</span>
-                        </a>
 
                     </div>
 
@@ -135,10 +143,79 @@
         </nav>
     </header>
 
-    <!-- Margem superior ajustada para compensar a barra fixa -->
-    <main class="container mt-4" style="margin-top: 85px !important;">
+    <!-- Conteúdo Principal -->
+    <main class="container mt-4 flex-grow-1" style="margin-top: 95px !important; min-height: 70vh;">
         @RenderBody()
     </main>
+
+    <!-- 🐾 Rodapé Moderno e Responsivo -->
+    <footer class="border-top mt-5 pt-5 pb-4 transition-all" style="background-color: var(--bs-body-bg);">
+        <div class="container">
+            <div class="row g-4 justify-content-between">
+
+                <!-- Coluna 1: Sobre & Marca -->
+                <div class="col-12 col-lg-4">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <img src="~/images/logo/logo.png" class="rounded-circle shadow-sm" alt="Logo" style="width: 36px; height: 36px; object-fit: cover;" />
+                        <span class="fw-bold fs-5 tracking-tight">Ateliê dos Pontinhos</span>
+                    </div>
+                    <p class="text-secondary small mb-3" style="max-width: 320px;">
+                        Peças artesanais feitas à mão com carinho, dedicação e qualidade. O mimo perfeito para você e quem você ama.
+                    </p>
+                    <div class="d-flex gap-2">
+                        <a href="#" class="btn btn-outline-secondary btn-sm rounded-circle d-flex align-items-center justify-content-center" style="width: 34px; height: 34px;" title="Instagram">
+                            <i class="bi bi-instagram"></i>
+                        </a>
+                        <a href="#" class="btn btn-outline-secondary btn-sm rounded-circle d-flex align-items-center justify-content-center" style="width: 34px; height: 34px;" title="WhatsApp">
+                            <i class="bi bi-whatsapp"></i>
+                        </a>
+                        <a href="#" class="btn btn-outline-secondary btn-sm rounded-circle d-flex align-items-center justify-content-center" style="width: 34px; height: 34px;" title="E-mail">
+                            <i class="bi bi-envelope-fill"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Coluna 2: Navegação Rápida -->
+                <div class="col-6 col-md-3 col-lg-2">
+                    <h6 class="fw-bold mb-3 text-uppercase fs-7 tracking-wider">Navegação</h6>
+                    <ul class="list-unstyled d-flex flex-column gap-2 small">
+                        <li><a asp-controller="Home" asp-action="Index" class="text-decoration-none text-secondary hover-primary">Início</a></li>
+                        <li><a asp-controller="Favorites" asp-action="Index" class="text-decoration-none text-secondary hover-primary">Meus Favoritos</a></li>
+                        <li><a asp-controller="Cart" asp-action="Index" class="text-decoration-none text-secondary hover-primary">Meu Carrinho</a></li>
+                        <li><a asp-controller="Order" asp-action="Index" class="text-decoration-none text-secondary hover-primary">Meus Pedidos</a></li>
+                    </ul>
+                </div>
+
+                <!-- Coluna 3: Atendimento & Segurança -->
+                <div class="col-6 col-md-3 col-lg-3">
+                    <h6 class="fw-bold mb-3 text-uppercase fs-7 tracking-wider">Atendimento</h6>
+                    <ul class="list-unstyled d-flex flex-column gap-2 small text-secondary mb-3">
+                        <li class="d-flex align-items-center gap-2">
+                            <i class="bi bi-clock"></i> Seg a Sex: 09h às 18h
+                        </li>
+                        <li class="d-flex align-items-center gap-2">
+                            <i class="bi bi-shield-check text-success"></i> Compra 100% Segura
+                        </li>
+                    </ul>
+                    <h6 class="fw-bold mb-2 text-uppercase fs-7 tracking-wider">Pagamento</h6>
+                    <div class="d-flex gap-2 fs-4 text-secondary">
+                        <i class="bi bi-qr-code-scan" title="Pix"></i>
+                        <i class="bi bi-credit-card-2-back-fill" title="Cartão de Crédito"></i>
+                        <i class="bi bi-barcode" title="Boleto Bancário"></i>
+                    </div>
+                </div>
+
+            </div>
+
+            <hr class="my-4 opacity-10" />
+
+            <!-- Rodapé Inferior (Copyright) -->
+            <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2 small text-secondary">
+                <span>&copy; @DateTime.Now.Year <strong>Ateliê dos Pontinhos</strong>. Todos os direitos reservados.</span>
+                <span class="opacity-75">Feito com <i class="bi bi-heart-fill text-danger fs-7"></i> para você</span>
+            </div>
+        </div>
+    </footer>
 
     <!-- 🍞 Container de Notificações Toast Flutuantes -->
     <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1080;">
@@ -163,9 +240,9 @@
 
                 function updateThemeUI(theme) {
                     if (theme === "dark") {
-                        themeIcon.className = "bi bi-moon-fill text-warning fs-5";
+                        themeIcon.className = "bi bi-moon-fill text-warning fs-6";
                     } else {
-                        themeIcon.className = "bi bi-sun-fill text-secondary fs-5";
+                        themeIcon.className = "bi bi-sun-fill text-secondary fs-6";
                     }
                 }
 
@@ -186,62 +263,66 @@
             });
     </script>
 
+    <!-- Script de Pesquisa Global -->
     <script>
             const input = document.querySelector(".search-navbar");
             const resultsBox = document.getElementById("searchResults");
             let timeout = null;
 
-            input.addEventListener("input", function() {
-                clearTimeout(timeout);
-                const term = this.value.trim();
+            if (input) {
+                input.addEventListener("input", function() {
+                    clearTimeout(timeout);
+                    const term = this.value.trim();
 
-                if (term.length < 2) {
-                    resultsBox.style.display = "none";
-                    return;
-                }
-
-                timeout = setTimeout(async () => {
-                    try {
-                        const response = await fetch(`http://localhost:5006/api/Product/search?term=${encodeURIComponent(term)}`);
-
-                        if (!response.ok) return;
-
-                        const data = await response.json();
-                        resultsBox.innerHTML = "";
-
-                        if (!data || data.length === 0) {
-                            resultsBox.style.display = "none";
-                            return;
-                        }
-
-                        data.forEach(p => {
-                            const productId = p.id || p.Id;
-                            const productName = p.name || p.nome || p.Name || p.Nome;
-
-                            if (productId) {
-                                const item = document.createElement("a");
-                                item.classList.add("list-group-item", "list-group-item-action", "py-2");
-                                item.href = `/Product/Detalhes/${productId}`;
-                                item.innerText = productName;
-
-                                resultsBox.appendChild(item);
-                            }
-                        });
-
-                        resultsBox.style.display = "block";
-                    } catch (error) {
-                        console.error("Erro na busca:", error);
+                    if (term.length < 2) {
+                        resultsBox.style.display = "none";
+                        return;
                     }
-                }, 300);
-            });
 
-            document.addEventListener("click", function(e) {
-                if (!input.contains(e.target) && !resultsBox.contains(e.target)) {
-                    resultsBox.style.display = "none";
-                }
-            });
+                    timeout = setTimeout(async () => {
+                        try {
+                            const response = await fetch(`/api/Product/search?term=${encodeURIComponent(term)}`);
+
+                            if (!response.ok) return;
+
+                            const data = await response.json();
+                            resultsBox.innerHTML = "";
+
+                            if (!data || data.length === 0) {
+                                resultsBox.style.display = "none";
+                                return;
+                            }
+
+                            data.forEach(p => {
+                                const productId = p.id || p.Id;
+                                const productName = p.name || p.nome || p.Name || p.Nome;
+
+                                if (productId) {
+                                    const item = document.createElement("a");
+                                    item.classList.add("list-group-item", "list-group-item-action", "py-2");
+                                    item.href = `/Product/Detalhes/${productId}`;
+                                    item.innerText = productName;
+
+                                    resultsBox.appendChild(item);
+                                }
+                            });
+
+                            resultsBox.style.display = "block";
+                        } catch (error) {
+                            console.error("Erro na busca:", error);
+                        }
+                    }, 300);
+                });
+
+                document.addEventListener("click", function(e) {
+                    if (!input.contains(e.target) && !resultsBox.contains(e.target)) {
+                        resultsBox.style.display = "none";
+                    }
+                });
+            }
     </script>
 
+    <!-- Contador do Carrinho -->
     <script>
             function updateCartCount() {
                 @{
@@ -252,17 +333,21 @@
                             try
                             {
                                 var itens = System.Text.Json.JsonSerializer.Deserialize<List<AtelieDosPontinhos.UI.Models.CartItemViewModel>>(cartJson);
-                                                        totalItens = itens?.Sum(x => x.Quantidade) ?? 0;
+                                                totalItens = itens?.Sum(x => x.Quantidade) ?? 0;
                             }
-                                                catch { }
+                                        catch { }
                         }
                     }
-                    document.getElementById("cartCount").innerText = "@totalItens";
+                        const badge = document.getElementById("cartCount");
+                if (badge) {
+                    badge.innerText = "@totalItens";
+                }
             }
 
             document.addEventListener("DOMContentLoaded", updateCartCount);
     </script>
 
+    <!-- Exibir / Ocultar Senha -->
     <script>
             function togglePassword(inputId, button) {
                 const input = document.getElementById(inputId);

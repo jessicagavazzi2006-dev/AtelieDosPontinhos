@@ -41,5 +41,7 @@ namespace AtelieDosPontinhos.UI.Models
 
         // Lista para carregar o dropdown de categorias no formulário
         public List<SelectListItem>? Categories { get; set; }
+
+        public string Categoria { get; set; }
     }
 }

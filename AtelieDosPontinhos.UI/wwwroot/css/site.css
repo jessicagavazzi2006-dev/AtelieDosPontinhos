@@ -193,6 +193,53 @@ body {
     border-top: 1px solid #eee;
 }
 
+/* Efeito Glassmorphism na Header / Navbar */
+.navbar-custom {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Card Moderno com Microinteração */
+.product-card {
+    border: none;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    background: #ffffff;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+    .product-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    /* Zoom suave na foto do produto */
+    .product-card .img-container {
+        overflow: hidden;
+        position: relative;
+    }
+
+    .product-card img {
+        transition: transform 0.6s ease;
+    }
+
+    .product-card:hover img {
+        transform: scale(1.06);
+    }
+
+/* Badge de Destaque Sofisticada (Efeito Shimmer) */
+.badge-destaque {
+    background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #feada6 100%);
+    color: #4a154b;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 20px;
+    box-shadow: 0 2px 10px rgba(255, 154, 158, 0.4);
+}
+
 /* ============================
    SUPORTE AO MODO ESCURO (LILÁS PADRÃO)
 ============================= */
@@ -255,59 +302,85 @@ body {
         color: #bfaed6 !important;
     }
 
+/* Ajuste para botões de formulário/ícones dentro do input-group no escuro */
+[data-bs-theme="dark"] .input-group .btn {
+    background-color: #241f31 !important;
+    border-color: #362f4a !important;
+    color: #e2d9ed !important;
+}
+
+/* Ajuste específico para cards de lista de pedidos no Dark Mode */
+[data-bs-theme="dark"] .card .fw-bold,
+[data-bs-theme="dark"] .card .fs-5 {
+    color: #ffffff !important;
+}
+
+[data-bs-theme="dark"] .card .text-uppercase {
+    color: #bfaed6 !important;
+}
+
 /* Ajuste para badges, pills e marcações secundárias no modo escuro */
-[data-bs-theme="dark"] .badge,
-[data-bs-theme="dark"] .rounded-pill,
-[data-bs-theme="dark"] span[class*="bg-"],
-[data-bs-theme="dark"] div[class*="bg-"] {
+[data-bs-theme="dark"] .badge:not(.bg-danger),
+[data-bs-theme="dark"] .rounded-pill:not(.btn),
+[data-bs-theme="dark"] span[class*="bg-"]:not(.bg-danger),
+[data-bs-theme="dark"] div[class*="bg-"]:not(.bg-danger) {
     background-color: #241f31 !important;
     color: #e2d9ed !important;
     border: 1px solid #362f4a !important;
 }
 
-/* Efeito Glassmorphism na Header / Navbar */
-.navbar-custom {
-    background: rgba(255, 255, 255, 0.75);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+/* Correção do contraste dos textos dentro dos cards de produtos no Dark Mode */
+[data-bs-theme="dark"] .product-card,
+[data-bs-theme="dark"] .product-card .card-body {
+    background-color: #ffffff !important;
 }
 
-/* Card Moderno com Microinteração */
-.product-card {
-    border: none;
-    border-radius: 16px;
-    overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-    background: #ffffff;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    [data-bs-theme="dark"] .product-card .card-title,
+    [data-bs-theme="dark"] .product-card h5,
+    [data-bs-theme="dark"] .product-card p,
+    [data-bs-theme="dark"] .product-card span:not(.Product-preco) {
+        color: #4A4A4A !important;
+    }
+
+    /* Mantém o valor "Preço" visível em um tom cinza discreto e o valor em destaque */
+    [data-bs-theme="dark"] .product-card .text-muted {
+        color: #777777 !important;
+    }
+
+/* Cards de produtos em lilás no Modo Escuro */
+[data-bs-theme="dark"] .product-card {
+    background-color: #211c2e !important;
+    border: 1px solid #362f4a !important;
 }
 
-    .product-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+    [data-bs-theme="dark"] .product-card .card-body {
+        background-color: #211c2e !important;
     }
 
-    /* Zoom suave na foto do produto */
-    .product-card .img-container {
-        overflow: hidden;
-        position: relative;
+    [data-bs-theme="dark"] .product-card h5,
+    [data-bs-theme="dark"] .product-card .card-title {
+        color: #ffffff !important;
+        font-weight: 600;
     }
 
-    .product-card img {
-        transition: transform 0.6s ease;
+    [data-bs-theme="dark"] .product-card p,
+    [data-bs-theme="dark"] .product-card .text-muted {
+        color: #bfaed6 !important;
     }
 
-    .product-card:hover img {
-        transform: scale(1.06);
+    [data-bs-theme="dark"] .product-card .Product-preco,
+    [data-bs-theme="dark"] .product-card .fw-bold.text-dark {
+        color: #ffffff !important;
     }
 
-/* Badge de Destaque Sofisticada (Efeito Shimmer) */
-.badge-destaque {
-    background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #feada6 100%);
-    color: #4a154b;
-    font-weight: 600;
-    padding: 6px 14px;
-    border-radius: 20px;
-    box-shadow: 0 2px 10px rgba(255, 154, 158, 0.4);
-}
+    /* Botão do card adaptado ao tema lilás */
+    [data-bs-theme="dark"] .product-card .btn-outline-primary,
+    [data-bs-theme="dark"] .product-card .btn-primary {
+        background-color: #D97FA8 !important;
+        border-color: #D97FA8 !important;
+        color: #ffffff !important;
+    }
+
+        [data-bs-theme="dark"] .product-card .btn-outline-primary:hover {
+            background-color: #C86C96 !important;
+        }

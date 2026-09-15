@@ -5,8 +5,39 @@
     var todosProdutos = ViewBag.TodosProdutos as List<AtelieDosPontinhos.UI.Models.ProductViewModel> ?? new List<AtelieDosPontinhos.UI.Models.ProductViewModel>();
 }
 
-<div class="container mt-3">
-    <div id="carouselHome" class="carousel slide shadow-sm rounded-4 overflow-hidden" data-bs-ride="carousel">
+<style>
+    /* Estilo para o botão de favoritar adaptado ao modo escuro */
+    .btn-favorite-toggle {
+        width: 38px;
+        height: 38px;
+        z-index: 10;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        background-color: rgba(0, 0, 0, 0.45) !important;
+        backdrop-filter: blur(4px);
+        transition: all 0.2s ease-in-out;
+    }
+
+        .btn-favorite-toggle:hover {
+            background-color: rgba(0, 0, 0, 0.75) !important;
+            transform: scale(1.08);
+        }
+
+            .btn-favorite-toggle:hover .bi-heart {
+                color: #fff !important;
+            }
+
+    /* Estilo dos botões de filtro de categoria */
+    .btn-filter {
+        border-radius: 50px;
+        padding: 8px 20px;
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }
+</style>
+
+<div class="container mt-3 py-2">
+    <!-- CARROSSEL DE BANNERS -->
+    <div id="carouselHome" class="carousel slide shadow-sm rounded-4 overflow-hidden mb-5" data-bs-ride="carousel">
         <div class="carousel-inner">
             <div class="carousel-item active">
                 <img src="~/images/banner/banner.png" class="d-block w-100 banner-home" style="height: 400px; object-fit: cover;" alt="Banner 1" />
@@ -25,44 +56,53 @@
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
         </button>
     </div>
-</div>
 
-<!-- Seção de Produtos em Destaque -->
-<div class="container mt-5 mb-5">
-    <h2 class="text-center mb-4 fw-bold text-secondary">⭐ Produtos em Destaque</h2>
+    <!-- SEÇÃO: PRODUTOS EM DESTAQUE -->
+    <div class="d-flex align-items-center mb-4">
+        <h3 class="fw-bold m-0 d-flex align-items-center gap-2" style="color: inherit;">
+            <span>⭐</span> Produtos em Destaque
+        </h3>
+    </div>
 
-    <div class="row row-cols-1 row-cols-md-3 g-4">
+    <div class="row row-cols-1 row-cols-md-3 g-4 mb-4">
         @if (Model != null && Model.Any())
         {
             foreach (var item in Model)
             {
                 <div class="col">
-                    <div class="card h-100 shadow-sm border-0 rounded-3 overflow-hidden position-relative">
-
+                    <div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden position-relative product-card">
                         <button type="button"
                                 onclick="toggleFavoritoHome(@item.Id, this)"
-                                class="btn btn-light rounded-circle position-absolute top-0 end-0 m-2 shadow-sm d-flex align-items-center justify-content-center"
-                                style="width: 38px; height: 38px; z-index: 10; border: none; background-color: rgba(255, 255, 255, 0.9);"
+                                class="btn position-absolute top-0 end-0 m-2 rounded-circle d-flex align-items-center justify-content-center shadow-sm btn-favorite-toggle"
                                 title="Favoritar">
-                            <i class="@(item.IsFavorited ? "bi bi-heart-fill" : "bi bi-heart") text-danger fs-5" id="fav-icon-destaque-@item.Id"></i>
+                            <i class="@(item.IsFavorited ? "bi bi-heart-fill text-danger" : "bi bi-heart text-white-50") fs-5" id="fav-icon-destaque-@item.Id"></i>
                         </button>
 
                         <a href="/Product/Detalhes/@item.Id" class="text-decoration-none">
                             <img src="@item.CoverImageUrl" class="card-img-top" alt="@item.Name" style="height: 250px; object-fit: cover;">
                         </a>
 
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title fw-bold text-dark">
-                                <a href="/Product/Detalhes/@item.Id" class="text-decoration-none text-dark">
-                                    @(string.IsNullOrEmpty(item.Nome) ? item.Name : item.Nome)
-                                </a>
-                            </h5>
-                            <p class="card-text text-muted text-truncate">@item.Descricao</p>
-                            <p class="card-text fs-5 fw-bold text-success mt-auto">R$ @item.Price</p>
+                        <div class="card-body d-flex flex-column justify-content-between p-3">
+                            <div>
+                                <h5 class="card-title fw-bold mb-1">
+                                    <a href="/Product/Detalhes/@item.Id" class="text-decoration-none text-dark">
+                                        @(string.IsNullOrEmpty(item.Nome) ? item.Name : item.Nome)
+                                    </a>
+                                </h5>
+                                <p class="card-text text-muted small" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                                    @item.Descricao
+                                </p>
+                            </div>
 
-                            <button type="button" onclick="adicionarAoCarrinhoHome(@item.Id)" class="btn btn-outline-primary w-100 rounded-pill fw-bold mt-3">
-                                <i class="bi bi-cart-plus-fill"></i> Adicionar ao Carrinho
-                            </button>
+                            <div class="pt-3 border-top border-secondary border-opacity-25 mt-2">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="text-muted small">Preço</span>
+                                    <span class="fs-5 fw-bold text-success">R$ @item.Price</span>
+                                </div>
+                                <button type="button" onclick="adicionarAoCarrinhoHome(@item.Id)" class="btn btn-outline-primary w-100 rounded-pill fw-bold d-flex align-items-center justify-content-center gap-2">
+                                    <i class="bi bi-cart-plus-fill"></i> Adicionar ao Carrinho
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -75,44 +115,92 @@
             </div>
         }
     </div>
-</div>
 
-<!-- Seção de Todos os Produtos / Catálogo Geral -->
-<div class="container mt-5 mb-5">
-    <h2 class="text-center mb-4 fw-bold text-secondary">🛍️ Todos os Produtos</h2>
+    <!-- FAIXA DIVISÓRIA ESTRUTURADA -->
+    <div class="my-5 py-2 position-relative">
+        <div class="rounded-4 p-4 text-center shadow-sm"
+             style="background: linear-gradient(135deg, #2b233a 0%, #1e1929 100%); border: 1px solid #3d3252;">
+            <div class="d-flex align-items-center justify-content-center gap-3">
+                <div class="flex-grow-1 border-bottom" style="border-color: #4a3e63 !important;"></div>
+                <span class="badge rounded-pill px-4 py-2 text-uppercase tracking-wide"
+                      style="background-color: #D97FA8; color: #fff; font-size: 0.85rem; letter-spacing: 1px;">
+                    ✨ Explore Nosso Catálogo Completo
+                </span>
+                <div class="flex-grow-1 border-bottom" style="border-color: #4a3e63 !important;"></div>
+            </div>
+            <p class="text-muted small mb-0 mt-2" style="color: #bfaed6 !important;">
+                Confira todas as peças exclusivas confeccionadas com carinho no Ateliê
+            </p>
+        </div>
+    </div>
 
-    <div class="row row-cols-1 row-cols-md-3 g-4">
+    <!-- SEÇÃO: TODOS OS PRODUTOS -->
+    <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+        <h3 class="fw-bold m-0 d-flex align-items-center gap-2" style="color: inherit;">
+            <span>🛍️</span> Catálogo de Produtos
+        </h3>
+    </div>
+
+    <!-- FILTROS DE CATEGORIA -->
+    <div class="d-flex flex-wrap gap-2 mb-4 justify-content-center justify-content-md-start">
+        <button type="button" class="btn btn-primary btn-filter filter-btn active" onclick="filtrarCategoria('todas', this)">
+            Todos
+        </button>
+        <button type="button" class="btn btn-outline-primary btn-filter filter-btn" onclick="filtrarCategoria('cama', this)">
+            🛏️ Cama
+        </button>
+        <button type="button" class="btn btn-outline-primary btn-filter filter-btn" onclick="filtrarCategoria('mesa', this)">
+            🍽️ Mesa
+        </button>
+        <button type="button" class="btn btn-outline-primary btn-filter filter-btn" onclick="filtrarCategoria('banho', this)">
+            🛁 Banho
+        </button>
+        <button type="button" class="btn btn-outline-primary btn-filter filter-btn" onclick="filtrarCategoria('infantil', this)">
+            🧸 Infantil
+        </button>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4 mb-4" id="gridProdutos">
         @if (todosProdutos != null && todosProdutos.Any())
         {
             foreach (var item in todosProdutos)
             {
-                <div class="col">
-                    <div class="card h-100 shadow-sm border-0 rounded-3 overflow-hidden position-relative">
+                <!-- Atributo data-categoria ajustado para tolower() seguro -->
+                <div class="col produto-item" data-categoria="@((item.Categoria ?? "").Trim().ToLower())">
+                    <div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden position-relative product-card">
 
                         <button type="button"
                                 onclick="toggleFavoritoHome(@item.Id, this)"
-                                class="btn btn-light rounded-circle position-absolute top-0 end-0 m-2 shadow-sm d-flex align-items-center justify-content-center"
-                                style="width: 38px; height: 38px; z-index: 10; border: none; background-color: rgba(255, 255, 255, 0.9);"
+                                class="btn position-absolute top-0 end-0 m-2 rounded-circle d-flex align-items-center justify-content-center shadow-sm btn-favorite-toggle"
                                 title="Favoritar">
-                            <i class="@(item.IsFavorited ? "bi bi-heart-fill" : "bi bi-heart") text-danger fs-5" id="fav-icon-todos-@item.Id"></i>
+                            <i class="@(item.IsFavorited ? "bi bi-heart-fill text-danger" : "bi bi-heart text-white-50") fs-5" id="fav-icon-todos-@item.Id"></i>
                         </button>
 
                         <a href="/Product/Detalhes/@item.Id" class="text-decoration-none">
                             <img src="@item.CoverImageUrl" class="card-img-top" alt="@item.Name" style="height: 250px; object-fit: cover;">
                         </a>
 
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title fw-bold text-dark">
-                                <a href="/Product/Detalhes/@item.Id" class="text-decoration-none text-dark">
-                                    @(string.IsNullOrEmpty(item.Nome) ? item.Name : item.Nome)
-                                </a>
-                            </h5>
-                            <p class="card-text text-muted text-truncate">@item.Descricao</p>
-                            <p class="card-text fs-5 fw-bold text-success mt-auto">R$ @item.Price</p>
+                        <div class="card-body d-flex flex-column justify-content-between p-3">
+                            <div>
+                                <h5 class="card-title fw-bold mb-1">
+                                    <a href="/Product/Detalhes/@item.Id" class="text-decoration-none text-dark">
+                                        @(string.IsNullOrEmpty(item.Nome) ? item.Name : item.Nome)
+                                    </a>
+                                </h5>
+                                <p class="card-text text-muted small" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                                    @item.Descricao
+                                </p>
+                            </div>
 
-                            <button type="button" onclick="adicionarAoCarrinhoHome(@item.Id)" class="btn btn-outline-primary w-100 rounded-pill fw-bold mt-3">
-                                <i class="bi bi-cart-plus-fill"></i> Adicionar ao Carrinho
-                            </button>
+                            <div class="pt-3 border-top border-secondary border-opacity-25 mt-2">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="text-muted small">Preço</span>
+                                    <span class="fs-5 fw-bold text-success">R$ @item.Price</span>
+                                </div>
+                                <button type="button" onclick="adicionarAoCarrinhoHome(@item.Id)" class="btn btn-outline-primary w-100 rounded-pill fw-bold d-flex align-items-center justify-content-center gap-2">
+                                    <i class="bi bi-cart-plus-fill"></i> Adicionar ao Carrinho
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -125,12 +213,51 @@
             </div>
         }
     </div>
+
+    <!-- Mensagem exibida caso a categoria selecionada não tenha produtos -->
+    <div id="msgSemProdutoCategoria" class="col-12 text-center py-5 d-none">
+        <p class="text-muted fs-5">Nenhum produto encontrado nesta categoria.</p>
+    </div>
 </div>
 
 @section Scripts {
     <script src="~/js/cart.js" asp-append-version="true"></script>
 
     <script>
+        // Função para filtrar os produtos na tela por categoria
+        function filtrarCategoria(categoria, btnElement) {
+            // Atualizar os botões ativos
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('btn-primary', 'active');
+                btn.classList.add('btn-outline-primary');
+            });
+            btnElement.classList.remove('btn-outline-primary');
+            btnElement.classList.add('btn-primary', 'active');
+
+            const categoriaAlvo = categoria.trim().toLowerCase();
+            const produtos = document.querySelectorAll('.produto-item');
+            let encontrou = false;
+
+            produtos.forEach(prod => {
+                const catProduto = (prod.getAttribute('data-categoria') || '').trim().toLowerCase();
+
+                if (categoriaAlvo === 'todas' || catProduto === categoriaAlvo) {
+                    prod.classList.remove('d-none');
+                    encontrou = true;
+                } else {
+                    prod.classList.add('d-none');
+                }
+            });
+
+            // Exibir mensagem se não houver produtos na categoria selecionada
+            const msgEmpty = document.getElementById('msgSemProdutoCategoria');
+            if (!encontrou) {
+                msgEmpty.classList.remove('d-none');
+            } else {
+                msgEmpty.classList.add('d-none');
+            }
+        }
+
         function adicionarAoCarrinhoHome(productId) {
             const formData = new FormData();
             formData.append('id', productId);
@@ -174,11 +301,11 @@
                         icons.forEach(icon => {
                             if (icon) {
                                 if (data.isFavorited) {
-                                    icon.classList.remove('bi-heart');
-                                    icon.classList.add('bi-heart-fill');
+                                    icon.classList.remove('bi-heart', 'text-white-50');
+                                    icon.classList.add('bi-heart-fill', 'text-danger');
                                 } else {
-                                    icon.classList.remove('bi-heart-fill');
-                                    icon.classList.add('bi-heart');
+                                    icon.classList.remove('bi-heart-fill', 'text-danger');
+                                    icon.classList.add('bi-heart', 'text-white-50');
                                 }
                             }
                         });

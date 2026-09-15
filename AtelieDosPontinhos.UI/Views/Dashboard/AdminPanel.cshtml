@@ -3,7 +3,7 @@
 }
 
 <div class="container py-4">
-    
+
     <div class="d-flex align-items-center justify-content-between mb-4 pb-3 border-bottom border-2 border-white">
         <div>
             <h1 class="fw-bold text-dark mb-1">Painel Administrativo 🔐</h1>
@@ -13,14 +13,13 @@
     </div>
 
     <div class="row g-4 mb-5">
-        
-        <!-- CARD: VER TODOS OS PRODUTOS (CRUD principal de listagem/exclusão) -->
+
+        <!-- CARD: VER TODOS OS PRODUTOS -->
         <div class="col-md-4">
             <div class="card h-100 border-0 shadow-sm p-4 text-center bg-white rounded-4 transition-hover">
                 <div class="fs-1 mb-2">📦</div>
                 <h4 class="fw-bold text-dark">Produtos</h4>
                 <p class="text-muted small">Catálogo ativo integrado</p>
-                <!-- Alterado para apontar para o Dashboard que lista os produtos da API -->
                 <a asp-controller="Dashboard" asp-action="GerenciarProdutos" class="btn btn-danger btn-sm rounded-pill px-4 mt-2 fw-semibold">
                     Ver Todos
                 </a>
@@ -33,7 +32,6 @@
                 <div class="fs-1 mb-2">➕</div>
                 <h4 class="fw-bold text-dark">Novo Item</h4>
                 <p class="text-muted small">Adicionar produto ao banco</p>
-                <!-- Aponta para a tela de criação dentro do Dashboard ou Products -->
                 <a asp-controller="Dashboard" asp-action="CriarProduto" class="btn btn-outline-secondary btn-sm rounded-pill px-4 mt-2 fw-semibold">
                     Cadastrar
                 </a>
@@ -46,7 +44,6 @@
                 <div class="fs-1 mb-2">👥</div>
                 <h4 class="fw-bold text-dark">Usuários</h4>
                 <p class="text-muted small">Controle de acessos e perfis</p>
-                <!-- Alterado para apontar para a nova tela que lista os clientes cadastrados -->
                 <a asp-controller="Dashboard" asp-action="GerenciarUsuarios" class="btn btn-outline-secondary btn-sm rounded-pill px-4 mt-2 fw-semibold">
                     Gerenciar
                 </a>
@@ -55,15 +52,23 @@
 
     </div>
 
-    <div class="card border-0 shadow-sm p-4 rounded-4 bg-white">
-        <h5 class="fw-bold text-dark mb-3 d-flex align-items-center gap-2">
-            <span>📢</span> Status do Sistema
+    <!-- Resumo Informativo da Loja -->
+    <div class="card border-0 rounded-4 p-4 mt-4 shadow-sm">
+        <h5 class="fw-bold mb-3 d-flex align-items-center gap-2">
+            <i class="bi bi-graph-up-arrow text-primary"></i> Resumo Geral do Ateliê
         </h5>
-        <div class="alert alert-success border-0 rounded-3 mb-0 bg-light text-dark d-flex align-items-center gap-3">
-            <div class="fs-3">🎯</div>
-            <div>
-                <strong>Banco de Dados Conectado!</strong> Todas as migrações do Entity Framework Core foram aplicadas com sucesso e a carga de dados contém 26 produtos reais ativos.
+        <div class="row g-3 text-center">
+            <div class="col-md-6">
+                <div class="p-3 rounded-3 bg-body-tertiary border">
+                    <span class="d-block text-muted small fw-semibold text-uppercase">Status da Integração</span>
+                    <span class="fs-4 fw-bold text-success"><i class="bi bi-check-circle-fill fs-6 me-1"></i> Operacional</span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="p-3 rounded-3 bg-body-tertiary border">
+                    <span class="d-block text-muted small fw-semibold text-uppercase">Banco de Dados</span>
+                    <span class="fs-4 fw-bold text-info">SQL Server</span>
+                </div>
             </div>
         </div>
     </div>
-</div>
