@@ -1,527 +1,402 @@
 ﻿@model IEnumerable<AtelieDosPontinhos.UI.Models.ProductViewModel>
 
 @{
-    ViewData["Title"] = "Página Inicial";
-    var todosProdutos = ViewBag.TodosProdutos as List<AtelieDosPontinhos.UI.Models.ProductViewModel> ?? new List<AtelieDosPontinhos.UI.Models.ProductViewModel>();
+    ViewData["Title"] = "Início";
 }
 
+<!-- Estilos Específicos da Página Inicial -->
 <style>
-    /* =========================================================
-           ESTRUTURA GERAL E CAIXA CENTRALIZADA (MODO CLARO E ESCURO)
-           ========================================================= */
-    body {
-        background-color: #f2ede6 !important; /* Fundo lateral bege suave no modo claro */
-        transition: background-color 0.3s ease;
+    .hero-section {
+        background: linear-gradient(135deg, #fdfbf7 0%, #f7eddf 100%);
+        border-radius: 2rem;
+        padding: 4rem 2rem;
+        position: relative;
+        overflow: hidden;
     }
 
-    [data-bs-theme="dark"] body {
-        background-color: #0b090f !important; /* Fundo lateral preto no modo escuro */
+    [data-bs-theme="dark"] .hero-section {
+        background: linear-gradient(135deg, #1b1724 0%, #292036 100%);
     }
 
-    /* Caixa centralizada principal que engloba todo o conteúdo da página */
-    .site-main-box {
-        background-color: #fffdfa !important; /* Fundo interno da caixa no modo claro (bege bem clarinho) */
-        border: 1px solid #e6dcc8 !important;
-        border-radius: 1.5rem;
-        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.06);
-        transition: all 0.3s ease;
-    }
-
-    [data-bs-theme="dark"] .site-main-box {
-        background-color: #131118 !important; /* Fundo interno da caixa no modo escuro (preto sutil) */
-        border: 1px solid rgba(255, 255, 255, 0.08) !important;
-        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.5) !important;
-    }
-
-    /* Estilo para o botão de favoritar adaptado ao modo escuro */
-    .btn-favorite-toggle {
-        width: 38px;
-        height: 38px;
-        z-index: 10;
-        border: 1px solid rgba(255, 255, 255, 0.2) !important;
-        background-color: rgba(0, 0, 0, 0.45) !important;
-        backdrop-filter: blur(4px);
-        transition: all 0.2s ease-in-out;
-    }
-
-        .btn-favorite-toggle:hover {
-            background-color: rgba(0, 0, 0, 0.75) !important;
-            transform: scale(1.08);
-        }
-
-            .btn-favorite-toggle:hover .bi-heart {
-                color: #fff !important;
-            }
-
-    /* Estilo dos botões de filtro de categoria */
-    .btn-filter {
-        border-radius: 50px;
-        padding: 8px 20px;
-        font-weight: 600;
-        transition: all 0.2s ease;
-    }
-
-    /* Estilização adaptativa da Faixa Divisória (Modo Claro / Escuro) */
-    .faixa-catalogo {
-        background: linear-gradient(135deg, #f8f1fa 0%, #ede3f2 100%) !important;
-        border: 1px solid #e2d1e6 !important;
-        transition: all 0.3s ease;
-    }
-
-    [data-bs-theme="dark"] .faixa-catalogo {
-        background: linear-gradient(135deg, #2b233a 0%, #1e1929 100%) !important;
-        border: 1px solid #3d3252 !important;
-    }
-
-    .faixa-linha-divisoria {
-        border-color: #d1b8dc !important;
-    }
-
-    [data-bs-theme="dark"] .faixa-linha-divisoria {
-        border-color: #4a3e63 !important;
-    }
-
-    .faixa-texto-sub {
-        color: #6c587a !important;
-    }
-
-    [data-bs-theme="dark"] .faixa-texto-sub {
-        color: #bfaed6 !important;
-    }
-
-    /* =========================================================
-           HERO ATELIÊ COM SUPORTE ADAPTATIVO (MODO CLARO E ESCURO)
-           ========================================================= */
-    .hero-atelier-container {
-        background: linear-gradient(135deg, #fcf6ed 0%, #f4ebd9 100%);
-        border: 1px solid #e6d8c3;
-        border-radius: 1.5rem;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-        transition: all 0.3s ease;
-    }
-
-    .badge-atelier {
-        background-color: #b84a75 !important;
-        color: #ffffff !important;
-        font-size: 0.8rem;
+    .hero-badge {
+        background-color: #fce8f0;
+        color: #b84a75;
+        font-size: 0.85rem;
         font-weight: 600;
         letter-spacing: 0.5px;
-        padding: 6px 14px;
+        padding: 6px 16px;
         border-radius: 50px;
+        display: inline-block;
     }
 
-    .hero-title {
-        color: #2c2530;
-        font-weight: 700;
-        letter-spacing: -0.5px;
-        transition: color 0.3s ease;
+    [data-bs-theme="dark"] .hero-badge {
+        background-color: #3d2433;
+        color: #ff9eba;
     }
 
-        .hero-title span {
-            color: #b84a75;
+    .feature-card {
+        background: var(--bs-body-bg);
+        border: 1px solid var(--bs-border-color);
+        border-radius: 1.25rem;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
         }
 
-    .hero-desc {
-        color: #63596b;
-        font-size: 0.98rem;
-        line-height: 1.6;
-        max-width: 460px;
-        transition: color 0.3s ease;
+    /* Estilo dos Botões de Categoria */
+    .category-btn {
+        background: transparent;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        width: 100%;
+        text-align: center;
+        transition: transform 0.2s ease;
     }
 
-    .btn-atelier-primary {
-        background-color: #b84a75;
-        border: 1px solid #b84a75;
-        color: #ffffff;
-        border-radius: 50px;
-        padding: 10px 24px;
-        font-weight: 600;
-        font-size: 0.9rem;
-        transition: all 0.2s ease;
-    }
-
-        .btn-atelier-primary:hover {
-            background-color: #9e3c62;
-            border-color: #9e3c62;
-            color: #ffffff;
+        .category-btn:hover {
+            transform: translateY(-3px);
         }
 
-    /* Estilo fluido e sem bordas marcadas para a logo */
-    .hero-logo-wrapper {
+    .category-circle {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        background-color: #fce8f0;
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 10px;
+        margin: 0 auto 15px auto;
+        color: #b84a75;
+        font-size: 2rem;
+        transition: all 0.3s ease;
     }
 
-    .hero-logo-img {
-        max-width: 100%;
-        max-height: 280px;
-        object-fit: contain;
-        mask-image: radial-gradient(circle, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%);
-        -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%);
-        transition: transform 0.3s ease;
+    .category-btn:hover .category-circle,
+    .category-btn.active .category-circle {
+        background-color: #b84a75;
+        color: #fff;
+        box-shadow: 0 5px 15px rgba(184, 74, 117, 0.3);
     }
 
-        .hero-logo-img:hover {
-            transform: scale(1.02);
-        }
-
-    /* MODO ESCURO AUTOMÁTICO */
-    [data-bs-theme="dark"] .hero-atelier-container {
-        background: linear-gradient(135deg, #181622 0%, #110f17 100%) !important;
-        border: 1px solid rgba(255, 255, 255, 0.08) !important;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+    [data-bs-theme="dark"] .category-circle {
+        background-color: #3d2433;
+        color: #ff9eba;
     }
 
-    [data-bs-theme="dark"] .hero-title {
-        color: #ffffff !important;
-    }
-
-    [data-bs-theme="dark"] .hero-desc {
-        color: #b0a8b9 !important;
-    }
-
-    .historia-ponto-cruz {
-        background-color: #fffaf0;
-        border: 1px solid #f0e6d2;
-    }
-
-    [data-bs-theme="dark"] .historia-ponto-cruz {
-        background-color: #231e2b;
-        border-color: #352c45;
+    [data-bs-theme="dark"] .category-btn:hover .category-circle,
+    [data-bs-theme="dark"] .category-btn.active .category-circle {
+        background-color: #ff9eba;
+        color: #17131f;
     }
 </style>
 
-<!-- CONTAINER PRINCIPAL ENVOLVIDO NA CAIXA -->
-<div class="container mt-4 mb-5 p-3 p-md-4 site-main-box">
-    <!-- CARROSSEL DE BANNERS -->
-    <div id="carouselHome" class="carousel slide shadow-sm rounded-4 overflow-hidden mb-5" data-bs-ride="carousel">
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="~/images/banner/banner.png" class="d-block w-100 banner-home" style="height: 400px; object-fit: cover;" alt="Banner 1" />
-            </div>
-            <div class="carousel-item">
-                <img src="~/images/banner/Banner2.png" class="d-block w-100 banner-home" style="height: 400px; object-fit: cover;" alt="Banner 2" />
-            </div>
-            <div class="carousel-item">
-                <img src="~/images/banner/Banner3.jpg" class="d-block w-100 banner-home" style="height: 400px; object-fit: cover;" alt="Banner 3" />
-            </div>
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselHome" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselHome" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        </button>
-    </div>
-
-    <!-- BANNER PRINCIPAL COM LOGO INTEGRADA -->
-    <section class="hero-atelier-container p-4 p-md-5 mb-5 shadow-sm">
-        <div class="row align-items-center g-4">
-
-            <!-- Coluna Esquerda: Textos e Botão Único -->
-            <div class="col-lg-6 text-lg-start text-center">
-                <div class="mb-3">
-                    <span class="badge badge-atelier shadow-sm">Feito à Mão com Amor</span>
-                </div>
-                <h1 class="display-6 hero-title mb-3">
-                    Ateliê dos <span>Pontinhos</span>
-                </h1>
-                <p class="hero-desc mb-4 mx-auto mx-lg-0">
-                    Mimos delicados em ponto cruz e bordados artesanais para encher de carinho fraldas, enxovais, toalhas e presentes exclusivos.
-                </p>
-                <div class="d-flex justify-content-center justify-content-lg-start">
-                    <a href="#produtos" class="btn btn-atelier-primary shadow-sm">Explorar Coleção</a>
-                </div>
-            </div>
-
-            <!-- Coluna Direita: Logo Fluida e Integrada -->
-            <div class="col-lg-6 text-center">
-                <div class="hero-logo-wrapper">
-                    <img src="~/images/logo/logo.png" alt="Logo Ateliê dos Pontinhos" class="hero-logo-img">
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-    <!-- SEÇÃO: A HISTÓRIA DO PONTO CRUZ -->
-    <section class="historia-ponto-cruz py-5 mb-5 rounded-4 px-4 px-md-5 shadow-sm">
-        <div class="row align-items-center g-5">
-            <div class="col-lg-4 text-center">
-                <div class="icon-story-wrapper mx-auto mb-3">
-                    <i class="bi bi-heart-fill fs-1" style="color: #b84a75;"></i>
-                </div>
-                <h3 class="fw-bold m-0" style="color: inherit;">A Magia do Ponto Cruz</h3>
-            </div>
-            <div class="col-lg-8">
-                <p class="mb-3 text-muted" style="line-height: 1.8;">
-                    O ponto cruz é uma das técnicas de bordado mais antigas e encantadoras da história humana. Passado de geração em geração, ele transforma simples fios de algodão e pedaços de tecido em verdadeiras obras de arte cheias de significado e afeto.
-                </p>
-                <p class="mb-0 text-muted" style="line-height: 1.8;">
-                    Cada cruzadinha feita à mão carrega paciência, dedicação e exclusividade. No <strong>Ateliê dos Pontinhos</strong>, resgatamos essa tradição artesanal para eternizar nomes, datas e momentos especiais em enxovais de bebês e mimos inesquecíveis.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <!-- SEÇÃO: PRODUTOS EM DESTAQUE -->
-    <div id="produtos" class="d-flex align-items-center mb-4">
-        <h3 class="fw-bold m-0 d-flex align-items-center gap-2" style="color: inherit;">
-            <span>⭐</span> Produtos em Destaque
-        </h3>
-    </div>
-
-    <div class="row row-cols-1 row-cols-md-3 g-4 mb-4">
-        @if (Model != null && Model.Any())
-        {
-            foreach (var item in Model)
-            {
-                <div class="col">
-                    <div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden position-relative product-card">
-                        <button type="button"
-                                onclick="toggleFavoritoHome(@item.Id, this)"
-                                class="btn position-absolute top-0 end-0 m-2 rounded-circle d-flex align-items-center justify-content-center shadow-sm btn-favorite-toggle"
-                                title="Favoritar">
-                            <i class="@(item.IsFavorited ? "bi bi-heart-fill text-danger" : "bi bi-heart text-white-50") fs-5" id="fav-icon-destaque-@item.Id"></i>
-                        </button>
-
-                        <a href="/Product/Detalhes/@item.Id" class="text-decoration-none">
-                            <img src="@item.CoverImageUrl" class="card-img-top" alt="@item.Name" style="height: 250px; object-fit: cover;">
-                        </a>
-
-                        <div class="card-body d-flex flex-column justify-content-between p-3">
-                            <div>
-                                <h5 class="card-title fw-bold mb-1">
-                                    <a href="/Product/Detalhes/@item.Id" class="text-decoration-none text-dark">
-                                        @(string.IsNullOrEmpty(item.Nome) ? item.Name : item.Nome)
-                                    </a>
-                                </h5>
-                                <p class="card-text text-muted small" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
-                                    @item.Descricao
-                                </p>
-                            </div>
-
-                            <div class="pt-3 border-top border-secondary border-opacity-25 mt-2">
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <span class="text-muted small">Preço</span>
-                                    <span class="fs-5 fw-bold text-success">R$ @item.Price</span>
-                                </div>
-                                <button type="button" onclick="adicionarAoCarrinhoHome(@item.Id)" class="btn btn-outline-primary w-100 rounded-pill fw-bold d-flex align-items-center justify-content-center gap-2">
-                                    <i class="bi bi-cart-plus-fill"></i> Adicionar ao Carrinho
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            }
-        }
-        else
-        {
-            <div class="col-12 text-center py-4">
-                <p class="text-muted fs-5">Nenhum produto em destaque no momento.</p>
-            </div>
-        }
-    </div>
-
-    <!-- FAIXA DIVISÓRIA ESTRUTURADA (ADAPTÁVEL CLARO/ESCURO) -->
-    <div class="my-5 py-2 position-relative">
-        <div class="rounded-4 p-4 text-center shadow-sm faixa-catalogo">
-            <div class="d-flex align-items-center justify-content-center gap-3">
-                <div class="flex-grow-1 border-bottom faixa-linha-divisoria"></div>
-                <span class="badge rounded-pill px-4 py-2 text-uppercase tracking-wide"
-                      style="background-color: #b84a75; color: #fff; font-size: 0.85rem; letter-spacing: 1px;">
-                    ✨ Explore Nosso Catálogo Completo
-                </span>
-                <div class="flex-grow-1 border-bottom faixa-linha-divisoria"></div>
-            </div>
-            <p class="small mb-0 mt-2 faixa-texto-sub">
-                Confira todas as peças exclusivas confeccionadas com carinho no Ateliê
+<!-- Hero Section Principal -->
+<section class="hero-section mb-5 shadow-sm">
+    <div class="row align-items-center g-5">
+        <div class="col-lg-6 text-center text-lg-start">
+            <span class="hero-badge mb-3"><i class="bi bi-heart-fill me-1"></i> Handcrafted with Love</span>
+            <h1 class="display-4 fw-bold lh-tight mb-3 text-body">
+                Stitching Memories, <br><span style="color: #b84a75;">Creating Happiness</span>
+            </h1>
+            <p class="lead text-secondary mb-4">
+                Peças exclusivas bordadas à mão para eternizar momentos especiais, decorar o seu lar e presentear quem você ama com significado e carinho.
             </p>
+            <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start">
+                <a href="#produtos" class="btn btn-primary btn-lg rounded-pill px-4 fw-semibold shadow-sm" style="background-color: #b84a75; border-color: #b84a75;">
+                    <i class="bi bi-bag-heart me-2"></i> Ver Catálogo
+                </a>
+                <a href="#about" class="btn btn-outline-secondary btn-lg rounded-pill px-4 fw-semibold">
+                    Conhecer História
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-6 text-center">
+            <div class="position-relative">
+                <img src="~/images/banner-principal.png" alt="Bordado Artesanal" class="img-fluid rounded-4 shadow-lg" style="max-height: 400px; object-fit: cover; width: 100%; border: 4px solid #fff;" onerror="this.src='https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?q=80&w=800&auto=format&fit=crop';" />
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Barra de Benefícios / Selos de Qualidade -->
+<section class="mb-5">
+    <div class="row g-4 text-center">
+        <div class="col-md-4">
+            <div class="feature-card p-4 h-100">
+                <div class="text-danger fs-3 mb-2"><i class="bi bi-patch-check-fill" style="color: #b84a75;"></i></div>
+                <h5 class="fw-bold mb-1">100% Feito à Mão</h5>
+                <p class="text-secondary small mb-0">Cada ponto é executado com total dedicação e acabamento impecável.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="feature-card p-4 h-100">
+                <div class="text-danger fs-3 mb-2"><i class="bi bi-gift-fill" style="color: #b84a75;"></i></div>
+                <h5 class="fw-bold mb-1">Presentes Personalizados</h5>
+                <p class="text-secondary small mb-0">Transformamos suas ideias, nomes e datas especiais em arte bordada.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="feature-card p-4 h-100">
+                <div class="text-danger fs-3 mb-2"><i class="bi bi-truck" style="color: #b84a75;"></i></div>
+                <h5 class="fw-bold mb-1">Envio com Cuidado</h5>
+                <p class="text-secondary small mb-0">Embalado com carinho e proteção para chegar perfeito até você.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Categorias Interativas (Cama, Mesa, Banho e Infantil) -->
+<section class="mb-5 py-4">
+    <div class="text-center mb-4">
+        <span class="text-uppercase tracking-wider text-muted small fw-bold">Explore por Categoria</span>
+        <h3 class="fw-bold">Nossas Especialidades</h3>
+        <div class="mt-2">
+            <button class="btn btn-sm btn-outline-secondary rounded-pill px-3 active filter-btn" data-category="todos">Ver Todos</button>
         </div>
     </div>
 
-    <!-- SEÇÃO: TODOS OS PRODUTOS -->
-    <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
-        <h3 class="fw-bold m-0 d-flex align-items-center gap-2" style="color: inherit;">
-            <span>🛍️</span> Catálogo de Produtos
-        </h3>
-    </div>
-
-    <!-- FILTROS DE CATEGORIA -->
-    <div class="d-flex flex-wrap gap-2 mb-4 justify-content-center justify-content-md-start">
-        <button type="button" class="btn btn-primary btn-filter filter-btn active" onclick="filtrarCategoria('todas', this)">
-            Todos
-        </button>
-        <button type="button" class="btn btn-outline-primary btn-filter filter-btn" onclick="filtrarCategoria('cama', this)">
-            🛏️ Cama
-        </button>
-        <button type="button" class="btn btn-outline-primary btn-filter filter-btn" onclick="filtrarCategoria('mesa', this)">
-            🍽️ Mesa
-        </button>
-        <button type="button" class="btn btn-outline-primary btn-filter filter-btn" onclick="filtrarCategoria('banho', this)">
-            🛁 Banho
-        </button>
-        <button type="button" class="btn btn-outline-primary btn-filter filter-btn" onclick="filtrarCategoria('infantil', this)">
-            🧸 Infantil
-        </button>
-    </div>
-
-    <div class="row row-cols-1 row-cols-md-3 g-4 mb-4" id="gridProdutos">
-        @if (todosProdutos != null && todosProdutos.Any())
-        {
-            foreach (var item in todosProdutos)
-            {
-                <div class="col produto-item" data-categoria="@((item.Categoria ?? "").Trim().ToLower())">
-                    <div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden position-relative product-card">
-
-                        <button type="button"
-                                onclick="toggleFavoritoHome(@item.Id, this)"
-                                class="btn position-absolute top-0 end-0 m-2 rounded-circle d-flex align-items-center justify-content-center shadow-sm btn-favorite-toggle"
-                                title="Favoritar">
-                            <i class="@(item.IsFavorited ? "bi bi-heart-fill text-danger" : "bi bi-heart text-white-50") fs-5" id="fav-icon-todos-@item.Id"></i>
-                        </button>
-
-                        <a href="/Product/Detalhes/@item.Id" class="text-decoration-none">
-                            <img src="@item.CoverImageUrl" class="card-img-top" alt="@item.Name" style="height: 250px; object-fit: cover;">
-                        </a>
-
-                        <div class="card-body d-flex flex-column justify-content-between p-3">
-                            <div>
-                                <h5 class="card-title fw-bold mb-1">
-                                    <a href="/Product/Detalhes/@item.Id" class="text-decoration-none text-dark">
-                                        @(string.IsNullOrEmpty(item.Nome) ? item.Name : item.Nome)
-                                    </a>
-                                </h5>
-                                <p class="card-text text-muted small" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
-                                    @item.Descricao
-                                </p>
-                            </div>
-
-                            <div class="pt-3 border-top border-secondary border-opacity-25 mt-2">
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <span class="text-muted small">Preço</span>
-                                    <span class="fs-5 fw-bold text-success">R$ @item.Price</span>
-                                </div>
-                                <button type="button" onclick="adicionarAoCarrinhoHome(@item.Id)" class="btn btn-outline-primary w-100 rounded-pill fw-bold d-flex align-items-center justify-content-center gap-2">
-                                    <i class="bi bi-cart-plus-fill"></i> Adicionar ao Carrinho
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+    <div class="row g-4 justify-content-center text-center">
+        <div class="col-6 col-md-3">
+            <button class="category-btn filter-btn" data-category="Cama">
+                <div class="category-circle shadow-sm">
+                    <i class="bi bi-moon-stars"></i>
                 </div>
-            }
-        }
-        else
-        {
-            <div class="col-12 text-center py-4">
-                <p class="text-muted fs-5">Nenhum produto cadastrado no catálogo.</p>
-            </div>
-        }
+                <h6 class="fw-bold mb-0 text-body">Cama</h6>
+                <small class="text-secondary">Enxovais & Conforto</small>
+            </button>
+        </div>
+        <div class="col-6 col-md-3">
+            <button class="category-btn filter-btn" data-category="Mesa">
+                <div class="category-circle shadow-sm">
+                    <i class="bi bi-cup-hot"></i>
+                </div>
+                <h6 class="fw-bold mb-0 text-body">Mesa</h6>
+                <small class="text-secondary">Cozinha & Decoração</small>
+            </button>
+        </div>
+        <div class="col-6 col-md-3">
+            <button class="category-btn filter-btn" data-category="Banho">
+                <div class="category-circle shadow-sm">
+                    <i class="bi bi-droplet"></i>
+                </div>
+                <h6 class="fw-bold mb-0 text-body">Banho</h6>
+                <small class="text-secondary">Toalhas & Cuidados</small>
+            </button>
+        </div>
+        <div class="col-6 col-md-3">
+            <button class="category-btn filter-btn" data-category="Infantil">
+                <div class="category-circle shadow-sm">
+                    <i class="bi bi-balloon"></i>
+                </div>
+                <h6 class="fw-bold mb-0 text-body">Infantil</h6>
+                <small class="text-secondary">Bebês & Crianças</small>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Seção de Produtos Dinâmicos (@Model) -->
+<section id="produtos" class="mb-5 pt-3">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <div>
+            <span class="text-uppercase tracking-wider text-muted small fw-bold">Catálogo Disponível</span>
+            <h2 class="fw-bold mb-0">Nossos Produtos</h2>
+        </div>
     </div>
 
-    <!-- Mensagem exibida caso a categoria selecionada não tenha produtos -->
-    <div id="msgSemProdutoCategoria" class="col-12 text-center py-5 d-none">
-        <p class="text-muted fs-5">Nenhum produto encontrado nesta categoria.</p>
-    </div>
-</div>
+    @if (Model != null && Model.Any())
+    {
+        <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4" id="lista-produtos">
+            @foreach (var produto in Model)
+            {
+                var catProduto = string.IsNullOrEmpty(produto.Categoria) ? "Outros" : produto.Categoria.Trim();
 
-@section Scripts {
-    <script src="~/js/cart.js" asp-append-version="true"></script>
+                <div class="col produto-item" data-category="@catProduto">
+                    <div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden position-relative feature-card">
 
-    <script>
-        function filtrarCategoria(categoria, btnElement) {
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('btn-primary', 'active');
-                btn.classList.add('btn-outline-primary');
-            });
-            btnElement.classList.remove('btn-outline-primary');
-            btnElement.classList.add('btn-primary', 'active');
+                        <!-- Badge de Destaque -->
+                        <span class="badge bg-danger position-absolute top-0 start-0 m-3 px-3 py-2 rounded-pill shadow-sm" style="background-color: #b84a75 !important; z-index: 2;">
+                            Destaque
+                        </span>
 
-            const categoriaAlvo = categoria.trim().toLowerCase();
-            const produtos = document.querySelectorAll('.produto-item');
-            let encontrou = false;
+                        <!-- Imagem do Produto -->
+                        <div class="bg-body-secondary position-relative overflow-hidden" style="height: 220px;">
+                            @{
+                                string imgUrl = "/images/products/default.png";
+                                var rawImage = produto.CoverImageUrl;
 
-            produtos.forEach(prod => {
-                const catProduto = (prod.getAttribute('data-categoria') || '').trim().toLowerCase();
-
-                if (categoriaAlvo === 'todas' || catProduto === categoriaAlvo) {
-                    prod.classList.remove('d-none');
-                    encontrou = true;
-                } else {
-                    prod.classList.add('d-none');
-                }
-            });
-
-            const msgEmpty = document.getElementById('msgSemProdutoCategoria');
-            if (!encontrou) {
-                msgEmpty.classList.remove('d-none');
-            } else {
-                msgEmpty.classList.add('d-none');
-            }
-        }
-
-        function adicionarAoCarrinhoHome(productId) {
-            const formData = new FormData();
-            formData.append('id', productId);
-            formData.append('quantidade', 1);
-
-            fetch('/Cart/AdicionarAoCarrinhoAjax', {
-                method: 'POST',
-                body: formData
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        const cartBadge = document.getElementById("cartCount");
-                        if (cartBadge) {
-                            cartBadge.innerText = data.totalCount;
-                        }
-
-                        const toastEl = document.getElementById('liveToast');
-                        if (toastEl) {
-                            const toast = new bootstrap.Toast(toastEl);
-                            toast.show();
-                        }
-                    } else {
-                        alert(data.message || 'Erro ao adicionar item ao carrinho.');
-                    }
-                })
-                .catch(error => console.error('Erro ao adicionar ao carrinho:', error));
-        }
-
-        function toggleFavoritoHome(productId, btn) {
-            const iconDestaque = document.getElementById(`fav-icon-destaque-${productId}`);
-            const iconTodos = document.getElementById(`fav-icon-todos-${productId}`);
-
-            fetch(`/Favorites/Toggle?productId=${productId}`, {
-                method: 'POST'
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        const icons = [iconDestaque, iconTodos];
-                        icons.forEach(icon => {
-                            if (icon) {
-                                if (data.isFavorited) {
-                                    icon.classList.remove('bi-heart', 'text-white-50');
-                                    icon.classList.add('bi-heart-fill', 'text-danger');
-                                } else {
-                                    icon.classList.remove('bi-heart-fill', 'text-danger');
-                                    icon.classList.add('bi-heart', 'text-white-50');
+                                if (!string.IsNullOrEmpty(rawImage))
+                                {
+                                    if (rawImage.StartsWith("http://") || rawImage.StartsWith("https://") || rawImage.StartsWith("/"))
+                                    {
+                                        imgUrl = rawImage;
+                                    }
+                                    else
+                                    {
+                                        imgUrl = "/images/products/" + rawImage;
+                                    }
                                 }
                             }
-                        });
-                    } else {
-                        if (data.redirectUrl) {
-                            window.location.href = data.redirectUrl;
+                            <img src="@imgUrl"
+                                 class="w-100 h-100 object-fit-cover"
+                                 alt="@produto.Nome"
+                                 onerror="this.onerror=null; this.src='/images/products/default.png';" />
+                        </div>
+
+                        <!-- Corpo do Card -->
+                        <div class="card-body d-flex flex-column p-4">
+                            <h5 class="card-title fw-bold text-body mb-2 text-truncate">@produto.Nome</h5>
+                            <p class="card-text text-secondary small flex-grow-1" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                                @produto.Descricao
+                            </p>
+
+                            <div class="d-flex align-items-center justify-content-between mt-3 pt-3 border-top">
+                                <div>
+                                    <small class="text-muted d-block" style="font-size: 0.75rem;">Valor</small>
+                                    <span class="fw-bold fs-5 text-success">@produto.Preco.ToString("C")</span>
+                                </div>
+                                <a asp-controller="Product" asp-action="Detalhes" asp-route-id="@produto.Id" class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-semibold" style="border-color: #b84a75; color: #b84a75;">
+                                    Ver Detalhes
+                                </a>
+                            </div>
+
+                            <button type="button" class="btn btn-primary w-100 mt-3 rounded-pill fw-semibold shadow-sm add-to-cart" data-id="@produto.Id" style="background-color: #b84a75; border: none;">
+                                <i class="bi bi-bag-plus me-1"></i> Adicionar ao Carrinho
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Mensagem caso nenhum produto seja encontrado na categoria filtrada -->
+        <div id="no-products-msg" class="text-center py-5 bg-body-tertiary rounded-4 border d-none">
+            <i class="bi bi-search display-4 text-muted mb-3 d-block"></i>
+            <h4 class="fw-bold text-secondary">Nenhum produto encontrado nesta categoria</h4>
+            <p class="text-muted small">Tente selecionar outra categoria ou volte mais tarde!</p>
+        </div>
+    }
+    else
+    {
+        <div class="text-center py-5 bg-body-tertiary rounded-4 border">
+            <i class="bi bi-basket display-4 text-muted mb-3 d-block"></i>
+            <h4 class="fw-bold text-secondary">Nenhum produto cadastrado no momento</h4>
+            <p class="text-muted small">Volte em breve para conferir as novidades do ateliê!</p>
+        </div>
+    }
+</section>
+
+<!-- Seção Quem Somos / Institucional -->
+<section id="about" class="my-5 py-5 border-top border-bottom">
+    <div class="row align-items-center g-5">
+        <div class="col-lg-6 text-center">
+            <img src="~/images/logo/logo.png" alt="Ateliê dos Pontinhos" class="img-fluid rounded-4 shadow-lg p-4 bg-body-tertiary" style="max-height: 400px; width: 100%; object-fit: contain; border: 2px solid #b84a75;" />
+        </div>
+        <div class="col-lg-6">
+            <span class="hero-badge mb-3"><i class="bi bi-heart-fill me-1"></i> Quem Somos</span>
+            <h2 class="fw-bold mb-3">Transformando linhas e agulhas em memórias afetivas</h2>
+            <p class="text-secondary mb-3">
+                O Ateliê nasceu da paixão pelo bordado livre e pela arte de criar peças únicas que contam histórias. Cada bastidor, monograma ou lembrança é confeccionado de maneira artesanal, priorizando a delicadeza dos materiais e a harmonia das cores.
+            </p>
+            <p class="text-secondary mb-4">
+                Acreditamos que o artesanato carrega a energia do tempo dedicado à sua confecção, tornando-se um presente eterno para quem recebe e um toque de aconchego para o ambiente.
+            </p>
+            <div class="d-flex gap-4">
+                <div>
+                    <h3 class="fw-bold mb-0 text-dark" style="color: #b84a75 !important;">+500</h3>
+                    <small class="text-secondary">Peças Entregues</small>
+                </div>
+                <div class="vr opacity-25"></div>
+                <div>
+                    <h3 class="fw-bold mb-0 text-dark" style="color: #b84a75 !important;">100%</h3>
+                    <small class="text-secondary">Feito à Mão</small>
+                </div>
+                <div class="vr opacity-25"></div>
+                <div>
+                    <h3 class="fw-bold mb-0 text-dark" style="color: #b84a75 !important;">5★</h3>
+                    <small class="text-secondary">Avaliações</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Scripts de Filtro por Categoria e Carrinho -->
+@section Scripts {
+    <script src="~/js/cart.js" asp-append-version="true"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Lógica de Filtragem por Categoria
+            const filterButtons = document.querySelectorAll(".filter-btn");
+            const productItems = document.querySelectorAll(".produto-item");
+            const noProductsMsg = document.getElementById("no-products-msg");
+
+            filterButtons.forEach(button => {
+                button.addEventListener("click", function() {
+                    filterButtons.forEach(btn => btn.classList.remove("active"));
+                    this.classList.add("active");
+
+                    const selectedCategory = this.getAttribute("data-category");
+                    let visibleCount = 0;
+
+                    productItems.forEach(item => {
+                        const itemCategory = item.getAttribute("data-category");
+
+                        if (selectedCategory === "todos" || itemCategory.toLowerCase() === selectedCategory.toLowerCase()) {
+                            item.style.display = "block";
+                            visibleCount++;
                         } else {
-                            alert(data.message || 'Faça login para favoritar produtos.');
+                            item.style.display = "none";
+                        }
+                    });
+
+                    if (noProductsMsg) {
+                        if (visibleCount === 0) {
+                            noProductsMsg.classList.remove("d-none");
+                        } else {
+                            noProductsMsg.classList.add("d-none");
                         }
                     }
-                })
-                .catch(error => console.error('Erro ao atualizar favorito:', error));
-        }
+                });
+            });
+
+            // Lógica do Carrinho via Ajax
+            const cartButtons = document.querySelectorAll(".add-to-cart");
+            cartButtons.forEach(button => {
+                button.addEventListener("click", async function() {
+                    const productId = this.getAttribute("data-id");
+                    try {
+                        const response = await fetch('/Cart/AdicionarAoCarrinhoAjax', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+                            },
+                            body: JSON.stringify({ produtoId: parseInt(productId), quantidade: 1 })
+                        });
+
+                        if (response.ok) {
+                            const data = await response.json();
+                            const badge = document.getElementById("cartCount");
+                            if (badge && data.totalItens !== undefined) {
+                                badge.innerText = data.totalItens;
+                            }
+
+                            const toastEl = document.getElementById('liveToast');
+                            if (toastEl) {
+                                const toast = new bootstrap.Toast(toastEl);
+                                toast.show();
+                            }
+                        }
+                    } catch (error) {
+                        console.error("Erro ao adicionar ao carrinho:", error);
+                    }
+                });
+            });
+        });
     </script>
 }

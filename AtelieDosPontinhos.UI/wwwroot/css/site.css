@@ -3,12 +3,25 @@ ESTILO GERAL
 ============================= */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
 body {
     font-family: 'Poppins', sans-serif;
     background-color: #F5EEDB;
     color: #4A4A4A;
     transition: background-color 0.3s ease, color 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
+
+    /* Faz o container principal (<main> ou conteúdo) expandir e empurrar o rodapé para baixo */
+    main, .main-content, body > div.container:not(.footer-container) {
+        flex: 1 0 auto;
+    }
 
 /* ============================
 NAVBAR
@@ -199,9 +212,15 @@ BANNER E OUTROS
         object-fit: cover;
     }
 
+/* ============================
+RODAPÉ (CORRIGIDO PARA FLEXBOX)
+============================= */
 .footer {
     background: white;
     border-top: 1px solid #eee;
+    flex-shrink: 0;
+    width: 100%;
+    position: static !important; /* Remove qualquer conflito de position absolute */
 }
 
 /* ============================
@@ -217,7 +236,12 @@ SUPORTE AO MODO ESCURO (REFINADO)
     border-bottom: 1px solid #2e263d !important;
 }
 
-/* 🎨 Cartões e containers centrais com tom elegante e boa profundidade */
+[data-bs-theme="dark"] .footer {
+    background-color: #201a2b !important;
+    border-top: 1px solid #352c45 !important;
+}
+
+/* Cartões e containers centrais com tom elegante e boa profundidade */
 [data-bs-theme="dark"] .card,
 [data-bs-theme="dark"] .Product-detalhe,
 [data-bs-theme="dark"] main .bg-white,
@@ -227,7 +251,7 @@ SUPORTE AO MODO ESCURO (REFINADO)
     background-color: #231e2b !important;
     color: #ded6ed !important;
     border: 1px solid #352c45 !important;
-    box-init: none;
+    box-shadow: none !important;
 }
 
 [data-bs-theme="dark"] p,
@@ -283,8 +307,6 @@ SUPORTE AO MODO ESCURO (REFINADO)
 /* ============================
 CORREÇÃO DOS BOTÕES DE AÇÃO (DETALHES DO PRODUTO)
 ============================= */
-
-/* Botão de Comprar Agora (Destacado, com fundo rosa/lilás forte e texto branco) */
 .Product-detalhe .btn-primary,
 .card .btn-primary,
 button:has(.bi-bag-plus),
@@ -307,7 +329,6 @@ a:has(.bi-bag-plus) {
         box-shadow: 0 6px 20px rgba(217, 127, 168, 0.5) !important;
     }
 
-/* Botão de Favoritos na página de detalhes (Com contraste forte e ícone visível) */
 .Product-detalhe .btn-outline-secondary,
 .Product-detalhe button:has(.bi-heart),
 .Product-detalhe a:has(.bi-heart) {
@@ -327,7 +348,6 @@ a:has(.bi-bag-plus) {
         border-color: #7C5E99 !important;
     }
 
-/* Garante que o ícone e texto dentro do botão de favoritos fiquem legíveis */
 [data-bs-theme="dark"] .Product-detalhe .btn-outline-secondary i,
 [data-bs-theme="dark"] .Product-detalhe .btn-outline-secondary span {
     color: #f7f4fc !important;
@@ -336,8 +356,6 @@ a:has(.bi-bag-plus) {
 /* ============================
 CORREÇÃO DEFINITIVA: BOTÃO COMPRAR AGORA
 ============================= */
-
-/* Alvo direto para qualquer botão ou link que contenha o texto "Comprar agora" ou o ícone correspondente */
 .Product-detalhe a:has(.bi-bag-plus),
 .Product-detalhe button:has(.bi-bag-plus),
 .Product-detalhe .btn:not(.btn-outline-secondary) {
@@ -360,7 +378,6 @@ CORREÇÃO DEFINITIVA: BOTÃO COMPRAR AGORA
         transform: translateY(-2px);
     }
 
-/* Garante que o texto e o ícone internos fiquem brancos e legíveis */
 [data-bs-theme="dark"] .Product-detalhe a:has(.bi-bag-plus) *,
 [data-bs-theme="dark"] .Product-detalhe button:has(.bi-bag-plus) *,
 [data-bs-theme="dark"] .Product-detalhe .btn:not(.btn-outline-secondary) * {
@@ -386,7 +403,6 @@ ESTILOS DA NOVA HERO E HISTÓRIA
     border: 1px solid #f0e6d2;
 }
 
-/* Ajustes automáticos para o Modo Escuro */
 [data-bs-theme="dark"] .hero-atelier {
     background: linear-gradient(135deg, #201a2b 0%, #17131f 100%);
     border-color: #352c45;
@@ -401,7 +417,6 @@ ESTILOS DA NOVA HERO E HISTÓRIA
     border-color: #352c45;
 }
 
-/* Corrige o fundo e a cor do texto do select e de suas opções no modo escuro */
 [data-bs-theme="dark"] select.form-select,
 [data-bs-theme="dark"] .form-select {
     background-color: #1f1a29 !important;
