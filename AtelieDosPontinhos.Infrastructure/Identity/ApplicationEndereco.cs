@@ -2,7 +2,7 @@
 
 namespace AtelieDosPontinhos.Infrastructure.Identity
 {
-    public class ApplicationUser : IdentityUser
+    public class ApplicationEndereco : IdentityUser
     {
         // Endereço de Entrega
         public string? Cep { get; set; }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AtelieDosPontinhos.Infrastructure.Migrations
 {
     [DbContext(typeof(AtelieDosPontinhosDbContext))]
-    [Migration("20260914195809_AddCamposCartaoPagamento")]
-    partial class AddCamposCartaoPagamento
+    [Migration("20260915170636_AddNewApplicationUser")]
+    partial class AddNewApplicationUser
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -282,9 +282,6 @@ namespace AtelieDosPontinhos.Infrastructure.Migrations
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Destaque")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("IsFeatured")
                         .HasColumnType("bit");

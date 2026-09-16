@@ -89,7 +89,7 @@ namespace AtelieDosPontinhos.Desktop.Themes
         {
             if (grid.Tag?.ToString() != "KeepEditable")
             {
-                grid.ReadOnly = true;
+                grid.ReadOnly = false;
             }
             // Estilo geral (fundo branco, bordas sutis)
             grid.BackgroundColor = CinzaFundo;
@@ -125,7 +125,7 @@ namespace AtelieDosPontinhos.Desktop.Themes
             // Comportamento
             grid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             grid.MultiSelect = false;
-            grid.ReadOnly = true;
+            grid.ReadOnly = false;
             grid.AllowUserToAddRows = false;
             grid.AllowUserToDeleteRows = false;
             grid.AllowUserToResizeRows = false;

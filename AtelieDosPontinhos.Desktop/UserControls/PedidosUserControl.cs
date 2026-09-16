@@ -43,6 +43,7 @@ namespace AtelieDosPontinhos.Desktop.UserControls
             _pedidosService = new PedidosApiService();
             _usuariosService = new UsuariosApiService();
 
+            gridPedidos.Tag = "KeepEditable";
             AtelieDosPontinhosTheme.AplicarEstiloGrid(gridPedidos);
 
             ConfigurarGrid();
@@ -51,6 +52,7 @@ namespace AtelieDosPontinhos.Desktop.UserControls
             gridPedidos.DataError += GridPedidos_DataError;
             gridPedidos.CurrentCellDirtyStateChanged += GridPedidos_CurrentCellDirtyStateChanged;
             gridPedidos.CellValueChanged += GridPedidos_CellValueChanged;
+            gridPedidos.CellMouseDown += GridPedidos_CellMouseDown;
 
             await CarregarDadosAsync();
         }
@@ -172,17 +174,17 @@ namespace AtelieDosPontinhos.Desktop.UserControls
 
         private void ConfigurarGrid()
         {
-            gridPedidos.Tag = "KeepEditable";
+            // garante que o grid seja editável quando necessário
+            // gridPedidos.Tag já é setado no Load (KeepEditable)
             gridPedidos.Rows.Clear();
             gridPedidos.Columns.Clear();
             gridPedidos.AutoGenerateColumns = false;
-            gridPedidos.EditMode = DataGridViewEditMode.EditOnEnter;
+            gridPedidos.EditMode = DataGridViewEditMode.EditOnEnter; // já estava assim, mantém
             gridPedidos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             gridPedidos.MultiSelect = false;
             gridPedidos.AllowUserToAddRows = false;
 
             gridPedidos.ReadOnly = false;
-
 
             // cria colunas no DataGridView (ID, Comprador, Data, Localidade, Pagamento, Total, Status)
             gridPedidos.Columns.Add(new DataGridViewTextBoxColumn { Name = "colId", HeaderText = "ID", ReadOnly = true });
@@ -196,11 +198,12 @@ namespace AtelieDosPontinhos.Desktop.UserControls
             {
                 Name = "colStatus",
                 HeaderText = "Status",
-                FlatStyle = FlatStyle.Flat,
                 ValueType = typeof(string),
                 ReadOnly = false, // coluna editável
-                DisplayStyle = DataGridViewComboBoxDisplayStyle.DropDownButton,
-                DisplayStyleForCurrentCellOnly = false
+                                  // Mostrar como combo apenas para a célula atual para evitar problemas do estilo
+                DisplayStyle = DataGridViewComboBoxDisplayStyle.ComboBox,
+                DisplayStyleForCurrentCellOnly = true,
+                FlatStyle = FlatStyle.Standard
             };
             colStatus.Items.AddRange(new string[] { "Concluido", "Pendente", "Cancelado" });
             gridPedidos.Columns.Add(colStatus);
@@ -339,5 +342,29 @@ namespace AtelieDosPontinhos.Desktop.UserControls
         private async void btnAtualizar_Click(object sender, EventArgs e) => await CarregarDadosAsync();
 
         private void txtPesquisa_TextChanged(object sender, EventArgs e) => FiltrarPedidos();
+
+        // Abre o dropdown do combo quando o usuário clica na célula (works around problemas de tema/flat style)
+        private void GridPedidos_CellMouseDown(object? sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
+            if (gridPedidos.Columns[e.ColumnIndex].Name != "colStatus") return;
+
+            // torna a célula atual e inicia edição
+            gridPedidos.CurrentCell = gridPedidos.Rows[e.RowIndex].Cells[e.ColumnIndex];
+            if (!gridPedidos.CurrentCell.IsInEditMode)
+            {
+                gridPedidos.BeginEdit(true);
+            }
+
+            // Se o controle de edição for o Combo, abre o dropdown
+            if (gridPedidos.EditingControl is DataGridViewComboBoxEditingControl cbEditing)
+            {
+                cbEditing.DroppedDown = true;
+            }
+            else if (gridPedidos.EditingControl is ComboBox combo)
+            {
+                combo.DroppedDown = true;
+            }
+        }
     }
 }

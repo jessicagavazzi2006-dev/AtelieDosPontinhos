@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using AtelieDosPontinhos.Domain.Entities;
+﻿using AtelieDosPontinhos.Domain.Entities;
 using AtelieDosPontinhos.Infrastructure.Context;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+
+
 
 namespace AtelieDosPontinhos.Infrastructure.Data
 {
@@ -123,6 +121,63 @@ namespace AtelieDosPontinhos.Infrastructure.Data
                 var defaultCategory = await context.Categories.FirstOrDefaultAsync();
                 var defaultCategoryId = defaultCategory?.Id ?? 1;
 
+                // carregar categorias para mapeamento
+                var categories = await context.Categories.ToListAsync();
+
+                // dicionário de palavras-chave para mapear nomes às categorias
+                var categoryKeywords = new Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase)
+                {
+                    { "Banho", new[] { "toalha", "banho", "fronha", "toalhalava", "toalha" } },
+                    { "Cama", new[] { "lençol", "lencol", "cama", "lencol", "jogo de cama", "lencolvermelhocasal" } },
+                    { "Infantil", new[] { "fralda", "menina", "menino", "infantil", "beb" } },
+                    { "Mesa", new[] { "pano", "panodeprato", "caminho", "mesa", "toalhademesa" } },
+                    { "Materiais", new[] { "kit", "material", "materiais", "kitfraldas", "kitfralda" } }
+                };
+
+                // preços por categoria (exemplo — ajuste conforme necessidade)
+                var priceByCategory = new Dictionary<string, decimal>(StringComparer.OrdinalIgnoreCase)
+                {
+                    { "Banho", 49.90m },
+                    { "Cama", 249.90m },
+                    { "Infantil", 59.90m },
+                    { "Mesa", 39.90m },
+                    { "Materiais", 19.90m }
+                };
+
+                int MapCategoryId(string productName)
+                {
+                    if (string.IsNullOrWhiteSpace(productName)) return defaultCategoryId;
+
+                    foreach (var cat in categories)
+                    {
+                        if (categoryKeywords.TryGetValue(cat.Name, out var keys))
+                        {
+                            foreach (var k in keys)
+                            {
+                                if (productName.IndexOf(k, StringComparison.OrdinalIgnoreCase) >= 0)
+                                {
+                                    return cat.Id;
+                                }
+                            }
+                        }
+                    }
+
+                    // fallback: tentativas por nome exato (se categoria for encontrada pelo nome)
+                    var byName = categories.FirstOrDefault(c => productName.IndexOf(c.Name, StringComparison.OrdinalIgnoreCase) >= 0);
+                    return byName?.Id ?? defaultCategoryId;
+                }
+
+                decimal PriceForProduct(string productName)
+                {
+                    var cat = categories.FirstOrDefault(c => categoryKeywords.ContainsKey(c.Name) &&
+                        categoryKeywords[c.Name].Any(k => productName.IndexOf(k, StringComparison.OrdinalIgnoreCase) >= 0));
+
+                    if (cat != null && priceByCategory.TryGetValue(cat.Name, out var p))
+                        return p;
+
+                    return 49.90m; // fallback
+                }
+
                 var produtos = new List<Product>();
                 if (!string.IsNullOrWhiteSpace(webRootPath))
                 {
@@ -140,22 +195,30 @@ namespace AtelieDosPontinhos.Infrastructure.Data
                             var name = Path.GetFileNameWithoutExtension(fileName).Replace('-', ' ').Replace('_', ' ');
                             if (string.IsNullOrWhiteSpace(name)) name = "Produto";
 
+                            var catId = MapCategoryId(name);
+                            var price = PriceForProduct(name);
+
                             produtos.Add(new Product
                             {
                                 Name = name,
                                 Description = $"Produto gerado automaticamente a partir da imagem {fileName}.",
                                 CoverImageUrl = $"/images/products/{fileName}",
-                                Price = 49.90m,
+                                Price = price,
                                 Stock = 10,
                                 IsFeatured = false,
-                                CategoryId = defaultCategoryId
+                                CategoryId = catId
                             });
                         }
                     }
                 }
 
+                // se não houver produtos gerados via imagens, adiciona alguns exemplos com categorias apropriadas
                 if (!produtos.Any())
                 {
+                    int banhoId = categories.FirstOrDefault(c => c.Name.Equals("Banho", StringComparison.OrdinalIgnoreCase))?.Id ?? defaultCategoryId;
+                    int camaId = categories.FirstOrDefault(c => c.Name.Equals("Cama", StringComparison.OrdinalIgnoreCase))?.Id ?? defaultCategoryId;
+                    int infantilId = categories.FirstOrDefault(c => c.Name.Equals("Infantil", StringComparison.OrdinalIgnoreCase))?.Id ?? defaultCategoryId;
+
                     produtos.Add(new Product
                     {
                         Name = "Kit de Toalhas Bordadas",
@@ -164,7 +227,7 @@ namespace AtelieDosPontinhos.Infrastructure.Data
                         Price = 159.90m,
                         Stock = 20,
                         IsFeatured = true,
-                        CategoryId = defaultCategoryId
+                        CategoryId = banhoId
                     });
 
                     produtos.Add(new Product
@@ -175,7 +238,7 @@ namespace AtelieDosPontinhos.Infrastructure.Data
                         Price = 89.90m,
                         Stock = 30,
                         IsFeatured = false,
-                        CategoryId = defaultCategoryId
+                        CategoryId = banhoId
                     });
 
                     produtos.Add(new Product
@@ -186,7 +249,7 @@ namespace AtelieDosPontinhos.Infrastructure.Data
                         Price = 249.90m,
                         Stock = 10,
                         IsFeatured = true,
-                        CategoryId = defaultCategoryId
+                        CategoryId = camaId
                     });
 
                     produtos.Add(new Product
@@ -197,7 +260,7 @@ namespace AtelieDosPontinhos.Infrastructure.Data
                         Price = 129.90m,
                         Stock = 15,
                         IsFeatured = false,
-                        CategoryId = defaultCategoryId
+                        CategoryId = infantilId
                     });
                 }
 
