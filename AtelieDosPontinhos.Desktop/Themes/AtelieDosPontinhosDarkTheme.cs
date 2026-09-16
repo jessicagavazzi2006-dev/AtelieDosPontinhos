@@ -42,7 +42,7 @@ namespace AtelieDosPontinhos.Desktop.Themes
         {
             if (grid.Tag?.ToString() != "KeepEditable")
             {
-                grid.ReadOnly = true;
+                grid.ReadOnly = false;
             }
             grid.BackgroundColor = LinhaPar;
             grid.BorderStyle = BorderStyle.None;
@@ -72,7 +72,7 @@ namespace AtelieDosPontinhos.Desktop.Themes
 
             grid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             grid.MultiSelect = false;
-            grid.ReadOnly = true;
+            grid.ReadOnly = false;
             grid.AllowUserToAddRows = false;
             grid.AllowUserToDeleteRows = false;
             grid.AllowUserToResizeRows = false;

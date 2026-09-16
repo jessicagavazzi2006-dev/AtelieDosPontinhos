@@ -5,18 +5,18 @@
 namespace AtelieDosPontinhos.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class AddNomeToApplicationUser : Migration
+    public partial class Oxe : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            
+
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-           
+
         }
     }
 }

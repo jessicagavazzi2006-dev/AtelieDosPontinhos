@@ -5,11 +5,12 @@
 namespace AtelieDosPontinhos.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class AddCamposCartaoPagamento : Migration
+    public partial class AddNewApplicationUser : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+
             migrationBuilder.AddColumn<string>(
                 name: "NomeCartao",
                 table: "Pagamentos",
