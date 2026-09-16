@@ -366,3 +366,50 @@ CORREÇÃO DEFINITIVA: BOTÃO COMPRAR AGORA
 [data-bs-theme="dark"] .Product-detalhe .btn:not(.btn-outline-secondary) * {
     color: #ffffff !important;
 }
+
+/* ============================
+ESTILOS DA NOVA HERO E HISTÓRIA
+============================= */
+.hero-atelier {
+    background: linear-gradient(135deg, rgba(233, 216, 244, 0.4) 0%, rgba(245, 238, 219, 0.8) 100%);
+    border: 1px solid rgba(200, 182, 226, 0.3);
+}
+
+.hero-main-img {
+    max-height: 380px;
+    object-fit: cover;
+    border: 6px solid rgba(255, 255, 255, 0.8);
+}
+
+.historia-ponto-cruz {
+    background-color: #fffaf0;
+    border: 1px solid #f0e6d2;
+}
+
+/* Ajustes automáticos para o Modo Escuro */
+[data-bs-theme="dark"] .hero-atelier {
+    background: linear-gradient(135deg, #201a2b 0%, #17131f 100%);
+    border-color: #352c45;
+}
+
+[data-bs-theme="dark"] .historia-ponto-cruz {
+    background-color: #231e2b;
+    border-color: #352c45;
+}
+
+[data-bs-theme="dark"] .hero-main-img {
+    border-color: #352c45;
+}
+
+/* Corrige o fundo e a cor do texto do select e de suas opções no modo escuro */
+[data-bs-theme="dark"] select.form-select,
+[data-bs-theme="dark"] .form-select {
+    background-color: #1f1a29 !important;
+    color: #ffffff !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+    [data-bs-theme="dark"] select.form-select option {
+        background-color: #1f1a29 !important;
+        color: #ffffff !important;
+    }
