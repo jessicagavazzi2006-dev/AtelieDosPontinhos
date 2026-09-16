@@ -29,6 +29,15 @@
                 <textarea asp-for="Description" class="form-control" rows="3" required></textarea>
             </div>
 
+            <!-- Campo: Categoria do Produto -->
+            <div class="form-group mb-3">
+                <label class="form-label fw-bold">Categoria</label>
+                <select asp-for="CategoryId" asp-items="Model.Categories" class="form-select" required>
+                    <option value="">-- Selecione uma Categoria --</option>
+                </select>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+
             <!-- Campo: Destacar Produto (com sincronização explícita) -->
             <div class="form-check mb-3">
                 <input type="checkbox" class="form-check-input" asp-for="Destaque" id="DestaqueCheck" onchange="syncDestaque(this.checked)" />
@@ -53,7 +62,6 @@
             <input type="hidden" asp-for="CoverImageUrl" id="CoverImageUrl" />
             <input type="hidden" asp-for="ImagemUrl" />
             <input type="hidden" asp-for="Stock" />
-            <input type="hidden" asp-for="CategoryId" />
 
             <div class="d-flex justify-content-between mt-4">
                 <a asp-action="GerenciarProdutos" class="btn btn-secondary">Voltar</a>

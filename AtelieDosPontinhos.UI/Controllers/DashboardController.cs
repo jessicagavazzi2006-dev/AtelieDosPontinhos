@@ -66,7 +66,6 @@ namespace AtelieDosPontinhos.UI.Controllers
                 ModelState.AddModelError("CoverImageUrl", "A foto do produto é obrigatória.");
             }
 
-            // Garante sincronização das flags de destaque
             model.IsFeatured = model.Destaque;
 
             if (!ModelState.IsValid)
@@ -105,7 +104,6 @@ namespace AtelieDosPontinhos.UI.Controllers
         [HttpPost]
         public async Task<IActionResult> EditarProdutoPost(ProductViewModel model, IFormFile? FotoArquivo)
         {
-            // 1. Processa nova imagem se arquivo foi enviado no upload
             if (FotoArquivo != null && FotoArquivo.Length > 0)
             {
                 using (var ms = new MemoryStream())
@@ -116,10 +114,7 @@ namespace AtelieDosPontinhos.UI.Controllers
                 }
             }
 
-            // 2. Remove validação da foto caso mantida a imagem anterior
             ModelState.Remove(nameof(model.CoverImageUrl));
-
-            // 3. Sincronização explícita entre Destaque e IsFeatured para o JSON da API
             model.IsFeatured = model.Destaque;
 
             if (!ModelState.IsValid)
@@ -153,20 +148,25 @@ namespace AtelieDosPontinhos.UI.Controllers
             try
             {
                 var httpClient = _httpClientFactory.CreateClient();
-                var categorias = await httpClient.GetFromJsonAsync<List<CategoriaViewModel>>(ApiCategoriasUrl);
+                var response = await httpClient.GetAsync(ApiCategoriasUrl);
 
-                if (categorias != null && categorias.Any())
+                if (response.IsSuccessStatusCode)
                 {
-                    return categorias.Select(c => new SelectListItem
+                    var categorias = await response.Content.ReadFromJsonAsync<List<CategoriaViewModel>>();
+
+                    if (categorias != null && categorias.Any())
                     {
-                        Value = c.Id.ToString(),
-                        Text = c.Name
-                    }).ToList();
+                        return categorias.Select(c => new SelectListItem
+                        {
+                            Value = c.Id.ToString(),
+                            Text = c.Name
+                        }).ToList();
+                    }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // Tratamento caso a API de categorias esteja offline
+                System.Diagnostics.Debug.WriteLine("Erro ao carregar categorias: " + ex.Message);
             }
 
             return new List<SelectListItem>();
@@ -176,7 +176,6 @@ namespace AtelieDosPontinhos.UI.Controllers
         // GERENCIAMENTO DE USUÁRIOS
         // ==========================================
 
-        // LISTAGEM DE USUÁRIOS
         [HttpGet]
         public async Task<IActionResult> GerenciarUsuarios()
         {
@@ -193,11 +192,9 @@ namespace AtelieDosPontinhos.UI.Controllers
             }
         }
 
-        // CRIAÇÃO (TELA DO FORMULÁRIO)
         [HttpGet]
         public IActionResult CriarUsuario() => View();
 
-        // CRIAÇÃO (SUBMISSÃO DO FORMULÁRIO)
         [HttpPost]
         public async Task<IActionResult> CriarUsuario(CriarUsuarioViewModel model, string Role)
         {
@@ -229,7 +226,6 @@ namespace AtelieDosPontinhos.UI.Controllers
             return View(model);
         }
 
-        // EXCLUSÃO DE USUÁRIO
         [HttpPost]
         public async Task<IActionResult> ExcluirUsuario(string id)
         {

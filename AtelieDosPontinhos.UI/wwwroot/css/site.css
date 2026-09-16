@@ -1,16 +1,17 @@
 /* ============================
-   ESTILO GERAL
+ESTILO GERAL
 ============================= */
-@import url('https://googleapis.com');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 body {
     font-family: 'Poppins', sans-serif;
     background-color: #F5EEDB;
     color: #4A4A4A;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* ============================
-   NAVBAR
+NAVBAR
 ============================= */
 .navbar {
     background-color: #E9D8F4 !important;
@@ -31,10 +32,17 @@ body {
         color: #D97FA8 !important;
     }
 
+/* Efeito Glassmorphism na Header / Navbar */
+.navbar-custom {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
 /* ============================
-   BOTÕES E ELEMENTOS EM DESTAQUE
+BOTÕES E ELEMENTOS EM DESTAQUE
 ============================= */
-/* Botão Principal (Rosa/Lilás) */
 .btn-danger, .btn-primary {
     background-color: #D97FA8 !important;
     border: none !important;
@@ -47,7 +55,6 @@ body {
         transform: translateY(-2px);
     }
 
-/* Botão Secundário / Detalhes */
 .btn-outline-secondary {
     border-color: #C8B6E2 !important;
     color: #7C5E99 !important;
@@ -59,29 +66,27 @@ body {
         color: white !important;
     }
 
-/* Badges Dinâmicos */
 .badge.bg-danger {
     background-color: #D97FA8 !important;
 }
 
 /* ============================
-   CARDS DE PRODUTOS (VITRINE)
+CARDS DE PRODUTOS (VITRINE)
 ============================= */
 .product-card {
     border: none;
-    border-radius: 20px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, .06);
-    background-color: #ffffff;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 16px;
     overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    background: #ffffff;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
     .product-card:hover {
-        transform: translateY(-8px) !important;
-        box-shadow: 0 12px 30px rgba(124, 94, 153, 0.15) !important;
+        transform: translateY(-8px);
+        box-shadow: 0 12px 30px rgba(124, 94, 153, 0.15);
     }
 
-/* Efeito de Zoom Suave na Imagem do Card */
 .product-img-zoom {
     transition: transform 0.5s ease;
     height: 240px;
@@ -92,8 +97,17 @@ body {
     transform: scale(1.06);
 }
 
+.badge-destaque {
+    background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #feada6 100%);
+    color: #4a154b;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 20px;
+    box-shadow: 0 2px 10px rgba(255, 154, 158, 0.4);
+}
+
 /* ============================
-   BARRA DE BUSCA E ÍCONES
+BARRA DE BUSCA E ÍCONES
 ============================= */
 .search-navbar {
     border-radius: 25px;
@@ -108,7 +122,6 @@ body {
         outline: none;
     }
 
-/* Contador do Carrinho Flutuante */
 .cart-badge {
     background: #D97FA8 !important;
     color: white !important;
@@ -118,7 +131,6 @@ body {
     border: 2px solid #E9D8F4;
 }
 
-/* Interações nos Ícones da Navbar */
 .navbar a, .navbar span {
     cursor: pointer;
     transition: 0.2s;
@@ -130,7 +142,6 @@ body {
         color: #D97FA8 !important;
     }
 
-/* Ajuste do tamanho do logo para não quebrar a barra */
 .logo-navbar {
     width: 45px;
     height: 45px;
@@ -138,7 +149,7 @@ body {
 }
 
 /* ============================
-   PÁGINA DE DETALHES DO PRODUTO
+PÁGINA DE DETALHES DO PRODUTO
 ============================= */
 .Product-detalhe {
     background: #fff;
@@ -166,7 +177,7 @@ body {
 }
 
 /* ============================
-   BANNER E OUTROS
+BANNER E OUTROS
 ============================= */
 .banner-home {
     height: 400px;
@@ -193,80 +204,34 @@ body {
     border-top: 1px solid #eee;
 }
 
-/* Efeito Glassmorphism na Header / Navbar */
-.navbar-custom {
-    background: rgba(255, 255, 255, 0.75);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-/* Card Moderno com Microinteração */
-.product-card {
-    border: none;
-    border-radius: 16px;
-    overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-    background: #ffffff;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-}
-
-    .product-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
-    }
-
-    /* Zoom suave na foto do produto */
-    .product-card .img-container {
-        overflow: hidden;
-        position: relative;
-    }
-
-    .product-card img {
-        transition: transform 0.6s ease;
-    }
-
-    .product-card:hover img {
-        transform: scale(1.06);
-    }
-
-/* Badge de Destaque Sofisticada (Efeito Shimmer) */
-.badge-destaque {
-    background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #feada6 100%);
-    color: #4a154b;
-    font-weight: 600;
-    padding: 6px 14px;
-    border-radius: 20px;
-    box-shadow: 0 2px 10px rgba(255, 154, 158, 0.4);
-}
-
 /* ============================
-   SUPORTE AO MODO ESCURO (LILÁS PADRÃO)
+SUPORTE AO MODO ESCURO (REFINADO)
 ============================= */
-body {
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
 [data-bs-theme="dark"] body {
-    background-color: #1a1625 !important;
-    color: #e2d9ed !important;
+    background-color: #17131f !important;
+    color: #ded6ed !important;
 }
 
 [data-bs-theme="dark"] .navbar {
-    background-color: #241f31 !important;
-    border-bottom: 1px solid #362f4a !important;
+    background-color: #201a2b !important;
+    border-bottom: 1px solid #2e263d !important;
 }
 
+/* 🎨 Cartões e containers centrais com tom elegante e boa profundidade */
 [data-bs-theme="dark"] .card,
-[data-bs-theme="dark"] .Product-detalhe {
-    background-color: #211c2e !important;
-    color: #e2d9ed !important;
-    border-color: #362f4a !important;
+[data-bs-theme="dark"] .Product-detalhe,
+[data-bs-theme="dark"] main .bg-white,
+[data-bs-theme="dark"] main > div > div.bg-white,
+[data-bs-theme="dark"] .container > .bg-white,
+[data-bs-theme="dark"] .container > div:not(.row) {
+    background-color: #231e2b !important;
+    color: #ded6ed !important;
+    border: 1px solid #352c45 !important;
+    box-init: none;
 }
 
-/* Força absolutamente qualquer texto, parágrafo, preço, span ou tabela a usar o tom lilás claro */
 [data-bs-theme="dark"] p,
-[data-bs-theme="dark"] span,
+[data-bs-theme="dark"] span:not(.badge),
 [data-bs-theme="dark"] a:not(.btn),
 [data-bs-theme="dark"] li,
 [data-bs-theme="dark"] label,
@@ -274,10 +239,9 @@ body {
 [data-bs-theme="dark"] small,
 [data-bs-theme="dark"] .table td,
 [data-bs-theme="dark"] .table th {
-    color: #e2d9ed !important;
+    color: #bfaed6 !important;
 }
 
-/* Títulos e preços em destaque puro */
 [data-bs-theme="dark"] h1,
 [data-bs-theme="dark"] h2,
 [data-bs-theme="dark"] h3,
@@ -286,101 +250,119 @@ body {
 [data-bs-theme="dark"] h6,
 [data-bs-theme="dark"] strong,
 [data-bs-theme="dark"] .price {
-    color: #ffffff !important;
+    color: #f7f4fc !important;
 }
 
-/* Correção para inputs e barras de busca */
 [data-bs-theme="dark"] .form-control,
 [data-bs-theme="dark"] .search-navbar {
-    background-color: #1a1625 !important;
-    border-color: #362f4a !important;
-    color: #e2d9ed !important;
+    background-color: #1c1724 !important;
+    border-color: #352c45 !important;
+    color: #ded6ed !important;
 }
 
     [data-bs-theme="dark"] .form-control::placeholder,
     [data-bs-theme="dark"] .search-navbar::placeholder {
-        color: #bfaed6 !important;
+        color: #8c7a9e !important;
     }
 
-/* Ajuste para botões de formulário/ícones dentro do input-group no escuro */
 [data-bs-theme="dark"] .input-group .btn {
-    background-color: #241f31 !important;
-    border-color: #362f4a !important;
-    color: #e2d9ed !important;
+    background-color: #201a2b !important;
+    border-color: #352c45 !important;
+    color: #ded6ed !important;
 }
 
-/* Ajuste específico para cards de lista de pedidos no Dark Mode */
-[data-bs-theme="dark"] .card .fw-bold,
-[data-bs-theme="dark"] .card .fs-5 {
-    color: #ffffff !important;
-}
-
-[data-bs-theme="dark"] .card .text-uppercase {
-    color: #bfaed6 !important;
-}
-
-/* Ajuste para badges, pills e marcações secundárias no modo escuro */
-[data-bs-theme="dark"] .badge:not(.bg-danger),
-[data-bs-theme="dark"] .rounded-pill:not(.btn),
-[data-bs-theme="dark"] span[class*="bg-"]:not(.bg-danger),
-[data-bs-theme="dark"] div[class*="bg-"]:not(.bg-danger) {
-    background-color: #241f31 !important;
-    color: #e2d9ed !important;
-    border: 1px solid #362f4a !important;
-}
-
-/* Correção do contraste dos textos dentro dos cards de produtos no Dark Mode */
-[data-bs-theme="dark"] .product-card,
-[data-bs-theme="dark"] .product-card .card-body {
-    background-color: #ffffff !important;
-}
-
-    [data-bs-theme="dark"] .product-card .card-title,
-    [data-bs-theme="dark"] .product-card h5,
-    [data-bs-theme="dark"] .product-card p,
-    [data-bs-theme="dark"] .product-card span:not(.Product-preco) {
-        color: #4A4A4A !important;
-    }
-
-    /* Mantém o valor "Preço" visível em um tom cinza discreto e o valor em destaque */
-    [data-bs-theme="dark"] .product-card .text-muted {
-        color: #777777 !important;
-    }
-
-/* Cards de produtos em lilás no Modo Escuro */
 [data-bs-theme="dark"] .product-card {
-    background-color: #211c2e !important;
-    border: 1px solid #362f4a !important;
+    background-color: #231e2b !important;
+    border: 1px solid #352c45 !important;
 }
 
     [data-bs-theme="dark"] .product-card .card-body {
-        background-color: #211c2e !important;
+        background-color: #231e2b !important;
     }
 
-    [data-bs-theme="dark"] .product-card h5,
-    [data-bs-theme="dark"] .product-card .card-title {
+/* ============================
+CORREÇÃO DOS BOTÕES DE AÇÃO (DETALHES DO PRODUTO)
+============================= */
+
+/* Botão de Comprar Agora (Destacado, com fundo rosa/lilás forte e texto branco) */
+.Product-detalhe .btn-primary,
+.card .btn-primary,
+button:has(.bi-bag-plus),
+a:has(.bi-bag-plus) {
+    background-color: #D97FA8 !important;
+    border: 2px solid #D97FA8 !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    padding: 10px 20px !important;
+    border-radius: 30px !important;
+    box-shadow: 0 4px 15px rgba(217, 127, 168, 0.3) !important;
+    transition: all 0.3s ease !important;
+}
+
+    .Product-detalhe .btn-primary:hover,
+    .card .btn-primary:hover {
+        background-color: #C86C96 !important;
+        border-color: #C86C96 !important;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(217, 127, 168, 0.5) !important;
+    }
+
+/* Botão de Favoritos na página de detalhes (Com contraste forte e ícone visível) */
+.Product-detalhe .btn-outline-secondary,
+.Product-detalhe button:has(.bi-heart),
+.Product-detalhe a:has(.bi-heart) {
+    background-color: #2e263d !important;
+    border: 2px solid #7C5E99 !important;
+    color: #f7f4fc !important;
+    font-weight: 500 !important;
+    border-radius: 30px !important;
+    padding: 10px 20px !important;
+    transition: all 0.3s ease !important;
+}
+
+    .Product-detalhe .btn-outline-secondary:hover,
+    .Product-detalhe button:has(.bi-heart):hover {
+        background-color: #7C5E99 !important;
         color: #ffffff !important;
-        font-weight: 600;
+        border-color: #7C5E99 !important;
     }
 
-    [data-bs-theme="dark"] .product-card p,
-    [data-bs-theme="dark"] .product-card .text-muted {
-        color: #bfaed6 !important;
-    }
+/* Garante que o ícone e texto dentro do botão de favoritos fiquem legíveis */
+[data-bs-theme="dark"] .Product-detalhe .btn-outline-secondary i,
+[data-bs-theme="dark"] .Product-detalhe .btn-outline-secondary span {
+    color: #f7f4fc !important;
+}
 
-    [data-bs-theme="dark"] .product-card .Product-preco,
-    [data-bs-theme="dark"] .product-card .fw-bold.text-dark {
+/* ============================
+CORREÇÃO DEFINITIVA: BOTÃO COMPRAR AGORA
+============================= */
+
+/* Alvo direto para qualquer botão ou link que contenha o texto "Comprar agora" ou o ícone correspondente */
+.Product-detalhe a:has(.bi-bag-plus),
+.Product-detalhe button:has(.bi-bag-plus),
+.Product-detalhe .btn:not(.btn-outline-secondary) {
+    background-color: #D97FA8 !important;
+    border: 2px solid #D97FA8 !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    border-radius: 30px !important;
+    padding: 10px 22px !important;
+    box-shadow: 0 4px 15px rgba(217, 127, 168, 0.4) !important;
+    text-decoration: none !important;
+}
+
+    .Product-detalhe a:has(.bi-bag-plus):hover,
+    .Product-detalhe button:has(.bi-bag-plus):hover,
+    .Product-detalhe .btn:not(.btn-outline-secondary):hover {
+        background-color: #C86C96 !important;
+        border-color: #C86C96 !important;
         color: #ffffff !important;
+        transform: translateY(-2px);
     }
 
-    /* Botão do card adaptado ao tema lilás */
-    [data-bs-theme="dark"] .product-card .btn-outline-primary,
-    [data-bs-theme="dark"] .product-card .btn-primary {
-        background-color: #D97FA8 !important;
-        border-color: #D97FA8 !important;
-        color: #ffffff !important;
-    }
-
-        [data-bs-theme="dark"] .product-card .btn-outline-primary:hover {
-            background-color: #C86C96 !important;
-        }
+/* Garante que o texto e o ícone internos fiquem brancos e legíveis */
+[data-bs-theme="dark"] .Product-detalhe a:has(.bi-bag-plus) *,
+[data-bs-theme="dark"] .Product-detalhe button:has(.bi-bag-plus) *,
+[data-bs-theme="dark"] .Product-detalhe .btn:not(.btn-outline-secondary) * {
+    color: #ffffff !important;
+}
