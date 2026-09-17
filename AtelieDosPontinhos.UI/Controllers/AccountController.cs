@@ -104,7 +104,15 @@ namespace AtelieDosPontinhos.UI.Controllers
                             HttpContext.Session.SetString("UserRoles", string.Join(",", loginResult.Roles));
                         }
 
-                        return RedirectToAction("Index", "Home");
+                        // Redirecionamento inteligente: Admin vai para o Dashboard, Cliente vai para a Home
+                        if (loginResult.Roles != null && loginResult.Roles.Contains("Admin"))
+                        {
+                            return RedirectToAction("Index", "Dashboard");
+                        }
+                        else
+                        {
+                            return RedirectToAction("Index", "Home");
+                        }
                     }
                 }
                 else
@@ -139,7 +147,6 @@ namespace AtelieDosPontinhos.UI.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            // CORREÇÃO: Enviando o valor digitado no formulário como "Nome"
             var apiModel = new
             {
                 Nome = model.UserName,

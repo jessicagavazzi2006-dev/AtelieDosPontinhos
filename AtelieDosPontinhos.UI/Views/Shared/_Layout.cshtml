@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Ateliê dos Pontinhos</title>
 
+    <!-- Script Inline Precoce para Aplicar o Tema Salvo antes de renderizar (Evita piscar a tela) -->
+    <script>
+            (function () {
+                const savedTheme = localStorage.getItem("theme") || "light";
+                document.documentElement.setAttribute("data-bs-theme", savedTheme);
+            })();
+    </script>
+
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <!-- Bootstrap Icons -->
@@ -12,11 +20,28 @@
     <!-- Seu CSS Personalizado -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/AtelieDosPontinhos.UI.styles.css" asp-append-version="true" />
+
+    <!-- Estilo Sutil e Elegante para os Links do Rodapé -->
+    <style>
+            .footer-nav-link {
+                display: inline-block;
+                padding: 4px 10px;
+                border-radius: 6px;
+                transition: all 0.2s ease-in-out;
+                color: var(--bs-secondary-color, #6c757d);
+                text-decoration: none;
+            }
+
+                .footer-nav-link:hover {
+                    background-color: #b84a75;
+                    color: #ffffff !important;
+                }
+    </style>
 </head>
 <body class="d-flex flex-column min-vh-100">
     <header>
-        <nav class="navbar navbar-expand-lg navbar-toggleable-lg border-bottom box-shadow mb-3 py-3 px-4 bg-body">
-            <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg navbar-toggleable-lg border-bottom box-shadow mb-3 py-3 px-3 bg-body">
+            <div class="container">
 
                 <!-- Logo do Ateliê -->
                 <a class="navbar-brand d-flex align-items-center gap-2 fw-bold text-body" asp-controller="Home" asp-action="Index">
@@ -72,48 +97,72 @@
 
                         <div class="vr opacity-25 mx-1"></div>
 
-                        <!-- Menu Dropdown Admin -->
-                        <div class="dropdown">
-                            <button class="btn btn-outline-secondary rounded-pill px-3 py-1 d-flex align-items-center gap-2 dropdown-toggle border" type="button" id="adminDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="border-color: var(--bs-border-color) !important;">
-                                <i class="bi bi-person-circle fs-5" style="color: #b84a75 !important;"></i>
-                                <span class="fw-semibold text-body">admin</span>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end shadow-lg rounded-4 p-2 mt-2" aria-labelledby="adminDropdown" style="min-width: 230px;">
-                                <li class="px-3 py-2 border-bottom mb-2">
-                                    <small class="text-muted d-block" style="font-size: 0.75rem;">Logado como:</small>
-                                    <span class="fw-bold text-body text-truncate d-block" style="font-size: 0.85rem;">admin@site.com</span>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item rounded-3 py-2 d-flex align-items-center gap-2" asp-controller="Account" asp-action="Perfil">
-                                        <i class="bi bi-person text-secondary"></i> Meu Perfil
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item rounded-3 py-2 d-flex align-items-center gap-2" asp-controller="Order" asp-action="MeusPedidos">
-                                        <i class="bi bi-box text-secondary"></i> Meus Pedidos
-                                    </a>
-                                </li>
-                                <li><hr class="dropdown-divider my-2"></li>
-                                <li>
-                                    <a class="dropdown-item rounded-3 py-2 d-flex align-items-center gap-2" asp-controller="Sales" asp-action="Painel">
-                                        <i class="bi bi-graph-up text-secondary"></i> Painel de Vendas
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item rounded-3 py-2 d-flex align-items-center gap-2" asp-controller="Admin" asp-action="Index">
-                                        <i class="bi bi-shield-lock text-secondary"></i> Painel Admin
-                                    </a>
-                                </li>
-                                <li><hr class="dropdown-divider my-2"></li>
-                                <li>
-                                    <form asp-controller="Account" asp-action="Logout" method="post" class="w-100">
-                                        <button type="submit" class="dropdown-item rounded-3 py-2 d-flex align-items-center gap-2 text-danger">
-                                            <i class="bi bi-box-arrow-right"></i> Sair
-                                        </button>
-                                    </form>
-                                </li>
-                            </ul>
-                        </div>
+                        <!-- Autenticação Dinâmica Baseada em Sessão -->
+                        @if (!string.IsNullOrEmpty(Context.Session.GetString("UserEmail")))
+                        {
+                            var userEmail = Context.Session.GetString("UserEmail");
+                            var userRoles = Context.Session.GetString("UserRoles") ?? "";
+                            bool isAdmin = userRoles.Contains("Admin");
+
+                            <!-- Menu Dropdown para Usuário Logado -->
+                            <div class="dropdown">
+                                <button class="btn btn-outline-secondary rounded-pill px-3 py-1 d-flex align-items-center gap-2 dropdown-toggle border" type="button" id="adminDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="border-color: var(--bs-border-color) !important;">
+                                    <i class="bi bi-person-circle fs-5" style="color: #b84a75 !important;"></i>
+                                    <span class="fw-semibold text-body">@userEmail</span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end shadow-lg rounded-4 p-2 mt-2" aria-labelledby="adminDropdown" style="min-width: 230px;">
+                                    <li class="px-3 py-2 border-bottom mb-2">
+                                        <small class="text-muted d-block" style="font-size: 0.75rem;">Logado como:</small>
+                                        <span class="fw-bold text-body text-truncate d-block" style="font-size: 0.85rem;">@userEmail</span>
+                                    </li>
+
+                                    @if (isAdmin)
+                                    {
+                                        <!-- Opções exclusivas do Administrador corrigidas -->
+                                        <li>
+                                            <a class="dropdown-item rounded-3 py-2 d-flex align-items-center gap-2" asp-controller="Dashboard" asp-action="AdminPanel">
+                                                <i class="bi bi-graph-up text-secondary"></i> Painel Administrativo
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item rounded-3 py-2 d-flex align-items-center gap-2" asp-controller="Order" asp-action="AdminDashboard">
+                                                <i class="bi bi-box-seam text-secondary"></i> Painel de Vendas
+                                            </a>
+                                        </li>
+                                        <li><hr class="dropdown-divider my-2"></li>
+                                    }
+
+                                    <!-- Opções comuns (Perfil e Pedidos) -->
+                                    <li>
+                                        <a class="dropdown-item rounded-3 py-2 d-flex align-items-center gap-2" asp-controller="Account" asp-action="Profile">
+                                            <i class="bi bi-person text-secondary"></i> Meu Perfil
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item rounded-3 py-2 d-flex align-items-center gap-2" asp-controller="Order" asp-action="Index">
+                                            <i class="bi bi-box text-secondary"></i> Meus Pedidos
+                                        </a>
+                                    </li>
+
+                                    <li><hr class="dropdown-divider my-2"></li>
+                                    <li>
+                                        <form asp-controller="Account" asp-action="Logout" method="post" class="w-100">
+                                            <button type="submit" class="dropdown-item rounded-3 py-2 d-flex align-items-center gap-2 text-danger border-0 bg-transparent">
+                                                <i class="bi bi-box-arrow-right"></i> Sair
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
+                        }
+                        else
+                        {
+                            <!-- Botão de Login para Visitantes -->
+                            <a asp-controller="Account" asp-action="Login" class="btn btn-outline-secondary rounded-pill px-3 py-1 d-flex align-items-center gap-2 border" style="border-color: var(--bs-border-color) !important; font-size: 0.9rem;">
+                                <i class="bi bi-person" style="color: #b84a75 !important;"></i>
+                                <span class="fw-semibold text-body">Entrar</span>
+                            </a>
+                        }
 
                     </div>
                 </div>
@@ -121,46 +170,52 @@
         </nav>
     </header>
 
-    <!-- Conteúdo Principal (Removido o 'container' global para permitir larguras totais nas views) -->
+    <!-- Conteúdo Principal Envolvido em Container Centralizado -->
     <main role="main" class="flex-grow-1 pb-3">
-        @RenderBody()
+        <div class="container">
+            @RenderBody()
+        </div>
     </main>
 
-    <!-- Rodapé Completo e Estilizado -->
+    <!-- Rodapé Organizado e com Caixa de Descrição Delimitada -->
     <footer class="border-top footer text-muted pt-5 pb-3 mt-auto bg-body">
         <div class="container">
-            <div class="row g-4 justify-content-between">
+            <div class="row g-4">
 
-                <!-- Coluna 1: Logo e Descrição -->
-                <div class="col-lg-4 col-md-6">
+                <!-- Coluna 1: Logo, Box com Descrição e Redes Sociais -->
+                <div class="col-lg-4 col-md-12 mb-4 mb-lg-0">
                     <div class="d-flex align-items-center gap-2 fw-bold text-body mb-3">
                         <img src="~/images/logo/logo.png" alt="Ateliê dos Pontinhos" class="rounded-circle shadow-sm" style="width: 36px; height: 36px; object-fit: cover;" />
                         <span>Ateliê dos Pontinhos</span>
                     </div>
-                    <p class="small text-muted mb-3" style="max-width: 300px;">
-                        Peças artesanais feitas à mão com carinho, dedicação e qualidade. O mimo perfeito para você e quem você ama.
-                    </p>
+
+                    <div class="mb-3" style="max-width: 280px;">
+                        <p class="small text-muted mb-0" style="line-height: 1.5;">
+                            Peças artesanais feitas à mão com carinho, dedicação e qualidade. O mimo perfeito para você e quem você ama.
+                        </p>
+                    </div>
+
                     <div class="d-flex gap-2">
-                        <a href="#" class="btn btn-outline-secondary btn-sm rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;" title="Instagram">
-                            <i class="bi bi-instagram"></i>
+                        <a href="javascript:void(0);" class="btn btn-sm rounded-circle d-flex align-items-center justify-content-center text-white shadow-sm" style="width: 36px; height: 36px; background-color: #b84a75;" title="Instagram">
+                            <i class="bi bi-instagram fs-6"></i>
                         </a>
-                        <a href="#" class="btn btn-outline-secondary btn-sm rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;" title="WhatsApp">
-                            <i class="bi bi-whatsapp"></i>
+                        <a href="javascript:void(0);" class="btn btn-sm rounded-circle d-flex align-items-center justify-content-center text-white shadow-sm" style="width: 36px; height: 36px; background-color: #b84a75;" title="WhatsApp">
+                            <i class="bi bi-whatsapp fs-6"></i>
                         </a>
-                        <a href="#" class="btn btn-outline-secondary btn-sm rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;" title="E-mail">
-                            <i class="bi bi-envelope"></i>
+                        <a href="javascript:void(0);" class="btn btn-sm rounded-circle d-flex align-items-center justify-content-center text-white shadow-sm" style="width: 36px; height: 36px; background-color: #b84a75;" title="E-mail">
+                            <i class="bi bi-envelope fs-6"></i>
                         </a>
                     </div>
                 </div>
 
                 <!-- Coluna 2: Navegação -->
-                <div class="col-lg-3 col-md-6">
+                <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
                     <h6 class="fw-bold text-uppercase text-body mb-3" style="font-size: 0.85rem; letter-spacing: 0.5px;">Navegação</h6>
-                    <ul class="list-unstyled small d-flex flex-column gap-2">
-                        <li><a asp-controller="Home" asp-action="Index" class="text-muted text-decoration-none">Início</a></li>
-                        <li><a asp-controller="Favorites" asp-action="Index" class="text-muted text-decoration-none">Meus Favoritos</a></li>
-                        <li><a asp-controller="Cart" asp-action="Index" class="text-muted text-decoration-none">Meu Carrinho</a></li>
-                        <li><a asp-controller="Order" asp-action="MeusPedidos" class="text-muted text-decoration-none">Meus Pedidos</a></li>
+                    <ul class="list-unstyled small d-flex flex-column gap-1 mb-0">
+                        <li><a asp-controller="Home" asp-action="Index" class="footer-nav-link">Início</a></li>
+                        <li><a asp-controller="Favorites" asp-action="Index" class="footer-nav-link">Meus Favoritos</a></li>
+                        <li><a asp-controller="Cart" asp-action="Index" class="footer-nav-link">Meu Carrinho</a></li>
+                        <li><a asp-controller="Order" asp-action="Index" class="footer-nav-link">Meus Pedidos</a></li>
                     </ul>
                 </div>
 
@@ -198,22 +253,31 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 
-    <!-- Script do Tema -->
+    <!-- Script Robusto do Tema com LocalStorage -->
     <script>
-            document.addEventListener("DOMContentLoaded", function() {
+            document.addEventListener("DOMContentLoaded", function () {
                 const themeToggleBtn = document.getElementById("btn-theme-toggle");
                 const themeIcon = document.getElementById("theme-icon");
+                const htmlElement = document.documentElement;
+
+                const currentTheme = htmlElement.getAttribute("data-bs-theme");
+                if (currentTheme === "dark") {
+                    themeIcon.classList.replace("bi-moon-fill", "bi-sun-fill");
+                } else {
+                    themeIcon.classList.replace("bi-sun-fill", "bi-moon-fill");
+                }
 
                 if (themeToggleBtn) {
-                    themeToggleBtn.addEventListener("click", function() {
-                        const htmlElement = document.documentElement;
-                        const currentTheme = htmlElement.getAttribute("data-bs-theme");
+                    themeToggleBtn.addEventListener("click", function () {
+                        const activeTheme = htmlElement.getAttribute("data-bs-theme");
 
-                        if (currentTheme === "dark") {
+                        if (activeTheme === "dark") {
                             htmlElement.setAttribute("data-bs-theme", "light");
+                            localStorage.setItem("theme", "light");
                             themeIcon.classList.replace("bi-sun-fill", "bi-moon-fill");
                         } else {
                             htmlElement.setAttribute("data-bs-theme", "dark");
+                            localStorage.setItem("theme", "dark");
                             themeIcon.classList.replace("bi-moon-fill", "bi-sun-fill");
                         }
                     });

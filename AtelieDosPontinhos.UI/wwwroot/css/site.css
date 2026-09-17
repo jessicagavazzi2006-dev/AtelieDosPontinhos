@@ -1,34 +1,60 @@
 /* ============================
-ESTILO GERAL
-============================= */
+   ESTILO GERAL E CENTRALIZAÇÃO
+   ============================= */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
-html, body {
+html {
+    font-size: 16px;
     height: 100%;
-    margin: 0;
 }
 
 body {
     font-family: 'Poppins', sans-serif;
     background-color: #F5EEDB;
     color: #4A4A4A;
-    transition: background-color 0.3s ease, color 0.3s ease;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    margin: 0;
+    overflow-x: hidden;
 }
 
-    /* Faz o container principal (<main> ou conteúdo) expandir e empurrar o rodapé para baixo */
-    main, .main-content, body > div.container:not(.footer-container) {
-        flex: 1 0 auto;
-    }
+/* Garante que o corpo centralize os blocos principais e empurre o rodapé */
+main, .main-content {
+    flex: 1 0 auto;
+    width: 100%;
+}
+
+/* Força os containers principais a terem um limite elegante e centralizado */
+.container, .container-lg, .container-md, .container-sm {
+    max-width: 1200px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
 
 /* ============================
-NAVBAR
-============================= */
-.navbar {
-    background-color: #E9D8F4 !important;
+   NAVBAR FIXA E CENTRALIZADA
+   ============================= */
+header {
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+    width: 100%;
 }
+
+.navbar {
+    background-color: rgba(233, 216, 244, 0.92) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+    .navbar > .container,
+    .navbar > .container-fluid {
+        max-width: 1200px !important;
+        margin: 0 auto !important;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
 
 .navbar-brand {
     color: #7C5E99 !important;
@@ -45,17 +71,16 @@ NAVBAR
         color: #D97FA8 !important;
     }
 
-/* Efeito Glassmorphism na Header / Navbar */
 .navbar-custom {
-    background: rgba(255, 255, 255, 0.75);
+    background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 /* ============================
-BOTÕES E ELEMENTOS EM DESTAQUE
-============================= */
+   BOTÕES E ELEMENTOS
+   ============================= */
 .btn-danger, .btn-primary {
     background-color: #D97FA8 !important;
     border: none !important;
@@ -71,62 +96,87 @@ BOTÕES E ELEMENTOS EM DESTAQUE
 .btn-outline-secondary {
     border-color: #C8B6E2 !important;
     color: #7C5E99 !important;
+    background-color: transparent !important;
     transition: 0.3s ease;
 }
 
     .btn-outline-secondary:hover {
         background-color: #C8B6E2 !important;
-        color: white !important;
+        color: #4A4A4A !important;
     }
 
-.badge.bg-danger {
-    background-color: #D97FA8 !important;
-}
-
 /* ============================
-CARDS DE PRODUTOS (VITRINE)
-============================= */
+   CARDS DE PRODUTOS (VITRINE)
+   ============================= */
 .product-card {
     border: none;
     border-radius: 16px;
     overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    transition: all 0.3s ease;
     background: #ffffff;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
 }
 
     .product-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 12px 30px rgba(124, 94, 153, 0.15);
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(124, 94, 153, 0.12);
     }
 
 .product-img-zoom {
-    transition: transform 0.5s ease;
-    height: 240px;
+    transition: transform 0.4s ease;
+    height: 220px !important;
     object-fit: cover;
+    width: 100%;
 }
 
 .product-card:hover .product-img-zoom {
-    transform: scale(1.06);
+    transform: scale(1.04);
 }
 
 .badge-destaque {
     background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #feada6 100%);
     color: #4a154b;
     font-weight: 600;
-    padding: 6px 14px;
+    padding: 5px 12px;
+    font-size: 0.8rem;
     border-radius: 20px;
-    box-shadow: 0 2px 10px rgba(255, 154, 158, 0.4);
 }
 
 /* ============================
-BARRA DE BUSCA E ÍCONES
-============================= */
+   ESPECIALIDADES / CATEGORIAS
+   ============================= */
+.categoria-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+    transition: 0.3s ease;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.03);
+    text-decoration: none !important;
+    display: block;
+    margin: 0 auto;
+}
+
+    .categoria-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(124, 94, 153, 0.1);
+    }
+
+    .categoria-card img,
+    .categoria-card .rounded-circle {
+        height: 90px !important;
+        width: 90px !important;
+        object-fit: cover;
+        margin: 0 auto 10px auto;
+    }
+
+/* ============================
+   BARRA DE BUSCA E ÍCONES
+   ============================= */
 .search-navbar {
     border-radius: 25px;
-    padding: 10px 18px;
+    padding: 8px 18px;
     border: 1px solid #ddd;
-    transition: 0.3s;
 }
 
     .search-navbar:focus {
@@ -140,99 +190,86 @@ BARRA DE BUSCA E ÍCONES
     color: white !important;
     font-size: 11px !important;
     font-weight: bold;
-    padding: 4px 8px !important;
+    padding: 3px 7px !important;
     border: 2px solid #E9D8F4;
 }
 
-.navbar a, .navbar span {
-    cursor: pointer;
-    transition: 0.2s;
-    color: #7C5E99;
-}
-
-    .navbar a:hover, .navbar span:hover {
-        transform: scale(1.15);
-        color: #D97FA8 !important;
-    }
-
 .logo-navbar {
-    width: 45px;
-    height: 45px;
+    width: 42px;
+    height: 42px;
     object-fit: cover;
 }
 
 /* ============================
-PÁGINA DE DETALHES DO PRODUTO
-============================= */
+   PÁGINA DE DETALHES E BANNERS
+   ============================= */
 .Product-detalhe {
     background: #fff;
     border-radius: 20px;
     padding: 30px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, .05);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, .04);
 }
 
 .Product-imagem {
-    height: 450px;
-    object-fit: cover;
-    width: 100%;
-    border-radius: 15px;
-}
-
-.Product-preco {
-    font-size: 28px;
-    font-weight: bold;
-    color: #D97FA8;
-}
-
-.quantidade-input {
-    width: 60px;
-    text-align: center;
-}
-
-/* ============================
-BANNER E OUTROS
-============================= */
-.banner-home {
     height: 400px;
     object-fit: cover;
-}
-
-.categoria-card {
-    overflow: hidden;
-    transition: 0.3s;
+    width: 100%;
     border-radius: 15px;
 }
 
-    .categoria-card:hover {
-        transform: translateY(-8px);
-    }
-
-    .categoria-card img {
-        height: 280px;
-        object-fit: cover;
-    }
-
-/* ============================
-RODAPÉ (CORRIGIDO PARA FLEXBOX)
-============================= */
-.footer {
-    background: white;
-    border-top: 1px solid #eee;
-    flex-shrink: 0;
+/* Transição suave e efeito flutuante para banners e imagens de destaque (sem bordas duras) */
+.banner-home, .sobre-img {
+    border: none !important;
+    background: transparent !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08) !important;
+    border-radius: 20px !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     width: 100%;
-    position: static !important; /* Remove qualquer conflito de position absolute */
+    object-fit: cover;
 }
 
 /* ============================
-SUPORTE AO MODO ESCURO (REFINADO)
-============================= */
+   RODAPÉ CENTRALIZADO E COMPACTO
+   ============================= */
+.footer {
+    background: white;
+    border-top: 1px solid #eaeaea;
+    flex-shrink: 0;
+    width: 100%;
+    position: static !important;
+    padding: 2rem 0 1rem 0 !important;
+    font-size: 0.88rem;
+}
+
+    .footer .container {
+        max-width: 1200px !important;
+        margin: 0 auto !important;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .footer h6 {
+        font-size: 0.95rem !important;
+        margin-bottom: 0.75rem !important;
+        font-weight: 600;
+        color: #4A4A4A;
+    }
+
+    .footer hr.my-4 {
+        margin-top: 1.5rem !important;
+        margin-bottom: 1rem !important;
+    }
+
+/* ============================
+   SUPORTE AO MODO ESCURO
+   ============================= */
 [data-bs-theme="dark"] body {
     background-color: #17131f !important;
     color: #ded6ed !important;
 }
 
 [data-bs-theme="dark"] .navbar {
-    background-color: #201a2b !important;
+    background-color: rgba(32, 26, 43, 0.92) !important;
     border-bottom: 1px solid #2e263d !important;
 }
 
@@ -241,190 +278,83 @@ SUPORTE AO MODO ESCURO (REFINADO)
     border-top: 1px solid #352c45 !important;
 }
 
-/* Cartões e containers centrais com tom elegante e boa profundidade */
 [data-bs-theme="dark"] .card,
 [data-bs-theme="dark"] .Product-detalhe,
-[data-bs-theme="dark"] main .bg-white,
-[data-bs-theme="dark"] main > div > div.bg-white,
-[data-bs-theme="dark"] .container > .bg-white,
-[data-bs-theme="dark"] .container > div:not(.row) {
-    background-color: #231e2b !important;
-    color: #ded6ed !important;
-    border: 1px solid #352c45 !important;
-    box-shadow: none !important;
-}
-
-[data-bs-theme="dark"] p,
-[data-bs-theme="dark"] span:not(.badge),
-[data-bs-theme="dark"] a:not(.btn),
-[data-bs-theme="dark"] li,
-[data-bs-theme="dark"] label,
-[data-bs-theme="dark"] .text-muted,
-[data-bs-theme="dark"] small,
-[data-bs-theme="dark"] .table td,
-[data-bs-theme="dark"] .table th {
-    color: #bfaed6 !important;
-}
-
-[data-bs-theme="dark"] h1,
-[data-bs-theme="dark"] h2,
-[data-bs-theme="dark"] h3,
-[data-bs-theme="dark"] h4,
-[data-bs-theme="dark"] h5,
-[data-bs-theme="dark"] h6,
-[data-bs-theme="dark"] strong,
-[data-bs-theme="dark"] .price {
-    color: #f7f4fc !important;
-}
-
-[data-bs-theme="dark"] .form-control,
-[data-bs-theme="dark"] .search-navbar {
-    background-color: #1c1724 !important;
-    border-color: #352c45 !important;
-    color: #ded6ed !important;
-}
-
-    [data-bs-theme="dark"] .form-control::placeholder,
-    [data-bs-theme="dark"] .search-navbar::placeholder {
-        color: #8c7a9e !important;
-    }
-
-[data-bs-theme="dark"] .input-group .btn {
-    background-color: #201a2b !important;
-    border-color: #352c45 !important;
-    color: #ded6ed !important;
-}
-
+[data-bs-theme="dark"] .categoria-card,
 [data-bs-theme="dark"] .product-card {
     background-color: #231e2b !important;
+    color: #ded6ed !important;
     border: 1px solid #352c45 !important;
 }
 
-    [data-bs-theme="dark"] .product-card .card-body {
-        background-color: #231e2b !important;
-    }
-
-/* ============================
-CORREÇÃO DOS BOTÕES DE AÇÃO (DETALHES DO PRODUTO)
-============================= */
-.Product-detalhe .btn-primary,
-.card .btn-primary,
-button:has(.bi-bag-plus),
-a:has(.bi-bag-plus) {
-    background-color: #D97FA8 !important;
-    border: 2px solid #D97FA8 !important;
-    color: #ffffff !important;
-    font-weight: 600 !important;
-    padding: 10px 20px !important;
-    border-radius: 30px !important;
-    box-shadow: 0 4px 15px rgba(217, 127, 168, 0.3) !important;
-    transition: all 0.3s ease !important;
+/* Ajuste específico para botões outline no modo escuro */
+[data-bs-theme="dark"] .btn-outline-secondary {
+    color: #ded6ed !important;
+    border-color: #8c78b0 !important;
+    background-color: transparent !important;
 }
 
-    .Product-detalhe .btn-primary:hover,
-    .card .btn-primary:hover {
-        background-color: #C86C96 !important;
-        border-color: #C86C96 !important;
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(217, 127, 168, 0.5) !important;
-    }
-
-.Product-detalhe .btn-outline-secondary,
-.Product-detalhe button:has(.bi-heart),
-.Product-detalhe a:has(.bi-heart) {
-    background-color: #2e263d !important;
-    border: 2px solid #7C5E99 !important;
-    color: #f7f4fc !important;
-    font-weight: 500 !important;
-    border-radius: 30px !important;
-    padding: 10px 20px !important;
-    transition: all 0.3s ease !important;
-}
-
-    .Product-detalhe .btn-outline-secondary:hover,
-    .Product-detalhe button:has(.bi-heart):hover {
-        background-color: #7C5E99 !important;
+    [data-bs-theme="dark"] .btn-outline-secondary:hover {
+        background-color: #8c78b0 !important;
         color: #ffffff !important;
-        border-color: #7C5E99 !important;
+        border-color: #8c78b0 !important;
     }
 
-[data-bs-theme="dark"] .Product-detalhe .btn-outline-secondary i,
-[data-bs-theme="dark"] .Product-detalhe .btn-outline-secondary span {
-    color: #f7f4fc !important;
+/* Suavização da sombra e brilho da imagem no modo escuro */
+[data-bs-theme="dark"] .banner-home,
+[data-bs-theme="dark"] .sobre-img {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4) !important;
+    filter: brightness(0.92);
 }
 
-/* ============================
-CORREÇÃO DEFINITIVA: BOTÃO COMPRAR AGORA
-============================= */
-.Product-detalhe a:has(.bi-bag-plus),
-.Product-detalhe button:has(.bi-bag-plus),
-.Product-detalhe .btn:not(.btn-outline-secondary) {
-    background-color: #D97FA8 !important;
-    border: 2px solid #D97FA8 !important;
-    color: #ffffff !important;
-    font-weight: 600 !important;
-    border-radius: 30px !important;
-    padding: 10px 22px !important;
-    box-shadow: 0 4px 15px rgba(217, 127, 168, 0.4) !important;
-    text-decoration: none !important;
+[data-bs-theme="dark"] .text-muted {
+    color: #b3a5cc !important;
 }
 
-    .Product-detalhe a:has(.bi-bag-plus):hover,
-    .Product-detalhe button:has(.bi-bag-plus):hover,
-    .Product-detalhe .btn:not(.btn-outline-secondary):hover {
-        background-color: #C86C96 !important;
-        border-color: #C86C96 !important;
-        color: #ffffff !important;
-        transform: translateY(-2px);
+[data-bs-theme="dark"] .footer h6,
+[data-bs-theme="dark"] .navbar-brand {
+    color: #ded6ed !important;
+}
+
+/* Ajustes globais para legibilidade no Modo Escuro do Bootstrap */
+[data-bs-theme="dark"] {
+    /* Força textos secundários/muted a terem um tom claro o suficiente para ler */
+    --bs-secondary-color: #adb5bd !important;
+    --bs-body-color: #f8f9fa !important;
+}
+
+    [data-bs-theme="dark"] .text-muted {
+        color: #adb5bd !important;
     }
 
-[data-bs-theme="dark"] .Product-detalhe a:has(.bi-bag-plus) *,
-[data-bs-theme="dark"] .Product-detalhe button:has(.bi-bag-plus) *,
-[data-bs-theme="dark"] .Product-detalhe .btn:not(.btn-outline-secondary) * {
-    color: #ffffff !important;
-}
-
-/* ============================
-ESTILOS DA NOVA HERO E HISTÓRIA
-============================= */
-.hero-atelier {
-    background: linear-gradient(135deg, rgba(233, 216, 244, 0.4) 0%, rgba(245, 238, 219, 0.8) 100%);
-    border: 1px solid rgba(200, 182, 226, 0.3);
-}
-
-.hero-main-img {
-    max-height: 380px;
-    object-fit: cover;
-    border: 6px solid rgba(255, 255, 255, 0.8);
-}
-
-.historia-ponto-cruz {
-    background-color: #fffaf0;
-    border: 1px solid #f0e6d2;
-}
-
-[data-bs-theme="dark"] .hero-atelier {
-    background: linear-gradient(135deg, #201a2b 0%, #17131f 100%);
-    border-color: #352c45;
-}
-
-[data-bs-theme="dark"] .historia-ponto-cruz {
-    background-color: #231e2b;
-    border-color: #352c45;
-}
-
-[data-bs-theme="dark"] .hero-main-img {
-    border-color: #352c45;
-}
-
-[data-bs-theme="dark"] select.form-select,
-[data-bs-theme="dark"] .form-select {
-    background-color: #1f1a29 !important;
-    color: #ffffff !important;
-    border-color: rgba(255, 255, 255, 0.15) !important;
-}
-
-    [data-bs-theme="dark"] select.form-select option {
-        background-color: #1f1a29 !important;
-        color: #ffffff !important;
+    /* Garante contraste nos títulos principais e subtítulos das views de perfil/dashboard */
+    [data-bs-theme="dark"] h1,
+    [data-bs-theme="dark"] h2,
+    [data-bs-theme="dark"] h3,
+    [data-bs-theme="dark"] h4,
+    [data-bs-theme="dark"] h5,
+    [data-bs-theme="dark"] h6 {
+        color: #f8f9fa !important;
     }
+
+    /* Ajuste específico para cards e caixas de resumo no modo escuro se necessário */
+    [data-bs-theme="dark"] .card,
+    [data-bs-theme="dark"] .border {
+        border-color: rgba(255, 255, 255, 0.15) !important;
+    }
+
+    /* Correção de legibilidade para textos em tabelas no Modo Escuro */
+    [data-bs-theme="dark"] .table {
+        color: #f8f9fa !important;
+    }
+
+        [data-bs-theme="dark"] .table td,
+        [data-bs-theme="dark"] .table th {
+            color: #f8f9fa !important;
+            border-color: rgba(255, 255, 255, 0.15) !important;
+        }
+
+        /* Garante contraste nos IDs, e-mails e nomes de produtos nas tabelas administrativas */
+        [data-bs-theme="dark"] .table tbody tr td {
+            color: #e9ecef !important;
+        }
