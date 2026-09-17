@@ -70,7 +70,18 @@ namespace AtelieDosPontinhos.Desktop.UserControls
                 var usuarios = tarefaUsuarios.Result;
 
                 // cria dicionário para mapear userId -> userName
-                _userMap = usuarios.ToDictionary(u => u.Id, u => u.UserName ?? string.Empty);
+                _userMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+                if (usuarios != null)
+                {
+                    foreach (var u in usuarios)
+                    {
+                        if (u == null) continue;
+                        var key = u.Id?.ToString()?.Trim() ?? string.Empty;
+                        if (string.IsNullOrWhiteSpace(key)) continue;
+                        if (!_userMap.ContainsKey(key))
+                            _userMap[key] = u.UserName ?? string.Empty;
+                    }
+                }
                 PopularGrid(_todosPedidos);
             }
             catch (Exception ex)
@@ -98,12 +109,24 @@ namespace AtelieDosPontinhos.Desktop.UserControls
                 }
 
                 // mapeia userId -> userName quando possível
-                var userName = _userMap != null && _userMap.TryGetValue(p.UserId, out var nm) ? nm : p.UserId;
+                var userName = p.UserId ?? string.Empty;
+                if (!string.IsNullOrWhiteSpace(userName) && _userMap != null)
+                {
+                    if (_userMap.TryGetValue(userName, out var nm) && !string.IsNullOrWhiteSpace(nm))
+                    {
+                        userName = nm;
+                    }
+                    else
+                    {
+                        var found = _userMap.FirstOrDefault(kvp => string.Equals(kvp.Key, userName.Trim(), StringComparison.OrdinalIgnoreCase));
+                        if (!string.IsNullOrWhiteSpace(found.Value)) userName = found.Value;
+                    }
+                }
 
                 // mapeia metodo de pagamento (pode vir como id) para um nome legível
                 var pagamento = MapPaymentName(p.MetodoPagamento);
 
-                int rowIndex = gridPedidos.Rows.Add(
+                gridPedidos.Rows.Add(
                     p.Id,
                     userName,
                     p.DataPedido.ToString("dd/MM/yyyy"),
@@ -112,9 +135,6 @@ namespace AtelieDosPontinhos.Desktop.UserControls
                     p.ValorTotal.ToString("C"),
                     status
                 );
-
-                // garante que a célula de status daquela linha NÃO seja ReadOnly
-                gridPedidos.Rows[rowIndex].Cells["colStatus"].ReadOnly = false;
             }
         }
 
@@ -200,7 +220,7 @@ namespace AtelieDosPontinhos.Desktop.UserControls
                 HeaderText = "Status",
                 ValueType = typeof(string),
                 ReadOnly = false, // coluna editável
-                                  // Mostrar como combo apenas para a célula atual para evitar problemas do estilo
+                // Mostrar como combo apenas para a célula atual para evitar problemas do estilo
                 DisplayStyle = DataGridViewComboBoxDisplayStyle.ComboBox,
                 DisplayStyleForCurrentCellOnly = true,
                 FlatStyle = FlatStyle.Standard
