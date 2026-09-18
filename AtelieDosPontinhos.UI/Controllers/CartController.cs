@@ -11,7 +11,13 @@ using System.Threading.Tasks;
 
 namespace AtelieDosPontinhos.UI.Controllers
 {
-    // DTOs locais fortemente tipados para garantir contrato perfeito com a API
+    // DTOs locais fortemente tipados para garantir contrato perfeito com a API e chamadas AJAX
+    public class AdicionarCarrinhoDto
+    {
+        public int ProdutoId { get; set; }
+        public int Quantidade { get; set; }
+    }
+
     public class CreateOrderDto
     {
         public string EmailUsuario { get; set; } = string.Empty;
@@ -69,8 +75,11 @@ namespace AtelieDosPontinhos.UI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AdicionarAoCarrinhoAjax(int id, int quantidade = 1)
+        public async Task<IActionResult> AdicionarAoCarrinhoAjax([FromBody] AdicionarCarrinhoDto model)
         {
+            int id = model?.ProdutoId ?? 0;
+            int quantidade = model?.Quantidade > 0 ? model.Quantidade : 1;
+
             if (id <= 0)
             {
                 return Json(new { success = false, message = "ID de produto inválido." });
@@ -146,8 +155,8 @@ namespace AtelieDosPontinhos.UI.Controllers
 
                 SalvarCarrinhoNaSessao(carrinho);
 
-                int totalCount = carrinho.Sum(x => x.Quantidade);
-                return Json(new { success = true, totalCount });
+                int totalItens = carrinho.Sum(x => x.Quantidade);
+                return Json(new { success = true, totalItens });
             }
             catch (Exception ex)
             {
@@ -341,7 +350,6 @@ namespace AtelieDosPontinhos.UI.Controllers
 
             try
             {
-                // Rota corrigida para consumir o endpoint GET api/User/profile
                 string rotaUsuario = client.BaseAddress != null && client.BaseAddress.ToString().EndsWith("api/")
                     ? "User/profile"
                     : "api/User/profile";
@@ -380,7 +388,6 @@ namespace AtelieDosPontinhos.UI.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            // Garante que o email venha preenchido
             model.EmailUsuario = userEmail;
 
             string tipoPagamento = form["TipoPagamento"].ToString();
@@ -391,7 +398,6 @@ namespace AtelieDosPontinhos.UI.Controllers
 
             bool ehPix = tipoPagamento.Equals("Pix", StringComparison.OrdinalIgnoreCase) || tipoPagamento == "3";
 
-            // 🔒 Validação condicional: Só valida cartão se NÃO for Pix
             if (!ehPix)
             {
                 string nomeCartao = !string.IsNullOrEmpty(form["NomeNoCartao"]) ? form["NomeNoCartao"].ToString() : model.Titular;

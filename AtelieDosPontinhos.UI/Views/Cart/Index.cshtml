@@ -5,32 +5,39 @@
 }
 
 <div class="container py-5">
-    <h2 class="mb-4 text-center fw-bold" style="color: #8a4f91 !important;">🛒 Meu Carrinho de Compras</h2>
+    <h2 class="mb-4 text-center fw-bold" style="color: #b84a75 !important;">🛒 Meu Carrinho de Compras</h2>
 
     @if (Model == null || !Model.Any())
     {
-        <div class="text-center py-5 shadow-sm rounded bg-light border">
-            <h4 class="text-muted mb-3">Seu carrinho está vazio no momento.</h4>
-            <p class="text-secondary mb-4">Adicione produtos artesanais incríveis para começar!</p>
-            <a asp-controller="Home" asp-action="Index" class="btn btn-lg text-white px-4 py-2 rounded-pill shadow" style="background-color: #8a4f91;">
-                Ver Produtos
-            </a>
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6 text-center">
+                <div class="card border-0 shadow-sm rounded-4 p-5 bg-body">
+                    <div class="mb-3 text-muted fs-1">
+                        <i class="bi bi-bag-x"></i>
+                    </div>
+                    <h4 class="fw-bold text-body mb-2">Seu carrinho está vazio no momento</h4>
+                    <p class="text-secondary small mb-4">Adicione produtos artesanais incríveis para começar!</p>
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-lg text-white px-4 py-2 rounded-pill shadow mx-auto" style="background-color: #b84a75; border: none; max-width: 220px;">
+                        Ver Produtos
+                    </a>
+                </div>
+            </div>
         </div>
     }
     else
     {
         <div class="row g-4">
             <div class="col-lg-8">
-                <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
+                <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-body">
                     <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0">
-                            <thead class="text-white text-center" style="background-color: #8a4f91;">
-                                <tr>
-                                    <th scope="col" class="py-3">Produto</th>
-                                    <th scope="col" class="py-3">Preço</th>
-                                    <th scope="col" class="py-3">Qtd</th>
-                                    <th scope="col" class="py-3">Subtotal</th>
-                                    <th scope="col" class="py-3">Ação</th>
+                        <table class="table align-middle mb-0 text-body">
+                            <thead>
+                                <tr class="border-bottom text-secondary small text-uppercase">
+                                    <th scope="col" class="py-3 ps-4">Produto</th>
+                                    <th scope="col" class="py-3 text-center">Preço</th>
+                                    <th scope="col" class="py-3 text-center">Qtd</th>
+                                    <th scope="col" class="py-3 text-end">Subtotal</th>
+                                    <th scope="col" class="py-3 text-center pe-4">Ação</th>
                                 </tr>
                             </thead>
 
@@ -40,14 +47,15 @@
                                     var nomeProduto = item.Produto?.Nome ?? item.Produto?.Name ?? "Produto Artesanal";
                                     var precoProduto = item.Produto?.Preco ?? item.Produto?.Price ?? 0m;
                                     var subtotalItem = precoProduto * item.Quantidade;
+                                    var imagem = string.IsNullOrEmpty(item.Produto?.CoverImageUrl) ? "/images/products/default.png" : item.Produto.CoverImageUrl;
 
                                     <tr>
-                                        <td class="p-3">
+                                        <td class="p-3 ps-4">
                                             <div class="d-flex align-items-center gap-3">
-                                                <img src="@item.Produto.CoverImageUrl" alt="@nomeProduto" class="rounded border shadow-sm" style="width: 70px; height: 70px; object-fit: cover;">
+                                                <img src="@imagem" alt="@nomeProduto" class="rounded-3 border shadow-sm object-fit-cover" style="width: 65px; height: 65px;" onerror="this.src='/images/products/default.png';">
                                                 <div>
-                                                    <h6 class="mb-0 fw-bold text-dark">@nomeProduto</h6>
-                                                    <small class="text-muted d-block text-truncate" style="max-width: 200px;">@item.Produto.Descricao</small>
+                                                    <h6 class="mb-1 fw-bold text-body">@nomeProduto</h6>
+                                                    <small class="text-muted d-block text-truncate" style="max-width: 180px;">@item.Produto?.Descricao</small>
                                                 </div>
                                             </div>
                                         </td>
@@ -55,19 +63,19 @@
 
                                         <!-- Quantidade com botões interativos AJAX -->
                                         <td class="text-center align-middle">
-                                            <div class="d-flex align-items-center justify-content-center gap-2">
+                                            <div class="d-flex align-items-center justify-content-center gap-1">
                                                 <button type="button" class="btn btn-sm btn-outline-secondary px-2 py-0 fw-bold" onclick="atualizarQuantidade(@item.Produto.Id, @item.Quantidade - 1)">-</button>
-                                                <span id="qtd-@item.Produto.Id" class="fw-bold text-dark">@item.Quantidade</span>
+                                                <span id="qtd-@item.Produto?.Id" class="fw-bold text-body px-2">@item.Quantidade</span>
                                                 <button type="button" class="btn btn-sm btn-outline-secondary px-2 py-0 fw-bold" onclick="atualizarQuantidade(@item.Produto.Id, @item.Quantidade + 1)">+</button>
                                             </div>
                                         </td>
 
-                                        <td class="text-center fw-bold text-success">R$ @subtotalItem.ToString("N2")</td>
-                                        <td class="text-center">
-                                            <form asp-controller="Cart" asp-action="RemoverDoCarrinho" method="post" style="display:inline;">
-                                                <input type="hidden" name="id" value="@item.Produto.Id" />
-                                                <button type="submit" class="btn btn-sm btn-danger rounded-pill px-3" title="Remover este produto">
-                                                    ❌ Excluir
+                                        <td class="text-end fw-bold text-success">R$ @subtotalItem.ToString("N2")</td>
+                                        <td class="text-center pe-4">
+                                            <form asp-controller="Cart" asp-action="RemoverDoCarrinho" method="post" class="d-inline">
+                                                <input type="hidden" name="id" value="@item.Produto?.Id" />
+                                                <button type="submit" class="btn btn-link text-danger p-0 fs-5" title="Remover este produto">
+                                                    <i class="bi bi-trash3"></i>
                                                 </button>
                                             </form>
                                         </td>
@@ -89,21 +97,21 @@
             }
 
             <div class="col-lg-4">
-                <div class="card border-0 shadow-sm rounded-3 p-4 bg-light border">
-                    <h5 class="fw-bold mb-4 border-bottom pb-2 text-dark">Resumo da Compra</h5>
+                <div class="card border-0 shadow-sm rounded-4 p-4 bg-body">
+                    <h5 class="fw-bold mb-4 border-bottom pb-2 text-body">Resumo da Compra</h5>
 
                     <div class="d-flex justify-content-between mb-3 text-secondary">
                         <span>Quantidade total:</span>
-                        <span class="fw-semibold">@Model.Sum(x => x.Quantidade) itens</span>
+                        <span class="fw-semibold text-body">@Model.Sum(x => x.Quantidade) itens</span>
                     </div>
 
                     <div class="d-flex justify-content-between align-items-center mb-4 pt-3 border-top">
-                        <h5 class="fw-bold text-dark mb-0">Valor Total:</h5>
+                        <h5 class="fw-bold text-body mb-0">Valor Total:</h5>
                         <h4 class="fw-bold text-success mb-0">R$ @valorTotalGeral.ToString("N2")</h4>
                     </div>
 
                     <div class="d-grid gap-2">
-                        <a asp-controller="Cart" asp-action="Checkout" class="btn btn-success btn-lg rounded-pill fw-bold py-3 shadow-sm d-block text-center text-white text-decoration-none">
+                        <a asp-controller="Cart" asp-action="Checkout" class="btn btn-lg rounded-pill fw-bold py-3 shadow-sm d-block text-center text-white text-decoration-none" style="background-color: #b84a75; border: none;">
                             🏁 Finalizar Pedido
                         </a>
 
@@ -131,7 +139,6 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // Recarrega a página para atualizar os subtotais, totais e quantidades instantaneamente
                         location.reload();
                     } else {
                         alert(data.message || 'Erro ao atualizar quantidade.');

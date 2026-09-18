@@ -7,50 +7,83 @@
 }
 
 <div class="container py-5 Product-detalhe">
-    <div class="row g-5">
+    <div class="row g-5 align-items-center">
+        <!-- Coluna da Imagem -->
         <div class="col-md-6">
-            <div class="Product-imagem-box">
-                <img src="@Model.CoverImageUrl" class="img-fluid Product-imagem" alt="@nomeProduto">
+            <div class="Product-imagem-box card border-0 shadow-lg rounded-4 overflow-hidden bg-body-tertiary">
+                @{
+                    string imgUrl = "/images/products/default.png";
+                    var rawImage = Model?.CoverImageUrl;
+
+                    if (!string.IsNullOrEmpty(rawImage))
+                    {
+                        if (rawImage.StartsWith("http://") || rawImage.StartsWith("https://") || rawImage.StartsWith("/"))
+                        {
+                            imgUrl = rawImage;
+                        }
+                        else
+                        {
+                            imgUrl = "/images/products/" + rawImage;
+                        }
+                    }
+                }
+                <img src="@imgUrl" class="img-fluid w-100 object-fit-cover Product-imagem" style="max-height: 450px;" alt="@nomeProduto" onerror="this.onerror=null; this.src='/images/products/default.png';">
             </div>
         </div>
 
+        <!-- Coluna das Informações -->
         <div class="col-md-6">
-            <h2 class="Product-titulo">@nomeProduto</h2>
-            <p class="Product-preco">R$ @precoProduto.ToString("N2")</p>
-            <p class="text-muted">@Model.Descricao</p>
+            <div class="p-4 bg-body border rounded-4 shadow-sm">
 
-            <form asp-controller="Cart" asp-action="AdicionarAoCarrinho" method="post">
-                <input type="hidden" name="id" value="@Model.Id" />
+                <span class="badge mb-2 px-3 py-2 rounded-pill" style="background-color: #fce8f0; color: #b84a75; font-size: 0.85rem;">
+                    <i class="bi bi-heart-fill me-1"></i> Artesanal
+                </span>
 
-                <div class="d-flex align-items-center gap-3 mb-3">
-                    <button type="button" class="btn btn-outline-secondary" onclick="alterarQuantidade(-1)">-</button>
-                    <input type="text" id="qtdInput" name="quantidade" value="1" class="form-control quantidade-input text-center" style="width: 60px;" readonly>
-                    <button type="button" class="btn btn-outline-secondary" onclick="alterarQuantidade(1)">+</button>
+                <h2 class="Product-titulo fw-bold text-body mb-2">@nomeProduto</h2>
+                <div class="mb-3">
+                    <span class="Product-preco fs-3 fw-bold text-success">R$ @precoProduto.ToString("N2")</span>
                 </div>
+                <p class="text-secondary mb-4">@(string.IsNullOrEmpty(Model?.Descricao) ? "Produto exclusivo feito à mão com todo o carinho e cuidado em ponto cruz." : Model.Descricao)</p>
 
-                <div class="d-flex gap-2 flex-wrap mb-3">
-                    <button type="submit" class="btn btn-comprar btn-lg">
-                        🛒 Comprar agora
-                    </button>
+                <form asp-controller="Cart" asp-action="AdicionarAoCarrinho" method="post">
+                    <input type="hidden" name="id" value="@Model.Id" />
 
-                    <!-- Botão Favoritar Interativo -->
-                    <button type="button"
-                            id="btnFavoritar"
-                            onclick="favoritarProduto(@Model.Id)"
-                            class="btn btn-lg d-flex align-items-center justify-content-center gap-2"
-                            style="background-color: #d1b3e0; color: #ffffff; border: none; transition: all 0.3s ease;">
-                        <i id="iconeFavorito" class="bi bi-heart"></i>
-                        <span id="textoFavorito">Favoritar</span>
-                    </button>
-                </div>
-            </form>
+                    <!-- Seletor de Quantidade -->
+                    <div class="mb-3">
+                        <label for="qtdInput" class="form-label fw-semibold small text-muted">Quantidade:</label>
+                        <div class="d-flex align-items-center gap-2" style="max-width: 140px;">
+                            <button type="button" class="btn btn-outline-secondary" onclick="alterarQuantidade(-1)">-</button>
+                            <input type="text" id="qtdInput" name="quantidade" value="1" class="form-control quantidade-input text-center bg-body" readonly>
+                            <button type="button" class="btn btn-outline-secondary" onclick="alterarQuantidade(1)">+</button>
+                        </div>
+                    </div>
 
-            <hr />
-            <ul class="Product-info-extra">
-                <li>✔ Produto artesanal</li>
-                <li>✔ Envio rápido</li>
-                <li>✔ Qualidade garantida</li>
-            </ul>
+                    <!-- Botões de Ação (Comprar em Destaque Absoluto + Favoritar) -->
+                    <div class="d-flex gap-2 align-items-center my-4">
+                        <button type="submit" class="btn btn-lg rounded-pill px-4 fw-bold text-white shadow-sm flex-grow-1 py-3" style="background-color: #b84a75; border: none; transition: transform 0.2s ease;">
+                            <i class="bi bi-bag-check-fill me-2 fs-5"></i> Comprar Agora
+                        </button>
+
+                        <!-- Botão Favoritar Interativo -->
+                        <button type="button"
+                                id="btnFavoritar"
+                                onclick="favoritarProduto(@Model.Id)"
+                                class="btn btn-lg d-flex align-items-center justify-content-center gap-2 rounded-pill px-3 py-3"
+                                style="background-color: #d1b3e0; color: #ffffff; border: none; transition: all 0.3s ease;"
+                                title="Favoritar">
+                            <i id="iconeFavorito" class="bi bi-heart fs-5"></i>
+                            <span id="textoFavorito" class="d-none d-sm-inline">Favoritar</span>
+                        </button>
+                    </div>
+                </form>
+
+                <hr />
+                <ul class="Product-info-extra list-unstyled text-secondary small d-flex flex-column gap-2 mb-0">
+                    <li><i class="bi bi-check2 text-success fw-bold me-2"></i> Produto artesanal</li>
+                    <li><i class="bi bi-check2 text-success fw-bold me-2"></i> Envio rápido</li>
+                    <li><i class="bi bi-check2 text-success fw-bold me-2"></i> Qualidade garantida</li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>
@@ -86,12 +119,12 @@
                     if (data.success) {
                         if (data.isFavorited) {
                             btn.style.backgroundColor = '#dc3545';
-                            icone.className = 'bi bi-heart-fill';
-                            texto.innerText = 'Favoritado!';
+                            icone.className = 'bi bi-heart-fill fs-5';
+                            if (texto) texto.innerText = 'Favoritado!';
                         } else {
                             btn.style.backgroundColor = '#d1b3e0';
-                            icone.className = 'bi bi-heart';
-                            texto.innerText = 'Favoritar';
+                            icone.className = 'bi bi-heart fs-5';
+                            if (texto) texto.innerText = 'Favoritar';
                         }
                     }
                 })
